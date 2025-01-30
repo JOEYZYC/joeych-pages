@@ -1,3 +1,5 @@
+theme: hyde
+
 # Dependencies
 markdown:         redcarpet
 highlighter:      pygments
