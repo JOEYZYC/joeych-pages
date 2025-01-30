@@ -3,15 +3,15 @@ markdown:         redcarpet
 highlighter:      pygments
 
 # Permalinks
-permalink:        pretty
-relative_permalinks: true
+permalink:        /:categories/:year/:month/:day/:title/
+relative_permalinks: false  # 设置为 false，使用绝对链接
 
 # Setup
 title:            Hyde
 tagline:          'A Jekyll theme'
 description:      'A brazen two-column <a href="http://jekyllrb.com" target="_blank">Jekyll</a> theme that pairs a prominent sidebar with uncomplicated content. Made by <a href="https://twitter.com/mdo" target="_blank">@mdo</a>.'
-url:              https://joeyzyc.github.io/joeych-pages/
-baseurl:          /
+url:              https://joeyzyc.github.io  # 确保这里是 GitHub Pages 部署的根 URL
+baseurl:          /joeych-pages  # 这里根据你的仓库名称调整，如果你的仓库名称是 'joeych-pages'，保持此设置，否则根据实际情况调整
 
 author:
   name:           'Mark Otto'
@@ -23,4 +23,4 @@ paginate:         5
 version:          2.1.0
 
 github:
-  repo:           https://github.com/JOEYZYC/
+  repo:           https://github.com/JOEYZYC/joeych-pages  # 确保这里指向你的 GitHub 仓库 URL
