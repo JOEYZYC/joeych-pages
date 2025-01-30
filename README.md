@@ -1,118 +1,66 @@
-# Hyde
+Hyde
+Hyde 是一个大胆的两栏 Jekyll 主题，它将显眼的侧边栏与简洁的内容相结合。它基于 Poole，Jekyll 的管家。
 
-Hyde is a brazen two-column [Jekyll](http://jekyllrb.com) theme that pairs a prominent sidebar with uncomplicated content. It's based on [Poole](http://getpoole.com), the Jekyll butler.
+Hyde 截图
 
-![Hyde screenshot](https://f.cloud.github.com/assets/98681/1831228/42af6c6a-7384-11e3-98fb-e0b923ee0468.png)
+内容
 
+使用
+选项
+侧边栏菜单
+固定侧边栏内容
+主题
+反转布局
+开发
+作者
+许可
+使用
+Hyde 是一个基于 Poole 构建的主题，Poole 提供了一个完整的 Jekyll 设置——只需下载并启动 Jekyll 服务器。请参阅 Poole 使用指南，了解如何安装和使用 Jekyll。
 
-## Contents
+选项
+Hyde 包含一些可自定义的选项，通常通过在 <body> 元素上应用类来实现。
 
-- [Usage](#usage)
-- [Options](#options)
-  - [Sidebar menu](#sidebar-menu)
-  - [Sticky sidebar content](#sticky-sidebar-content)
-  - [Themes](#themes)
-  - [Reverse layout](#reverse-layout)
-- [Development](#development)
-- [Author](#author)
-- [License](#license)
+侧边栏菜单
+通过在页面的 front-matter 中为每个 Jekyll 页面分配正确的布局，来创建一个侧边栏中的导航链接列表。
 
-
-## Usage
-
-Hyde is a theme built on top of [Poole](https://github.com/poole/poole), which provides a fully furnished Jekyll setup—just download and start the Jekyll server. See [the Poole usage guidelines](https://github.com/poole/poole#usage) for how to install and use Jekyll.
-
-
-## Options
-
-Hyde includes some customizable options, typically applied via classes on the `<body>` element.
-
-
-### Sidebar menu
-
-Create a list of nav links in the sidebar by assigning each Jekyll page the correct layout in the page's [front-matter](http://jekyllrb.com/docs/frontmatter/).
-
-```
----
 layout: page
 title: About
----
-```
+为什么需要特定的布局？Jekyll 会返回所有页面，包括 atom.xml，并按字母顺序排序。为了确保第一个链接是首页，我们通过指定页面布局将 index.html 页面排除在这个列表之外。
 
-**Why require a specific layout?** Jekyll will return *all* pages, including the `atom.xml`, and with an alphabetical sort order. To ensure the first link is *Home*, we exclude the `index.html` page from this list by specifying the `page` layout.
+固定侧边栏内容
+默认情况下，Hyde 附带一个将内容固定在侧边栏底部的侧边栏。您可以选择通过移除 .sidebar-sticky 类来禁用此功能。这样，侧边栏内容将正常从上到下流动。
 
+<!-- 默认侧边栏 --> <div class="sidebar"> <div class="container sidebar-sticky"> ... </div> </div> <!-- 修改后的侧边栏 --> <div class="sidebar"> <div class="container"> ... </div> </div>
+主题
+Hyde 附带八个可选主题，基于 base16 颜色方案。应用一个主题来改变颜色方案（主要作用于侧边栏和链接）。
 
-### Sticky sidebar content
+Hyde 红色主题
 
-By default Hyde ships with a sidebar that affixes it's content to the bottom of the sidebar. You can optionally disable this by removing the `.sidebar-sticky` class from the sidebar's `.container`. Sidebar content will then normally flow from top to bottom.
+目前有八个主题可供选择。
 
-```html
-<!-- Default sidebar -->
-<div class="sidebar">
-  <div class="container sidebar-sticky">
-    ...
-  </div>
-</div>
+Hyde 主题类
 
-<!-- Modified sidebar -->
-<div class="sidebar">
-  <div class="container">
-    ...
-  </div>
-</div>
-```
+要使用主题，将可用的主题类之一添加到默认布局中的 <body> 元素，如下所示：
 
+<body class="theme-base-08"> ... </body>
+要创建自己的主题，请查看附带的 CSS 文件中的主题部分。复制任何现有的主题（它们只有几行 CSS），重命名并更改提供的颜色。
 
-### Themes
+反转布局
+Hyde 带有反转布局
 
-Hyde ships with eight optional themes based on the [base16 color scheme](https://github.com/chriskempson/base16). Apply a theme to change the color scheme (mostly applies to sidebar and links).
+Hyde 的页面方向可以通过一个类来反转。
 
-![Hyde in red](https://f.cloud.github.com/assets/98681/1831229/42b0b354-7384-11e3-8462-31b8df193fe5.png)
+<body class="layout-reverse"> ... </body>
+开发
+Hyde 有两个分支，但只有一个用于活跃开发。
 
-There are eight themes available at this time.
+master 用于开发。所有的 pull 请求应提交到 master。
+gh-pages 用于我们的托管站点，其中包含我们的分析跟踪代码。请避免使用此分支。
+作者
+Mark Otto
+GitHub: https://github.com/mdo
+Twitter: https://twitter.com/mdo
 
-![Hyde theme classes](https://f.cloud.github.com/assets/98681/1817044/e5b0ec06-6f68-11e3-83d7-acd1942797a1.png)
+许可
+根据 MIT 许可开源。
 
-To use a theme, add anyone of the available theme classes to the `<body>` element in the `default.html` layout, like so:
-
-```html
-<body class="theme-base-08">
-  ...
-</body>
-```
-
-To create your own theme, look to the Themes section of [included CSS file](https://github.com/poole/hyde/blob/master/public/css/hyde.css). Copy any existing theme (they're only a few lines of CSS), rename it, and change the provided colors.
-
-### Reverse layout
-
-![Hyde with reverse layout](https://f.cloud.github.com/assets/98681/1831230/42b0d3ac-7384-11e3-8d54-2065afd03f9e.png)
-
-Hyde's page orientation can be reversed with a single class.
-
-```html
-<body class="layout-reverse">
-  ...
-</body>
-```
-
-
-## Development
-
-Hyde has two branches, but only one is used for active development.
-
-- `master` for development.  **All pull requests should be submitted against `master`.**
-- `gh-pages` for our hosted site, which includes our analytics tracking code. **Please avoid using this branch.**
-
-
-## Author
-
-**Mark Otto**
-- <https://github.com/mdo>
-- <https://twitter.com/mdo>
-
-
-## License
-
-Open sourced under the [MIT license](LICENSE.md).
-
-<3
