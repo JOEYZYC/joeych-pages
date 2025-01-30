@@ -1,4 +1,4 @@
-theme: hyde
+theme: jekyll-theme-hyde
 
 # Dependencies
 markdown:         redcarpet
