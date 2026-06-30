@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Yicheng Zhang">
+  <rect width="64" height="64" rx="14" fill="#0f2c52"/>
+  <path d="M20 20 H44 V26 L29 42 H44 V48 H20 V42 L35 26 H20 Z" fill="#ffffff"/>
+  <circle cx="48" cy="46" r="4.5" fill="#1f5fd1"/>
+</svg>

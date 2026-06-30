@@ -1,26 +1,18 @@
-# Dependencies
-markdown:         redcarpet
-highlighter:      pygments
-
-# Permalinks
-permalink:        /:categories/:year/:month/:day/:title/
-relative_permalinks: false  # 设置为 false，使用绝对链接
-
-# Setup
-title:            Hyde
-tagline:          'A Jekyll theme'
-description:      'A brazen two-column <a href="http://jekyllrb.com" target="_blank">Jekyll</a> theme that pairs a prominent sidebar with uncomplicated content. Made by <a href="https://twitter.com/mdo" target="_blank">@mdo</a>.'
-url:              https://joeyzyc.github.io  # GitHub Pages 根 URL
-baseurl:          /joeych-pages  # 根据你的仓库名调整
+title: "张易成 | Yicheng Zhang"
+description: "张易成的个人学术作品集 — 电子信息工程 · 嵌入式系统 / 无线感知 / 超表面与太赫兹。Personal academic portfolio of Yicheng Zhang."
+url: "https://joeyzyc.github.io"
+baseurl: "/joeych-pages"
 
 author:
-  name:           'Mark Otto'
-  url:            https://twitter.com/mdo
+  name: "张易成 / Yicheng Zhang"
+  email: "szjoeych@gmail.com"
 
-paginate:         5
+markdown: kramdown
+permalink: /blog/:year/:month/:day/:title/
 
-# Custom vars
-version:          2.1.0
-
-github:
-  repo:           https://github.com/JOEYZYC/joeych-pages  # GitHub 仓库 URL
+exclude:
+  - README.md
+  - DESIGN.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
