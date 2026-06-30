@@ -16,3 +16,5 @@ exclude:
   - LICENSE
   - Gemfile
   - Gemfile.lock
+  - deploy.ps1
+  - serve.ps1
