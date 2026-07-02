@@ -13,9 +13,9 @@
 ```
 index.html          首页（Hero + 概览 + 研究方向）
 about.html          自我介绍（教育 / 校园经历 / 技能 / 联系方式）
-awards.html         获奖证书（竞赛 / 论文 / 专利 / 毕设 / 证书图占位）
+awards.html         获奖证书（竞赛 / 论文 / 专利 / 毕设 / 证书图）
 projects.html       项目介绍（电纹识别 / 双光融合热像仪 / ResGatNet）
-blog.html           博客列表（Jekyll）
+tech-stack.html     技术栈（基础知识 / 技术方向 / 架构设计）
 404.html            404 页
 
 assets/
@@ -47,7 +47,7 @@ serve.ps1           本地预览脚本
 ```
 
 浏览器打开 `http://localhost:8123/index.html` 即可。
-（博客 `blog.html` 依赖 Jekyll，本地静态服务器不渲染，仅线上生效。）
+（博客 `blog.html` 已重定向到 `tech-stack.html`。）
 
 ---
 
