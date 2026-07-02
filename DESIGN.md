@@ -22,6 +22,14 @@
 | `--c-bg-alt` | `#f5f8fc` | Alternate section background |
 | `--c-border` | `#e2e9f3` | Borders, dividers |
 | `--c-gold` | `#b8842b` | Warm accent — ONLY for top-tier award highlights (国家级·特等) |
+| `--c-ice` | `#f7fbff` | Very light blue-tinted white for glass fills |
+| `--c-frost` | `rgba(255,255,255,0.58)` | Light glass panel fill |
+| `--c-frost-strong` | `rgba(255,255,255,0.78)` | Light glass fallback / strong fill |
+| `--c-navy-glass` | `rgba(15,44,82,0.28)` | Dark glass panel fill over images |
+| `--c-navy-glass-strong` | `rgba(15,44,82,0.48)` | Dark glass fallback |
+| `--c-glass-border-light` | `rgba(255,255,255,0.45)` | Glass border on light sections |
+| `--c-glass-border-dark` | `rgba(255,255,255,0.14)` | Glass border on dark/image sections |
+| `--c-glass-highlight` | `rgba(255,255,255,0.32)` | Inner top highlight on glass |
 
 ### Spacing
 
@@ -58,6 +66,20 @@ Base unit: **4px**. Scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96.
 | `--shadow-rest` | `0 1px 2px rgba(15,44,82,.06)` | Cards at rest |
 | `--shadow-hover` | `0 12px 28px -14px rgba(15,44,82,.22)` | Cards on hover |
 | `--shadow-nav` | `0 1px 3px rgba(15,44,82,.08)` | Navbar scroll state |
+| `--shadow-glass` | `0 10px 30px rgba(15,44,82,.10)` | Glass panels on light bg |
+| `--shadow-glass-dark` | `0 16px 48px rgba(3,10,24,.24)` | Glass panels over images |
+| `--shadow-modal` | `0 24px 64px rgba(3,10,24,.32)` | Certificate modal |
+
+### Glass
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--glass-blur-sm` | `10px` | Small panels, captions |
+| `--glass-blur-md` | `18px` | Cards, nav, modal panels |
+| `--glass-blur-lg` | `28px` | Modal backdrop |
+| `--glass-sat` | `160%` | Backdrop saturation boost |
+| `--glass-radius-sm` | `14px` | Small glass cards/pills |
+| `--glass-radius-lg` | `22px` | Large glass panels |
 
 ### Z-index
 
@@ -66,6 +88,8 @@ Base unit: **4px**. Scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96.
 | `--z-nav` | `100` | Sticky navbar |
 | `--z-mobile-menu` | `90` | Mobile menu panel |
 | `--z-overlay` | `80` | Mobile menu backdrop |
+| `--z-modal` | `110` | Certificate modal container |
+| `--z-modal-backdrop` | `109` | Modal frosted-glass backdrop |
 
 ---
 
@@ -208,8 +232,24 @@ Google Fonts: `Inter:wght@400;500;600;700` + `Noto+Sans+SC:wght@400;500;600;700`
 
 - Background: `--c-navy`
 - Text: white (0.9 opacity)
-- Contact info + external links + copyright
+- External links + copyright
 - © 2026 张易成
+
+### Glass Panel
+
+- Use `.glass` on light sections, `.glass--navy` over dark/image sections.
+- Background fallback first; enhance with `backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-sat))`.
+- Border: 1px solid using `--c-glass-border-light` / `--c-glass-border-dark`.
+- Inner highlight: `inset 0 1px 0 var(--c-glass-highlight)`.
+- Radius: `--glass-radius-sm` or `--glass-radius-lg`.
+- Avoid placing small body text directly over busy images without a tint layer.
+
+### Certificate Modal
+
+- Backdrop: fixed full viewport, `--c-navy-glass`, `backdrop-filter: blur(var(--glass-blur-lg))`.
+- Modal panel: centered, max-width ~90vw / max-height ~85vh, `--c-frost` or `--c-navy-glass-strong`, border highlight.
+- Image carousel: left/right arrow buttons, keyboard navigation, click image or backdrop closes.
+- Focus management: focus trap while open, restore focus on close.
 
 ---
 
