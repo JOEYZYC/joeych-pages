@@ -42,3 +42,8 @@ Thumbs.db
 .omo/
 .playwright-mcp/
 qa*.png
+
+# Source material (not for deployment) #
+######################################
+素材/
+
