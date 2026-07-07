@@ -398,6 +398,7 @@ small {
 }
 
 .navbar__brand-zh {
+  font-family: var(--font-cjk);
   font-size: 1.125rem;
   font-weight: 700;
 }
@@ -1740,35 +1741,48 @@ small {
 }
 
 /* --- Cover (index only) --- */
+/* Split-zone hero: white top (hides imperfect hair keying), theme-color bottom.
+   The portrait's head + hair sits in the white zone; shoulders/body cross into
+   the theme-color zone so the cutout edges read as intentional. */
 .cover {
+  --cover-split: 66%;            /* white/theme boundary, below the blue title */
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: stretch;
   background:
-    radial-gradient(circle at 80% 20%, rgba(31, 95, 209, 0.22) 0%, transparent 35%),
-    radial-gradient(circle at 20% 80%, rgba(15, 44, 82, 0.9) 0%, transparent 45%),
-    linear-gradient(135deg, #071425 0%, #0f2c52 50%, #143a6b 100%);
-  color: var(--c-ice);
-  padding-top: calc(56px + var(--sp-10));
-  padding-bottom: var(--sp-10);
+    linear-gradient(
+      to bottom,
+      #ffffff 0%,
+      #ffffff var(--cover-split),
+      #143a6b var(--cover-split),
+      #0f2c52 78%,
+      #071425 100%
+    );
+  color: var(--c-ink);
+  padding-top: calc(56px + var(--sp-8));
+  padding-bottom: 0;
   position: relative;
   overflow: hidden;
-  text-align: center;
 }
 
 .cover__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: end;
+  gap: var(--sp-8);
+  width: 100%;
+}
+
+.cover__text {
+  align-self: center;
+  text-align: left;
 }
 
 .cover__greeting {
   font-size: clamp(1.25rem, 3vw, 1.75rem);
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--c-blue);
   margin-bottom: var(--sp-2);
   letter-spacing: 0.06em;
 }
@@ -1780,11 +1794,11 @@ small {
 
 .cover__name {
   display: block;
-  font-size: clamp(3.5rem, 12vw, 7rem);
+  font-size: clamp(3rem, 9vw, 6rem);
   font-weight: 700;
-  color: #fff;
+  color: var(--c-navy);
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #ffffff 0%, #a8c9ff 50%, #ffffff 100%);
+  background: linear-gradient(135deg, #0f2c52 0%, #1f5fd1 55%, #0f2c52 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1792,84 +1806,89 @@ small {
 
 .cover__tagline {
   font-size: clamp(0.9375rem, 2vw, 1.25rem);
-  color: rgba(255, 255, 255, 0.78);
-  max-width: 680px;
-  margin-bottom: var(--sp-8);
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 560px;
+  margin-top: clamp(4.25rem, 8vh, 5.5rem);
   line-height: 1.7;
 }
 
-.cover__actions {
+/* Portrait: anchored to the bottom, its head reaching up into the white zone. */
+.cover__portrait {
+  position: relative;
+  align-self: end;
+  justify-self: center;
+  height: 100%;
   display: flex;
-  flex-wrap: wrap;
+  align-items: flex-end;
   justify-content: center;
-  gap: var(--sp-4);
-  margin-bottom: var(--sp-16);
 }
 
-.btn--large {
-  padding: var(--sp-4) var(--sp-8);
-  font-size: 1rem;
+.cover__portrait::before {
+  content: none;
 }
 
-.cover__scroll {
-  position: absolute;
-  bottom: var(--sp-8);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--sp-3);
-  color: rgba(255, 255, 255, 0.6);
-  text-decoration: none;
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  transition: color var(--duration-fast) ease;
+.cover__portrait-img {
+  display: block;
+  height: min(88vh, 720px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  /* subtle lift so the head doesn't touch the navbar */
+  margin-bottom: 0;
 }
 
-.cover__scroll:hover {
-  color: #fff;
-}
-
-.cover__scroll-line {
-  width: 1px;
-  height: 40px;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
-  animation: scrollPulse 2s ease-in-out infinite;
-}
-
-@keyframes scrollPulse {
-  0%, 100% {
-    opacity: 0.4;
-    transform: scaleY(0.8);
-  }
-  50% {
-    opacity: 1;
-    transform: scaleY(1);
+@media (min-width: 769px) {
+  .cover__inner {
+    max-width: 1080px;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cover__scroll-line {
-    animation: none;
-  }
-}
-
+/* --- Mobile: stack text over portrait, keep split concept --- */
 @media (max-width: 768px) {
-  .cover__actions {
-    flex-direction: column;
-    align-items: center;
+  .cover {
+    --cover-split: 33%;
   }
 
-  .btn--large {
-    width: min(280px, 100%);
-    justify-content: center;
+  .cover__inner {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    align-items: start;
+    text-align: center;
+    gap: var(--sp-4);
   }
 
-  .cover__scroll {
-    bottom: var(--sp-6);
+  .cover__text {
+    text-align: center;
+    padding-top: var(--sp-4);
+  }
+
+  .cover__tagline {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: clamp(4.5rem, 11vh, 5.5rem);
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .cover__portrait {
+    width: 100%;
+  }
+
+  .cover__portrait::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(86vw, 360px);
+    height: 42%;
+    transform: translateX(-50%);
+    background: #fff;
+    border-radius: 0 0 var(--r-lg) var(--r-lg);
+  }
+
+  .cover__portrait-img {
+    position: relative;
+    height: min(62vh, 520px);
   }
 }
 
