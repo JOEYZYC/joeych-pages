@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Yicheng Zhang">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="JOEYCH">
   <rect width="64" height="64" rx="14" fill="#0f2c52"/>
-  <path d="M20 20 H44 V26 L29 42 H44 V48 H20 V42 L35 26 H20 Z" fill="#ffffff"/>
+  <path d="M26 16 H44 V22 H36 V40 C36 47 31.5 51 24.5 51 C20.5 51 17.2 49.6 15 47.2 L18.8 42.4 C20.2 44 22 45 24.2 45 C27.8 45 29 43.1 29 39.8 V22 H26 Z" fill="#ffffff"/>
   <circle cx="48" cy="46" r="4.5" fill="#1f5fd1"/>
 </svg>

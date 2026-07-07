@@ -1,10 +1,10 @@
-title: "张易成 | Yicheng Zhang"
-description: "张易成的个人学术作品集 — 电子信息工程 · 嵌入式系统 / 无线感知 / 超表面与太赫兹。Personal academic portfolio of Yicheng Zhang."
+title: "张易成 个人网页"
+description: "张易成的个人学术作品集 — 电子信息工程 · 嵌入式系统 / 无线感知 / 超表面与太赫兹。Personal academic portfolio of JOEYCH."
 url: "https://joeyzyc.github.io"
 baseurl: "/joeych-pages"
 
 author:
-  name: "张易成 / Yicheng Zhang"
+  name: "张易成 / JOEYCH"
   email: "szjoeych@gmail.com"
 
 markdown: kramdown

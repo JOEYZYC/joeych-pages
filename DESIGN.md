@@ -1,6 +1,6 @@
 # Design System — joeych-pages
 
-> Academic portfolio for 张易成 (Yicheng Zhang). Light, professional, trustworthy.
+> Academic portfolio for 张易成 (JOEYCH). Light, professional, trustworthy.
 > "Research portfolio" feel — refined, restrained, editorial clarity.
 
 ---
@@ -151,7 +151,7 @@ Google Fonts: `Inter:wght@400;500;600;700` + `Noto+Sans+SC:wght@400;500;600;700`
 ### Navbar
 
 - Sticky top, `--z-nav: 100`
-- Brand: 张易成 / Yicheng Zhang (bilingual)
+- Brand: 张易成 / JOEYCH (bilingual)
 - Links: 首页 / 自我介绍 / 获奖证书 / 项目介绍 / 博客
 - Active state: `--c-blue` color + bottom border
 - Language toggle: "中/EN" button

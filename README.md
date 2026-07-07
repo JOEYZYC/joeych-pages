@@ -1,4 +1,4 @@
-# 张易成 · 个人学术作品集 / Yicheng Zhang — Academic Portfolio
+# 张易成 · 个人学术作品集 / JOEYCH — Academic Portfolio
 
 电子信息工程本科生的个人作品集站点，托管于 **GitHub Pages**：
 
