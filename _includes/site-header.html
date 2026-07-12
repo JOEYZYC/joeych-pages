@@ -1,0 +1,24 @@
+<a href="#main" class="skip-link">跳到主要内容 / Skip to content</a>
+<header class="navbar" role="banner">
+  <div class="container navbar__inner">
+    <a href="{{ '/index.html' | relative_url | escape }}" class="navbar__brand" aria-label="返回首页 / Back to home">
+      <span class="navbar__brand-zh">张易成</span><span class="navbar__brand-en">JOEYCH</span>
+    </a>
+    <nav class="navbar__links" aria-label="主导航 / Main navigation">
+      <a href="{{ '/index.html' | relative_url | escape }}" class="navbar__link" data-en="Home">首页</a>
+      <a href="{{ '/index.html#about' | relative_url | escape }}" class="navbar__link" data-en="About">自我介绍</a>
+      <a href="{{ '/awards.html' | relative_url | escape }}" class="navbar__link" data-en="Awards">获奖证书</a>
+      <a href="{{ '/projects.html' | relative_url | escape }}" class="navbar__link" data-en="Projects">项目介绍</a>
+      <a href="{{ '/tech-stack.html' | relative_url | escape }}" class="navbar__link" data-en="Tech Stack">技术栈</a>
+    </nav>
+    <div class="navbar__actions"><button class="lang-toggle" aria-label="切换语言 / Switch language">中</button><button class="navbar__hamburger" aria-label="打开菜单 / Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+  </div>
+</header>
+<div class="mobile-overlay" aria-hidden="true"></div>
+<nav class="mobile-menu" aria-label="移动端导航 / Mobile navigation">
+  <a href="{{ '/index.html' | relative_url | escape }}" class="mobile-menu__link" data-en="Home">首页</a>
+  <a href="{{ '/index.html#about' | relative_url | escape }}" class="mobile-menu__link" data-en="About">自我介绍</a>
+  <a href="{{ '/awards.html' | relative_url | escape }}" class="mobile-menu__link" data-en="Awards">获奖证书</a>
+  <a href="{{ '/projects.html' | relative_url | escape }}" class="mobile-menu__link" data-en="Projects">项目介绍</a>
+  <a href="{{ '/tech-stack.html' | relative_url | escape }}" class="mobile-menu__link" data-en="Tech Stack">技术栈</a>
+</nav>

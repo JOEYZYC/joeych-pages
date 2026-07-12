@@ -1,76 +1,32 @@
+---
+---
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="张易成的学术作品集 — 电子信息工程 · 嵌入式系统 / 无线感知 / 超表面与太赫兹">
-  <meta name="author" content="张易成 / JOEYCH">
-  <title>张易成 个人网页</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="张易成的个人学术作品集 — 电子信息工程、嵌入式系统、无线感知与超表面研究。"><meta name="author" content="张易成 / JOEYCH">
+  <title>张易成 / JOEYCH · 个人学术作品集</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="{{ '/assets/img/favicon.svg' | relative_url | escape }}"><link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | escape }}">
 </head>
-<body>
-  <a href="#main" class="skip-link">跳到主要内容 / Skip to content</a>
-
-  <!-- Navbar -->
-  <header class="navbar" role="banner">
-    <div class="container navbar__inner">
-      <a href="./index.html" class="navbar__brand" aria-label="返回首页 / Back to home">
-        <span class="navbar__brand-zh">张易成</span>
-        <span class="navbar__brand-en">JOEYCH</span>
-      </a>
-
-      <nav class="navbar__links" role="navigation" aria-label="主导航 / Main navigation">
-        <a href="./index.html" class="navbar__link" data-en="Home">首页</a>
-        <a href="./about.html" class="navbar__link" data-en="About">自我介绍</a>
-        <a href="./awards.html" class="navbar__link" data-en="Awards">获奖证书</a>
-        <a href="./projects.html" class="navbar__link" data-en="Projects">项目介绍</a>
-        <a href="./tech-stack.html" class="navbar__link" data-en="Tech Stack">技术栈</a>
-      </nav>
-
-      <div class="navbar__actions">
-        <button class="lang-toggle" aria-label="切换语言 / Switch language">中</button>
-        <button class="navbar__hamburger" aria-label="打开菜单 / Open menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Mobile Menu -->
-  <div class="mobile-overlay" aria-hidden="true"></div>
-  <nav class="mobile-menu" role="navigation" aria-label="移动端导航 / Mobile navigation">
-    <a href="./index.html" class="mobile-menu__link" data-en="Home">首页</a>
-    <a href="./about.html" class="mobile-menu__link" data-en="About">自我介绍</a>
-    <a href="./awards.html" class="mobile-menu__link" data-en="Awards">获奖证书</a>
-    <a href="./projects.html" class="mobile-menu__link" data-en="Projects">项目介绍</a>
-    <a href="./tech-stack.html" class="mobile-menu__link" data-en="Tech Stack">技术栈</a>
-  </nav>
-
+<body class="homepage">
+  {% include site-header.html %}
   <main id="main">
-    <!-- Cover -->
-    <section class="cover">
+    <section class="cover home-cover">
       <div class="container cover__inner">
-        <div class="cover__text">
-          <p class="cover__greeting" data-en="Hello">你好，</p>
-          <h1 class="cover__title">
-            <span class="cover__name" data-en="I'm JOEYCH">我是张易成</span>
-          </h1>
-          <p class="cover__tagline" data-en="Electronic &amp; Information Engineering · Embedded Systems / Wireless Perception / Metasurfaces &amp; Terahertz">电子信息工程 · 嵌入式系统 / 无线感知 / 超表面与太赫兹</p>
-        </div>
-
-        <div class="cover__portrait">
-          <img src="assets/img/portrait-b1-cutout.png" alt="张易成证件照 / Portrait of JOEYCH" class="cover__portrait-img" width="1800" height="2727">
-        </div>
+        <div class="cover__text"><p class="cover__greeting" data-en="Electronic & Information Engineering">电子信息工程</p><h1 class="cover__title"><span class="cover__name" data-en="JOEYCH">张易成</span></h1><a class="cover__scroll-link" href="#about"><span data-en="Explore profile">浏览简介</span><span aria-hidden="true">↓</span></a></div>
+        <div class="cover__portrait"><img src="{{ '/assets/img/portrait-b1-cutout.png' | relative_url | escape }}" alt="张易成证件照 / Portrait of JOEYCH" class="cover__portrait-img" width="1800" height="2727" fetchpriority="high"></div>
       </div>
     </section>
+    <section class="section home-profile" id="about">
+      <div class="container home-profile__grid"><div class="home-profile__lead reveal"><span class="section-eyebrow">PROFILE</span><h2 data-en="About me">个人简介</h2><p data-en="{{ site.data.profile.summary.en | escape }}">{{ site.data.profile.summary.zh }}</p></div><dl class="home-profile__metrics reveal">{% for stat in site.data.profile.statistics %}<div><dt data-en="{{ stat.label.en | escape }}">{{ stat.label.zh }}</dt><dd>{{ stat.value }}</dd></div>{% endfor %}</dl></div>
+    </section>
+    <section class="section section--alt"><div class="container"><div class="section-header reveal"><span class="section-eyebrow">EDUCATION</span><h2 class="section-title" data-en="Education background">教育背景</h2></div><div class="timeline reveal">{% for entry in site.data.profile.education %}<article class="timeline__entry home-timeline"><div class="timeline__dot"></div><time class="timeline__date">{{ entry.period }}</time><h3 class="timeline__title" data-en="{{ entry.school.en | escape }}">{{ entry.school.zh }}</h3><p class="timeline__subtitle" data-en="{{ entry.degree.en | escape }}">{{ entry.degree.zh }}</p><ul class="timeline__details">{% for item in entry.highlights %}<li data-en="{{ item.en | escape }}">{{ item.zh }}</li>{% endfor %}</ul></article>{% endfor %}</div></div></section>
+    <section class="section"><div class="container"><div class="section-header reveal"><span class="section-eyebrow">EXPERIENCE</span><h2 class="section-title" data-en="Campus experience">校园经历</h2></div><div class="timeline reveal">{% for entry in site.data.profile.campus_experience %}<article class="timeline__entry home-timeline"><div class="timeline__dot"></div><time class="timeline__date">{{ entry.period }}</time><h3 class="timeline__title" data-en="{{ entry.organization.en | escape }}">{{ entry.organization.zh }}</h3><p class="timeline__subtitle" data-en="{{ entry.role.en | escape }}">{{ entry.role.zh }}</p><ul class="timeline__details">{% for item in entry.details %}<li data-en="{{ item.en | escape }}">{{ item.zh }}</li>{% endfor %}</ul></article>{% endfor %}</div></div></section>
+    <section class="section section--alt"><div class="container"><div class="section-header reveal"><span class="section-eyebrow">SKILLS</span><h2 class="section-title" data-en="Professional skills">专业技能</h2></div><div class="skills-grid reveal-stagger">{% for skill in site.data.profile.skills %}<article class="skill-card reveal"><h3 class="skill-card__title" data-en="{{ skill.title.en | escape }}">{{ skill.title.zh }}</h3><div class="skill-card__tags">{% for tag in skill.tags %}<span class="tag" data-en="{{ tag.en | escape }}">{{ tag.zh }}</span>{% endfor %}</div></article>{% endfor %}</div></div></section>
+    <section class="section home-contact"><div class="container home-contact__grid"><div class="reveal"><span class="section-eyebrow">CONTACT</span><h2 data-en="Contact information">联系方式</h2><p class="home-contact__copy" data-en="Open to academic and engineering conversations.">欢迎通过以下渠道联系，交流学术研究与工程实践。</p></div><address class="contact-info reveal"><p><span data-en="Email">邮箱</span><a href="mailto:{{ site.data.profile.contact.email | escape }}">{{ site.data.profile.contact.email }}</a></p><p><span data-en="Phone">电话</span>{{ site.data.profile.contact.phone }}</p><p><span data-en="Hometown">籍贯</span><span data-en="{{ site.data.profile.contact.hometown.en | escape }}">{{ site.data.profile.contact.hometown.zh }}</span></p><p><span data-en="Political">政治面貌</span><span data-en="{{ site.data.profile.contact.political.en | escape }}">{{ site.data.profile.contact.political.zh }}</span></p><div class="contact-links"><a href="{{ site.data.profile.contact.github | escape }}" class="btn btn--outline" target="_blank" rel="noopener noreferrer">GitHub</a><a href="{{ site.data.profile.contact.scholar | escape }}" class="btn btn--outline" target="_blank" rel="noopener noreferrer">Google Scholar</a><a href="{{ site.data.profile.contact.orcid | escape }}" class="btn btn--outline" target="_blank" rel="noopener noreferrer">ORCID</a></div></address></div></section>
   </main>
-
-  <script src="assets/js/main.js"></script>
+  {% include site-footer.html %}<script src="{{ '/assets/js/main.js' | relative_url | escape }}"></script>
 </body>
 </html>

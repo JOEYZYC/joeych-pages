@@ -11,16 +11,19 @@
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| `--c-navy` | `#0f2c52` | Primary dark — headings, navbar brand, footer |
-| `--c-blue` | `#1f5fd1` | Primary accent — links, active states, eyebrow labels |
-| `--c-blue-600` | `#2563eb` | Button hover, interactive highlights |
-| `--c-blue-soft` | `#e9f1fd` | Soft background fills, tag backgrounds |
-| `--c-blue-50` | `#f4f8fe` | Subtle section backgrounds |
-| `--c-ink` | `#15233b` | Body text |
-| `--c-muted` | `#5a6b85` | Secondary text, captions, timestamps |
+| `--c-navy` | `#2C313A` | Gunmetal anchor — headings, dark surfaces, footer |
+| `--c-accent` | `#46E5FF` | Fluorescent cyan anchor — dark-surface decoration only |
+| `--c-accent-fg` | `#00788f` | Accessible dark-cyan foreground for text, links, focus, and light-surface controls |
+| `--c-blue` | `var(--c-accent-fg)` | Legacy semantic alias for accessible foreground usage |
+| `--c-blue-600` | `#00677a` | Dark-cyan interactive hover tone |
+| `--c-blue-soft` | `#e6fbff` | Accessible cyan-tinted fills |
+| `--c-blue-50` | `#f3f6f8` | Light neutral section background |
+| `--c-ink` | `#2C313A` | Gunmetal body text |
+| `--c-muted` | `#61707d` | Secondary text, captions, timestamps |
 | `--c-bg` | `#ffffff` | Page background |
-| `--c-bg-alt` | `#f5f8fc` | Alternate section background |
-| `--c-border` | `#e2e9f3` | Borders, dividers |
+| `--c-bg-alt` | `#f3f6f8` | Alternate section background |
+| `--c-border` | `#C8D2DC` | Ice silver gray anchor — borders and dividers |
+| `--c-silver` | `#C8D2DC` | Ice silver gray anchor — secondary text on dark surfaces |
 | `--c-gold` | `#b8842b` | Warm accent — ONLY for top-tier award highlights (国家级·特等) |
 | `--c-ice` | `#f7fbff` | Very light blue-tinted white for glass fills |
 | `--c-frost` | `rgba(255,255,255,0.58)` | Light glass panel fill |
@@ -158,12 +161,11 @@ Google Fonts: `Inter:wght@400;500;600;700` + `Noto+Sans+SC:wght@400;500;600;700`
 - Mobile: hamburger icon → slide-in panel from right
 - Background: `--c-bg` with `--shadow-nav` on scroll
 
-### Hero
+### Merged Homepage
 
-- Full-width, `--c-bg-alt` background
-- Name (h1), role tagline, stat pills row
-- Primary CTA buttons + contact icon links
-- Subtle decorative element (optional gradient mesh)
+- A split portrait hero keeps the provided cutout as the first-viewport focal element; gunmetal anchors the lower field and cyan is limited to the exploration affordance.
+- The homepage contains the full profile sequence in order: hero, `#about` profile summary, education, campus experience, professional skills, contact, and footer.
+- Editorial metrics use hairline ice-silver dividers rather than nested cards; timelines are unframed on the merged homepage.
 
 ### Stat Pills
 
@@ -311,7 +313,7 @@ Google Fonts: `Inter:wght@400;500;600;700` + `Noto+Sans+SC:wght@400;500;600;700`
 
 - Body text: `--c-ink` on `--c-bg` → 15.4:1 ✓
 - Muted text: `--c-muted` on `--c-bg` → 5.8:1 ✓ (AA)
-- Links: `--c-blue` on `--c-bg` → 4.6:1 ✓ (AA)
+- Links, active navigation, focus rings, and labels use `--c-accent-fg` on light surfaces; fluorescent `--c-accent` is reserved for dark surfaces and non-text decoration.
 
 ---
 
@@ -334,6 +336,11 @@ Google Fonts: `Inter:wght@400;500;600;700` + `Noto+Sans+SC:wght@400;500;600;700`
 
 - Content lives in HTML (not JS dictionary) for crawlability
 - Graceful degradation: no-JS users see Chinese only
+
+### Jekyll Data Contract
+
+- `_data/profile.yml`, `_data/projects.yml`, `_data/publications.yml`, `_data/patents.yml`, and `_data/awards.yml` hold localized `{ zh, en }` objects and stable `id`, `year`, `tags`, `featured`, `image`, and `links` fields where applicable.
+- Projects and awards pages render from this data. Certificate triggers are opt-in: only a record with an explicit `certificates` list emits a `data-certs` JSON attribute.
 
 ---
 
@@ -402,7 +409,7 @@ Google Fonts: `Inter:wght@400;500;600;700` + `Noto+Sans+SC:wght@400;500;600;700`
 /
 ├── DESIGN.md (this file)
 ├── index.html (home)
-├── about.html (self-intro)
+├── about.html (noindex redirect to `index.html#about`)
 ├── awards.html (Wave B)
 ├── projects.html (Wave B)
 ├── blog.html (Wave B)
@@ -427,5 +434,5 @@ Google Fonts: `Inter:wght@400;500;600;700` + `Noto+Sans+SC:wght@400;500;600;700`
 
 ---
 
-**Last updated:** 2026-06-30
-**Version:** 1.0 (Wave A)
+**Last updated:** 2026-07-12
+**Version:** 1.1

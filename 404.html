@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -9,88 +11,25 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
-  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="{{ '/assets/img/favicon.svg' | relative_url | escape }}">
+  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | escape }}">
 </head>
 <body>
-  <a href="#main" class="skip-link">跳到主要内容 / Skip to content</a>
-
-  <!-- Navbar -->
-  <header class="navbar" role="banner">
-    <div class="container navbar__inner">
-      <a href="./index.html" class="navbar__brand" aria-label="返回首页 / Back to home">
-        <span class="navbar__brand-zh">张易成</span>
-        <span class="navbar__brand-en">JOEYCH</span>
-      </a>
-
-      <nav class="navbar__links" role="navigation" aria-label="主导航 / Main navigation">
-        <a href="./index.html" class="navbar__link" data-en="Home">首页</a>
-        <a href="./about.html" class="navbar__link" data-en="About">自我介绍</a>
-        <a href="./awards.html" class="navbar__link" data-en="Awards">获奖证书</a>
-        <a href="./projects.html" class="navbar__link" data-en="Projects">项目介绍</a>
-        <a href="./tech-stack.html" class="navbar__link" data-en="Tech Stack">技术栈</a>
-      </nav>
-
-      <div class="navbar__actions">
-        <button class="lang-toggle" aria-label="切换语言 / Switch language">中</button>
-        <button class="navbar__hamburger" aria-label="打开菜单 / Open menu" aria-expanded="false">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Mobile Menu -->
-  <div class="mobile-overlay" aria-hidden="true"></div>
-  <nav class="mobile-menu" role="navigation" aria-label="移动端导航 / Mobile navigation">
-    <a href="./index.html" class="mobile-menu__link" data-en="Home">首页</a>
-    <a href="./about.html" class="mobile-menu__link" data-en="About">自我介绍</a>
-    <a href="./awards.html" class="mobile-menu__link" data-en="Awards">获奖证书</a>
-    <a href="./projects.html" class="mobile-menu__link" data-en="Projects">项目介绍</a>
-    <a href="./tech-stack.html" class="mobile-menu__link" data-en="Tech Stack">技术栈</a>
-  </nav>
+  {% include site-header.html %}
 
   <main id="main">
     <div class="error-page">
       <div class="error-page__code">404</div>
       <h1 class="error-page__title" data-en="Page Not Found">页面未找到</h1>
       <p class="error-page__text" data-en="Sorry, the page you are looking for does not exist or has been moved.">抱歉，您访问的页面不存在或已被移动。</p>
-      <a href="./index.html" class="btn btn--primary">
+      <a href="{{ '/index.html' | relative_url | escape }}" class="btn btn--primary">
         <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span data-en="Back to Home">返回首页</span>
       </a>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer" role="contentinfo">
-    <div class="container">
-      <div class="footer__inner">
-        <div class="footer__section">
-          <h4 class="footer__heading" data-en="Contact">联系方式</h4>
-          <p class="footer__text">
-            <span data-en="Email">邮箱</span>: szjoeych@gmail.com<br>
-            <span data-en="Phone">电话</span>: 17751103176<br>
-            <span data-en="Location">籍贯</span>: <span data-en="Suzhou, Jiangsu">江苏苏州</span>
-          </p>
-        </div>
-        <div class="footer__section">
-          <h4 class="footer__heading" data-en="Links">链接</h4>
-          <div class="footer__links">
-            <a href="https://github.com/JOEYZYC" class="footer__link" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="https://scholar.google.com/citations?user=R_3hg2gAAAAJ" class="footer__link" target="_blank" rel="noopener noreferrer">Google Scholar</a>
-            <a href="https://orcid.org/0009-0009-0202-8772" class="footer__link" target="_blank" rel="noopener noreferrer">ORCID</a>
-          </div>
-        </div>
-      </div>
-      <div class="footer__bottom">
-        <span>© 2026 张易成 / JOEYCH</span>
-      </div>
-    </div>
-  </footer>
-
-  <script src="assets/js/main.js"></script>
+  {% include site-footer.html %}
+  <script src="{{ '/assets/js/main.js' | relative_url | escape }}"></script>
 </body>
 </html>

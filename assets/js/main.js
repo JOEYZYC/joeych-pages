@@ -181,34 +181,47 @@
      ============================================================ */
 
   function initActiveNav() {
-    // Get current page filename
-    var path = window.location.pathname;
-    var filename = path.split('/').pop() || 'index.html';
+    var links = document.querySelectorAll('.navbar__link, .mobile-menu__link');
 
-    // Normalize: if empty, treat as index.html
-    if (!filename || filename === '') filename = 'index.html';
+    function updateActiveLinks() {
+      var currentUrl = new URL(window.location.href);
+      var currentFilename = currentUrl.pathname.split('/').pop() || 'index.html';
+      var currentHash = currentUrl.hash;
 
-    // Desktop nav links
-    var desktopLinks = document.querySelectorAll('.navbar__link');
-    for (var i = 0; i < desktopLinks.length; i++) {
-      var link = desktopLinks[i];
+      for (var i = 0; i < links.length; i++) {
+        links[i].classList.remove('is-active');
+        links[i].removeAttribute('aria-current');
+      }
+
+      for (var j = 0; j < links.length; j++) {
+        var link = links[j];
+        if (isActiveLink(link, currentFilename, currentHash)) {
+          link.classList.add('is-active');
+          link.setAttribute('aria-current', currentHash === '#about' ? 'location' : 'page');
+        }
+      }
+    }
+
+    function isActiveLink(link, currentFilename, currentHash) {
       var href = link.getAttribute('href');
-      if (href === filename || (filename === '' && href === './index.html') || (filename === 'index.html' && href === './')) {
-        link.classList.add('is-active');
-        link.setAttribute('aria-current', 'page');
+      if (!href) return false;
+
+      var linkUrl = new URL(href, window.location.href);
+      var linkFilename = linkUrl.pathname.split('/').pop() || 'index.html';
+
+      if (currentFilename !== 'index.html') {
+        return linkFilename === currentFilename && !linkUrl.hash;
       }
+
+      if (currentHash === '#about') {
+        return linkFilename === 'index.html' && linkUrl.hash === '#about';
+      }
+
+      return linkFilename === 'index.html' && !linkUrl.hash;
     }
 
-    // Mobile nav links
-    var mobileLinks = document.querySelectorAll('.mobile-menu__link');
-    for (var j = 0; j < mobileLinks.length; j++) {
-      var mLink = mobileLinks[j];
-      var mHref = mLink.getAttribute('href');
-      if (mHref === filename || (filename === '' && mHref === './index.html') || (filename === 'index.html' && mHref === './')) {
-        mLink.classList.add('is-active');
-        mLink.setAttribute('aria-current', 'page');
-      }
-    }
+    updateActiveLinks();
+    window.addEventListener('hashchange', updateActiveLinks);
   }
 
   /* ============================================================
@@ -304,141 +317,6 @@
     var caption = modal.querySelector('.certificate-modal__caption');
     var img = figure ? figure.querySelector('img') : null;
 
-    var fallbackCert = {
-      src: 'assets/img/avatar-cartoon.jpg',
-      zh: '证书待补充，暂以卡通头像占位',
-      en: 'Certificate pending; cartoon avatar placeholder'
-    };
-
-    function cert(src, zh, en) {
-      return { src: src, zh: zh, en: en };
-    }
-
-    var certificateRules = [
-      {
-        keywords: ['职业技能赛项'],
-        certs: [cert('assets/img/certificates/2025/集成电路国三.jpg', '全国大学生集成电路创新创业大赛（职业技能赛项）国三', 'IC Innovation Contest — National Third')]
-      },
-      {
-        keywords: ['瑞萨', '东部'],
-        certs: [
-          cert('assets/img/certificates/2024/瑞萨省一.jpg', '全国大学生电子设计竞赛（瑞萨杯）东部第一名', 'Electronic Design Contest (Renesas) — Eastern-China First'),
-          cert('assets/img/certificates/2024/瑞萨国三.jpg', '全国大学生电子设计竞赛（瑞萨杯）国三', 'Electronic Design Contest (Renesas) — National Third')
-        ]
-      },
-      {
-        keywords: ['TI', '一等奖'],
-        certs: [cert('assets/img/certificates/2024/24电赛 省一.png', '全国大学生电子设计竞赛（TI杯）省一', 'Electronic Design Contest (TI) — Provincial First')]
-      },
-      {
-        keywords: ['RAICOM'],
-        certs: [
-          cert('assets/img/certificates/2024/24智能侦察 省一.jpg', 'RAICOM 智能侦察省一', 'RAICOM Intelligent Reconnaissance — Provincial First'),
-          cert('assets/img/certificates/2024/24智能侦察 国二.jpg', 'RAICOM 智能侦察国二', 'RAICOM Intelligent Reconnaissance — National Second')
-        ]
-      },
-      {
-        keywords: ['智能汽车'],
-        certs: [
-          cert('assets/img/certificates/2024/24智能车 省三（个人）.png', '全国大学生智能汽车竞赛省三（个人）', 'Smart Car Competition — Provincial Third (Individual)'),
-          cert('assets/img/certificates/2024/24智能车 省三（团队）.png', '全国大学生智能汽车竞赛省三（团队）', 'Smart Car Competition — Provincial Third (Team)')
-        ]
-      },
-      {
-        keywords: ['嵌入式芯片'],
-        certs: [cert('assets/img/certificates/2024/24嵌赛 省三.png', '全国大学生嵌入式芯片与系统设计竞赛省三', 'Embedded Chip and System Design Contest — Provincial Third')]
-      },
-      {
-        keywords: ['iCAN'],
-        certs: [cert('assets/img/certificates/2023/23ican 国一.jpg', 'iCAN 大学生创新创业赛国一', 'iCAN Innovation Contest — National First')]
-      },
-      {
-        keywords: ['TI', '二等奖'],
-        certs: [cert('assets/img/certificates/2023/23电赛 省二.jpg', '全国大学生电子设计竞赛（TI杯）省二', 'Electronic Design Contest (TI) — Provincial Second')]
-      },
-      {
-        keywords: ['雨骤'],
-        certs: [cert('assets/img/certificates/2023/23集创赛 东部三.jpg', '全国大学生集成电路创新创业大赛（雨骤杯）东部三等', 'IC Innovation Contest (Yuzhou Cup) — East-China Third')]
-      },
-      {
-        keywords: ['博创'],
-        certs: [cert('assets/img/certificates/2023/23博创杯 国三.jpg', '全国大学生嵌入式人工智能设计大赛（博创杯）国三', 'Embedded AI Design Contest (Bochuang Cup) — National Third')]
-      },
-      {
-        keywords: ['ResGatNet'],
-        certs: [cert('assets/img/certificates/2024/屏幕截图 2024-11-08 003146.png', '论文收录截图：ResGatNet', 'Paper acceptance screenshot: ResGatNet')]
-      },
-      {
-        keywords: ['Bifunctional flexible metasurface'],
-        certs: [
-          cert('assets/img/certificates/2024/Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption.png', '论文：Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption', 'Paper: Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption'),
-          cert('assets/img/certificates/2024/屏幕截图 2024-11-08 003221.png', '论文收录截图：Bifunctional flexible metasurface', 'Paper acceptance screenshot: Bifunctional flexible metasurface')
-        ]
-      },
-      {
-        keywords: ['Design and theoretical analysis'],
-        certs: [
-          cert('assets/img/certificates/2024/Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon.png', '论文：Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon', 'Paper: Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon'),
-          cert('assets/img/certificates/2024/屏幕截图 2024-11-08 003256.png', '论文收录截图：Design and theoretical analysis', 'Paper acceptance screenshot: Design and theoretical analysis')
-        ]
-      },
-      {
-        keywords: ['Dual-broadband flexible metasurface'],
-        certs: [cert('assets/img/certificates/2024/Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction.png', '论文：Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction', 'Paper: Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction')]
-      },
-      {
-        keywords: ['双频带柔性极化转换'],
-        certs: [cert('assets/img/certificates/2024/屏幕截图 2024-11-08 003313.png', '论文收录截图：双频带柔性极化转换超表面的仿真研究', 'Paper acceptance screenshot: Simulation Study of a Dual-band Flexible Polarization-Conversion Metasurface')]
-      },
-      {
-        keywords: ['基于字典动态学习'],
-        certs: [cert('assets/img/certificates/2024/陶宇-发明专利证书-基于字典动态学习的目标参数估计方法、系统及存储介质.png', '发明专利：基于字典动态学习的目标参数估计方法、系统及存储介质', 'Patent: Target parameter estimation based on dynamic dictionary learning')]
-      },
-      {
-        keywords: ['二氧化钒和光导硅'],
-        certs: [cert('assets/img/certificates/2024/常熟理工学院-2024100166689 -一种基于二氧化钒和光导硅的动态可调太赫兹吸波器-发明专利证书(签章).png', '发明专利：一种基于二氧化钒和光导硅的动态可调太赫兹吸波器', 'Patent: Tunable terahertz absorber based on VO2 and photoconductive silicon')]
-      }
-    ];
-
-    function getEntryText(entry) {
-      return (entry.textContent || '').replace(/\s+/g, ' ');
-    }
-
-    function matchesRule(text, rule) {
-      for (var i = 0; i < rule.keywords.length; i++) {
-        if (text.indexOf(rule.keywords[i]) === -1) return false;
-      }
-      return true;
-    }
-
-    function resolveEntryCerts(entry) {
-      var text = getEntryText(entry);
-      for (var i = 0; i < certificateRules.length; i++) {
-        if (matchesRule(text, certificateRules[i])) {
-          return certificateRules[i].certs;
-        }
-      }
-      return [fallbackCert];
-    }
-
-    function attachEntryCertificates() {
-      var entries = document.querySelectorAll('.award-card, .pub-item');
-      for (var i = 0; i < entries.length; i++) {
-        var entry = entries[i];
-        if (!entry.hasAttribute('data-certs')) {
-          entry.setAttribute('data-certs', JSON.stringify(resolveEntryCerts(entry)));
-        }
-        entry.classList.add('certificate-trigger');
-        entry.setAttribute('role', 'button');
-        entry.setAttribute('tabindex', '0');
-        if (!entry.hasAttribute('aria-label')) {
-          entry.setAttribute('aria-label', '查看对应证书 / View related certificate');
-        }
-      }
-    }
-
-    attachEntryCertificates();
-
     var triggers = document.querySelectorAll('[data-certs]');
     if (triggers.length === 0) return;
 
@@ -494,6 +372,7 @@
       lastFocused = document.activeElement;
       updateSlide();
       modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
 
       // Move focus to close button for accessibility
@@ -506,6 +385,7 @@
 
     function closeModal() {
       modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
       if (lastFocused && lastFocused.focus) {
         lastFocused.focus();
@@ -560,7 +440,7 @@
       } else if (e.key === 'Tab') {
         // Focus trap
         var focusable = modal.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])'
         );
         if (focusable.length === 0) return;
         var first = focusable[0];

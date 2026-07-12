@@ -1,0 +1,70 @@
+- id: power-print-recognition
+  year: 2024
+  featured: true
+  image: null
+  title: { zh: '「电纹识别」智能物联用电检测装置', en: '"Power-Print Recognition" Smart IoT Electricity-Monitoring Device' }
+  summary:
+    zh: 一款智能用电监控系统，基于瑞萨 R7FA6M5 单片机，采集电器运行电流波形，结合快速傅里叶变换（FFT）与斯皮尔曼相关性匹配算法，实现对多设备的非侵入式、实时识别与状态监测。搭配 W800 WiFi 模块，通过 TCP 协议将识别结果上传至自制 C# 上位机；系统支持本地模式匹配、实时分析、远程管理三大功能。
+    en: An intelligent power-monitoring system on a Renesas R7FA6M5 MCU. It captures appliance current waveforms and combines FFT with Spearman correlation matching for non-intrusive, real-time multi-device recognition and status monitoring. A W800 Wi-Fi module uploads results over TCP to a custom C# host app, supporting local pattern matching, real-time analysis, and remote management.
+  contribution:
+    zh: 在赛题要求的单片机资源受限条件下完成高频信号采集与复杂算法运算：采用 DMA 传输减轻 CPU 负担，使用 12 位 ADC 以 10 kHz 采样率采集电流波形，通过 FFT 提取 512 点频域特征，并使用斯皮尔曼相关系数方法提升多设备并发识别准确率。
+    en: 'Achieved high-frequency acquisition and heavy computation under tight MCU resource limits: DMA to offload the CPU, a 12-bit ADC at 10 kHz, 512-point FFT feature extraction, and Spearman correlation to boost concurrent multi-device recognition accuracy.'
+  tags:
+    - { zh: Renesas R7FA6M5, en: Renesas R7FA6M5 }
+    - { zh: FFT, en: FFT }
+    - { zh: 斯皮尔曼相关, en: Spearman }
+    - { zh: DMA, en: DMA }
+    - { zh: '12-bit ADC @10kHz', en: '12-bit ADC @10kHz' }
+    - { zh: W800 WiFi, en: W800 WiFi }
+    - { zh: TCP, en: TCP }
+    - { zh: C# 上位机, en: C# Host App }
+  figures:
+    - { id: power-print-host, zh: 图1 C# 上位机, en: Fig.1 C# Host App }
+    - { id: power-print-hardware, zh: 图2 下位机实物结构, en: Fig.2 Device Hardware }
+    - { id: power-print-spectrum, zh: 图3 FFT 运算后的频谱, en: Fig.3 FFT Spectrum }
+  links: []
+- id: dual-light-fusion
+  year: 2024
+  featured: true
+  image: null
+  title: { zh: '「双光融合」智能热像仪', en: '"Dual-Light Fusion" Smart Thermal Imager' }
+  summary:
+    zh: 基于 OpenMV 独立设计的「双光融合」智能热像仪，集成可见光摄像头 OV5640 与红外传感器 MLX90640，使用 MicroPython 开发；通过二值化处理简化视觉信息，并训练部署基于 TensorFlow Lite 的轻量化人脸识别模型，实现对人脸区域的自动定位与体温实时监测。
+    en: 'A "dual-light fusion" thermal imager independently designed on OpenMV, integrating an OV5640 visible-light camera and an MLX90640 infrared sensor, developed in MicroPython. Binarization simplifies the visual stream, and a lightweight TensorFlow Lite face-recognition model is trained and deployed for automatic face localization and real-time temperature monitoring.'
+  contribution: null
+  tags:
+    - { zh: OpenMV, en: OpenMV }
+    - { zh: OV5640, en: OV5640 }
+    - { zh: MLX90640, en: MLX90640 }
+    - { zh: MicroPython, en: MicroPython }
+    - { zh: TensorFlow Lite, en: TensorFlow Lite }
+    - { zh: 二值化, en: Binarization }
+    - { zh: 人脸识别, en: Face Recognition }
+  figures:
+    - { id: dual-light-fusion, zh: 图4 「双光融合」功能, en: Fig.4 Dual-Light Fusion }
+    - { id: dual-light-binarization, zh: 图5 二值化处理, en: Fig.5 Binarization }
+    - { id: dual-light-device, zh: 图6 热像仪实物展示, en: Fig.6 Device }
+  links:
+    - { type: source, url: null, label: { zh: 开源链接待补充, en: Open-source — coming soon } }
+- id: resgatnet
+  year: 2024
+  featured: true
+  image: null
+  title: { zh: ResGatNet, en: ResGatNet }
+  summary:
+    zh: 面向低信噪比无线感知的深度学习模型，采用三阶段架构：① 信号预处理——将含噪原始 IQ 信号映射为星座图，实现物理层信号到视觉表征的转化；② 特征提取——集成大核卷积与 ResNet-50 主干网络，通过扩大感受野与残差连接提升噪声鲁棒性；③ 特征增强与分类——创新引入门控 CNN 模块实现局部特征动态选择与噪声抑制，并采用 Kolmogorov–Arnold Network（KAN）替代传统 MLP，显著降低参数量并提升分类精度。成果发表于 IEEE Access。
+    en: 'A deep-learning model for low-SNR wireless perception with a three-stage architecture: (1) signal preprocessing maps noisy raw IQ signals into constellation diagrams, turning physical-layer signals into visual representations; (2) feature extraction integrates large-kernel convolution with a ResNet-50 backbone, enlarging the receptive field and using residual connections for noise robustness; (3) feature enhancement & classification introduces a gated-CNN module for dynamic local-feature selection and noise suppression, and replaces the conventional MLP with a Kolmogorov–Arnold Network (KAN), markedly cutting parameters while improving accuracy. Published in IEEE Access.'
+  contribution: { zh: 主要负责数据处理与部分代码编写。, en: Responsible for data processing and part of the codebase. }
+  tags:
+    - { zh: 深度学习, en: Deep Learning }
+    - { zh: IQ / 星座图, en: IQ / Constellation }
+    - { zh: 大核卷积, en: Large-kernel Conv }
+    - { zh: ResNet-50, en: ResNet-50 }
+    - { zh: 门控 CNN, en: Gated CNN }
+    - { zh: KAN, en: KAN }
+    - { zh: IEEE Access, en: IEEE Access }
+  figures:
+    - { id: resgatnet-architecture, zh: 图7 ResGatNet 模型结构, en: Fig.7 ResGatNet Architecture }
+  links:
+    - { type: paper, url: null, label: { zh: 论文链接待补充, en: Paper — coming soon } }
+    - { type: source, url: null, label: { zh: 开源链接待补充, en: Open-source — coming soon } }

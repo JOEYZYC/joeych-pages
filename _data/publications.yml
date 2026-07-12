@@ -1,0 +1,61 @@
+- id: resgatnet
+  year: 2024
+  featured: true
+  title: { zh: ResGatNet：低信噪比无线感知中的效率与精度协同, en: 'ResGatNet: Bridging Efficiency and Precision in Low-SNR Wireless Perception' }
+  venue: { zh: IEEE Access, en: IEEE Access }
+  authors: { zh: 作者位次 2/6, en: Author 2/6 }
+  tags: [wireless-perception, deep-learning]
+  links: []
+  certificates:
+    - { src: 'assets/img/certificates/2024/屏幕截图 2024-11-08 003146.png', zh: '论文收录截图：ResGatNet', en: 'Paper acceptance screenshot: ResGatNet' }
+- id: bifunctional-flexible-metasurface
+  year: 2024
+  featured: true
+  title: { zh: 基于石墨烯和二氧化钒的双功能柔性超表面：极化转换与吸收, en: Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption }
+  venue: { zh: Diamond and Related Materials, en: Diamond and Related Materials }
+  authors: { zh: 作者位次 3/8, en: Author 3/8 }
+  tags: [metasurface, terahertz]
+  links: []
+  certificates:
+    - { src: 'assets/img/certificates/2024/Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption.png', zh: '论文：Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption', en: 'Paper: Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption' }
+    - { src: 'assets/img/certificates/2024/屏幕截图 2024-11-08 003221.png', zh: '论文收录截图：Bifunctional flexible metasurface', en: 'Paper acceptance screenshot: Bifunctional flexible metasurface' }
+- id: tunable-bifunctional-metasurface-absorber
+  year: 2024
+  featured: true
+  title: { zh: 基于二氧化钒和光导硅的可调谐双功能超表面吸收器设计与理论分析, en: Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon }
+  venue: { zh: Dalton Transactions, en: Dalton Transactions }
+  authors: { zh: 作者位次 5/8, en: Author 5/8 }
+  tags: [metasurface, terahertz]
+  links: []
+  certificates:
+    - { src: 'assets/img/certificates/2024/Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon.png', zh: '论文：Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon', en: 'Paper: Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon' }
+    - { src: 'assets/img/certificates/2024/屏幕截图 2024-11-08 003256.png', zh: '论文收录截图：Design and theoretical analysis', en: 'Paper acceptance screenshot: Design and theoretical analysis' }
+- id: dual-broadband-flexible-metasurface
+  year: 2024
+  featured: true
+  title: { zh: 基于交错三角棋盘布局的双宽带柔性超表面用于 RCS 缩减, en: Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction }
+  venue: { zh: Optics Communications, en: Optics Communications }
+  authors: { zh: 作者位次 3/8, en: Author 3/8 }
+  tags: [metasurface, rcs]
+  links: []
+  certificates:
+    - { src: 'assets/img/certificates/2024/Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction.png', zh: '论文：Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction', en: 'Paper: Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction' }
+- id: dual-band-polarization-conversion
+  year: 2024
+  featured: false
+  title: { zh: 双频带柔性极化转换超表面的仿真研究, en: Simulation Study of a Dual-band Flexible Polarization-Conversion Metasurface }
+  venue: { zh: 光电子·激光, en: Journal of Optoelectronics·Laser }
+  authors: { zh: 作者位次 3/6, en: Author 3/6 }
+  tags: [metasurface]
+  links: []
+  certificates:
+    - { src: 'assets/img/certificates/2024/屏幕截图 2024-11-08 003313.png', zh: '论文收录截图：双频带柔性极化转换超表面的仿真研究', en: 'Paper acceptance screenshot: Simulation Study of a Dual-band Flexible Polarization-Conversion Metasurface' }
+- id: tri-band-metasurface-absorber
+  year: 2024
+  featured: false
+  title: { zh: 基于超表面的三频带吸波器, en: A Tri-band Metasurface Absorber }
+  venue: { zh: 光电子·激光, en: Journal of Optoelectronics·Laser }
+  authors: { zh: 作者位次 3/6, en: Author 3/6 }
+  tags: [metasurface]
+  links: []
+  certificates: []

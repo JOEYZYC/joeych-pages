@@ -11,10 +11,10 @@
 ## 目录结构
 
 ```
-index.html          首页（Hero + 概览 + 研究方向）
-about.html          自我介绍（教育 / 校园经历 / 技能 / 联系方式）
-awards.html         获奖证书（竞赛 / 论文 / 专利 / 毕设 / 证书图）
-projects.html       项目介绍（电纹识别 / 双光融合热像仪 / ResGatNet）
+index.html          首页（Hero + 完整个人简介）
+about.html          无索引重定向至首页 #about
+awards.html         获奖证书（由 `_data` 渲染）
+projects.html       项目介绍（由 `_data` 渲染）
 tech-stack.html     技术栈（基础知识 / 技术方向 / 架构设计）
 404.html            404 页
 
@@ -25,6 +25,7 @@ assets/
   img/favicon.svg   站点图标
 
 _layouts/           Jekyll 博客布局（default / post）
+_data/              双语资料、项目、论文、专利、毕业设计与获奖记录
 _posts/             博客文章（Markdown）
 _config.yml         Jekyll / GitHub Pages 配置
 atom.xml            RSS/Atom 订阅源
@@ -33,21 +34,20 @@ deploy.ps1          一键提交并部署脚本
 serve.ps1           本地预览脚本
 ```
 
-> 核心四页为**纯静态 HTML**（无 Liquid、相对路径），既能本地直接预览，又能在 GitHub Pages 子路径 `/joeych-pages/` 正常工作；博客层使用标准 Jekyll。
+> 首页、项目和获奖页面使用标准 Jekyll Liquid 与 `_data`，GitHub Pages 会在子路径 `/joeych-pages/` 下渲染它们。
 
 ---
 
 ## 本地预览
 
-环境：仅需 **Python 3**（无需安装 Ruby/Jekyll，核心页为静态）。
+环境：Ruby、Bundler 与 GitHub Pages 兼容的 Jekyll 依赖。
 
 ```powershell
 ./serve.ps1            # 默认 http://localhost:8123
 ./serve.ps1 8080       # 自定义端口
 ```
 
-浏览器打开 `http://localhost:8123/index.html` 即可。
-（博客 `blog.html` 已重定向到 `tech-stack.html`。）
+首次运行前执行 `bundle install`，然后浏览器打开 `http://localhost:8123/joeych-pages/index.html`。
 
 ---
 
@@ -95,7 +95,7 @@ git push origin main
 </figure>
 ```
 
-> 头像、微信 / GitHub 二维码（`about.html`）、荣誉证书（`awards.html`，6 格）同理替换。
+> 首页使用现有的抠图肖像；项目图在 `_data/projects.yml` 的 `figures` 中维护。证书关联在 `_data/awards.yml`、`publications.yml` 和 `patents.yml` 的显式 `certificates` 列表中维护。
 
 ### 2. 补全链接占位
 

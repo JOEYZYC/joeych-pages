@@ -1,0 +1,87 @@
+name:
+  zh: 张易成
+  en: JOEYCH
+role:
+  zh: 电子信息工程
+  en: Electronic & Information Engineering
+tagline:
+  zh: 嵌入式系统 / 无线感知 / 超表面与太赫兹
+  en: Embedded Systems / Wireless Perception / Metasurfaces & Terahertz
+summary:
+  zh: 苏州工学院电子信息工程专业本科生，综测专业排名 5/71。研究兴趣涵盖嵌入式系统、无线感知与深度学习、超表面/太赫兹器件与天线设计。已发表学术论文 6 篇，申请发明专利 4 项，斩获国家级与省级学科竞赛奖项十余项。热爱动手实践，擅长从电路设计、嵌入式开发到算法部署的软硬件全栈工程。
+  en: Undergraduate in Electronic & Information Engineering at Suzhou Institute of Technology, ranked 5/71. Research interests span embedded systems, wireless perception with deep learning, and metasurface / terahertz devices and antenna design. Author of 6 publications, 4 patent applications, and 10+ national or provincial competition awards. A hands-on hardware-software engineer, from circuit design and embedded development to algorithm deployment.
+statistics:
+  - { id: academic-rank, label: { zh: 综测专业排名, en: Academic rank }, value: 5/71 }
+  - { id: publications, label: { zh: 学术论文, en: Publications }, value: 6 }
+  - { id: patents, label: { zh: 发明专利, en: Patents }, value: 4 }
+  - { id: competition-records, label: { zh: 竞赛获奖, en: Competition records }, value: 10+ }
+contact:
+  email: szjoeych@gmail.com
+  phone: "17751103176"
+  hometown: { zh: 江苏苏州, en: Suzhou, Jiangsu }
+  political: { zh: 中共党员, en: CPC Member }
+  github: https://github.com/JOEYZYC
+  scholar: https://scholar.google.com/citations?user=R_3hg2gAAAAJ
+  orcid: https://orcid.org/0009-0009-0202-8772
+education:
+  - id: suzhou-institute-of-technology
+    period: 2022.9 - 2026.6
+    school: { zh: 苏州工学院, en: Suzhou Institute of Technology }
+    degree: { zh: 电子信息工程 · 工学学士, en: B.Eng. in Electronic & Information Engineering }
+    highlights:
+      - { zh: 综测专业排名 5/71, en: Comprehensive rank 5/71 }
+      - { zh: 校三好学生 (2022·2023·2024·2025), en: '"Three-Good" Merit Student (2022·2023·2024·2025)' }
+      - { zh: 奖学金：校二等 (2022·2023) → 校一等 (2024) → 校特等 (2025), en: 'Scholarships: 2nd-class (2022·2023) → 1st-class (2024) → Special-class (2025)' }
+      - { zh: 校优秀班干 (2023·2024), en: Outstanding Student Cadre (2023·2024) }
+      - { zh: 五四青年奖章 (2024), en: May Fourth Youth Medal (2024) }
+      - { zh: 校优秀毕业生, en: Outstanding Graduate }
+campus_experience:
+  - id: aeromodelling-club
+    period: 2024.6 - 2025.6
+    organization: { zh: 天际线航模社, en: Skyline Aeromodelling Club }
+    role: { zh: 副社长, en: Vice President }
+    details:
+      - { zh: 航模制作、社团招新、比赛组织、设备管理、志愿服务。, en: Model-aircraft building, recruitment, competition organization, equipment management, volunteering. }
+  - id: media-center
+    period: 2022.9 - 2025.6
+    organization: { zh: 学校融媒体中心, en: University Media Center }
+    role: { zh: 首席记者, en: Chief Reporter }
+    details:
+      - { zh: '负责公众号推文摄影，累计超 20 篇；主讲新生摄影后期培训，授课 60 人次；2023「理工秋」校级摄影比赛二等奖；2023 江苏省大学生网络文化节三等奖。', en: Lead photographer for 20+ official-account features; led photo post-production training for 60 attendees; 2nd prize, campus photography contest (2023); 3rd prize, Jiangsu Provincial Collegiate Online Culture Festival (2023). }
+  - id: party-branch
+    period: 2024.7 - 2025.6
+    organization: { zh: 电子学院学生第二党支部, en: 2nd Student Party Branch, School of Electronics }
+    role: { zh: 负责人, en: Head }
+    details:
+      - { zh: 负责党的组织生活相关工作；支部获评校先进优秀党组织。, en: Organized Party activities; branch awarded Advanced Party Organization of the university. }
+  - id: class-officer
+    period: 2023.9 - 2026.6
+    organization: { zh: 班级, en: Class }
+    role: { zh: 组织委员 / 就业委员, en: Organization & Employment Officer }
+    details:
+      - { zh: 负责班级活动组织与就业活动通知。, en: Organized class activities and employment notices. }
+skills:
+  - id: hardware
+    title: { zh: 硬件, en: Hardware }
+    tags:
+      - { zh: 电子电路设计 · 多层 PCB 布板 · 焊接调试, en: Circuit design · multilayer PCB layout · soldering & debugging }
+      - { zh: ST / Renesas / TI / Infineon, en: ST / Renesas / TI / Infineon }
+      - { zh: 无人机驾驶员 五级/初级工, en: UAV Pilot, Level-5 }
+      - { zh: 电工 三级/高级工, en: Electrician, Senior }
+  - id: software
+    title: { zh: 软件, en: Software }
+    tags:
+      - { zh: C / C# / Python, en: C / C# / Python }
+      - { zh: Linux & Docker 容器部署, en: Linux & Docker deployment }
+      - { zh: Git 版本管理与团队协作, en: Git version control & team collaboration }
+  - id: algorithms-simulation
+    title: { zh: 算法与仿真, en: Algorithms & Simulation }
+    tags:
+      - { zh: Halcon / OpenCV 图像处理与视觉算法, en: Halcon / OpenCV image processing & vision }
+      - { zh: MATLAB / Simulink 建模仿真, en: MATLAB / Simulink modeling & simulation }
+      - { zh: CST Studio Suite 微波仿真与天线设计, en: CST Studio Suite microwave simulation & antenna design }
+  - id: general
+    title: { zh: 通用, en: General }
+    tags:
+      - { zh: 善用 AI 工具提升开发效率, en: AI-assisted development }
+      - { zh: 良好英语能力，能阅读英文技术文档, en: Strong English, reads technical docs }
