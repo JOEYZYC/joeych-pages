@@ -6,9 +6,9 @@ permalink: /tech-stack.html
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="张易成的技术栈 — 基础知识、技术方向与架构设计知识体系">
+  <meta name="description" content="张易成的技术栈 — 已在项目中使用的能力与持续学习的技术地图">
   <meta name="author" content="张易成 / JOEYCH">
-  <title>张易成 个人网页</title>
+  <title>技术栈 · 张易成</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -17,226 +17,81 @@ permalink: /tech-stack.html
 </head>
 <body>
   {% include site-header.html %}
-
   <main id="main">
-    <!-- Page Header -->
-    <section class="page-header">
-      <div class="container">
-        <span class="page-header__eyebrow">TECH STACK</span>
-        <h1 class="page-header__title" data-en="Tech Stack">技术栈</h1>
-      </div>
-    </section>
+    {% include editorial-page-intro.html eyebrow="TECH STACK" title_zh="技术栈" title_en="Tech Stack" intro_zh="这里优先展示已在项目中使用的能力，其余内容作为持续学习的技术地图。" intro_en="Proven project capabilities come first; the remaining topics form an ongoing technical learning map." %}
 
-    <!-- 01 基础知识 -->
     <section class="section">
       <div class="container">
-        <div class="section-header reveal">
-          <span class="section-eyebrow">FUNDAMENTALS</span>
-          <h2 class="section-title" data-en="Fundamentals">基础知识</h2>
-        </div>
-
-        <details class="glass glass-card reveal" open>
-          <summary class="tree-branch__summary" data-en="Fundamentals — click to collapse">基础知识 — 点击可折叠</summary>
-          <div class="tree-branch__content">
-            <div class="tree-leaf-grid">
-              <div class="glass glass-card tree-leaf-card">
-                <h3 class="tree-leaf-card__title" data-en="Operating Systems">操作系统</h3>
-              </div>
-              <div class="glass glass-card tree-leaf-card">
-                <h3 class="tree-leaf-card__title" data-en="Databases">数据库</h3>
-              </div>
-              <div class="glass glass-card tree-leaf-card">
-                <h3 class="tree-leaf-card__title" data-en="Algorithms">算法</h3>
-              </div>
-              <div class="glass glass-card tree-leaf-card">
-                <h3 class="tree-leaf-card__title" data-en="Networking">网络</h3>
-              </div>
+        <div class="skill-groups">
+          {% for skill in site.data.profile.skills %}
+          <article class="skill-group">
+            <h2 class="skill-group__title" data-en="{{ skill.title.en | escape }}">{{ skill.title.zh }}</h2>
+            <div class="skill-group__tags tags-row">
+              {% for tag in skill.tags %}<span class="tag" data-en="{{ tag.en | escape }}">{{ tag.zh }}</span>{% endfor %}
             </div>
-          </div>
-        </details>
+            {% if skill.id == 'hardware' %}
+            <div class="skill-group__evidence"><a href="{{ '/projects.html#power-print-recognition' | relative_url | escape }}" data-en="{{ site.data.projects[0].title.en | escape }}">{{ site.data.projects[0].title.zh }}</a><a href="{{ '/projects.html#dual-light-fusion' | relative_url | escape }}" data-en="{{ site.data.projects[1].title.en | escape }}">{{ site.data.projects[1].title.zh }}</a></div>
+            {% elsif skill.id == 'software' or skill.id == 'algorithms-simulation' %}
+            <div class="skill-group__evidence"><a href="{{ '/projects.html#power-print-recognition' | relative_url | escape }}" data-en="{{ site.data.projects[0].title.en | escape }}">{{ site.data.projects[0].title.zh }}</a><a href="{{ '/projects.html#dual-light-fusion' | relative_url | escape }}" data-en="{{ site.data.projects[1].title.en | escape }}">{{ site.data.projects[1].title.zh }}</a><a href="{{ '/projects.html#resgatnet' | relative_url | escape }}" data-en="{{ site.data.projects[2].title.en | escape }}">{{ site.data.projects[2].title.zh }}</a></div>
+            {% endif %}
+          </article>
+          {% endfor %}
+        </div>
       </div>
     </section>
 
-    <!-- 02 技术栈 -->
     <section class="section section--alt">
       <div class="container">
-        <div class="section-header reveal">
-          <span class="section-eyebrow">TECH STACK</span>
-          <h2 class="section-title" data-en="Technology Stack">技术栈</h2>
+        <div class="learning-map">
+          <details class="learning-map__section" open>
+            <summary class="learning-map__summary" data-en="Fundamentals — click to collapse">基础知识 — 点击可折叠</summary>
+            <div class="learning-map__content">
+              <div class="tree-leaf-grid">
+                <div class="glass glass-card tree-leaf-card"><h3 class="tree-leaf-card__title" data-en="Operating Systems">操作系统</h3></div>
+                <div class="glass glass-card tree-leaf-card"><h3 class="tree-leaf-card__title" data-en="Databases">数据库</h3></div>
+                <div class="glass glass-card tree-leaf-card"><h3 class="tree-leaf-card__title" data-en="Algorithms">算法</h3></div>
+                <div class="glass glass-card tree-leaf-card"><h3 class="tree-leaf-card__title" data-en="Networking">网络</h3></div>
+              </div>
+            </div>
+          </details>
+
+          <details class="learning-map__section" open>
+            <summary class="learning-map__summary" data-en="Technology Stack — click to collapse">技术栈 — 点击可折叠</summary>
+            <div class="learning-map__content">
+              <div class="tree-branch__group"><h3 class="tree-branch__group-title" data-en="AI Technology">AI 技术</h3></div>
+              <div class="tree-branch__group"><h3 class="tree-branch__group-title" data-en="Cloud Computing">云计算</h3></div>
+              <details class="learning-map__subsection" open>
+                <summary class="learning-map__summary" data-en="Embedded Systems — click to expand sub-layers">嵌入式 — 点击展开子层</summary>
+                <div class="learning-map__content">
+                  <div class="glass glass-card tree-layer-card"><h4 class="tree-layer-card__title" data-en="Middleware Layer">中间件层</h4><div class="tags-row"><span class="tag" data-en="Security &amp; Encryption">安全加密</span><span class="tag" data-en="Storage Technology">存储技术</span><span class="tag" data-en="Multimedia Processing">多媒体处理</span><span class="tag" data-en="Database &amp; Data Management">数据库与数据管理</span><span class="tag" data-en="Graphics Display">图形显示</span><span class="tag" data-en="File Systems">文件系统</span></div></div>
+                  <div class="glass glass-card tree-layer-card"><h4 class="tree-layer-card__title" data-en="Cloud &amp; Backend">云端与后台</h4><div class="tags-row"><span class="tag" data-en="Backend Development">后端开发</span><span class="tag" data-en="Data Analysis &amp; Visualization">数据分析与可视化</span><span class="tag" data-en="Cloud Services">云服务</span></div></div>
+                  <div class="glass glass-card tree-layer-card"><h4 class="tree-layer-card__title" data-en="Toolchain">工具链</h4><div class="tags-row"><span class="tag" data-en="Debugging &amp; Testing">调试与测试</span><span class="tag" data-en="Development Tools">开发工具</span><span class="tag" data-en="Performance Optimization">性能优化</span><span class="tag" data-en="CI/CD &amp; DevOps">CI CD与DevOps</span></div></div>
+                  <div class="glass glass-card tree-layer-card"><h4 class="tree-layer-card__title" data-en="Application Layer">应用层</h4><div class="tags-row"><span class="tag" data-en="Embedded AI/ML">嵌入式AI ML</span><span class="tag" data-en="Application Frameworks">应用框架</span><span class="tag" data-en="UI Development">用户界面开发</span><span class="tag" data-en="OTA &amp; Remote Management">OTA与远程管理</span></div></div>
+                  <div class="glass glass-card tree-layer-card"><h4 class="tree-layer-card__title" data-en="OS Layer">操作系统层</h4><div class="tags-row"><span class="tag" data-en="Bare-metal Programming">裸机编程</span><span class="tag" data-en="Embedded Linux">嵌入式Linux</span><span class="tag" data-en="Android Systems">Android系统</span><span class="tag">FreeRTOS</span><span class="tag">RT-Thread</span><span class="tag" data-en="RTOS Fundamentals">RTOS基础</span></div></div>
+                  <div class="glass glass-card tree-layer-card"><h4 class="tree-layer-card__title" data-en="Cross-cutting Concerns">横切关注点</h4><div class="tags-row"><span class="tag" data-en="Safety &amp; Reliability">安全与可靠性</span><span class="tag" data-en="Programming Languages">编程语言</span><span class="tag" data-en="Software Architecture &amp; Design Patterns">软件架构与设计模式</span><span class="tag" data-en="Project Management &amp; Career">项目管理与职业</span></div></div>
+                  <div class="glass glass-card tree-layer-card"><h4 class="tree-layer-card__title" data-en="Hardware Layer">硬件层</h4><div class="tags-row"><span class="tag" data-en="Sensor Technology">传感器技术</span><span class="tag" data-en="Power Management">电源管理</span><span class="tag" data-en="Communication Interface Hardware">通信接口硬件</span><span class="tag" data-en="Chip Architecture">芯片架构</span><span class="tag" data-en="Hardware Design Fundamentals">硬件设计基础</span><span class="tag" data-en="Actuator Control">执行器控制</span></div></div>
+                  <div class="glass glass-card tree-layer-card"><h4 class="tree-layer-card__title" data-en="Industry Domains">行业领域</h4><div class="tags-row"><span class="tag" data-en="Industrial Automation">工业自动化</span><span class="tag" data-en="Aerospace &amp; Defense">航空航天与国防</span><span class="tag" data-en="Automotive Electronics">汽车电子</span><span class="tag" data-en="Consumer Electronics">消费电子</span><span class="tag" data-en="Medical Devices">医疗设备</span></div></div>
+                  <div class="glass glass-card tree-layer-card"><h4 class="tree-layer-card__title" data-en="Communication &amp; Networking">通信与网络</h4><div class="tags-row"><span class="tag" data-en="Network Protocols">网络协议</span><span class="tag" data-en="Wireless Communication">无线通信</span><span class="tag" data-en="IoT Cloud Connectivity">IoT云接入</span></div></div>
+                  <div class="glass glass-card tree-layer-card"><h4 class="tree-layer-card__title" data-en="Driver &amp; BSP Layer">驱动与BSP层</h4><div class="tags-row"><span class="tag" data-en="Memory Management">内存管理</span><span class="tag" data-en="Device Driver Development">设备驱动开发</span><span class="tag" data-en="Device Tree &amp; BSP">设备树与BSP</span><span class="tag" data-en="Clocks &amp; Timers">时钟与定时器</span><span class="tag" data-en="Interrupts &amp; Exception Handling">中断与异常处理</span><span class="tag" data-en="Bootloader Development">Bootloader开发</span></div></div>
+                </div>
+              </details>
+            </div>
+          </details>
+
+          <details class="learning-map__section" open>
+            <summary class="learning-map__summary" data-en="Architecture Design — click to collapse">架构设计 — 点击可折叠</summary>
+            <div class="learning-map__content">
+              <div class="tree-leaf-grid">
+                <div class="glass glass-card tree-leaf-card"><h3 class="tree-leaf-card__title" data-en="Distributed Systems Architecture">分布式系统架构</h3></div>
+                <div class="glass glass-card tree-leaf-card"><h3 class="tree-leaf-card__title" data-en="Platform Architecture">平台架构</h3></div>
+                <div class="glass glass-card tree-leaf-card"><h3 class="tree-leaf-card__title" data-en="Embedded Systems Architecture">嵌入式系统架构</h3></div>
+              </div>
+            </div>
+          </details>
         </div>
-
-        <details class="glass glass-card reveal" open>
-          <summary class="tree-branch__summary" data-en="Technology Stack — click to collapse">技术栈 — 点击可折叠</summary>
-          <div class="tree-branch__content">
-
-            <!-- AI 技术 -->
-            <div class="tree-branch__group">
-              <h3 class="tree-branch__group-title" data-en="AI Technology">AI 技术</h3>
-            </div>
-
-            <!-- 云计算 -->
-            <div class="tree-branch__group">
-              <h3 class="tree-branch__group-title" data-en="Cloud Computing">云计算</h3>
-            </div>
-
-            <!-- 嵌入式 (collapsible sub-layers) -->
-            <details class="glass glass-card tree-sub-branch reveal" open>
-              <summary class="tree-branch__summary" data-en="Embedded Systems — click to expand sub-layers">嵌入式 — 点击展开子层</summary>
-              <div class="tree-branch__content">
-
-                <!-- 中间件层 -->
-                <div class="glass glass-card tree-layer-card">
-                  <h4 class="tree-layer-card__title" data-en="Middleware Layer">中间件层</h4>
-                  <div class="tags-row">
-                    <span class="tag" data-en="Security &amp; Encryption">安全加密</span>
-                    <span class="tag" data-en="Storage Technology">存储技术</span>
-                    <span class="tag" data-en="Multimedia Processing">多媒体处理</span>
-                    <span class="tag" data-en="Database &amp; Data Management">数据库与数据管理</span>
-                    <span class="tag" data-en="Graphics Display">图形显示</span>
-                    <span class="tag" data-en="File Systems">文件系统</span>
-                  </div>
-                </div>
-
-                <!-- 云端与后台 -->
-                <div class="glass glass-card tree-layer-card">
-                  <h4 class="tree-layer-card__title" data-en="Cloud &amp; Backend">云端与后台</h4>
-                  <div class="tags-row">
-                    <span class="tag" data-en="Backend Development">后端开发</span>
-                    <span class="tag" data-en="Data Analysis &amp; Visualization">数据分析与可视化</span>
-                    <span class="tag" data-en="Cloud Services">云服务</span>
-                  </div>
-                </div>
-
-                <!-- 工具链 -->
-                <div class="glass glass-card tree-layer-card">
-                  <h4 class="tree-layer-card__title" data-en="Toolchain">工具链</h4>
-                  <div class="tags-row">
-                    <span class="tag" data-en="Debugging &amp; Testing">调试与测试</span>
-                    <span class="tag" data-en="Development Tools">开发工具</span>
-                    <span class="tag" data-en="Performance Optimization">性能优化</span>
-                    <span class="tag" data-en="CI/CD &amp; DevOps">CI CD与DevOps</span>
-                  </div>
-                </div>
-
-                <!-- 应用层 -->
-                <div class="glass glass-card tree-layer-card">
-                  <h4 class="tree-layer-card__title" data-en="Application Layer">应用层</h4>
-                  <div class="tags-row">
-                    <span class="tag" data-en="Embedded AI/ML">嵌入式AI ML</span>
-                    <span class="tag" data-en="Application Frameworks">应用框架</span>
-                    <span class="tag" data-en="UI Development">用户界面开发</span>
-                    <span class="tag" data-en="OTA &amp; Remote Management">OTA与远程管理</span>
-                  </div>
-                </div>
-
-                <!-- 操作系统层 -->
-                <div class="glass glass-card tree-layer-card">
-                  <h4 class="tree-layer-card__title" data-en="OS Layer">操作系统层</h4>
-                  <div class="tags-row">
-                    <span class="tag" data-en="Bare-metal Programming">裸机编程</span>
-                    <span class="tag" data-en="Embedded Linux">嵌入式Linux</span>
-                    <span class="tag" data-en="Android Systems">Android系统</span>
-                    <span class="tag">FreeRTOS</span>
-                    <span class="tag">RT-Thread</span>
-                    <span class="tag" data-en="RTOS Fundamentals">RTOS基础</span>
-                  </div>
-                </div>
-
-                <!-- 横切关注点 -->
-                <div class="glass glass-card tree-layer-card">
-                  <h4 class="tree-layer-card__title" data-en="Cross-cutting Concerns">横切关注点</h4>
-                  <div class="tags-row">
-                    <span class="tag" data-en="Safety &amp; Reliability">安全与可靠性</span>
-                    <span class="tag" data-en="Programming Languages">编程语言</span>
-                    <span class="tag" data-en="Software Architecture &amp; Design Patterns">软件架构与设计模式</span>
-                    <span class="tag" data-en="Project Management &amp; Career">项目管理与职业</span>
-                  </div>
-                </div>
-
-                <!-- 硬件层 -->
-                <div class="glass glass-card tree-layer-card">
-                  <h4 class="tree-layer-card__title" data-en="Hardware Layer">硬件层</h4>
-                  <div class="tags-row">
-                    <span class="tag" data-en="Sensor Technology">传感器技术</span>
-                    <span class="tag" data-en="Power Management">电源管理</span>
-                    <span class="tag" data-en="Communication Interface Hardware">通信接口硬件</span>
-                    <span class="tag" data-en="Chip Architecture">芯片架构</span>
-                    <span class="tag" data-en="Hardware Design Fundamentals">硬件设计基础</span>
-                    <span class="tag" data-en="Actuator Control">执行器控制</span>
-                  </div>
-                </div>
-
-                <!-- 行业领域 -->
-                <div class="glass glass-card tree-layer-card">
-                  <h4 class="tree-layer-card__title" data-en="Industry Domains">行业领域</h4>
-                  <div class="tags-row">
-                    <span class="tag" data-en="Industrial Automation">工业自动化</span>
-                    <span class="tag" data-en="Aerospace &amp; Defense">航空航天与国防</span>
-                    <span class="tag" data-en="Automotive Electronics">汽车电子</span>
-                    <span class="tag" data-en="Consumer Electronics">消费电子</span>
-                    <span class="tag" data-en="Medical Devices">医疗设备</span>
-                  </div>
-                </div>
-
-                <!-- 通信与网络 -->
-                <div class="glass glass-card tree-layer-card">
-                  <h4 class="tree-layer-card__title" data-en="Communication &amp; Networking">通信与网络</h4>
-                  <div class="tags-row">
-                    <span class="tag" data-en="Network Protocols">网络协议</span>
-                    <span class="tag" data-en="Wireless Communication">无线通信</span>
-                    <span class="tag" data-en="IoT Cloud Connectivity">IoT云接入</span>
-                  </div>
-                </div>
-
-                <!-- 驱动与BSP层 -->
-                <div class="glass glass-card tree-layer-card">
-                  <h4 class="tree-layer-card__title" data-en="Driver &amp; BSP Layer">驱动与BSP层</h4>
-                  <div class="tags-row">
-                    <span class="tag" data-en="Memory Management">内存管理</span>
-                    <span class="tag" data-en="Device Driver Development">设备驱动开发</span>
-                    <span class="tag" data-en="Device Tree &amp; BSP">设备树与BSP</span>
-                    <span class="tag" data-en="Clocks &amp; Timers">时钟与定时器</span>
-                    <span class="tag" data-en="Interrupts &amp; Exception Handling">中断与异常处理</span>
-                    <span class="tag" data-en="Bootloader Development">Bootloader开发</span>
-                  </div>
-                </div>
-
-              </div>
-            </details>
-
-          </div>
-        </details>
-      </div>
-    </section>
-
-    <!-- 03 架构设计 -->
-    <section class="section">
-      <div class="container">
-        <div class="section-header reveal">
-          <span class="section-eyebrow">ARCHITECTURE</span>
-          <h2 class="section-title" data-en="Architecture Design">架构设计</h2>
-        </div>
-
-        <details class="glass glass-card reveal" open>
-          <summary class="tree-branch__summary" data-en="Architecture Design — click to collapse">架构设计 — 点击可折叠</summary>
-          <div class="tree-branch__content">
-            <div class="tree-leaf-grid">
-              <div class="glass glass-card tree-leaf-card">
-                <h3 class="tree-leaf-card__title" data-en="Distributed Systems Architecture">分布式系统架构</h3>
-              </div>
-              <div class="glass glass-card tree-leaf-card">
-                <h3 class="tree-leaf-card__title" data-en="Platform Architecture">平台架构</h3>
-              </div>
-              <div class="glass glass-card tree-leaf-card">
-                <h3 class="tree-leaf-card__title" data-en="Embedded Systems Architecture">嵌入式系统架构</h3>
-              </div>
-            </div>
-          </div>
-        </details>
       </div>
     </section>
   </main>
-
   {% include site-footer.html %}
   <script src="{{ '/assets/js/main.js' | relative_url | escape }}"></script>
 </body>
