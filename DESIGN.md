@@ -53,7 +53,7 @@ The homepage body is exactly this semantic structure. Required Liquid and data a
 <main class="home-editorial"><section class="home-editorial__portrait"><img class="home-editorial__portrait-image" ...></section><div class="home-editorial__identity"><section class="home-editorial__greeting"><p class="home-editorial__eyebrow" ...>...</p><h1 class="home-editorial__title" ...>...</h1><p class="home-editorial__tagline" ...>...</p></section><a class="home-editorial__profile" href="{{ '/experience.html' | relative_url }}"><div class="home-editorial__profile-content"><p class="home-editorial__summary" ...>...</p><span class="home-editorial__cta"><span data-en="Learn more">了解更多</span><span class="home-editorial__cta-arrow" aria-hidden="true">→</span></span></div></a></div></main>
 ```
 
-`.home-editorial` owns `min-height:calc(100dvh - 64px)` beneath the 64px header. The global footer follows this viewport body and is never included in it.
+`.home-editorial` owns `min-height:calc(100dvh - 64px)` beneath the 64px header. At `>=1024px`, its preferred minimum height is capped at `48rem` via `min(calc(100dvh - 64px), 48rem)`, and the greeting content is vertically centered. The portrait remains uncropped with `object-fit:contain` and `object-position:center bottom`. The desktop columns, identity rows, and panel padding remain unchanged; tablet and mobile retain their existing viewport-height behavior and `justify-content:end` greeting alignment. The global footer follows this viewport body and is never included in it.
 
 `.home-editorial` is a centered border-box container capped at 1080px, with 24px inline gutters at `>=768px` and 16px below; its grid ratios apply within the padded content box.
 

@@ -4,6 +4,10 @@ const { capture, resetLanguage } = require('./helpers');
 const home = '.home-editorial';
 const profile = '.home-editorial__profile';
 const cta = '.home-editorial__cta';
+const desktopViewports = [
+  { width: 1280, height: 900 },
+  { width: 2000, height: 1000 },
+];
 const atomicSummaryPhrases = [
   { label: 'rank 5/71', text: '5\u2060/\u206071' },
   { label: 'metasurface / terahertz', text: '超表面\u2060/\u2060太赫兹' },
@@ -59,6 +63,55 @@ async function expectNoOverlaps(page) {
   expect(hasOverlap).toBeFalsy();
 }
 
+async function expectDesktopHomeGeometry(page, language) {
+  const geometry = await page.locator(home).evaluate((element) => {
+    const portraitPane = element.querySelector('.home-editorial__portrait');
+    const portraitImage = element.querySelector('.home-editorial__portrait-image');
+    const greetingPane = element.querySelector('.home-editorial__greeting');
+    const eyebrow = element.querySelector('.home-editorial__eyebrow');
+    const profilePane = element.querySelector('.home-editorial__profile');
+    const imageRect = portraitImage.getBoundingClientRect();
+    const portraitRect = portraitPane.getBoundingClientRect();
+    const greetingRect = greetingPane.getBoundingClientRect();
+    const eyebrowRect = eyebrow.getBoundingClientRect();
+    const scale = Math.min(imageRect.width / portraitImage.naturalWidth, imageRect.height / portraitImage.naturalHeight);
+    const containedHeight = portraitImage.naturalHeight * scale;
+    const portraitTopGap = imageRect.height - containedHeight;
+    const containedBottom = imageRect.top + portraitTopGap + containedHeight;
+    const paneOverflow = (pane) => ({
+      horizontal: pane.scrollWidth - pane.clientWidth,
+      vertical: pane.scrollHeight - pane.clientHeight,
+    });
+
+    return {
+      greetingJustifyContent: getComputedStyle(greetingPane).justifyContent,
+      homeHeight: element.getBoundingClientRect().height,
+      portraitBottomGap: portraitRect.bottom - containedBottom,
+      portraitFit: getComputedStyle(portraitImage).objectFit,
+      portraitPosition: getComputedStyle(portraitImage).objectPosition,
+      portraitTopGap,
+      greetingTopGap: eyebrowRect.top - greetingRect.top,
+      greetingOverflow: paneOverflow(greetingPane),
+      profileOverflow: paneOverflow(profilePane),
+    };
+  });
+
+  expect(geometry.greetingJustifyContent).toBe('center');
+  expect(geometry.portraitFit).toBe('contain');
+  expect(geometry.portraitPosition).toBe('50% 100%');
+  expect(geometry.homeHeight).toBeGreaterThanOrEqual(768);
+  if (language === 'zh') {
+    expect(geometry.homeHeight).toBeCloseTo(768, 0);
+  }
+  expect(geometry.portraitTopGap).toBeLessThanOrEqual(120);
+  expect(geometry.portraitBottomGap).toBeLessThanOrEqual(1);
+  expect(geometry.greetingTopGap).toBeLessThanOrEqual(160);
+  for (const overflow of [geometry.greetingOverflow, geometry.profileOverflow]) {
+    expect(overflow.horizontal).toBeLessThanOrEqual(1);
+    expect(overflow.vertical).toBeLessThanOrEqual(1);
+  }
+}
+
 test.beforeEach(async ({ page }) => {
   await resetLanguage(page);
 });
@@ -111,6 +164,8 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
       .split(' ').map(Number.parseFloat),
     rows: getComputedStyle(element).gridTemplateRows
       .split(' ').map(Number.parseFloat),
+    greetingJustifyContent: getComputedStyle(element.querySelector('.home-editorial__greeting')).justifyContent,
+    homeMinHeight: Number.parseFloat(getComputedStyle(element).minHeight),
     geometry: (() => {
       const rect = element.getBoundingClientRect();
       const style = getComputedStyle(element);
@@ -144,6 +199,10 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
     expect(grids.rows[1] / totalRowHeight).toBeCloseTo(0.42, 2);
     expect(grids.rows[2] / totalRowHeight).toBeCloseTo(0.30, 2);
   }
+  if (!isDesktop) {
+    expect(grids.homeMinHeight).toBeCloseTo(page.viewportSize().height - 64, 0);
+    expect(grids.greetingJustifyContent).toBe('end');
+  }
   await expect(page.locator('.home-editorial__summary')).toHaveText(summary.zh);
   expect(await page.locator('.home-editorial__summary').evaluate((element, phrases) => {
     const textNode = element.firstChild;
@@ -158,6 +217,22 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
   }, atomicSummaryPhrases)).toEqual(atomicSummaryPhrases.map(({ label }) => ({ label, lineCount: 1 })));
   await expectPageOwnedOverflow(page);
   await expectNoOverlaps(page);
+});
+
+test('homepage: caps desktop height and removes excessive portrait and greeting whitespace', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'Desktop geometry is covered at explicit desktop viewports.');
+
+  for (const viewport of desktopViewports) {
+    for (const language of ['zh', 'en']) {
+      await page.setViewportSize(viewport);
+      await resetLanguage(page);
+      await openHomepage(page);
+      if (language === 'en') {
+        await page.locator('.lang-toggle').click();
+      }
+      await expectDesktopHomeGeometry(page, language);
+    }
+  }
 });
 
 test('homepage: exposes the profile action on hover and keyboard focus', async ({ page }, testInfo) => {

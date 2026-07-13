@@ -2413,6 +2413,7 @@ small {
   --editorial-meta-size: 0.8125rem;
   --editorial-title-size: 2.25rem;
   --editorial-display-size: 3.25rem;
+  --editorial-home-desktop-height: 48rem;
   --editorial-profile-action-glow: color-mix(in srgb, var(--c-accent) 36%, transparent);
   --editorial-focus-width: 2px;
 }
@@ -2474,6 +2475,16 @@ small {
   flex-direction: column;
   justify-content: end;
   background: var(--c-bg);
+}
+
+@media (min-width: 1024px) {
+  .home-editorial {
+    min-height: min(calc(100dvh - var(--header-height)), var(--editorial-home-desktop-height));
+  }
+
+  .home-editorial__greeting {
+    justify-content: center;
+  }
 }
 
 .home-editorial__eyebrow,
