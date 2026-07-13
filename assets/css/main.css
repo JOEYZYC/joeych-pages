@@ -2571,6 +2571,16 @@ html[lang^='zh'] .home-editorial__summary {
   transition: opacity var(--duration-fast) ease, transform var(--duration-fast) var(--ease-out);
 }
 
+@media (min-width: 768px) {
+  html[lang='en'] .home-editorial__profile {
+    padding-block: var(--sp-6);
+  }
+
+  html[lang='en'] .home-editorial__cta {
+    margin-top: var(--sp-6);
+  }
+}
+
 .home-editorial__cta-arrow {
   display: inline-block;
   font-family: var(--font-latin);

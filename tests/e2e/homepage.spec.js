@@ -63,13 +63,27 @@ async function expectNoOverlaps(page) {
   expect(hasOverlap).toBeFalsy();
 }
 
+async function expectGreetingAndProfileOverflow(page) {
+  const panes = await page.locator(home).evaluate((element) => [
+    element.querySelector('.home-editorial__greeting'),
+    element.querySelector('.home-editorial__profile'),
+  ].map((pane) => ({
+    horizontal: pane.scrollWidth - pane.clientWidth,
+    vertical: pane.scrollHeight - pane.clientHeight,
+  })));
+
+  for (const pane of panes) {
+    expect(pane.horizontal).toBeLessThanOrEqual(1);
+    expect(pane.vertical).toBeLessThanOrEqual(1);
+  }
+}
+
 async function expectDesktopHomeGeometry(page, language) {
   const geometry = await page.locator(home).evaluate((element) => {
     const portraitPane = element.querySelector('.home-editorial__portrait');
     const portraitImage = element.querySelector('.home-editorial__portrait-image');
     const greetingPane = element.querySelector('.home-editorial__greeting');
     const eyebrow = element.querySelector('.home-editorial__eyebrow');
-    const profilePane = element.querySelector('.home-editorial__profile');
     const imageRect = portraitImage.getBoundingClientRect();
     const portraitRect = portraitPane.getBoundingClientRect();
     const greetingRect = greetingPane.getBoundingClientRect();
@@ -78,11 +92,6 @@ async function expectDesktopHomeGeometry(page, language) {
     const containedHeight = portraitImage.naturalHeight * scale;
     const portraitTopGap = imageRect.height - containedHeight;
     const containedBottom = imageRect.top + portraitTopGap + containedHeight;
-    const paneOverflow = (pane) => ({
-      horizontal: pane.scrollWidth - pane.clientWidth,
-      vertical: pane.scrollHeight - pane.clientHeight,
-    });
-
     return {
       greetingJustifyContent: getComputedStyle(greetingPane).justifyContent,
       homeHeight: element.getBoundingClientRect().height,
@@ -91,8 +100,6 @@ async function expectDesktopHomeGeometry(page, language) {
       portraitPosition: getComputedStyle(portraitImage).objectPosition,
       portraitTopGap,
       greetingTopGap: eyebrowRect.top - greetingRect.top,
-      greetingOverflow: paneOverflow(greetingPane),
-      profileOverflow: paneOverflow(profilePane),
     };
   });
 
@@ -106,10 +113,7 @@ async function expectDesktopHomeGeometry(page, language) {
   expect(geometry.portraitTopGap).toBeLessThanOrEqual(120);
   expect(geometry.portraitBottomGap).toBeLessThanOrEqual(1);
   expect(geometry.greetingTopGap).toBeLessThanOrEqual(160);
-  for (const overflow of [geometry.greetingOverflow, geometry.profileOverflow]) {
-    expect(overflow.horizontal).toBeLessThanOrEqual(1);
-    expect(overflow.vertical).toBeLessThanOrEqual(1);
-  }
+  await expectGreetingAndProfileOverflow(page);
 }
 
 test.beforeEach(async ({ page }) => {
@@ -232,6 +236,21 @@ test('homepage: caps desktop height and removes excessive portrait and greeting 
       }
       await expectDesktopHomeGeometry(page, language);
     }
+  }
+});
+
+test('homepage: fits English greeting and profile panes from tablet through desktop', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-1280', 'English fit is covered at explicit tablet and desktop viewports.');
+
+  for (const viewport of [{ width: 768, height: 1024 }, ...desktopViewports]) {
+    await page.setViewportSize(viewport);
+    await resetLanguage(page);
+    await openHomepage(page);
+    await page.locator('.lang-toggle').click();
+    await expect(page.locator(profile)).toHaveCSS('padding-top', '24px');
+    await expect(page.locator(profile)).toHaveCSS('padding-left', '48px');
+    await expect(page.locator(cta)).toHaveCSS('margin-top', '24px');
+    await expectGreetingAndProfileOverflow(page);
   }
 });
 
