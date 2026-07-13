@@ -2577,7 +2577,7 @@ html[lang^='zh'] .home-editorial__summary {
   }
 
   html[lang='en'] .home-editorial__cta {
-    margin-top: var(--sp-6);
+    margin-top: var(--sp-5);
   }
 }
 

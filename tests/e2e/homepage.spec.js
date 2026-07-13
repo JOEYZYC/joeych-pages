@@ -249,7 +249,7 @@ test('homepage: fits English greeting and profile panes from tablet through desk
     await page.locator('.lang-toggle').click();
     await expect(page.locator(profile)).toHaveCSS('padding-top', '24px');
     await expect(page.locator(profile)).toHaveCSS('padding-left', '48px');
-    await expect(page.locator(cta)).toHaveCSS('margin-top', '24px');
+    await expect(page.locator(cta)).toHaveCSS('margin-top', '20px');
     await expectGreetingAndProfileOverflow(page);
   }
 });
