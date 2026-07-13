@@ -2978,6 +2978,10 @@ small {
   .home-editorial {
     grid-template-columns: 38% 62%;
   }
+
+  .home-editorial__title {
+    font-size: var(--editorial-title-size);
+  }
 }
 
 @media (max-width: 767px) {
