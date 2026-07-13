@@ -4,8 +4,17 @@ const { capture, resetLanguage } = require('./helpers');
 const home = '.home-editorial';
 const profile = '.home-editorial__profile';
 const cta = '.home-editorial__cta';
+const atomicSummaryPhrases = [
+  { label: 'rank 5/71', text: '5\u2060/\u206071' },
+  { label: 'metasurface / terahertz', text: '超表面\u2060/\u2060太赫兹' },
+  { label: '6 publications', text: '6\u00a0篇' },
+  { label: '4 patents', text: '4\u00a0项' },
+  { label: '涵盖', text: '涵盖' },
+  { label: '已发表', text: '已发表' },
+  { label: '实践', text: '实践' },
+];
 const summary = {
-  zh: '苏州工学院电子信息工程专业本科生，综测专业排名 5/71。研究兴趣涵盖嵌入式系统、无线感知与深度学习、超表面/太赫兹器件与天线设计。已发表学术论文 6 篇，申请发明专利 4 项，斩获国家级与省级学科竞赛奖项十余项。热爱动手实践，擅长从电路设计、嵌入式开发到算法部署的软硬件全栈工程。',
+  zh: '苏州工学院电子信息工程专业本科生，综测专业排名 5\u2060/\u206071。研究兴趣涵盖嵌入式系统、无线感知与深度学习、超表面\u2060/\u2060太赫兹器件与天线设计。已发表学术论文 6\u00a0篇，申请发明专利 4\u00a0项，斩获国家级与省级学科竞赛奖项十余项。热爱动手实践，擅长从电路设计、嵌入式开发到算法部署的软硬件全栈工程。',
   en: 'Undergraduate in Electronic & Information Engineering at Suzhou Institute of Technology, ranked 5/71. Research interests span embedded systems, wireless perception with deep learning, and metasurface / terahertz devices and antenna design. Author of 6 publications, 4 patent applications, and 10+ national or provincial competition awards. A hands-on hardware-software engineer, from circuit design and embedded development to algorithm deployment.',
 };
 
@@ -128,22 +137,6 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
     expect(grids.columns).toHaveLength(2);
     expect(grids.columns[0] / (grids.columns[0] + grids.columns[1])).toBeCloseTo(expectedPortraitRatio, 2);
     expect(grids.identityRows[0] / (grids.identityRows[0] + grids.identityRows[1])).toBeCloseTo(0.56, 2);
-    await expect(page.locator('.home-editorial__summary')).toHaveText(summary.zh);
-    expect(await page.locator('.home-editorial__summary').evaluate((element) => {
-      const textNode = element.firstChild;
-      const text = textNode.textContent;
-      return ['涵盖', '已发表', '实践'].map((compound) => {
-        const start = text.indexOf(compound);
-        const range = document.createRange();
-        range.setStart(textNode, start);
-        range.setEnd(textNode, start + compound.length);
-        return { compound, lineCount: range.getClientRects().length };
-      });
-    })).toEqual([
-      { compound: '涵盖', lineCount: 1 },
-      { compound: '已发表', lineCount: 1 },
-      { compound: '实践', lineCount: 1 },
-    ]);
   } else {
     expect(grids.columns).toHaveLength(1);
     const totalRowHeight = grids.rows.reduce((sum, rowHeight) => sum + rowHeight, 0);
@@ -151,6 +144,18 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
     expect(grids.rows[1] / totalRowHeight).toBeCloseTo(0.42, 2);
     expect(grids.rows[2] / totalRowHeight).toBeCloseTo(0.30, 2);
   }
+  await expect(page.locator('.home-editorial__summary')).toHaveText(summary.zh);
+  expect(await page.locator('.home-editorial__summary').evaluate((element, phrases) => {
+    const textNode = element.firstChild;
+    const text = textNode.textContent;
+    return phrases.map(({ label, text: phrase }) => {
+      const start = text.indexOf(phrase);
+      const range = document.createRange();
+      range.setStart(textNode, start);
+      range.setEnd(textNode, start + phrase.length);
+      return { label, lineCount: range.getClientRects().length };
+    });
+  }, atomicSummaryPhrases)).toEqual(atomicSummaryPhrases.map(({ label }) => ({ label, lineCount: 1 })));
   await expectPageOwnedOverflow(page);
   await expectNoOverlaps(page);
 });
