@@ -1,0 +1,185 @@
+name: Portfolio validation
+
+on:
+  push:
+    branches:
+      - validation/portfolio-editorial-redesign
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out validation branch
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.1"
+          bundler-cache: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Create evidence directories
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p \
+            .ci/logs \
+            .omo/evidence/portfolio-editorial-redesign/final/playwright \
+            .omo/evidence/portfolio-editorial-redesign/final/screenshots
+
+      - name: Build Jekyll site
+        shell: bash
+        run: |
+          set -euo pipefail
+          bundle exec jekyll build --trace --baseurl "/joeych-pages" \
+            2>&1 | tee .ci/logs/jekyll-build.log
+
+      - name: Install Node dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci 2>&1 | tee .ci/logs/npm-ci.log
+          python -m pip install --disable-pip-version-check PyYAML==6.0.2 \
+            2>&1 | tee .ci/logs/pyyaml-install.log
+
+      - name: Select installed Google Chrome
+        shell: bash
+        run: |
+          set -euo pipefail
+          chrome_path="$(command -v google-chrome || command -v google-chrome-stable)"
+          test -x "$chrome_path"
+          echo "PLAYWRIGHT_EXECUTABLE_PATH=$chrome_path" >> "$GITHUB_ENV"
+          "$chrome_path" --version | tee .ci/logs/google-chrome-version.log
+
+      - name: Run Jekyll validation and exact screenshot gate
+        shell: bash
+        env:
+          PLAYWRIGHT_BASE_URL: http://127.0.0.1:8123/joeych-pages/
+          PW_CAPTURE_ROOT: .omo/evidence/portfolio-editorial-redesign/final/screenshots
+          PW_MANIFEST: .omo/evidence/portfolio-editorial-redesign/final/manifest.json
+          PW_REPORT_ROOT: .omo/evidence/portfolio-editorial-redesign/final/playwright
+        run: |
+          set -euo pipefail
+
+          evidence_root=".omo/evidence/portfolio-editorial-redesign/final"
+          bundle exec jekyll serve \
+            --host 127.0.0.1 \
+            --port 8123 \
+            --baseurl "/joeych-pages" \
+            --no-watch \
+            > .ci/logs/jekyll-serve.stdout.log \
+            2> .ci/logs/jekyll-serve.stderr.log &
+          jekyll_pid=$!
+
+          cleanup() {
+            kill "$jekyll_pid" 2>/dev/null || true
+            wait "$jekyll_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          ready=0
+          for attempt in $(seq 1 60); do
+            if ! kill -0 "$jekyll_pid" 2>/dev/null; then
+              echo "Jekyll exited before readiness" >&2
+              exit 1
+            fi
+            if curl --fail --silent --show-error \
+              "http://127.0.0.1:8123/joeych-pages/" \
+              > /dev/null; then
+              echo "HTTP 200 readiness after $attempt attempt(s)" \
+                | tee .ci/logs/readiness.log
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+          test "$ready" -eq 1
+
+          npm run test:e2e -- --grep-invert baseline \
+            2>&1 | tee .ci/logs/playwright.log
+
+          node <<'NODE' 2>&1 | tee "$evidence_root/manifest-gate.log"
+          const { existsSync, readFileSync } = require('node:fs');
+          const { join } = require('node:path');
+
+          const evidenceRoot = '.omo/evidence/portfolio-editorial-redesign/final';
+          const screenshotRoot = join(evidenceRoot, 'screenshots');
+          const manifestPath = join(evidenceRoot, 'manifest.json');
+          const viewports = ['mobile-375', 'tablet-768', 'desktop-1280'];
+          const languages = ['zh', 'en'];
+          const pages = ['index', 'experience', 'awards', 'projects', 'tech-stack'];
+          const expected = viewports.flatMap((viewport) =>
+            languages.flatMap((language) =>
+              pages.map((page) => `${viewport}--${language}--${page}--default.png`),
+            ),
+          );
+          expected.push(
+            'desktop-1280--zh--index--hover.png',
+            'desktop-1280--zh--index--focus.png',
+            'mobile-375--zh--index--touch-cta.png',
+            'desktop-1280--zh--index--contact-open.png',
+            'mobile-375--zh--index--contact-open.png',
+            'mobile-375--zh--index--menu-open.png',
+            'desktop-1280--zh--awards--certificate-single.png',
+            'desktop-1280--zh--awards--certificate-multiple.png',
+            'desktop-1280--en--awards--certificate-multiple.png',
+          );
+
+          if (expected.length !== 39 || new Set(expected).size !== 39) {
+            throw new Error('Workflow contract must contain exactly 39 unique screenshot names');
+          }
+          if (!existsSync(manifestPath)) {
+            throw new Error(`Missing screenshot manifest: ${manifestPath}`);
+          }
+
+          const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+          if (!Array.isArray(manifest.files)) {
+            throw new Error('Screenshot manifest files must be an array');
+          }
+
+          const actual = manifest.files.map((file) => {
+            if (typeof file !== 'string' || file.includes('/') || file.includes('\\')) {
+              throw new Error(`Invalid screenshot manifest path: ${String(file)}`);
+            }
+            return file;
+          });
+          const actualSet = new Set(actual);
+          const expectedSet = new Set(expected);
+          const missing = expected.filter((file) => !actualSet.has(file));
+          const unexpected = actual.filter((file) => !expectedSet.has(file));
+          const absent = actual.filter((file) => !existsSync(join(screenshotRoot, file)));
+
+          if (actual.length !== 39 || actualSet.size !== 39 || missing.length || unexpected.length || absent.length) {
+            throw new Error([
+              `Expected exactly 39 unique screenshots, received ${actual.length} entries and ${actualSet.size} unique names`,
+              `Missing: ${missing.join(', ') || '(none)'}`,
+              `Unexpected: ${unexpected.join(', ') || '(none)'}`,
+              `Manifest files absent on disk: ${absent.join(', ') || '(none)'}`,
+            ].join('\n'));
+          }
+
+          console.log('Exact 39-screenshot manifest gate passed');
+          NODE
+
+      - name: Upload validation evidence
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: portfolio-validation-${{ github.run_id }}
+          path: |
+            _site/
+            .ci/logs/
+            .omo/evidence/portfolio-editorial-redesign/final/
+          if-no-files-found: warn
+          retention-days: 14
