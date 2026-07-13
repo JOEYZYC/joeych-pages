@@ -21,7 +21,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.1"
-          bundler-cache: true
+          bundler-cache: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
@@ -37,6 +37,14 @@ jobs:
             .ci/logs \
             .omo/evidence/portfolio-editorial-redesign/final/playwright \
             .omo/evidence/portfolio-editorial-redesign/final/screenshots
+
+      - name: Install Ruby dependencies outside the Jekyll source
+        shell: bash
+        run: |
+          set -euo pipefail
+          bundle config set --local path "$RUNNER_TEMP/bundle"
+          bundle install --jobs 4 --retry 3 \
+            2>&1 | tee .ci/logs/bundle-install.log
 
       - name: Build Jekyll site
         shell: bash
