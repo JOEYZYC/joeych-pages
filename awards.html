@@ -13,28 +13,48 @@ permalink: /awards.html
 <body>
   {% include site-header.html %}
   <main id="main">
-    <section class="page-header"><div class="container"><span class="page-header__eyebrow">AWARDS</span><h1 class="page-header__title" data-en="Awards &amp; Honors">获奖证书</h1></div></section>
-    <section class="section"><div class="container"><div class="section-header reveal"><span class="section-eyebrow">COMPETITION AWARDS</span><h2 class="section-title" data-en="Competition awards">竞赛获奖</h2></div>
+    {% include editorial-page-intro.html eyebrow='AWARDS' title_zh='获奖证书' title_en='Awards & Honors' intro_zh='竞赛、论文、专利与毕业设计，共同记录了持续积累的研究与工程成果。' intro_en='Competitions, publications, patents, and the graduation thesis document a growing body of research and engineering work.' %}
+    <section class="achievement-ledger">
+      <h2 data-en="Competition Awards">竞赛获奖</h2>
       {% assign years = site.data.awards | map: 'year' | uniq %}{% for year in years %}
-      <section class="year-group reveal"><h3 class="year-group__title">{{ year }}</h3><div class="awards-grid reveal-stagger">
+      <section>
+        <h3 class="achievement-ledger__year">{{ year }}</h3>
         {% for award in site.data.awards %}{% if award.year == year %}
-        <article class="award-card reveal{% if award.certificates.size > 0 %} certificate-trigger{% endif %}"{% if award.certificates.size > 0 %} data-certs="{{ award.certificates | jsonify | escape }}" role="button" tabindex="0" aria-label="查看对应证书 / View related certificate"{% endif %}>
-          <h4 class="award-card__title" data-en="{{ award.title.en | escape }}">{{ award.title.zh }}</h4><div class="award-card__badges">{% for prize in award.prizes %}<span class="award-card__badge award-card__badge--{{ prize.level | escape }}" data-en="{{ prize.en | escape }}">{{ prize.zh }}</span>{% endfor %}</div>
+        <article class="achievement-ledger__row{% if award.certificates.size > 0 %} certificate-trigger{% endif %}"{% if award.certificates.size > 0 %} data-certs="{{ award.certificates | jsonify | escape }}" role="button" tabindex="0" aria-label="查看对应证书 / View related certificate"{% endif %}>
+          <h3 class="achievement-ledger__title" data-en="{{ award.title.en | escape }}">{{ award.title.zh }}</h3>
+          <div class="achievement-ledger__badges">{% for prize in award.prizes %}<span data-en="{{ prize.en | escape }}">{{ prize.zh }}</span>{% endfor %}</div>
         </article>
         {% endif %}{% endfor %}
-      </div></section>{% endfor %}
-    </div></section>
-    <section class="section section--alt"><div class="container"><div class="section-header reveal"><span class="section-eyebrow">PUBLICATIONS</span><h2 class="section-title" data-en="Publications">发表论文</h2></div><div class="pub-list reveal">
+      </section>{% endfor %}
+    </section>
+    <section class="research-archive">
+      <h2 data-en="Publications">发表论文</h2>
       {% for publication in site.data.publications %}
-      <article class="pub-item{% if publication.certificates.size > 0 %} certificate-trigger{% endif %}"{% if publication.certificates.size > 0 %} data-certs="{{ publication.certificates | jsonify | escape }}" role="button" tabindex="0" aria-label="查看对应证书 / View related certificate"{% endif %}><div class="pub-item__index">{{ forloop.index }}</div><div class="pub-item__body"><h3 class="pub-item__title" data-en="{{ publication.title.en | escape }}">{{ publication.title.zh }}</h3><p class="pub-item__venue" data-en="{{ publication.venue.en | escape }}">{{ publication.venue.zh }}</p><span class="pub-item__badge" data-en="{{ publication.authors.en | escape }}">{{ publication.authors.zh }}</span></div></article>
+      <article class="research-archive__item{% if publication.certificates.size > 0 %} certificate-trigger{% endif %}"{% if publication.certificates.size > 0 %} data-certs="{{ publication.certificates | jsonify | escape }}" role="button" tabindex="0" aria-label="查看对应证书 / View related certificate"{% endif %}>
+        <h3 class="research-archive__title" data-en="{{ publication.title.en | escape }}">{{ publication.title.zh }}</h3>
+        <p class="research-archive__meta"><span data-en="{{ publication.venue.en | escape }}">{{ publication.venue.zh }}</span><span aria-hidden="true"> · </span><span>{{ publication.year }}</span></p>
+        <span class="research-archive__badge" data-en="{{ publication.authors.en | escape }}">{{ publication.authors.zh }}</span>
+      </article>
       {% endfor %}
-    </div></div></section>
-    <section class="section"><div class="container"><div class="section-header reveal"><span class="section-eyebrow">PATENTS</span><h2 class="section-title" data-en="Patent applications">申请专利</h2></div><div class="pub-list reveal">
+    </section>
+    <section class="research-archive">
+      <h2 data-en="Patent Applications">申请专利</h2>
       {% for patent in site.data.patents %}
-      <article class="pub-item{% if patent.certificates.size > 0 %} certificate-trigger{% endif %}"{% if patent.certificates.size > 0 %} data-certs="{{ patent.certificates | jsonify | escape }}" role="button" tabindex="0" aria-label="查看对应证书 / View related certificate"{% endif %}><div class="pub-item__index">{{ forloop.index }}</div><div class="pub-item__body"><h3 class="pub-item__title" data-en="{{ patent.title.en | escape }}">{{ patent.title.zh }}</h3><span class="pub-item__badge" data-en="{{ patent.authors.en | escape }}">{{ patent.authors.zh }}</span></div></article>
+      <article class="research-archive__item{% if patent.certificates.size > 0 %} certificate-trigger{% endif %}"{% if patent.certificates.size > 0 %} data-certs="{{ patent.certificates | jsonify | escape }}" role="button" tabindex="0" aria-label="查看对应证书 / View related certificate"{% endif %}>
+        <h3 class="research-archive__title" data-en="{{ patent.title.en | escape }}">{{ patent.title.zh }}</h3>
+        <p class="research-archive__meta">{{ patent.year }}</p>
+        <span class="research-archive__badge" data-en="{{ patent.authors.en | escape }}">{{ patent.authors.zh }}</span>
+      </article>
       {% endfor %}
-    </div></div></section>
-    <section class="section section--alt"><div class="container"><div class="section-header reveal"><span class="section-eyebrow">THESIS</span><h2 class="section-title" data-en="Graduation thesis">毕业设计</h2></div><article class="pub-item"><div class="pub-item__index">T</div><div class="pub-item__body"><h3 class="pub-item__title" data-en="{{ site.data.thesis.title.en | escape }}">{{ site.data.thesis.title.zh }}</h3><span class="pub-item__badge" data-en="{{ site.data.thesis.award.en | escape }}">{{ site.data.thesis.award.zh }}</span></div></article></div></section>
+    </section>
+    <section class="research-archive">
+      <h2 data-en="Graduation Thesis">毕业设计</h2>
+      <article class="research-archive__item">
+        <h3 class="research-archive__title" data-en="{{ site.data.thesis.title.en | escape }}">{{ site.data.thesis.title.zh }}</h3>
+        <p class="research-archive__meta">{{ site.data.thesis.year }}</p>
+        <span class="research-archive__badge" data-en="{{ site.data.thesis.award.en | escape }}">{{ site.data.thesis.award.zh }}</span>
+      </article>
+    </section>
   </main>
   <div class="certificate-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="certificate-caption"><button class="certificate-modal__backdrop" aria-label="关闭 / Close"></button><div class="certificate-modal__panel"><button class="certificate-modal__close" aria-label="关闭 / Close">×</button><button class="certificate-modal__nav certificate-modal__nav--prev" aria-label="上一张 / Previous">‹</button><button class="certificate-modal__nav certificate-modal__nav--next" aria-label="下一张 / Next">›</button><figure class="certificate-modal__figure"><img src="" alt=""><figcaption id="certificate-caption" class="certificate-modal__caption"></figcaption></figure></div></div>
   {% include site-footer.html %}<script src="{{ '/assets/js/main.js' | relative_url | escape }}"></script>
