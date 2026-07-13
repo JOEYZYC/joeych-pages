@@ -98,7 +98,9 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
 
   const grids = await page.locator(home).evaluate((element) => ({
     columns: getComputedStyle(element).gridTemplateColumns.split(' ').map(Number.parseFloat),
-    rows: getComputedStyle(element.querySelector('.home-editorial__identity')).gridTemplateRows
+    identityRows: getComputedStyle(element.querySelector('.home-editorial__identity')).gridTemplateRows
+      .split(' ').map(Number.parseFloat),
+    rows: getComputedStyle(element).gridTemplateRows
       .split(' ').map(Number.parseFloat),
     geometry: (() => {
       const rect = element.getBoundingClientRect();
@@ -125,9 +127,13 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
     const expectedPortraitRatio = isDesktop ? 0.42 : 0.38;
     expect(grids.columns).toHaveLength(2);
     expect(grids.columns[0] / (grids.columns[0] + grids.columns[1])).toBeCloseTo(expectedPortraitRatio, 2);
-    expect(grids.rows[0] / (grids.rows[0] + grids.rows[1])).toBeCloseTo(0.44, 2);
+    expect(grids.identityRows[0] / (grids.identityRows[0] + grids.identityRows[1])).toBeCloseTo(0.56, 2);
   } else {
     expect(grids.columns).toHaveLength(1);
+    const totalRowHeight = grids.rows.reduce((sum, rowHeight) => sum + rowHeight, 0);
+    expect(grids.rows[0] / totalRowHeight).toBeCloseTo(0.28, 2);
+    expect(grids.rows[1] / totalRowHeight).toBeCloseTo(0.42, 2);
+    expect(grids.rows[2] / totalRowHeight).toBeCloseTo(0.30, 2);
   }
   await expectPageOwnedOverflow(page);
   await expectNoOverlaps(page);
@@ -139,12 +145,36 @@ test('homepage: exposes the profile action on hover and keyboard focus', async (
 
   await capture(page, { projectName: testInfo.project.name, lang: 'zh', page: 'index', state: 'rest' });
   await expect(page.locator(cta)).toHaveCSS('opacity', '0.68');
+  expect(await page.locator(profile).evaluate((element) => {
+    const style = getComputedStyle(element, '::after');
+    return {
+      backgroundImage: style.backgroundImage,
+      bottom: style.bottom,
+      left: style.left,
+      opacity: style.opacity,
+      pointerEvents: style.pointerEvents,
+      right: style.right,
+      top: style.top,
+    };
+  })).toEqual({
+    backgroundImage: expect.stringContaining('linear-gradient'),
+    bottom: '0px',
+    left: '0px',
+    opacity: '0',
+    pointerEvents: 'none',
+    right: '0px',
+    top: '0px',
+  });
   await page.locator(profile).hover();
   await expect(page.locator(cta)).toHaveCSS('opacity', '1');
+  await expect.poll(() => page.locator(profile).evaluate((element) => getComputedStyle(element, '::after').opacity)).toBe('1');
   await capture(page, { projectName: testInfo.project.name, lang: 'zh', page: 'index', state: 'hover' });
+  await page.mouse.move(0, 0);
+  await expect.poll(() => page.locator(profile).evaluate((element) => getComputedStyle(element, '::after').opacity)).toBe('0');
   await page.locator(profile).focus();
   await expect(page.locator(profile)).toBeFocused();
   await expect(page.locator(cta)).toHaveCSS('opacity', '1');
+  await expect.poll(() => page.locator(profile).evaluate((element) => getComputedStyle(element, '::after').opacity)).toBe('1');
   await capture(page, { projectName: testInfo.project.name, lang: 'zh', page: 'index', state: 'focus' });
 });
 

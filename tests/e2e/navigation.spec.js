@@ -70,8 +70,24 @@ test('navigation: exact header fixture exposes five routes and an accessible con
 
   await expect(page.locator('.navbar__link')).toHaveText(routes.map(([, zh]) => zh));
   await expect(page.locator('.mobile-menu__link')).toHaveText(routes.map(([, zh]) => zh));
-  await expect(page.locator('.identity-contact-trigger')).toHaveAttribute('aria-controls', 'identity-contact-panel');
+  const trigger = page.locator('.identity-contact-trigger');
+  await expect(trigger).toHaveText('联系方式');
+  await expect(trigger).toHaveAccessibleName('联系方式 / Contact');
+  await expect(trigger).toHaveAttribute('aria-controls', 'identity-contact-panel');
   await expect(page.locator('#identity-contact-panel')).toBeHidden();
+  expect(await page.locator('.navbar__actions').evaluate((actions) => {
+    const properties = [
+      'backgroundColor', 'borderStyle', 'borderRadius', 'color', 'fontSize',
+      'fontWeight', 'lineHeight', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+    ];
+    const triggerStyle = getComputedStyle(actions.querySelector('.identity-contact-trigger'));
+    const toggleStyle = getComputedStyle(actions.querySelector('.lang-toggle'));
+    return properties.every((property) => triggerStyle[property] === toggleStyle[property]);
+  })).toBeTruthy();
+
+  await page.locator('.lang-toggle').click();
+  await expect(trigger).toHaveText('Contact');
+  await expect(trigger).toHaveAccessibleName('Contact');
   expect(readFileSync(headerPath, 'utf8')).not.toContain('data-en="Home"');
 });
 
