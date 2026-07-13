@@ -105,7 +105,7 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
       const style = getComputedStyle(element);
       return {
         contentLeft: rect.left + Number.parseFloat(style.paddingLeft),
-        contentRight: innerWidth - rect.right + Number.parseFloat(style.paddingRight),
+        contentRight: document.documentElement.clientWidth - rect.right + Number.parseFloat(style.paddingRight),
         paddingLeft: Number.parseFloat(style.paddingLeft),
         paddingRight: Number.parseFloat(style.paddingRight),
         width: rect.width,
