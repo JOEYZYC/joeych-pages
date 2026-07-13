@@ -55,6 +55,8 @@ The homepage body is exactly this semantic structure. Required Liquid and data a
 
 `.home-editorial` owns `min-height:calc(100dvh - 64px)` beneath the 64px header. The global footer follows this viewport body and is never included in it.
 
+`.home-editorial` is a centered border-box container capped at 1080px, with 24px inline gutters at `>=768px` and 16px below; its grid ratios apply within the padded content box.
+
 | Range | `.home-editorial` geometry | `.home-editorial__identity` geometry |
 | --- | --- | --- |
 | `>=1024px` | Two columns, `42% 58%` | Two rows, `44% 56%` |

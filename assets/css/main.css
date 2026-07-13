@@ -2429,6 +2429,10 @@ small {
 
 .home-editorial {
   display: grid;
+  width: 100%;
+  max-width: var(--editorial-max-width);
+  margin-inline: auto;
+  padding-inline: var(--sp-6);
   grid-template-columns: 42% 58%;
   min-height: calc(100dvh - var(--header-height));
   background: var(--c-bg);
@@ -2980,6 +2984,7 @@ small {
   .home-editorial {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: 28fr 42fr 30fr;
+    padding-inline: var(--sp-4);
   }
 
   .home-editorial__identity {

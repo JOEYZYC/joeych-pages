@@ -100,9 +100,27 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
     columns: getComputedStyle(element).gridTemplateColumns.split(' ').map(Number.parseFloat),
     rows: getComputedStyle(element.querySelector('.home-editorial__identity')).gridTemplateRows
       .split(' ').map(Number.parseFloat),
+    geometry: (() => {
+      const rect = element.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      return {
+        contentLeft: rect.left + Number.parseFloat(style.paddingLeft),
+        contentRight: innerWidth - rect.right + Number.parseFloat(style.paddingRight),
+        paddingLeft: Number.parseFloat(style.paddingLeft),
+        paddingRight: Number.parseFloat(style.paddingRight),
+        width: rect.width,
+      };
+    })(),
   }));
   const isDesktop = testInfo.project.name === 'desktop-1280';
   const isTablet = testInfo.project.name === 'tablet-768';
+  const expectedGutter = isDesktop || isTablet ? 24 : 16;
+  expect(Math.abs(grids.geometry.paddingLeft - expectedGutter)).toBeLessThanOrEqual(1);
+  expect(Math.abs(grids.geometry.paddingRight - expectedGutter)).toBeLessThanOrEqual(1);
+  expect(Math.abs(grids.geometry.contentLeft - grids.geometry.contentRight)).toBeLessThanOrEqual(1);
+  if (isDesktop) {
+    expect(Math.abs(grids.geometry.width - 1080)).toBeLessThanOrEqual(1);
+  }
   if (isDesktop || isTablet) {
     const expectedPortraitRatio = isDesktop ? 0.42 : 0.38;
     expect(grids.columns).toHaveLength(2);
