@@ -18,3 +18,14 @@ exclude:
   - Gemfile.lock
   - deploy.ps1
   - serve.ps1
+  - package.json
+  - package-lock.json
+  - playwright.config.js
+  - scripts
+  - tests
+  - node_modules
+  - .omo
+  - .playwright-mcp
+  - .codegraph
+  - .tmp-asset-prep
+  - 素材
