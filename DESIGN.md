@@ -1,438 +1,144 @@
-# Design System — joeych-pages
+# Editorial Portfolio Implementation Contract
 
-> Academic portfolio for 张易成 (JOEYCH). Light, professional, trustworthy.
-> "Research portfolio" feel — refined, restrained, editorial clarity.
+This document is the implementation contract for the approved five-route technical editorial portfolio. HTML, Liquid, CSS, and JavaScript changes must follow these decisions exactly.
 
----
+## 1. Information Architecture
 
-## 1. Tokens
+The public portfolio routes are:
 
-### Colors
+| Route | Navigation label | Purpose |
+| --- | --- | --- |
+| `/index.html` | 自我介绍 / About | Split identity homepage |
+| `/experience.html` | 个人经历 / Experience | Education and campus experience only |
+| `/awards.html` | 获奖证书 / Awards | Competition ledger and research archives |
+| `/projects.html` | 项目介绍 / Projects | Numbered project index and evidence-led records |
+| `/tech-stack.html` | 技术栈 / Tech Stack | Proven skill groups and collapsible learning map |
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--c-navy` | `#2C313A` | Gunmetal anchor — headings, dark surfaces, footer |
-| `--c-accent` | `#46E5FF` | Fluorescent cyan anchor — dark-surface decoration only |
-| `--c-accent-fg` | `#00788f` | Accessible dark-cyan foreground for text, links, focus, and light-surface controls |
-| `--c-blue` | `var(--c-accent-fg)` | Legacy semantic alias for accessible foreground usage |
-| `--c-blue-600` | `#00677a` | Dark-cyan interactive hover tone |
-| `--c-blue-soft` | `#e6fbff` | Accessible cyan-tinted fills |
-| `--c-blue-50` | `#f3f6f8` | Light neutral section background |
-| `--c-ink` | `#2C313A` | Gunmetal body text |
-| `--c-muted` | `#61707d` | Secondary text, captions, timestamps |
-| `--c-bg` | `#ffffff` | Page background |
-| `--c-bg-alt` | `#f3f6f8` | Alternate section background |
-| `--c-border` | `#C8D2DC` | Ice silver gray anchor — borders and dividers |
-| `--c-silver` | `#C8D2DC` | Ice silver gray anchor — secondary text on dark surfaces |
-| `--c-gold` | `#b8842b` | Warm accent — ONLY for top-tier award highlights (国家级·特等) |
-| `--c-ice` | `#f7fbff` | Very light blue-tinted white for glass fills |
-| `--c-frost` | `rgba(255,255,255,0.58)` | Light glass panel fill |
-| `--c-frost-strong` | `rgba(255,255,255,0.78)` | Light glass fallback / strong fill |
-| `--c-navy-glass` | `rgba(15,44,82,0.28)` | Dark glass panel fill over images |
-| `--c-navy-glass-strong` | `rgba(15,44,82,0.48)` | Dark glass fallback |
-| `--c-glass-border-light` | `rgba(255,255,255,0.45)` | Glass border on light sections |
-| `--c-glass-border-dark` | `rgba(255,255,255,0.14)` | Glass border on dark/image sections |
-| `--c-glass-highlight` | `rgba(255,255,255,0.32)` | Inner top highlight on glass |
+`/about.html` redirects to `{{ '/index.html' | relative_url }}` without a fragment. The global footer appears after the page content on all five routes and existing site layouts.
 
-### Spacing
+The shared navigation order is About, Experience, Awards, Projects, Tech Stack. There is no separate Home navigation item. The right-side identity trigger is not a route. It opens the contact panel.
 
-Base unit: **4px**. Scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96.
+## 2. Palette And Type
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--sp-1` | `4px` | Micro gaps |
-| `--sp-2` | `8px` | Icon-to-text, tight padding |
-| `--sp-3` | `12px` | Tag padding, small gaps |
-| `--sp-4` | `16px` | Card padding (mobile), inline gaps |
-| `--sp-5` | `20px` | Card inner padding |
-| `--sp-6` | `24px` | Container side padding (desktop) |
-| `--sp-8` | `32px` | Section sub-gaps |
-| `--sp-10` | `40px` | Between component groups |
-| `--sp-12` | `48px` | Card padding (desktop) |
-| `--sp-16` | `64px` | Large section gaps |
-| `--sp-20` | `80px` | Hero top padding |
-| `--sp-24` | `96px` | Maximum section separation |
+The visual identity uses gunmetal, cyan, and ice silver. Keep the page background white or near-white, use gunmetal for structural dark surfaces and body ink, reserve fluorescent cyan for non-text emphasis on dark surfaces, and use the accessible dark cyan foreground for links, focus indicators, and text on light surfaces.
 
-### Radius
+| Token | Value | Contract use |
+| --- | --- | --- |
+| `--c-navy` | `#2C313A` | Gunmetal identity panel, headings, footer, body ink |
+| `--c-accent` | `#46E5FF` | Cyan detail on dark surfaces only |
+| `--c-accent-fg` | `#00788f` | Accessible links, focus, and light-surface controls |
+| `--c-blue-600` | `#00677a` | Interactive hover foreground |
+| `--c-bg` | `#ffffff` | Main background and greeting panel |
+| `--c-bg-alt` | `#f3f6f8` | Alternate editorial field |
+| `--c-ink` | `#2C313A` | Primary text |
+| `--c-muted` | `#61707d` | Metadata and captions |
+| `--c-border` | `#C8D2DC` | Hairline rules and dividers |
+| `--c-gold` | `#b8842b` | Top-tier award highlight only |
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--r-sm` | `6px` | Small elements, inputs |
-| `--r-md` | `10px` | Buttons |
-| `--r-lg` | `14px` | Cards |
-| `--r-pill` | `999px` | Tags, chips, pills |
+Use `Inter, system-ui, -apple-system, sans-serif` for Latin text and `'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif` for Chinese text. Use a monospace stack only for technical metadata when it adds scanning value.
 
-### Shadows
+Body copy is 16px with 1.7 line height. Editorial titles are compact and hierarchy-led, not hero-scale outside the homepage. Metadata and eyebrows are 12px to 14px with positive letter spacing only. Do not use viewport-scaled font sizes. CJK content must allow normal Chinese line breaking, avoid orphaned one-character labels where practical, and keep English labels and values from colliding or overflowing at 375px.
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--shadow-rest` | `0 1px 2px rgba(15,44,82,.06)` | Cards at rest |
-| `--shadow-hover` | `0 12px 28px -14px rgba(15,44,82,.22)` | Cards on hover |
-| `--shadow-nav` | `0 1px 3px rgba(15,44,82,.08)` | Navbar scroll state |
-| `--shadow-glass` | `0 10px 30px rgba(15,44,82,.10)` | Glass panels on light bg |
-| `--shadow-glass-dark` | `0 16px 48px rgba(3,10,24,.24)` | Glass panels over images |
-| `--shadow-modal` | `0 24px 64px rgba(3,10,24,.32)` | Certificate modal |
+## 3. Shared Geometry
 
-### Glass
+The header is 64px high at every responsive breakpoint. Standard editorial pages use a centered content container with a 1080px maximum width, 24px desktop inline padding, and 16px mobile inline padding. Use unframed full-width sections with hairline rules and editorial columns. Do not turn sections into floating containers or nest cards.
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--glass-blur-sm` | `10px` | Small panels, captions |
-| `--glass-blur-md` | `18px` | Cards, nav, modal panels |
-| `--glass-blur-lg` | `28px` | Modal backdrop |
-| `--glass-sat` | `160%` | Backdrop saturation boost |
-| `--glass-radius-sm` | `14px` | Small glass cards/pills |
-| `--glass-radius-lg` | `22px` | Large glass panels |
+Test the rendered site at these viewports in Chinese and English: `375x812`, `768x1024`, and `1280x900`.
 
-### Z-index
+## 4. Homepage Exact DOM And Geometry
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--z-nav` | `100` | Sticky navbar |
-| `--z-mobile-menu` | `90` | Mobile menu panel |
-| `--z-overlay` | `80` | Mobile menu backdrop |
-| `--z-modal` | `110` | Certificate modal container |
-| `--z-modal-backdrop` | `109` | Modal frosted-glass backdrop |
+The homepage body is exactly this semantic structure. Required Liquid and data attributes may replace each `...`, but no wrapper may be inserted between the named parent and child elements.
 
----
-
-## 2. Typography
-
-### Font Stack
-
-```css
---font-latin: 'Inter', system-ui, -apple-system, sans-serif;
---font-cjk: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
---font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+```html
+<main class="home-editorial"><section class="home-editorial__portrait"><img class="home-editorial__portrait-image" ...></section><div class="home-editorial__identity"><section class="home-editorial__greeting"><p class="home-editorial__eyebrow" ...>...</p><h1 class="home-editorial__title" ...>...</h1><p class="home-editorial__tagline" ...>...</p></section><a class="home-editorial__profile" href="{{ '/experience.html' | relative_url }}"><div class="home-editorial__profile-content"><p class="home-editorial__summary" ...>...</p><span class="home-editorial__cta"><span data-en="Learn more">了解更多</span><span class="home-editorial__cta-arrow" aria-hidden="true">→</span></span></div></a></div></main>
 ```
 
-Google Fonts: `Inter:wght@400;500;600;700` + `Noto+Sans+SC:wght@400;500;600;700`, `display=swap`.
+`.home-editorial` owns `min-height:calc(100dvh - 64px)` beneath the 64px header. The global footer follows this viewport body and is never included in it.
 
-### Scale (fluid clamp)
+| Range | `.home-editorial` geometry | `.home-editorial__identity` geometry |
+| --- | --- | --- |
+| `>=1024px` | Two columns, `42% 58%` | Two rows, `44% 56%` |
+| `768px-1023px` | Two columns, `38% 62%` | Two rows, `44% 56%` |
+| `<768px` | One column, rows `28fr 42fr 30fr` | `display:contents` with explicit placement |
 
-| Element | Size | Weight | Line-height |
-|---------|------|--------|-------------|
-| Hero h1 | `clamp(2.2rem, 5vw, 3.4rem)` | 700 | 1.15 |
-| Section title h2 | `clamp(1.5rem, 2.6vw, 2rem)` | 700 | 1.3 |
-| Subtitle h3 | `clamp(1.15rem, 1.8vw, 1.35rem)` | 600 | 1.4 |
-| Body | `1rem` (16px) | 400 | 1.7 |
-| Small / caption | `0.875rem` | 400 | 1.6 |
-| Eyebrow label | `0.75rem` | 600 | 1.4 |
+At `<768px`, the direct visual order is greeting, portrait, profile. Achieve it with `display:contents` for `.home-editorial__identity` and explicit grid placement. The page or body owns vertical overflow. No child pane, portrait, greeting, identity, or profile area has its own scroll container.
 
-### Eyebrow Labels
+The portrait uses `portrait-b1-cutout.png`. The greeting panel is white. Its title is `你好，我是张易成` with `data-en="Hello, I'm JOEYCH"`; the eyebrow is the bilingual role from `profile.role`; the tagline is from `profile.tagline`. The profile is one semantic link to `/experience.html`, uses gunmetal, renders `profile.summary` verbatim, and contains the exact CTA label plus an arrow outside the translated span.
 
-- Uppercase, `letter-spacing: 0.12em`
-- Color: `--c-blue`
-- Small font size (0.75rem)
-- Followed by a short accent divider (32px wide, 2px tall, `--c-blue`)
-- Larger bilingual title below
+The CTA is subdued at rest. On hover or keyboard focus of `.home-editorial__profile`, a bottom-up shadow gradient clarifies the panel action and reveals the CTA. On coarse-pointer devices, the CTA remains visible without hover. The profile must remain keyboard operable. Reduced-motion users receive the same state information without animated transition.
 
----
+## 5. Shared Editorial Primitives
 
-## 3. Layout
+### Editorial Page Intro
 
-### Container
+Every non-home portfolio route begins with:
 
-- Max-width: **1080px**
-- Side padding: **24px** (desktop), **16px** (mobile ≤768px)
-- Centered with `margin: 0 auto`
-
-### Sections
-
-- Vertical padding: `clamp(3.5rem, 7vw, 6rem)`
-- Alternate background: `--c-bg-alt` for every other section
-
-### Grid
-
-- Cards: CSS Grid, `auto-fill, minmax(280px, 1fr)`, gap 24px
-- Stats row: flex wrap, gap 16px
-
----
-
-## 4. Components
-
-### Navbar
-
-- Sticky top, `--z-nav: 100`
-- Brand: 张易成 / JOEYCH (bilingual)
-- Links: 首页 / 自我介绍 / 获奖证书 / 项目介绍 / 博客
-- Active state: `--c-blue` color + bottom border
-- Language toggle: "中/EN" button
-- Mobile: hamburger icon → slide-in panel from right
-- Background: `--c-bg` with `--shadow-nav` on scroll
-
-### Merged Homepage
-
-- A split portrait hero keeps the provided cutout as the first-viewport focal element; gunmetal anchors the lower field and cyan is limited to the exploration affordance.
-- The homepage contains the full profile sequence in order: hero, `#about` profile summary, education, campus experience, professional skills, contact, and footer.
-- Editorial metrics use hairline ice-silver dividers rather than nested cards; timelines are unframed on the merged homepage.
-
-### Stat Pills
-
-- Inline-flex row, wrap on mobile
-- Each pill: icon + label + value
-- Background: `--c-blue-soft`, text: `--c-navy`
-- Border-radius: `--r-pill`
-
-### Section Header
-
-- Eyebrow label (EN uppercase) + accent divider
-- Bilingual title (zh default, en via data-en)
-- Left-aligned
-
-### Timeline (vertical)
-
-- Left border line (2px, `--c-border`)
-- Dot marker (12px circle, `--c-blue` fill) at each entry
-- Date range as eyebrow, title + subtitle, bullet list for details
-- Responsive: line moves to top on mobile (horizontal timeline alternative)
-
-### Skill Group Card
-
-- Card with `--r-lg`, `--shadow-rest`
-- Title + icon, tag chips inside
-- Hover: `--shadow-hover`, `translateY(-3px)`
-
-### Tag Chips
-
-- Background: `--c-blue-soft`
-- Text: `--c-blue`
-- Padding: 4px 12px
-- Border-radius: `--r-pill`
-- Font: 0.8125rem, weight 500
-
-### Publication Item
-
-- Numbered index (large, `--c-navy`, weight 700)
-- Title (weight 600), venue (italic, `--c-muted`)
-- Author position badge (e.g., "第一作者" / "1st Author")
-
-### Award Card
-
-- Card layout with level badge
-- Level badges:
-  - 国家级 (National): `--c-gold` background
-  - 省级 (Provincial): `--c-blue` background
-  - 区域/校级 (Regional): `--c-muted` background
-- Prize tier: 特等/一等/二等/三等奖 — displayed as text
-
-### Image Placeholder
-
-- Dashed border (2px, `--c-border`)
-- Aspect ratio reserved (16:9 or 4:3)
-- Centered icon + caption "图N 标题"
-- Muted line: "图片待补充 / Image coming soon"
-
-### Link Placeholder Button
-
-- Disabled state
-- Dashed border
-- Text: "链接待补充 / Link coming soon"
-- Cursor: not-allowed
-
-### Footer
-
-- Background: `--c-navy`
-- Text: white (0.9 opacity)
-- External links + copyright
-- © 2026 张易成
-
-### Glass Panel
-
-- Use `.glass` on light sections, `.glass--navy` over dark/image sections.
-- Background fallback first; enhance with `backdrop-filter: blur(var(--glass-blur-md)) saturate(var(--glass-sat))`.
-- Border: 1px solid using `--c-glass-border-light` / `--c-glass-border-dark`.
-- Inner highlight: `inset 0 1px 0 var(--c-glass-highlight)`.
-- Radius: `--glass-radius-sm` or `--glass-radius-lg`.
-- Avoid placing small body text directly over busy images without a tint layer.
-
-### Certificate Modal
-
-- Backdrop: fixed full viewport, `--c-navy-glass`, `backdrop-filter: blur(var(--glass-blur-lg))`.
-- Modal panel: centered, max-width ~90vw / max-height ~85vh, `--c-frost` or `--c-navy-glass-strong`, border highlight.
-- Image carousel: left/right arrow buttons, keyboard navigation, click image or backdrop closes.
-- Focus management: focus trap while open, restore focus on close.
-
----
-
-## 5. Motion
-
-### Scroll Reveal
-
-- Trigger: IntersectionObserver, threshold 0.1
-- Animation: `translateY(16px) → 0`, `opacity: 0 → 1`
-- Duration: 0.55s, easing: ease
-- Stagger: 80ms between siblings
-- Class: `.reveal` → `.reveal.is-visible`
-
-### Card Hover
-
-- `transform: translateY(-3px)`
-- Shadow transition: `--shadow-rest` → `--shadow-hover`
-- Duration: 0.3s ease
-
-### Reduced Motion
-
-```css
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+```html
+<header class="editorial-intro"><span class="editorial-intro__eyebrow">…</span><h1 class="editorial-intro__title" data-en="…">…</h1><p class="editorial-intro__copy" data-en="…">…</p></header>
 ```
 
-### Rules
+`.editorial-intro` owns the route introduction. `.editorial-intro__eyebrow` owns its small sectional label. `.editorial-intro__title` owns the sole route h1. `.editorial-intro__copy` owns the source-grounded explanatory copy.
 
-- GPU-only: `transform`, `opacity`, `filter`
-- NEVER animate: `width`, `height`, `top`, `left`, `margin`, `padding`
-- NEVER use: `transition: all`
+### Projects
 
----
+`.project-index` owns the compact numbered project index. Each `.project-index__item` is one anchor to an exact project record id. `.project-index__number`, `.project-index__title`, `.project-index__category`, and `.project-index__year` own the scan order.
 
-## 6. Accessibility
+`.project-record` owns one full evidence-led record. `.project-record__meta` owns number and year. `.project-record__claim` owns the approved technical claim. `.project-record__summary`, `.project-record__contribution`, and `.project-record__tags` own their corresponding source data. `.project-figures` owns the figures, and each `figure` has an always-visible `figcaption`. `.link-placeholder` owns an unavailable link state. No project evidence is hidden behind hover.
 
-### Semantic Landmarks
+### Achievements And Archives
 
-- `<header>`, `<nav>`, `<main>`, `<section>`, `<footer>`
-- Proper heading hierarchy (h1 → h2 → h3)
+`.achievement-ledger` owns chronological competition groups. `.achievement-ledger__year` owns the year rule and `.achievement-ledger__row` owns one competition entry. `.achievement-ledger__title` owns the bilingual title. `.achievement-ledger__badges` owns prize labels. A record with certificates alone may be interactive and use `data-certs`.
 
-### Keyboard Navigation
+`.research-archive` owns the compact publications, patent applications, and graduation thesis records. `.research-archive__item` owns one archive record, `.research-archive__title` owns its bilingual title, `.research-archive__meta` owns venue and year when approved, and `.research-archive__badge` owns the source-backed author or award label. Use no unsupported publication, patent, or thesis metadata.
 
-- All interactive elements focusable
-- Visible focus rings: `outline: 2px solid --c-blue; outline-offset: 2px`
-- Skip-to-content link (optional but recommended)
+### Skills
 
-### ARIA
+`.skill-groups` owns the four professional skill groups. Each `.skill-group` owns one group title, source-backed tag list, and only its approved evidence links. These groups appear on `/tech-stack.html`, not on the homepage.
 
-- `aria-label` on icon-only buttons
-- `aria-current="page"` on active nav link
-- `aria-expanded` on mobile menu toggle
+`.learning-map` owns the secondary broad taxonomy. Each top-level `<details class="learning-map__section" open>` owns one existing Fundamentals, Technology Stack, or Architecture branch. `.learning-map__summary` owns the bilingual native summary and `.learning-map__content` owns its existing content. The Embedded branch remains `<details class="learning-map__subsection" open>`. Native details behavior is the only interaction. Do not add proficiency ratings or custom accordion JavaScript.
 
-### Contrast
+### Contact Panel
 
-- Body text: `--c-ink` on `--c-bg` → 15.4:1 ✓
-- Muted text: `--c-muted` on `--c-bg` → 5.8:1 ✓ (AA)
-- Links, active navigation, focus rings, and labels use `--c-accent-fg` on light surfaces; fluorescent `--c-accent` is reserved for dark surfaces and non-text decoration.
+`button.identity-contact-trigger` owns the right-side identity action. It contains separate translatable spans for `张易成` and `JOEYCH`, has `aria-expanded`, and has `aria-controls="identity-contact-panel"`.
 
----
+`div#identity-contact-panel.identity-contact-panel[hidden]` owns the hidden contact panel. Its exact child structure is `h2.identity-contact-panel__title + ul.identity-contact-panel__links`. The title is `联系方式` with `data-en="Contact"`. The link list contains only Email, GitHub, Google Scholar, and ORCID.
 
-## 7. i18n (Internationalization)
+On desktop, the panel is positioned below the trigger and stays inside the viewport. On mobile, it is a viewport-safe full-width panel below the 64px navigation with 16px side insets. Clicking or pressing Enter or Space on the trigger opens it, updates `aria-expanded`, and focuses Email. Repeating the trigger action, clicking outside, or pressing Escape closes it and restores focus to the trigger. Opening the mobile menu closes the contact panel. Opening the contact panel closes the mobile menu and releases any menu body lock. Only the mobile menu owns its overlay and body scroll lock. Touch users have the same reachable contact links without hover-only behavior.
 
-### Pattern
+## 6. Global Footer Exact DOM
 
-- Default language: **Chinese (zh)** — inline in HTML
-- English translations: `data-en` attribute on same element
-- JS toggle swaps `textContent` based on `lang` value in `localStorage`
-- Key: `site-lang`, values: `zh` (default) | `en`
-- `<html lang>` attribute updates on toggle
+The footer must use this Liquid DOM verbatim:
 
-### Attribute Translation
-
-- For `aria-label`, `alt`, `title`: use `data-en-aria-label`, `data-en-alt`, etc.
-- JS updates these attributes when lang=en
-
-### SEO
-
-- Content lives in HTML (not JS dictionary) for crawlability
-- Graceful degradation: no-JS users see Chinese only
-
-### Jekyll Data Contract
-
-- `_data/profile.yml`, `_data/projects.yml`, `_data/publications.yml`, `_data/patents.yml`, and `_data/awards.yml` hold localized `{ zh, en }` objects and stable `id`, `year`, `tags`, `featured`, `image`, and `links` fields where applicable.
-- Projects and awards pages render from this data. Certificate triggers are opt-in: only a record with an explicit `certificates` list emits a `data-certs` JSON attribute.
-
----
-
-## 8. Responsive Breakpoints
-
-| Breakpoint | Layout |
-|------------|--------|
-| ≤ 768px | Mobile: single column, stacked nav, reduced padding |
-| 769–1024px | Tablet: 2-column grids, condensed spacing |
-| ≥ 1025px | Desktop: full layout, max-width container |
-
-### Mobile Adjustments
-
-- Container side padding: 16px
-- Section vertical padding: `clamp(2.5rem, 5vw, 4rem)`
-- Hero h1: `clamp(1.8rem, 6vw, 2.4rem)`
-- Stats row: wrap to 2 columns
-- Timeline: vertical line on left (not horizontal)
-
----
-
-## 9. Placeholders
-
-### Image Placeholder
-
-- Dashed border: `2px dashed --c-border`
-- Aspect ratio: `16/9` (or `4/3` for portraits)
-- Background: `--c-bg-alt`
-- Centered content: icon + caption
-- Caption: "图N 标题" (bold) + "图片待补充 / Image coming soon" (muted)
-
-### Link Placeholder Button
-
-- Disabled: `pointer-events: none; opacity: 0.6`
-- Border: `2px dashed --c-border`
-- Background: transparent
-- Text: "链接待补充 / Link coming soon"
-- Cursor: `not-allowed`
-
----
-
-## 10. Anti-Slop Rules
-
-### DO
-
-- Use design tokens for ALL colors, spacing, radius, shadows
-- Follow the eyebrow + bilingual title pattern for section headers
-- Keep animations subtle and purposeful
-- Use inline SVG icons (lucide-style stroke icons)
-- Test at 375px, 768px, 1280px
-
-### DO NOT
-
-- Use emoji as icons (SVG only)
-- Hardcode hex values in components (use CSS variables)
-- Use `transition: all`
-- Animate layout properties (width, height, top, left, margin, padding)
-- Use generic AI-slop patterns (purple gradients on white, cookie-cutter cards)
-- Stub or simplify content — deliver complete, production-ready pages
-
----
-
-## 11. File Structure
-
-```
-/
-├── DESIGN.md (this file)
-├── index.html (home)
-├── about.html (noindex redirect to `index.html#about`)
-├── awards.html (Wave B)
-├── projects.html (Wave B)
-├── blog.html (Wave B)
-├── 404.html (error page)
-├── assets/
-│   ├── css/
-│   │   └── main.css (design system + all components)
-│   ├── js/
-│   │   └── main.js (i18n, mobile nav, scroll reveal)
-│   └── img/
-│       └── .gitkeep (future images)
-└── _config.yml (Jekyll config — minimal)
+```html
+<footer class="site-footer"><div class="container"><section class="site-footer__contact"><h2 class="site-footer__heading" data-en="Contact">联系方式</h2><a class="site-footer__email" href="mailto:{{ site.data.profile.contact.email | escape }}"><span data-en="Email">邮箱</span><span class="site-footer__email-value">{{ site.data.profile.contact.email }}</span></a></section><nav class="site-footer__links" aria-label="链接 / Links"><a href="{{ site.data.profile.contact.github | escape }}" target="_blank" rel="noopener noreferrer">GitHub</a><a href="{{ site.data.profile.contact.scholar | escape }}" target="_blank" rel="noopener noreferrer">Google Scholar</a><a href="{{ site.data.profile.contact.orcid | escape }}" target="_blank" rel="noopener noreferrer">ORCID</a></nav></div></footer>
 ```
 
----
+`.site-footer` owns the persistent global contact surface. `.site-footer__contact` owns the heading and email link. `.site-footer__heading` owns the bilingual heading. `.site-footer__email` owns the mail destination, its first span owns the bilingual label, and `.site-footer__email-value` owns the email value. `.site-footer__links` owns only the three approved external links. Do not output phone, hometown, political status, copyright, or a second contact section here.
 
-## 12. Browser Support
+## 7. Accessibility And Language States
 
-- Modern evergreen browsers (Chrome, Firefox, Safari, Edge — last 2 versions)
-- No IE11 support
-- Graceful degradation for older browsers (layout still works, animations may not)
+Use semantic `header`, `nav`, `main`, `section`, `article`, `figure`, `figcaption`, and `footer` landmarks. Maintain one h1 per route and a descending heading structure. Every interactive target has a visible focus indicator using the accessible cyan foreground with a 2px outline and 2px offset.
 
----
+The language system renders Chinese inline and English in `data-en`. `applyLang()` replaces `textContent`, so do not put icons, arrows, or interactive child markup inside an element whose text content changes. The homepage CTA arrow is therefore outside its translated span. Translate `aria-label`, `alt`, and `title` through dedicated `data-en-*` attributes. Chinese remains readable without JavaScript.
 
-**Last updated:** 2026-07-12
-**Version:** 1.1
+Certificate modal behavior retains focus trapping, Escape close, and focus restoration. Captions remain beneath certificate images. Every interactive certificate trigger is keyboard reachable. Native `<details>` controls retain keyboard behavior.
+
+## 8. Motion And Responsive Rules
+
+Motion only communicates an interaction or state change. Animate only `transform`, `opacity`, or `filter`. Do not use `transition: all`, scroll-jacking, autoplay, decorative motion, or layout-property animation. Respect `prefers-reduced-motion` without hiding information or controls.
+
+At 375px, 768px, and 1280px, all text must fit its owner, the header remains 64px high, the contact panel remains reachable, footer content does not overlap the page, figures keep visible captions, and the homepage has no inner scrollbar. Check Chinese and English after live language switching.
+
+## 9. Must-NOT Constraints
+
+- Do not migrate from Jekyll/Liquid, `_data` YAML, vanilla CSS, or vanilla JavaScript.
+- Do not add an unapproved navigation destination, search, filtering, dark-mode toggle, 3D, scroll-jacking, autoplay, hover-only information, nested cards, or decorative animation.
+- Do not invent accuracy, latency, power, dataset, team, DOI, volume, status, patent identifier, work, internship, proficiency, future-plan, or unsupported-role claims.
+- Do not add, remove, redact, or reassociate images and certificates.
+- Do not rewrite `_data` schemas broadly or clean unrelated CSS.
+- Do not use root-relative internal links. Use `relative_url` for internal routes.
+- Do not place icons or child markup inside a `data-en` element whose `textContent` changes.
+
+## 10. Verification Contract
+
+The implementation is checked at `375x812`, `768x1024`, and `1280x900`, in Chinese and English. Verification confirms the exact homepage DOM and grids, page-owned mobile overflow, keyboard and touch contact-panel behavior, source-backed project and archive presentation, visible captions, and the exact footer hierarchy. Any unapproved navigation claim fails this contract.
