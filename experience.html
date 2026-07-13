@@ -1,0 +1,38 @@
+---
+permalink: /experience.html
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="张易成的教育背景与校园经历"><title>个人经历 · 张易成</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="{{ '/assets/img/favicon.svg' | relative_url | escape }}"><link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | escape }}">
+</head>
+<body>
+  {% include site-header.html %}
+  <main id="main">
+    {% include editorial-page-intro.html eyebrow="EXPERIENCE" title_zh="个人经历" title_en="Experience" intro_zh="从课堂学习到校园实践，这些经历构成了我的工程基础与协作方式。" intro_en="From academic study to campus practice, these experiences shaped my engineering foundation and collaborative approach." %}
+    <section class="achievement-ledger" aria-labelledby="education-title">
+      <h2 id="education-title" class="achievement-ledger__year" data-en="Education">教育背景</h2>
+      {% for entry in site.data.profile.education %}
+      <article class="achievement-ledger__row" data-experience-kind="education">
+        <time class="achievement-ledger__year">{{ entry.period | escape }}</time>
+        <div><h3 class="achievement-ledger__title" data-en="{{ entry.school.en | escape }}">{{ entry.school.zh | escape }}</h3><p data-en="{{ entry.degree.en | escape }}">{{ entry.degree.zh | escape }}</p><ul class="achievement-ledger__badges">{% for item in entry.highlights %}<li data-en="{{ item.en | escape }}">{{ item.zh | escape }}</li>{% endfor %}</ul></div>
+      </article>
+      {% endfor %}
+    </section>
+    <section class="achievement-ledger" aria-labelledby="campus-title">
+      <h2 id="campus-title" class="achievement-ledger__year" data-en="Campus experience">校园经历</h2>
+      {% for entry in site.data.profile.campus_experience %}
+      <article class="achievement-ledger__row" data-experience-kind="campus">
+        <time class="achievement-ledger__year">{{ entry.period | escape }}</time>
+        <div><h3 class="achievement-ledger__title" data-en="{{ entry.organization.en | escape }}">{{ entry.organization.zh | escape }}</h3><p data-en="{{ entry.role.en | escape }}">{{ entry.role.zh | escape }}</p><ul class="achievement-ledger__badges">{% for item in entry.details %}<li data-en="{{ item.en | escape }}">{{ item.zh | escape }}</li>{% endfor %}</ul></div>
+      </article>
+      {% endfor %}
+    </section>
+  </main>
+  {% include site-footer.html %}<script src="{{ '/assets/js/main.js' | relative_url | escape }}"></script>
+</body>
+</html>

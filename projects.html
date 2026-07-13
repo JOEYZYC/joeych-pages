@@ -10,23 +10,42 @@ permalink: /projects.html
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/svg+xml" href="{{ '/assets/img/favicon.svg' | relative_url | escape }}"><link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | escape }}">
 </head>
-<body>
-  {% include site-header.html %}
-  <main id="main">
-    <section class="page-header"><div class="container"><span class="page-header__eyebrow">PROJECTS</span><h1 class="page-header__title" data-en="Projects">项目介绍</h1></div></section>
-    <section class="section"><div class="container">
+  <body>
+    {% include site-header.html %}
+    <main id="main">
+      {% include editorial-page-intro.html eyebrow='PROJECTS' title_zh='项目介绍' title_en='Projects' intro_zh='三个项目记录了我从信号采集、边缘视觉到无线感知模型的工程实践。' intro_en='Three projects trace my work from signal acquisition and edge vision to wireless perception models.' %}
+      <nav class="project-index" aria-label="项目索引 / Project index">
+        {% for project in site.data.projects %}
+        <a class="project-index__item" href="#{{ project.id | escape }}">
+          <span class="project-index__number">{{ forloop.index | prepend: '0' }}</span>
+          <span class="project-index__title" data-en="{{ project.title.en | escape }}">{{ project.title.zh | escape }}</span>
+          <span class="project-index__category" data-en="{{ project.category.en | escape }}">{{ project.category.zh | escape }}</span>
+          <span class="project-index__year">{{ project.year | escape }}</span>
+        </a>
+        {% endfor %}
+      </nav>
       {% for project in site.data.projects %}
-      <article class="project-block reveal" id="{{ project.id | escape }}">
-        <header><p class="project-block__label">{{ project.year }}</p><h2 class="project-block__title" data-en="{{ project.title.en | escape }}">{{ project.title.zh }}</h2></header>
-        <div class="project-block__subsection"><span class="project-block__label" data-en="Summary">项目概述</span><p class="project-block__summary" data-en="{{ project.summary.en | escape }}">{{ project.summary.zh }}</p></div>
-        {% if project.contribution %}<div class="project-block__subsection"><span class="project-block__label" data-en="My contribution">我的贡献</span><p class="project-block__text" data-en="{{ project.contribution.en | escape }}">{{ project.contribution.zh }}</p></div>{% endif %}
-        <div class="project-block__subsection"><span class="project-block__label" data-en="Tech stack">技术栈</span><div class="tags-row">{% for tag in project.tags %}<span class="tag" data-en="{{ tag.en | escape }}">{{ tag.zh }}</span>{% endfor %}</div></div>
-        <div class="project-block__subsection"><span class="project-block__label" data-en="Figures">项目图片</span><div class="project-figures">{% for figure in project.figures %}<div class="img-placeholder"><svg class="img-placeholder__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span class="img-placeholder__caption" data-en="{{ figure.en | escape }}">{{ figure.zh }}</span><span class="img-placeholder__hint" data-en="Image coming soon">图片待补充</span></div>{% endfor %}</div></div>
-        {% if project.links.size > 0 %}<div class="project-links">{% for link in project.links %}{% if link.url %}<a class="btn btn--outline" href="{{ link.url | escape }}" target="_blank" rel="noopener noreferrer" data-en="{{ link.label.en | escape }}">{{ link.label.zh }}</a>{% else %}<span class="link-placeholder" data-en="{{ link.label.en | escape }}">{{ link.label.zh }}</span>{% endif %}{% endfor %}</div>{% endif %}
+      <article class="project-record" id="{{ project.id | escape }}">
+        <p class="project-record__meta">{{ forloop.index | prepend: '0' }} / {{ project.year | escape }}</p>
+        <div class="project-record__body">
+          <h2 class="project-record__title" data-en="{{ project.title.en | escape }}">{{ project.title.zh | escape }}</h2>
+          <p class="project-record__claim" data-en="{{ project.claim.en | escape }}">{{ project.claim.zh | escape }}</p>
+          <p class="project-record__summary" data-en="{{ project.summary.en | escape }}">{{ project.summary.zh | escape }}</p>
+          {% if project.contribution %}<p class="project-record__contribution" data-en="{{ project.contribution.en | escape }}">{{ project.contribution.zh | escape }}</p>{% endif %}
+          <div class="project-record__tags">{% for tag in project.tags %}<span class="tag" data-en="{{ tag.en | escape }}">{{ tag.zh | escape }}</span>{% endfor %}</div>
+          <div class="project-figures">
+            {% for figure in project.figures %}
+            <figure>
+              <div class="img-placeholder"><svg class="img-placeholder__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span class="img-placeholder__hint" data-en="{{ 'Image coming soon' | escape }}">{{ '图片待补充' | escape }}</span></div>
+              <figcaption data-en="{{ figure.en | escape }}">{{ figure.zh | escape }}</figcaption>
+            </figure>
+            {% endfor %}
+          </div>
+          {% if project.links.size > 0 %}<div class="project-links">{% for link in project.links %}{% if link.url %}<a class="btn btn--outline" href="{{ link.url | escape }}" target="_blank" rel="noopener noreferrer" data-en="{{ link.label.en | escape }}">{{ link.label.zh | escape }}</a>{% else %}<span class="link-placeholder" data-en="{{ link.label.en | escape }}">{{ link.label.zh | escape }}</span>{% endif %}{% endfor %}</div>{% endif %}
+        </div>
       </article>
       {% endfor %}
-    </div></section>
-  </main>
+    </main>
   {% include site-footer.html %}<script src="{{ '/assets/js/main.js' | relative_url | escape }}"></script>
 </body>
 </html>

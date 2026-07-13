@@ -5,19 +5,32 @@
       <span class="navbar__brand-zh">张易成</span><span class="navbar__brand-en">JOEYCH</span>
     </a>
     <nav class="navbar__links" aria-label="主导航 / Main navigation">
-      <a href="{{ '/index.html' | relative_url | escape }}" class="navbar__link" data-en="Home">首页</a>
-      <a href="{{ '/index.html#about' | relative_url | escape }}" class="navbar__link" data-en="About">自我介绍</a>
+      <a href="{{ '/index.html' | relative_url | escape }}" class="navbar__link" data-en="About">自我介绍</a>
+      <a href="{{ '/experience.html' | relative_url | escape }}" class="navbar__link" data-en="Experience">个人经历</a>
       <a href="{{ '/awards.html' | relative_url | escape }}" class="navbar__link" data-en="Awards">获奖证书</a>
       <a href="{{ '/projects.html' | relative_url | escape }}" class="navbar__link" data-en="Projects">项目介绍</a>
       <a href="{{ '/tech-stack.html' | relative_url | escape }}" class="navbar__link" data-en="Tech Stack">技术栈</a>
     </nav>
-    <div class="navbar__actions"><button class="lang-toggle" aria-label="切换语言 / Switch language">中</button><button class="navbar__hamburger" aria-label="打开菜单 / Open menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
+    <div class="navbar__actions">
+      <button class="identity-contact-trigger" type="button" aria-label="张易成联系方式 / JOEYCH contact" data-en-aria-label="JOEYCH contact" aria-expanded="false" aria-controls="identity-contact-panel"><span data-en="JOEYCH">张易成</span></button>
+      <button class="lang-toggle" type="button" aria-label="切换语言 / Switch language">中</button>
+      <button class="navbar__hamburger" type="button" aria-label="打开菜单 / Open menu" data-en-aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></button>
+      <div id="identity-contact-panel" class="identity-contact-panel" hidden>
+        <h2 class="identity-contact-panel__title" data-en="Contact">联系方式</h2>
+        <ul class="identity-contact-panel__links">
+          <li><a href="mailto:{{ site.data.profile.contact.email | escape }}"><span data-en="Email">邮箱</span>: {{ site.data.profile.contact.email | escape }}</a></li>
+          <li><a href="{{ site.data.profile.contact.github | escape }}" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="{{ site.data.profile.contact.scholar | escape }}" target="_blank" rel="noopener noreferrer">Google Scholar</a></li>
+          <li><a href="{{ site.data.profile.contact.orcid | escape }}" target="_blank" rel="noopener noreferrer">ORCID</a></li>
+        </ul>
+      </div>
+    </div>
   </div>
 </header>
 <div class="mobile-overlay" aria-hidden="true"></div>
-<nav class="mobile-menu" aria-label="移动端导航 / Mobile navigation">
-  <a href="{{ '/index.html' | relative_url | escape }}" class="mobile-menu__link" data-en="Home">首页</a>
-  <a href="{{ '/index.html#about' | relative_url | escape }}" class="mobile-menu__link" data-en="About">自我介绍</a>
+<nav id="mobile-menu" class="mobile-menu" aria-label="移动端导航 / Mobile navigation">
+  <a href="{{ '/index.html' | relative_url | escape }}" class="mobile-menu__link" data-en="About">自我介绍</a>
+  <a href="{{ '/experience.html' | relative_url | escape }}" class="mobile-menu__link" data-en="Experience">个人经历</a>
   <a href="{{ '/awards.html' | relative_url | escape }}" class="mobile-menu__link" data-en="Awards">获奖证书</a>
   <a href="{{ '/projects.html' | relative_url | escape }}" class="mobile-menu__link" data-en="Projects">项目介绍</a>
   <a href="{{ '/tech-stack.html' | relative_url | escape }}" class="mobile-menu__link" data-en="Tech Stack">技术栈</a>
