@@ -11,11 +11,12 @@
 ## 目录结构
 
 ```
-index.html          首页（Hero + 完整个人简介）
-about.html          无索引重定向至首页 #about
-awards.html         获奖证书（由 `_data` 渲染）
-projects.html       项目介绍（由 `_data` 渲染）
-tech-stack.html     技术栈（基础知识 / 技术方向 / 架构设计）
+index.html          自我介绍 / About
+experience.html     个人经历 / Experience
+awards.html         获奖证书 / Awards（由 `_data` 渲染）
+projects.html       项目介绍 / Projects（由 `_data` 渲染）
+tech-stack.html     技术栈 / Tech Stack
+about.html          兼容旧链接的无索引重定向，目标为 index.html
 404.html            404 页
 
 assets/
@@ -24,9 +25,9 @@ assets/
   img/              图片资源（替换占位图请放这里）
   img/favicon.svg   站点图标
 
-_layouts/           Jekyll 博客布局（default / post）
+_layouts/           Jekyll 布局（default / post）
 _data/              双语资料、项目、论文、专利、毕业设计与获奖记录
-_posts/             博客文章（Markdown）
+_posts/             历史 Markdown 内容（不在站点导航中展示 Blog）
 _config.yml         Jekyll / GitHub Pages 配置
 atom.xml            RSS/Atom 订阅源
 DESIGN.md           设计契约（配色 / 字体 / 组件 / 动效规范）
@@ -34,7 +35,7 @@ deploy.ps1          一键提交并部署脚本
 serve.ps1           本地预览脚本
 ```
 
-> 首页、项目和获奖页面使用标准 Jekyll Liquid 与 `_data`，GitHub Pages 会在子路径 `/joeych-pages/` 下渲染它们。
+> 站点导航固定为上述五个页面，不包含 Blog。页面使用标准 Jekyll Liquid 与 `_data`，GitHub Pages 会在子路径 `/joeych-pages/` 下渲染它们。
 
 ---
 
@@ -47,7 +48,7 @@ serve.ps1           本地预览脚本
 ./serve.ps1 8080       # 自定义端口
 ```
 
-首次运行前执行 `bundle install`，然后浏览器打开 `http://localhost:8123/joeych-pages/index.html`。
+首次运行前执行 `bundle install`。`serve.ps1` 等价于 `bundle exec jekyll serve --port 8123 --baseurl "/joeych-pages"`；服务就绪后打开 `http://localhost:8123/joeych-pages/index.html`。
 
 ---
 
@@ -118,22 +119,6 @@ git push origin main
 ```html
 <h2 class="section-title" data-en="New Section">新板块</h2>
 ```
-
-### 4. 写博客
-
-在 `_posts/` 新建 `YYYY-MM-DD-标题.md`：
-
-```markdown
----
-layout: post
-title: "文章标题"
-date: 2026-07-01
----
-
-正文（Markdown）……
-```
-
----
 
 ## 设计规范
 

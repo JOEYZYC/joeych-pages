@@ -126,52 +126,111 @@
      Mobile Navigation
      ============================================================ */
 
-  function initMobileNav() {
+  function initHeaderControls() {
     var hamburger = document.querySelector('.navbar__hamburger');
     var mobileMenu = document.querySelector('.mobile-menu');
     var overlay = document.querySelector('.mobile-overlay');
-    if (!hamburger || !mobileMenu) return;
+    var contactTrigger = document.querySelector('.identity-contact-trigger');
+    var contactPanel = document.querySelector('#identity-contact-panel');
+    var contactLink = contactPanel ? contactPanel.querySelector('a') : null;
+
+    function isMenuOpen() {
+      return mobileMenu && mobileMenu.classList.contains('is-open');
+    }
+
+    function isContactOpen() {
+      return contactPanel && !contactPanel.hidden;
+    }
 
     function openMenu() {
+      if (!hamburger || !mobileMenu) return;
+      closeContact(false);
       hamburger.classList.add('is-active');
       mobileMenu.classList.add('is-open');
       if (overlay) overlay.classList.add('is-visible');
       document.body.style.overflow = 'hidden';
       hamburger.setAttribute('aria-expanded', 'true');
+      window.requestAnimationFrame(function () {
+        var links = mobileMenu.querySelectorAll('.mobile-menu__link');
+        for (var i = 0; i < links.length; i++) {
+          if (links[i].getClientRects().length > 0) {
+            links[i].focus();
+            return;
+          }
+        }
+      });
     }
 
-    function closeMenu() {
+    function closeMenu(restoreFocus) {
+      if (!hamburger || !mobileMenu) return;
       hamburger.classList.remove('is-active');
       mobileMenu.classList.remove('is-open');
       if (overlay) overlay.classList.remove('is-visible');
       document.body.style.overflow = '';
       hamburger.setAttribute('aria-expanded', 'false');
+      if (restoreFocus) hamburger.focus();
     }
 
-    hamburger.addEventListener('click', function () {
-      var isOpen = mobileMenu.classList.contains('is-open');
-      if (isOpen) {
-        closeMenu();
-      } else {
-        openMenu();
+    function openContact() {
+      if (!contactTrigger || !contactPanel) return;
+      closeMenu(false);
+      contactPanel.hidden = false;
+      contactTrigger.setAttribute('aria-expanded', 'true');
+      if (contactLink) contactLink.focus();
+    }
+
+    function closeContact(restoreFocus) {
+      if (!contactTrigger || !contactPanel) return;
+      contactPanel.hidden = true;
+      contactTrigger.setAttribute('aria-expanded', 'false');
+      if (restoreFocus) contactTrigger.focus();
+    }
+
+    if (hamburger && mobileMenu) {
+      hamburger.addEventListener('click', function () {
+        if (isMenuOpen()) {
+          closeMenu(false);
+        } else {
+          openMenu();
+        }
+      });
+    }
+
+    if (contactTrigger && contactPanel) {
+      contactTrigger.addEventListener('click', function () {
+        if (isContactOpen()) {
+          closeContact(true);
+        } else {
+          openContact();
+        }
+      });
+    }
+
+    if (overlay) {
+      overlay.addEventListener('click', function () {
+        closeMenu(true);
+      });
+    }
+
+    var mobileLinks = mobileMenu ? mobileMenu.querySelectorAll('.mobile-menu__link') : [];
+    for (var i = 0; i < mobileLinks.length; i++) {
+      mobileLinks[i].addEventListener('click', function () {
+        closeMenu(false);
+      });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (isContactOpen()) {
+        closeContact(true);
+      } else if (isMenuOpen()) {
+        closeMenu(true);
       }
     });
 
-    if (overlay) {
-      overlay.addEventListener('click', closeMenu);
-    }
-
-    // Close menu when a mobile link is clicked
-    var mobileLinks = mobileMenu.querySelectorAll('.mobile-menu__link');
-    for (var i = 0; i < mobileLinks.length; i++) {
-      mobileLinks[i].addEventListener('click', closeMenu);
-    }
-
-    // Close menu on Escape key
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) {
-        closeMenu();
-        hamburger.focus();
+    document.addEventListener('click', function (e) {
+      if (isContactOpen() && !contactPanel.contains(e.target) && !contactTrigger.contains(e.target)) {
+        closeContact(true);
       }
     });
   }
@@ -470,7 +529,7 @@
 
   function init() {
     initI18n();
-    initMobileNav();
+    initHeaderControls();
     initActiveNav();
     initNavbarScroll();
     initScrollReveal();
