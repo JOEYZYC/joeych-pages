@@ -2542,6 +2542,11 @@ small {
   color: var(--c-bg);
 }
 
+html[lang^='zh'] .home-editorial__summary {
+  overflow-wrap: normal;
+  word-break: keep-all;
+}
+
 .home-editorial__cta {
   display: inline-flex;
   align-items: center;

@@ -128,6 +128,22 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
     expect(grids.columns).toHaveLength(2);
     expect(grids.columns[0] / (grids.columns[0] + grids.columns[1])).toBeCloseTo(expectedPortraitRatio, 2);
     expect(grids.identityRows[0] / (grids.identityRows[0] + grids.identityRows[1])).toBeCloseTo(0.56, 2);
+    await expect(page.locator('.home-editorial__summary')).toHaveText(summary.zh);
+    expect(await page.locator('.home-editorial__summary').evaluate((element) => {
+      const textNode = element.firstChild;
+      const text = textNode.textContent;
+      return ['涵盖', '已发表', '实践'].map((compound) => {
+        const start = text.indexOf(compound);
+        const range = document.createRange();
+        range.setStart(textNode, start);
+        range.setEnd(textNode, start + compound.length);
+        return { compound, lineCount: range.getClientRects().length };
+      });
+    })).toEqual([
+      { compound: '涵盖', lineCount: 1 },
+      { compound: '已发表', lineCount: 1 },
+      { compound: '实践', lineCount: 1 },
+    ]);
   } else {
     expect(grids.columns).toHaveLength(1);
     const totalRowHeight = grids.rows.reduce((sum, rowHeight) => sum + rowHeight, 0);

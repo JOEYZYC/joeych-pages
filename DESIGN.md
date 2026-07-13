@@ -67,6 +67,8 @@ At `<768px`, the direct visual order is greeting, portrait, profile. Achieve it 
 
 The portrait uses `portrait-b1-cutout.png`. The greeting panel is white. Its title is `你好，我是张易成` with `data-en="Hello, I'm JOEYCH"`; the eyebrow is the bilingual role from `profile.role`; the tagline is from `profile.tagline`. The profile is one semantic link to `/experience.html`, uses gunmetal, renders `profile.summary` verbatim, and contains the exact CTA label plus an arrow outside the translated span.
 
+Chinese `.home-editorial__summary` text preserves multi-character compounds on a single rendered line with normal wrapping and `word-break:keep-all`; English retains its existing wrapping behavior.
+
 The CTA is subdued at rest. On hover or keyboard focus of `.home-editorial__profile`, a full-area bottom-up shadow gradient overlay clarifies the gunmetal panel action and reveals the CTA. On coarse-pointer devices, the CTA remains visible without hover. The profile must remain keyboard operable. Reduced-motion users receive the same state information without animated transition.
 
 ## 5. Shared Editorial Primitives
