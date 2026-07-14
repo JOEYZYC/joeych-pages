@@ -123,6 +123,7 @@ test('navigation: contact panel supports keyboard, repeated trigger, outside, an
   await trigger.focus();
   await page.keyboard.press('Enter');
   await expect(panel).toBeVisible();
+  await expect(panel).toHaveCSS('border-radius', '14px');
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
   await expect(email).toBeFocused();
   await expect(panel.locator('.identity-contact-panel__links a')).toHaveCount(4);

@@ -105,7 +105,7 @@ Every non-home portfolio route begins with:
 
 `button.identity-contact-trigger` owns the right-side contact action. It contains the translatable label `联系方式` with `data-en="Contact"`, uses `aria-label="联系方式 / Contact"` with `data-en-aria-label="Contact"`, visually matches `.lang-toggle`, has `aria-expanded`, and has `aria-controls="identity-contact-panel"`.
 
-`div#identity-contact-panel.identity-contact-panel[hidden]` owns the hidden contact panel. Its exact child structure is `h2.identity-contact-panel__title + ul.identity-contact-panel__links`. The title is `联系方式` with `data-en="Contact"`. The link list contains only Email, GitHub, Google Scholar, and ORCID.
+`div#identity-contact-panel.identity-contact-panel[hidden]` owns the hidden contact panel. Its exact child structure is `h2.identity-contact-panel__title + ul.identity-contact-panel__links`. The title is `联系方式` with `data-en="Contact"`. The link list contains only Email, GitHub, Google Scholar, and ORCID. The panel uses `border-radius: var(--r-lg)` (14px) at every breakpoint.
 
 On desktop, the panel is positioned below the trigger and stays inside the viewport. On mobile, it is a viewport-safe full-width panel below the 64px navigation with 16px side insets. Clicking or pressing Enter or Space on the trigger opens it, updates `aria-expanded`, and focuses Email. Repeating the trigger action, clicking outside, or pressing Escape closes it and restores focus to the trigger. Opening the mobile menu closes the contact panel. Opening the contact panel closes the mobile menu and releases any menu body lock. Only the mobile menu owns its overlay and body scroll lock. Touch users have the same reachable contact links without hover-only behavior.
 
