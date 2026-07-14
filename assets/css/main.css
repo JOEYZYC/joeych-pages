@@ -2977,6 +2977,7 @@ html[lang^='zh'] .home-editorial__summary {
 
 .home-editorial__profile:focus-visible,
 .identity-contact-trigger:focus-visible,
+.identity-contact-panel__links a:focus,
 .identity-contact-panel__links a:focus-visible,
 .site-footer a:focus-visible,
 .project-index__item:focus-visible,
