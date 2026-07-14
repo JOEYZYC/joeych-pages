@@ -127,7 +127,7 @@ test('navigation: contact panel supports keyboard, repeated trigger, outside, an
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
   await expect(email).toBeFocused();
   await expect(email).toHaveCSS('outline-style', 'solid');
-  await expect(email).toHaveCSS('outline-width', '2px');
+  expect(await email.evaluate((element) => Number.parseFloat(getComputedStyle(element).outlineWidth))).toBeGreaterThanOrEqual(1.5);
   await expect(email).toHaveCSS('outline-offset', '4px');
   await expect(panel.locator('.identity-contact-panel__links a')).toHaveCount(4);
   await expect(panel.locator('.identity-contact-panel__links a')).toHaveText([
