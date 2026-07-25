@@ -2927,7 +2927,14 @@ html[lang^='zh'] .home-editorial__summary {
 }
 
 body.homepage .site-footer {
+  flex-grow: 1;
   margin-top: 0;
+}
+
+body.homepage {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
 }
 
 .site-footer .container {
