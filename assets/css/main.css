@@ -2926,6 +2926,10 @@ html[lang^='zh'] .home-editorial__summary {
   color: var(--c-bg);
 }
 
+body.homepage .site-footer {
+  margin-top: 0;
+}
+
 .site-footer .container {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;

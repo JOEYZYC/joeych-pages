@@ -173,9 +173,12 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
     geometry: (() => {
       const rect = element.getBoundingClientRect();
       const style = getComputedStyle(element);
+      const footer = document.querySelector('.site-footer').getBoundingClientRect();
       return {
+        bottom: rect.bottom,
         contentLeft: rect.left + Number.parseFloat(style.paddingLeft),
         contentRight: document.documentElement.clientWidth - rect.right + Number.parseFloat(style.paddingRight),
+        footerTop: footer.top,
         paddingLeft: Number.parseFloat(style.paddingLeft),
         paddingRight: Number.parseFloat(style.paddingRight),
         width: rect.width,
@@ -188,6 +191,7 @@ test('homepage: uses the approved viewport grids without overlaps or inner scrol
   expect(Math.abs(grids.geometry.paddingLeft - expectedGutter)).toBeLessThanOrEqual(1);
   expect(Math.abs(grids.geometry.paddingRight - expectedGutter)).toBeLessThanOrEqual(1);
   expect(Math.abs(grids.geometry.contentLeft - grids.geometry.contentRight)).toBeLessThanOrEqual(1);
+  expect(Math.abs(grids.geometry.footerTop - grids.geometry.bottom)).toBeLessThanOrEqual(1);
   if (isDesktop) {
     expect(Math.abs(grids.geometry.width - 1080)).toBeLessThanOrEqual(1);
   }
