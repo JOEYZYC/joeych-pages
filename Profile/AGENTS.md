@@ -4,7 +4,7 @@
 
 - `Profile/data/` and `Profile/media/` are the sole authored public profile source. YAML and media bytes are framework-neutral.
 - Keep workspace publication and verification policy in the root `AGENTS.md`.
-- `Profile/private/` is ignored local material. Never enumerate it from synchronization or site code.
+- `Profile/private/` is ignored local material. Never enumerate it from archived or future site code.
 - Content claims must remain source-backed. Do not invent achievements, qualifications, metrics, links, or associations.
 
 ## WHERE TO LOOK
@@ -16,7 +16,7 @@
 - `data/patents.yml`: patent records, author positions, and certificate associations.
 - `data/thesis.yml`: the single graduation-thesis record.
 - `media/`: published portraits, icons, and certificate files at their literal site-relative hierarchy.
-- Jekyll receives ignored byte-equivalent mirrors through `node tools/profile-sync.mjs --write`.
+- Ignored Jekyll mirrors are not authored sources and do not change Profile ownership.
 
 ## CONVENTIONS
 
@@ -31,22 +31,20 @@
 - Publication records include localized `venue` and `authors`; patent records include localized `authors`.
 - The thesis is a mapping, not a list. Keep its `id`, year, localized `title` and `award`, tags, and links shape.
 - Certificate entries are literal `{ src, zh, en }` values. Keep `src` under `assets/img/certificates`; the matching authored file lives under `Profile/media/certificates`.
-- New certificate files are not visible until an owning YAML record associates them. Project figures are placeholder-only; adding image sources requires coordinated schema, template, and test changes.
+- New certificate files are not visible until an owning YAML record associates them. Project figures are placeholder-only; adding image sources requires coordinated schema and template review.
 
 ## ANTI-PATTERNS
 
 - Do not change a schema, field name, nullability, record form, ID, or ordering casually.
 - Do not duplicate YAML facts or media into Jekyll/Astro variants, overrides, aliases, or authored mirrors.
 - Do not add a certificate-folder guide or place content policy beside certificate assets.
-- Do not traverse, synchronize, test against, or publish `Profile/private/`.
+- Do not traverse, copy, or publish `Profile/private/`.
 - Do not add presentation, layout, style, or interaction rules here.
 - Do not add an asset path without its YAML association, or a certificate reference to a missing asset.
-- Do not change schemas without updating every Liquid and test consumer.
+- Do not change schemas without accounting for every archived Liquid consumer.
 
-## VERIFICATION
+## ARCHIVE OWNERSHIP NOTES
 
-- Parse edited YAML, run `node tools/profile-sync.mjs --write`, then require `node tools/profile-sync.mjs --check` to pass.
-- For projects, confirm the exact record count, unique IDs, localized fields, figures, and links expected by `projects.spec.js`.
-- For awards, publications, patents, and thesis, confirm required paired values and certificate paths against `awards.spec.js`.
-- Inspect the consuming Liquid when adding fields or changing content ownership; schema changes require every consumer to change together.
-- Recheck source-backed claims against the supplied record or evidence before publishing.
+- Preserve source-backed claims, stable record shapes, localized values, and literal certificate associations.
+- Treat `Profile/data/` and `Profile/media/` as the only authored public sources; ignored mirrors and local private material are outside the distributable package.
+- This archive guide provides ownership and data-shape context only; it has no executable workflow.
