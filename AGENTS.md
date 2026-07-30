@@ -8,7 +8,7 @@ This repository is one Git control plane for three ordinary directories:
 - `Jeklly/` owns the existing Jekyll site as an offline archive.
 - `Astro/` is a placeholder for a separately approved future implementation.
 
-The Jekyll archive is not deployed. GitHub Pages must remain disabled, and no deployment workflow, executable deployment path, or broad-staging command may be introduced.
+The Jekyll archive is not deployed. GitHub Pages must remain disabled, and no deployment workflow, executable deployment path, or broad-staging mechanism may be introduced.
 
 ## Publication Firewall
 
@@ -25,7 +25,7 @@ The Jekyll archive is not deployed. GitHub Pages must remain disabled, and no de
 - Do not create nested repositories, submodules, or gitlinks.
 - Do not move profile data, media, Jekyll source, research, screenshots, or raw originals as part of root-contract work.
 - Do not initialize Astro or add Astro packages, source, configuration, or workflows without a separate approved plan.
-- Stage explicit paths only. Never use `git add -A`, `git add .`, or repository-wide wildcards.
+- Stage explicit paths only. Never use broad staging or repository-wide wildcards.
 
 ## Current Transition
 
