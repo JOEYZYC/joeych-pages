@@ -44,7 +44,17 @@ Thumbs.db
 .playwright-mcp/
 qa*.png
 
-# Source material (not for deployment) #
-######################################
-素材/
+# Split workspace publication firewall #
+########################################
+/Profile/private/
+/Astro/research/
+/Jeklly/archive/local/
+/Jeklly/_data/
+/Jeklly/assets/img/
+/Jeklly/.generated/
+/.tmp-build/
+
+# Source material (not for publication) #
+########################################
+/素材/
 
