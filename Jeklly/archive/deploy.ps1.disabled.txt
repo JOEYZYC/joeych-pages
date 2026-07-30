@@ -1,3 +1,6 @@
+# HISTORICAL ARCHIVE ONLY - DEPLOYMENT PERMANENTLY DISABLED
+# This non-executable text must not be renamed to .ps1 or used to stage, commit, push, or publish.
+
 # 部署：提交并推送到 GitHub Pages
 # 用法:
 #   ./deploy.ps1                 # 使用默认提交信息
