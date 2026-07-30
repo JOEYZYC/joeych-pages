@@ -17,7 +17,6 @@ statistics:
   - { id: competition-records, label: { zh: 竞赛获奖, en: Competition records }, value: 10+ }
 contact:
   email: szjoeych@gmail.com
-  phone: "17751103176"
   hometown: { zh: 江苏苏州, en: Suzhou, Jiangsu }
   political: { zh: 中共党员, en: CPC Member }
   github: https://github.com/JOEYZYC
