@@ -1,0 +1,144 @@
+.home-identity {
+  border-block-end: 1px solid var(--color-rule);
+  display: grid;
+  gap: var(--space-10);
+  grid-template-areas:
+    "identity"
+    "portrait"
+    "profile";
+  padding-block-end: var(--space-12);
+}
+
+.home-identity-intro {
+  grid-area: identity;
+  max-inline-size: var(--prose-max);
+}
+
+.home-identity h1 {
+  font-family: var(--font-serif);
+  font-size: var(--type-display);
+  line-height: 1.08;
+  margin: 0 0 var(--space-4);
+}
+
+.home-role,
+.home-tagline,
+.home-summary {
+  margin: 0;
+}
+
+.home-role {
+  font-size: var(--type-h3);
+  font-weight: 600;
+}
+
+.home-tagline {
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-small);
+  margin-block-start: var(--space-3);
+}
+
+.home-summary {
+  font-size: var(--type-lead);
+  margin-block-start: var(--space-6);
+}
+
+.home-portrait {
+  border-block: 1px solid var(--color-rule);
+  grid-area: portrait;
+  margin: 0;
+}
+
+.home-portrait img {
+  aspect-ratio: 33 / 50;
+  inline-size: 100%;
+  object-fit: contain;
+}
+
+.home-profile {
+  background: var(--color-gunmetal);
+  color: var(--color-paper);
+  grid-area: profile;
+  padding: var(--space-6);
+}
+
+.home-profile .eyebrow {
+  color: var(--color-signal);
+}
+
+.profile-statistics {
+  margin: var(--space-6) 0;
+}
+
+.profile-statistics > div {
+  border-block-start: 1px solid var(--color-gunmetal-raised);
+  display: flex;
+  gap: var(--space-4);
+  justify-content: space-between;
+  padding-block: var(--space-3);
+}
+
+.profile-statistics > div:last-child {
+  border-block-end: 1px solid var(--color-gunmetal-raised);
+}
+
+.profile-statistics dt {
+  color: var(--color-ice-strong);
+  font-size: var(--type-small);
+}
+
+.profile-statistics dd {
+  font-family: var(--font-mono);
+  margin: 0;
+}
+
+.experience-cta {
+  color: var(--color-signal);
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-small);
+  text-decoration-thickness: 0.125rem;
+}
+
+.experience-cta:hover {
+  color: var(--color-paper);
+}
+
+.featured-projects {
+  position: relative;
+}
+
+.featured-projects a {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+.featured-projects a:hover h3,
+.featured-projects a:focus-visible h3 {
+  color: var(--color-signal-fg);
+}
+
+.home-education ul {
+  margin: var(--space-4) 0 0;
+  padding-inline-start: var(--space-5);
+}
+
+.home-education li + li {
+  margin-block-start: var(--space-2);
+}
+
+@media (min-width: 48rem) {
+  .home-identity {
+    column-gap: var(--space-12);
+    grid-template-areas:
+      "portrait identity"
+      "portrait profile";
+    grid-template-columns: minmax(0, 38fr) minmax(0, 62fr);
+  }
+
+  .home-portrait {
+    align-self: stretch;
+  }
+}
