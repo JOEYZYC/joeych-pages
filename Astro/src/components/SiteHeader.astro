@@ -1,0 +1,25 @@
+---
+import type { Locale } from "../i18n/locales"
+import type { RouteId } from "../lib/routes"
+import { ROUTE_IDS, getRoutePath } from "../lib/routes"
+import { UI } from "../i18n/ui"
+import LanguageLink from "./LanguageLink.astro"
+import ContactDialog from "./ContactDialog.astro"
+import type { Profile } from "../content/schemas"
+
+type Props = { readonly locale: Locale; readonly profile: Profile; readonly routeId: RouteId }
+const { locale, profile, routeId } = Astro.props
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="wordmark" href={getRoutePath("home", locale)}>{profile.name[locale]}</a>
+    <button class="header-button menu-button" type="button" data-menu-toggle aria-expanded="false" aria-controls="primary-navigation">{UI[locale].menu}</button>
+    <nav id="primary-navigation" class="header-nav" aria-label={UI[locale].mainNavigation} data-signal-rail-group data-signal-rail-axis="horizontal">
+      <span class="signal-rail" data-signal-rail aria-hidden="true"></span>
+      {ROUTE_IDS.map((id) => <a class="header-link" href={getRoutePath(id, locale)} aria-current={id === routeId ? "page" : undefined} data-signal-target>{UI[locale].navigation[id]}</a>)}
+    </nav>
+    <LanguageLink routeId={routeId} locale={locale} />
+    <ContactDialog id="site-contact" locale={locale} profile={profile} />
+  </div>
+</header>

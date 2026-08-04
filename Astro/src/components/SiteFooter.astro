@@ -1,0 +1,23 @@
+---
+import type { Locale } from "../i18n/locales"
+import type { Profile } from "../content/schemas"
+import { UI } from "../i18n/ui"
+
+type Props = { readonly locale: Locale; readonly profile: Profile }
+const { locale, profile } = Astro.props
+const links = [
+  { label: UI[locale].links.github, href: profile.contact.github },
+  { label: UI[locale].links.scholar, href: profile.contact.scholar },
+  { label: UI[locale].links.orcid, href: profile.contact.orcid },
+] as const
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p>{profile.name[locale]} · {profile.role[locale]}</p>
+    <div class="footer-links">
+      <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>
+      {links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
+    </div>
+  </div>
+</footer>
