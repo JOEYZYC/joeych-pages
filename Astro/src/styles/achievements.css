@@ -1,0 +1,71 @@
+.achievement-year + .achievement-year,
+.research-section {
+  margin-block-start: var(--space-10);
+}
+
+.year-heading {
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-overline);
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.achievement-year .record-row:first-of-type {
+  border-block-start: 1px solid var(--color-rule);
+}
+
+.record-content .record-detail {
+  color: var(--color-ink-muted);
+  font-size: var(--type-small);
+  margin-block-start: var(--space-2);
+}
+
+.award-prize + .award-prize::before {
+  color: var(--color-ink-faint);
+  content: " / ";
+}
+
+.award-prize--top-tier {
+  color: var(--color-award-gold);
+  font-weight: 600;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin: var(--space-3) 0;
+  padding: 0;
+}
+
+.tag-list li {
+  border: 1px solid var(--color-rule);
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-overline);
+  letter-spacing: 0.04em;
+  padding: var(--space-1) var(--space-2);
+}
+
+.archive-link,
+.unavailable-link {
+  display: inline-flex;
+  font-size: var(--type-small);
+  margin-inline-end: var(--space-3);
+}
+
+.unavailable-link {
+  color: var(--color-ink-faint);
+}
+
+.record-content .certificate-control {
+  margin-block-start: var(--space-3);
+}
+
+@media (max-width: 47.99rem) {
+  .record-meta {
+    margin-block-end: var(--space-2);
+  }
+}

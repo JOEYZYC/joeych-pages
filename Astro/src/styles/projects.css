@@ -1,0 +1,110 @@
+.project-index-section {
+  position: relative;
+}
+
+.project-records {
+  border-block-start: 1px solid var(--color-rule);
+}
+
+.project-record {
+  padding-block: var(--space-10);
+  scroll-margin-block-start: calc(var(--header-height) + var(--space-4));
+}
+
+.project-record:target {
+  background: var(--color-ice);
+}
+
+.project-record-meta,
+.project-record-category,
+.project-record-content h3,
+.project-tag-list,
+.project-links {
+  font-family: var(--font-mono);
+  font-size: var(--type-meta);
+  letter-spacing: 0.04em;
+}
+
+.project-record-meta,
+.project-record-category {
+  color: var(--color-ink-muted);
+}
+
+.project-record-content {
+  min-inline-size: 0;
+}
+
+.project-record-content h2 {
+  font-family: var(--font-serif);
+  font-size: var(--type-h2);
+  line-height: 1.22;
+  margin: var(--space-2) 0 var(--space-3);
+}
+
+.project-record-content h3 {
+  color: var(--color-ink-muted);
+  margin: 0 0 var(--space-2);
+}
+
+.project-record-content p {
+  margin: 0;
+  max-inline-size: var(--prose-max);
+}
+
+.project-record-claim {
+  font-size: var(--type-lead);
+}
+
+.project-record-summary,
+.project-record-contribution,
+.project-figures,
+.project-links {
+  margin-block-start: var(--space-5);
+}
+
+.project-tag-list,
+.project-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  list-style: none;
+  margin: var(--space-5) 0 0;
+  padding: 0;
+}
+
+.project-tag-list li {
+  border: 1px solid var(--color-rule);
+  color: var(--color-ink-muted);
+  padding: var(--space-1) var(--space-2);
+}
+
+.project-figures {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.project-figures figure {
+  margin: 0;
+  max-inline-size: var(--prose-max);
+}
+
+.project-figures img {
+  border: 1px solid var(--color-rule);
+}
+
+.project-figures figcaption {
+  color: var(--color-ink-muted);
+  font-size: var(--type-small);
+  margin-block-start: var(--space-2);
+}
+
+.project-link-unavailable {
+  color: var(--color-ink-faint);
+}
+
+@media (min-width: 48rem) {
+  .project-record:target {
+    margin-inline: calc(var(--space-6) * -1);
+    padding-inline: var(--space-6);
+  }
+}
