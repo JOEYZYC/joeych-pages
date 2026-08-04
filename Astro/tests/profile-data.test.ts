@@ -1,0 +1,250 @@
+import { readFile } from "node:fs/promises"
+import { fileURLToPath } from "node:url"
+
+import { describe, expect, it } from "vitest"
+
+import { parseYamlValue } from "../src/content/loaders"
+import {
+  loadProfileData,
+  ProfileContentError,
+  type ProfileDocuments,
+  parseProfileDocuments,
+} from "../src/lib/profile-data"
+
+const DATA_ROOT = new URL("../../Profile/data/", import.meta.url)
+
+type CanonicalTexts = {
+  readonly profile: string
+  readonly projects: string
+  readonly awards: string
+  readonly publications: string
+  readonly patents: string
+  readonly thesis: string
+}
+
+async function readCanonicalTexts(): Promise<CanonicalTexts> {
+  const [profile, projects, awards, publications, patents, thesis] = await Promise.all([
+    readFile(new URL("profile.yml", DATA_ROOT), "utf8"),
+    readFile(new URL("projects.yml", DATA_ROOT), "utf8"),
+    readFile(new URL("awards.yml", DATA_ROOT), "utf8"),
+    readFile(new URL("publications.yml", DATA_ROOT), "utf8"),
+    readFile(new URL("patents.yml", DATA_ROOT), "utf8"),
+    readFile(new URL("thesis.yml", DATA_ROOT), "utf8"),
+  ])
+
+  return { profile, projects, awards, publications, patents, thesis }
+}
+
+function parseYaml(text: string): unknown {
+  return parseYamlValue(text)
+}
+
+function documentsFrom(texts: CanonicalTexts): ProfileDocuments {
+  return {
+    profile: parseYaml(texts.profile),
+    projects: parseYaml(texts.projects),
+    awards: parseYaml(texts.awards),
+    publications: parseYaml(texts.publications),
+    patents: parseYaml(texts.patents),
+    thesis: parseYaml(texts.thesis),
+  }
+}
+
+describe("Profile content boundary", () => {
+  it("loads current canonical content with stable order and normalized public paths", async () => {
+    // Given: the six canonical Profile YAML documents and fixed public media root
+    await readCanonicalTexts()
+
+    // When: the documents cross the typed Astro boundary
+    const content = await loadProfileData()
+
+    // Then: source ordering, nullability, mixed values, and public paths are preserved
+    expect(content.projects.map(({ id }) => id)).toEqual([
+      "power-print-recognition",
+      "dual-light-fusion",
+      "resgatnet",
+      "flexible-bifunctional-metasurface",
+      "rigid-dual-polarization-metasurface",
+      "single-phase-power-analyzer",
+      "traffic-sign-recognition",
+      "intelligent-reconnaissance-2024",
+      "full-model-smart-car",
+      "smart-harvesting-robot",
+      "intelligent-reconnaissance-2023",
+      "digikey-dual-light-thermal-imager-2024",
+      "joeych-pages",
+      "eflydrone-boards",
+    ])
+    expect(content.profile.statistics.map(({ value }) => typeof value)).toEqual([
+      "string",
+      "number",
+      "number",
+      "string",
+    ])
+    expect(content.profile.contact.hometown.en).toBe("Suzhou, Jiangsu")
+    expect(content.profile.portrait).toBe("/portrait-b1-cutout.png")
+    expect(content.profile.favicon).toBe("/favicon.svg")
+    expect(content.projects.find(({ id }) => id === "resgatnet")).toMatchObject({
+      image: null,
+      contribution: { zh: expect.any(String), en: expect.any(String) },
+      figures: [{ id: "resgatnet-architecture" }],
+      links: [
+        { type: "paper", url: null },
+        { type: "source", url: null },
+      ],
+    })
+    expect(content.projects[0]?.image).toBe(
+      "/projects/power-print-recognition/power-print-architecture.jpg",
+    )
+    expect(content.certificates).toHaveLength(22)
+    expect(content.certificates.every(({ src }) => src.startsWith("/certificates/"))).toBe(true)
+    expect(content.certificates.map(({ src }) => src)).not.toContain(
+      "/certificates/2025/五四奖章.jpg",
+    )
+    expect(fileURLToPath(DATA_ROOT)).not.toContain("private")
+  })
+
+  it("rejects a localized field with a missing locale", async () => {
+    // Given: profile copy without its English locale
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      profile: texts.profile.replace("  en: JOEYCH\n", ""),
+    })
+
+    // When: the incomplete document crosses the boundary
+    const result = parseProfileDocuments(documents)
+
+    // Then: boundary parsing rejects the missing locale
+    await expect(result).rejects.toBeInstanceOf(ProfileContentError)
+  })
+
+  it("rejects duplicate stable record IDs", async () => {
+    // Given: two project records with the same stable ID
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      projects: texts.projects.replace("- id: dual-light-fusion", "- id: power-print-recognition"),
+    })
+
+    // When: the duplicate projects cross the boundary
+    const result = parseProfileDocuments(documents)
+
+    // Then: ID uniqueness is enforced before pages can consume the records
+    await expect(result).rejects.toThrow(/duplicate/i)
+  })
+
+  it("rejects skill evidence for an unknown project", async () => {
+    // Given: project evidence pointing outside the canonical project IDs
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      profile: texts.profile.replace(
+        "project_id: single-phase-power-analyzer",
+        "project_id: missing-project",
+      ),
+    })
+
+    // When: cross-record evidence is validated
+    const result = parseProfileDocuments(documents)
+
+    // Then: unsupported project evidence is rejected
+    await expect(result).rejects.toThrow(/missing-project/)
+  })
+
+  it("rejects skill evidence for an unsupported component", async () => {
+    // Given: evidence naming a component outside its owning skill tag
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      profile: texts.profile.replace("supports: [circuit-design]", "supports: [unknown-component]"),
+    })
+
+    // When: component associations cross the boundary
+    const result = parseProfileDocuments(documents)
+
+    // Then: evidence cannot claim a component the tag does not define
+    await expect(result).rejects.toThrow(/unknown-component/)
+  })
+
+  it("rejects media traversal outside Profile media", async () => {
+    // Given: a project image attempting to traverse to private material
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      projects: texts.projects.replace(
+        "projects/power-print-recognition/power-print-architecture.jpg",
+        "../private/avatar.jpg",
+      ),
+    })
+
+    // When: the media path is normalized
+    const result = parseProfileDocuments(documents)
+
+    // Then: traversal is structurally rejected
+    await expect(result).rejects.toThrow(/media path/i)
+  })
+
+  it("rejects certificate paths outside the canonical prefix", async () => {
+    // Given: a certificate associated through a non-certificate asset prefix
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      awards: texts.awards.replace("assets/img/certificates/", "assets/img/other/"),
+    })
+
+    // When: certificate associations are normalized
+    const result = parseProfileDocuments(documents)
+
+    // Then: only the literal certificate source hierarchy is accepted
+    await expect(result).rejects.toThrow(/certificate/i)
+  })
+
+  it("rejects an associated public media file that does not exist", async () => {
+    // Given: a valid relative media path with no matching public file
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      projects: texts.projects.replace("power-print-hardware.png", "missing-public-media.jpg"),
+    })
+
+    // When: media associations are checked against fixed Profile media
+    const result = parseProfileDocuments(documents)
+
+    // Then: missing associated media fails the boundary
+    await expect(result).rejects.toThrow(/missing public media/i)
+  })
+
+  it("rejects a portrait association whose public media file does not exist", async () => {
+    // Given: a valid relative portrait path with no matching public file
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      profile: texts.profile.replace(
+        "portrait: portrait-b1-cutout.png",
+        "portrait: missing-profile-portrait.png",
+      ),
+    })
+
+    // When: the profile portrait association crosses the boundary
+    const result = parseProfileDocuments(documents)
+
+    // Then: missing portrait media fails the boundary
+    await expect(result).rejects.toThrow(/missing public media/i)
+  })
+
+  it("rejects a favicon association whose public media file does not exist", async () => {
+    // Given: a valid relative favicon path with no matching public file
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      profile: texts.profile.replace("favicon: favicon.svg", "favicon: missing-favicon.svg"),
+    })
+
+    // When: the profile favicon association crosses the boundary
+    const result = parseProfileDocuments(documents)
+
+    // Then: missing favicon media fails the boundary
+    await expect(result).rejects.toThrow(/missing public media/i)
+  })
+})
