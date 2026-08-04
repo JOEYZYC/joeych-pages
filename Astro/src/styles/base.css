@@ -1,0 +1,54 @@
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  background: var(--color-paper);
+  color: var(--color-gunmetal);
+  font-family: var(--font-sans);
+}
+body {
+  margin: 0;
+  min-width: 20rem;
+  font-size: var(--type-body);
+  line-height: 1.7;
+}
+a {
+  align-items: center;
+  color: var(--color-signal-fg);
+  display: inline-flex;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+  text-underline-offset: var(--space-1);
+}
+a:hover {
+  color: var(--color-signal-hover);
+}
+button {
+  font: inherit;
+}
+button,
+a {
+  min-block-size: 2.75rem;
+  min-inline-size: 2.75rem;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 0.125rem solid var(--color-signal-fg);
+  outline-offset: 0.125rem;
+}
+img {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+}
+dialog {
+  border: 0;
+  color: var(--color-gunmetal);
+}
+dialog::backdrop {
+  background: color-mix(in srgb, var(--color-ice) 82%, var(--color-gunmetal));
+}
