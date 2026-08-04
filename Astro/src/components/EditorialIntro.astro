@@ -1,0 +1,10 @@
+---
+type Props = { readonly overline: string; readonly title: string; readonly summary: string }
+const { overline, title, summary } = Astro.props
+---
+
+<section class="intro" aria-labelledby="page-title">
+  <p class="eyebrow">{overline}</p>
+  <h1 id="page-title">{title}</h1>
+  <p>{summary}</p>
+</section>

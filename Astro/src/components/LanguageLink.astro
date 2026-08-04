@@ -1,0 +1,35 @@
+---
+import type { Locale } from "../i18n/locales"
+import type { RouteId } from "../lib/routes"
+import { getCorrespondingLocalePath } from "../lib/routes"
+import { UI } from "../i18n/ui"
+
+type Props = { readonly routeId: RouteId; readonly locale: Locale }
+const { routeId, locale } = Astro.props
+const targetLocale = locale === "zh" ? "en" : "zh"
+const labels = UI[locale].language
+const counterpartPath = getCorrespondingLocalePath(routeId, locale)
+---
+
+<a
+  class="language-link"
+  href={counterpartPath}
+  data-language-counterpart={counterpartPath}
+  hreflang={targetLocale}
+  lang={targetLocale}
+  title={locale === "zh" ? labels.switchToEnglish : labels.switchToChinese}
+  aria-label={locale === "zh" ? labels.switchToEnglishVersion : labels.switchToChineseVersion}
+>{labels.label}</a>
+
+<script>
+  const links = document.querySelectorAll<HTMLAnchorElement>(".language-link")
+  for (const link of links) {
+    const counterpartPath = link.dataset.languageCounterpart
+    if (!counterpartPath) continue
+    const synchronizeHref = () => {
+      link.setAttribute("href", `${counterpartPath}${window.location.hash}`)
+    }
+    synchronizeHref()
+    window.addEventListener("hashchange", synchronizeHref)
+  }
+</script>
