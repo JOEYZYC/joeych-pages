@@ -1,0 +1,43 @@
+---
+import type { Locale } from "../i18n/locales"
+import type { Profile } from "../content/schemas"
+import { UI } from "../i18n/ui"
+import { getDialogIds } from "../lib/dialog-ids"
+
+type Props = { readonly id: string; readonly locale: Locale; readonly profile: Profile }
+const { id, locale, profile } = Astro.props
+const labels = UI[locale].contact
+const ids = getDialogIds(id)
+const contacts = [
+  { label: labels.email, href: `mailto:${profile.contact.email}`, value: profile.contact.email },
+  { label: labels.github, href: profile.contact.github, value: profile.contact.github },
+  { label: labels.scholar, href: profile.contact.scholar, value: profile.contact.scholar },
+  { label: labels.orcid, href: profile.contact.orcid, value: profile.contact.orcid },
+] as const
+---
+
+<div data-contact-dialog-root>
+  <button id={ids.trigger} class="header-button" type="button" aria-haspopup="dialog" aria-controls={ids.dialog}>{labels.open}</button>
+  <dialog id={ids.dialog} class="dialog-surface" aria-labelledby={ids.title}>
+    <button class="dialog-close" type="button" data-dialog-close aria-label={labels.close}>{labels.closeButton}</button>
+    <h2 id={ids.title} tabindex="-1">{labels.title}</h2>
+    <ul class="contact-list">
+      {contacts.map((contact) => <li><strong>{contact.label}</strong><br /><a href={contact.href} target={contact.href.startsWith("mailto:") ? undefined : "_blank"} rel="noopener noreferrer">{contact.value}</a></li>)}
+    </ul>
+  </dialog>
+</div>
+
+<script>
+  const roots = document.querySelectorAll<HTMLElement>("[data-contact-dialog-root]")
+  for (const root of roots) {
+    const trigger = root.querySelector<HTMLButtonElement>("[aria-haspopup='dialog']")
+    const dialog = root.querySelector<HTMLDialogElement>("dialog")
+    const title = root.querySelector<HTMLElement>("h2")
+    if (!trigger || !dialog || !title) continue
+    const close = dialog.querySelector("[data-dialog-close]")
+    trigger.addEventListener("click", () => { dialog.showModal(); title.focus() })
+    close?.addEventListener("click", () => dialog.close())
+    dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close() })
+    dialog.addEventListener("close", () => trigger.focus())
+  }
+</script>
