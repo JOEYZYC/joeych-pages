@@ -1,0 +1,58 @@
+---
+import type { Project } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import { publicMediaUrl } from "../lib/urls"
+
+type Props = { readonly locale: Locale; readonly number: number; readonly project: Project }
+
+const { locale, number, project } = Astro.props
+const labels = UI[locale]
+const ordinal = String(number).padStart(2, "0")
+const figureSizes: Readonly<Record<string, { readonly width: number; readonly height: number }>> = {
+  "projects/power-print-recognition/power-print-architecture.jpg": { width: 372, height: 372 },
+  "projects/power-print-recognition/power-print-hardware.png": { width: 1017, height: 728 },
+  "projects/power-print-recognition/power-print-display.png": { width: 773, height: 507 },
+  "projects/dual-light-fusion/dual-light-fusion.png": { width: 1082, height: 792 },
+  "projects/dual-light-fusion/dual-light-assembled.png": { width: 584, height: 438 },
+  "projects/rigid-dual-polarization-metasurface/rigid-metasurface-sample.jpg": { width: 2875, height: 2898 },
+  "projects/traffic-sign-recognition/traffic-sign-device.jpg": { width: 1600, height: 1745 },
+  "projects/smart-harvesting-robot/harvesting-workflow.png": { width: 691, height: 290 },
+}
+---
+
+<article id={project.id} class="project-record record-grid" data-project-record>
+  <div class="project-record-meta">{ordinal} / {project.year}</div>
+  <div class="project-record-content">
+    <p class="project-record-category">{project.category[locale]}</p>
+    <h2>{project.title[locale]}</h2>
+    <p class="project-record-claim">{project.claim[locale]}</p>
+    <p class="project-record-summary">{project.summary[locale]}</p>
+    {project.contribution !== null && <section class="project-record-contribution" aria-label={labels.sections.projects.contribution}>
+      <h3>{labels.sections.projects.contribution}</h3>
+      <p>{project.contribution[locale]}</p>
+    </section>}
+    <ul class="project-tag-list" aria-label={project.title[locale]}>
+      {project.tags.map((tag) => <li>{tag[locale]}</li>)}
+    </ul>
+    {project.figures.some((figure) => figure.src !== undefined) && <section class="project-figures" aria-labelledby={`${project.id}-figures`}>
+      <h3 id={`${project.id}-figures`}>{labels.sections.projects.figures}</h3>
+      {project.figures.map((figure) => {
+        if (figure.src === undefined) return null
+        const size = figureSizes[figure.src]
+        return <figure>
+          <img src={publicMediaUrl(figure.src)} alt={figure[locale]} loading="lazy" decoding="async" width={size?.width} height={size?.height} />
+          <figcaption>{figure[locale]}</figcaption>
+        </figure>
+      })}
+    </section>}
+    {project.links.length > 0 && <section class="project-links" aria-labelledby={`${project.id}-links`}>
+      <h3 id={`${project.id}-links`}>{labels.sections.projects.links}</h3>
+      <ul>
+        {project.links.map((link) => <li>
+          {link.url === null ? <span class="project-link-unavailable">{labels.unavailable.link}</span> : <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label[locale]}</a>}
+        </li>)}
+      </ul>
+    </section>}
+  </div>
+</article>
