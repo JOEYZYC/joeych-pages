@@ -47,7 +47,14 @@ qa*.png
 # Split workspace publication firewall #
 ########################################
 /Profile/private/
+/Astro/Demo/
 /Astro/research/
+/Astro/node_modules/
+/Astro/.astro/
+/Astro/dist/
+/Astro/coverage/
+/Astro/test-results/
+/Astro/playwright-report/
 /Jeklly/archive/local/
 /Jeklly/_data/
 /Jeklly/assets/img/
