@@ -1,0 +1,59 @@
+---
+import type { Profile } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import { getRoutePath } from "../lib/routes"
+
+type SkillGroupData = Profile["skills"][number]
+type Props = { readonly group: SkillGroupData; readonly locale: Locale }
+const { group, locale } = Astro.props
+---
+
+<section class="skill-group" data-skill-group={group.id} aria-labelledby={group.id}>
+  <h2 id={group.id} class="section-title">{group.title[locale]}</h2>
+  {group.tags.map((tag) => {
+    const tagTitleId = `${tag.id}-title`
+    const evidenceTitleId = `${tag.id}-evidence`
+    return <article class="skill-tag" data-skill-tag={tag.id} aria-labelledby={tagTitleId}>
+      <h3 id={tagTitleId}>{tag[locale]}</h3>
+      <ul class="skill-components">
+        {tag.components.map((component) => <li data-skill-component={component.id}><code>{component.id}</code></li>)}
+      </ul>
+      <section class="skill-evidence" aria-labelledby={evidenceTitleId}>
+        <h4 id={evidenceTitleId}>{UI[locale].sections["tech-stack"].evidence}</h4>
+        <ul>
+          {tag.evidence.map((evidence) => {
+            const supports = evidence.supports.join(" ")
+            switch (evidence.type) {
+              case "project":
+                return <li
+                  class="skill-evidence-row"
+                  data-skill-evidence="project"
+                  data-project-id={evidence.project_id}
+                  data-supports={supports}
+                >
+                  <a href={`${getRoutePath("projects", locale)}#${evidence.project_id}`}>{UI[locale].evidence.project}</a>
+                  <span class="skill-evidence-supports">{evidence.supports.join(", ")}</span>
+                </li>
+              case "credential":
+                return <li class="skill-evidence-row" data-skill-evidence="credential" data-supports={supports}>
+                  <span>{UI[locale].evidence.credential}</span>
+                  <span class="skill-evidence-supports">{evidence.supports.join(", ")}</span>
+                </li>
+              case "general-ability":
+                return <li
+                  class="skill-evidence-row"
+                  data-skill-evidence="general-ability"
+                  data-evidence-level={evidence.level}
+                  data-supports={supports}
+                >
+                  <span>{UI[locale].evidence.generalAbility} · {UI[locale].evidence.levels[evidence.level]}</span>
+                  <span class="skill-evidence-supports">{evidence.supports.join(", ")}</span>
+                </li>
+            }
+          })}
+        </ul>
+      </section>
+    </article>
+  })}
+</section>

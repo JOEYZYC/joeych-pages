@@ -1,0 +1,9 @@
+---
+type Props = { readonly meta: string }
+const { meta } = Astro.props
+---
+
+<article class="record-row record-grid">
+  <div class="record-meta">{meta}</div>
+  <div class="record-content"><slot /></div>
+</article>
