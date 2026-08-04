@@ -1,55 +1,53 @@
 - id: power-print-recognition
   year: 2024
   featured: true
-  image: null
-  title: { zh: '「电纹识别」智能物联用电检测装置', en: '"Power-Print Recognition" Smart IoT Electricity-Monitoring Device' }
-  claim: { zh: '在受限 MCU 资源下，实现多设备非侵入式实时识别。', en: 'Real-time non-intrusive recognition of multiple devices on a resource-constrained MCU.' }
+  image: projects/power-print-recognition/power-print-architecture.jpg
+  title: { zh: '“电纹识别”与 OpenLab“新质”交互场景设计', en: '"Power-Print Recognition" and OpenLab "New Quality" Interactive Scenario Design' }
+  claim: { zh: '在同一瑞萨赛事项目中，从用电电流识别发展至实验室能耗、安全、门禁与热监测的综合管理场景。', en: 'A single Renesas competition project progressed from appliance-current recognition to an integrated laboratory scenario for energy use, safety, access, and thermal monitoring.' }
   category: { zh: '嵌入式系统 / 信号处理', en: 'Embedded Systems / Signal Processing' }
   summary:
-    zh: 一款智能用电监控系统，基于瑞萨 R7FA6M5 单片机，采集电器运行电流波形，结合快速傅里叶变换（FFT）与斯皮尔曼相关性匹配算法，实现对多设备的非侵入式、实时识别与状态监测。搭配 W800 WiFi 模块，通过 TCP 协议将识别结果上传至自制 C# 上位机；系统支持本地模式匹配、实时分析、远程管理三大功能。
-    en: An intelligent power-monitoring system on a Renesas R7FA6M5 MCU. It captures appliance current waveforms and combines FFT with Spearman correlation matching for non-intrusive, real-time multi-device recognition and status monitoring. A W800 Wi-Fi module uploads results over TCP to a custom C# host app, supporting local pattern matching, real-time analysis, and remote management.
-  contribution:
-    zh: 在赛题要求的单片机资源受限条件下完成高频信号采集与复杂算法运算：采用 DMA 传输减轻 CPU 负担，使用 12 位 ADC 以 10 kHz 采样率采集电流波形，通过 FFT 提取 512 点频域特征，并使用斯皮尔曼相关系数方法提升多设备并发识别准确率。
-    en: 'Achieved high-frequency acquisition and heavy computation under tight MCU resource limits: DMA to offload the CPU, a 12-bit ADC at 10 kHz, 512-point FFT feature extraction, and Spearman correlation to boost concurrent multi-device recognition accuracy.'
+    zh: 初赛项目“电纹识别”智能物联用电检测装置基于瑞萨 RA6M5 采集电器电流波形，并以 ADC、DMA、FFT 与斯皮尔曼匹配开展非侵入式设备识别。终赛项目 OpenLab“新质”交互场景设计将该子系统纳入实验室管理场景，结合 W800 Wi-Fi、TCP 与 C# 上位机进行状态查看和管理交互。
+    en: The preliminary "Power-Print Recognition" smart power-monitoring device used a Renesas RA6M5 to capture appliance current waveforms and applied ADC, DMA, FFT, and Spearman matching for non-intrusive device recognition. The final OpenLab "New Quality" interactive scenario design incorporated that subsystem into laboratory management, using W800 Wi-Fi, TCP, and a C# host application for status views and management interaction.
+  contribution: null
   tags:
-    - { zh: Renesas R7FA6M5, en: Renesas R7FA6M5 }
+    - { zh: 瑞萨 RA6M5, en: Renesas RA6M5 }
+    - { zh: ADC / DMA, en: ADC / DMA }
     - { zh: FFT, en: FFT }
-    - { zh: 斯皮尔曼相关, en: Spearman }
-    - { zh: DMA, en: DMA }
-    - { zh: '12-bit ADC @10kHz', en: '12-bit ADC @10kHz' }
-    - { zh: W800 WiFi, en: W800 WiFi }
-    - { zh: TCP, en: TCP }
-    - { zh: C# 上位机, en: C# Host App }
+    - { zh: 斯皮尔曼匹配, en: Spearman Matching }
+    - { zh: W800 Wi-Fi, en: W800 Wi-Fi }
+    - { zh: TCP / C# 上位机, en: TCP / C# Host App }
+    - { zh: 电流波形采集, en: Current-Waveform Acquisition }
+    - { zh: 非侵入式设备识别, en: Non-Intrusive Device Recognition }
   figures:
-    - { id: power-print-host, zh: 图1 C# 上位机, en: Fig.1 C# Host App }
-    - { id: power-print-hardware, zh: 图2 下位机实物结构, en: Fig.2 Device Hardware }
-    - { id: power-print-spectrum, zh: 图3 FFT 运算后的频谱, en: Fig.3 FFT Spectrum }
+    - { id: power-print-architecture, src: projects/power-print-recognition/power-print-architecture.jpg, zh: 系统架构, en: System Architecture }
+    - { id: power-print-hardware, src: projects/power-print-recognition/power-print-hardware.png, zh: 硬件装置, en: Hardware Device }
+    - { id: power-print-display, src: projects/power-print-recognition/power-print-display.png, zh: 管理界面, en: Management Interface }
   links: []
 - id: dual-light-fusion
   year: 2024
   featured: true
-  image: null
-  title: { zh: '「双光融合」智能热像仪', en: '"Dual-Light Fusion" Smart Thermal Imager' }
-  claim: { zh: '在边缘视觉设备上融合可见光与红外信息，实现人脸定位与实时测温。', en: 'Visible and infrared sensing converge on an edge device for face localization and real-time temperature monitoring.' }
+  image: projects/dual-light-fusion/dual-light-fusion.png
+  title: { zh: '2024 嵌入式芯片与系统设计竞赛“双光融合”智能热像仪', en: '2024 Embedded Chip and System Design Contest "Dual-Light Fusion" Smart Thermal Imager' }
+  claim: { zh: '2024 嵌入式芯片与系统设计竞赛参赛作品，在边缘视觉设备上融合可见光与红外信息，用于人脸区域定位与实时测温。', en: 'A 2024 Embedded Chip and System Design Contest entry that combines visible and infrared information on an edge-vision device for face-region localization and real-time temperature monitoring.' }
   category: { zh: '计算机视觉 / 边缘 AI', en: 'Computer Vision / Edge AI' }
   summary:
-    zh: 基于 OpenMV 独立设计的「双光融合」智能热像仪，集成可见光摄像头 OV5640 与红外传感器 MLX90640，使用 MicroPython 开发；通过二值化处理简化视觉信息，并训练部署基于 TensorFlow Lite 的轻量化人脸识别模型，实现对人脸区域的自动定位与体温实时监测。
-    en: 'A "dual-light fusion" thermal imager independently designed on OpenMV, integrating an OV5640 visible-light camera and an MLX90640 infrared sensor, developed in MicroPython. Binarization simplifies the visual stream, and a lightweight TensorFlow Lite face-recognition model is trained and deployed for automatic face localization and real-time temperature monitoring.'
+    zh: 基于 STM32H7 与 OpenMV 的智能热像仪，集成 OV5640 可见光摄像头和 MLX90640 红外传感器。项目使用 MicroPython，结合二值化处理、热成像与可见光融合，以及轻量化 TensorFlow Lite 模型，完成人脸区域定位与交互。
+    en: A smart thermal imager based on STM32H7 and OpenMV, integrating an OV5640 visible-light camera and an MLX90640 infrared sensor. Developed with MicroPython, it combines binarization, thermal and visible-light fusion, and a lightweight TensorFlow Lite model for face-region localization and interaction.
   contribution: null
   tags:
-    - { zh: OpenMV, en: OpenMV }
+    - { zh: STM32H7 / OpenMV, en: STM32H7 / OpenMV }
     - { zh: OV5640, en: OV5640 }
     - { zh: MLX90640, en: MLX90640 }
     - { zh: MicroPython, en: MicroPython }
     - { zh: TensorFlow Lite, en: TensorFlow Lite }
-    - { zh: 二值化, en: Binarization }
-    - { zh: 人脸识别, en: Face Recognition }
+    - { zh: 双光融合, en: Dual-Light Fusion }
+    - { zh: 图像二值化, en: Image Binarization }
+    - { zh: 人脸区域定位, en: Face-Region Localization }
+    - { zh: 实时测温, en: Real-Time Temperature Measurement }
   figures:
-    - { id: dual-light-fusion, zh: 图4 「双光融合」功能, en: Fig.4 Dual-Light Fusion }
-    - { id: dual-light-binarization, zh: 图5 二值化处理, en: Fig.5 Binarization }
-    - { id: dual-light-device, zh: 图6 热像仪实物展示, en: Fig.6 Device }
-  links:
-    - { type: source, url: null, label: { zh: 开源链接待补充, en: Open-source — coming soon } }
+    - { id: dual-light-fusion, src: projects/dual-light-fusion/dual-light-fusion.png, zh: 双光融合效果, en: Dual-Light Fusion }
+    - { id: dual-light-assembled, src: projects/dual-light-fusion/dual-light-assembled.png, zh: 装配展示, en: Assembled Device }
+  links: []
 - id: resgatnet
   year: 2024
   featured: true
@@ -74,3 +72,227 @@
   links:
     - { type: paper, url: null, label: { zh: 论文链接待补充, en: Paper — coming soon } }
     - { type: source, url: null, label: { zh: 开源链接待补充, en: Open-source — coming soon } }
+- id: flexible-bifunctional-metasurface
+  year: 2023
+  featured: false
+  image: null
+  title: { zh: 反射型双极化转换超构表面的设计, en: Design of a Reflective Dual-Polarization Conversion Metasurface }
+  claim: { zh: '2023 年大学生创新创业训练计划项目，围绕反射型双极化转换超构表面的设计开展研究。', en: 'A 2023 university innovation and entrepreneurship training project on the design of a reflective dual-polarization conversion metasurface.' }
+  category: { zh: '电磁超材料 / 创新训练项目', en: 'Electromagnetic Metamaterials / Innovation Training Project' }
+  summary:
+    zh: 项目围绕反射型双极化转换超构表面的设计开展高层研究规划与协调。相关柔性石墨烯/VO2 双功能超表面稿件处于草稿或投稿阶段，不作为已发表或已录用成果表述。
+    en: The project focused on high-level research planning and coordination for a reflective dual-polarization conversion metasurface. A related flexible graphene/VO2 bifunctional-metasurface manuscript remained a draft or submission and is not presented as a published or accepted work.
+  contribution: { zh: 项目负责人，负责高层规划与研究协调。, en: 'Project lead, responsible for high-level planning and research coordination.' }
+  tags:
+    - { zh: 反射型超构表面, en: Reflective Metasurface }
+    - { zh: 双极化转换, en: Dual-Polarization Conversion }
+    - { zh: 创新训练项目, en: Innovation Training Project }
+  figures: []
+  links: []
+- id: rigid-dual-polarization-metasurface
+  year: 2024
+  featured: false
+  image: projects/rigid-dual-polarization-metasurface/rigid-metasurface-sample.jpg
+  title: { zh: 刚性线圆双极化转换超构表面性能研究, en: Performance Study of a Rigid Linear-Circular Dual-Polarization Conversion Metasurface }
+  claim: { zh: '2024 年创新训练项目，研究刚性反射型超构表面的线偏振至圆偏振及交叉偏振转换。', en: 'A 2024 innovation-training project studying linear-to-circular and cross-polarization conversion in a rigid reflective metasurface.' }
+  category: { zh: '电磁超材料 / 仿真设计', en: 'Electromagnetic Metamaterials / Simulation Design' }
+  summary:
+    zh: 项目使用 CST 分析偏振转换率、轴比、入射角和结构参数，并结合表面电流与多重干涉分析转换机理。该项目与 2023 年创新训练项目相互独立。
+    en: CST was used to examine polarization conversion ratio, axial ratio, incidence angle, and structural parameters, with surface-current and multiple-interference analysis supporting the study of conversion mechanisms. This project is separate from the 2023 innovation-training project.
+  contribution: null
+  tags:
+    - { zh: CST, en: CST }
+    - { zh: PCR / AR, en: PCR / AR }
+    - { zh: 反射型超构表面, en: Reflective Metasurface }
+    - { zh: 偏振转换, en: Polarization Conversion }
+    - { zh: 表面电流分析, en: Surface-Current Analysis }
+  figures:
+    - { id: rigid-metasurface-sample, src: projects/rigid-dual-polarization-metasurface/rigid-metasurface-sample.jpg, zh: 超构表面样品, en: Metasurface Sample }
+  links: []
+- id: single-phase-power-analyzer
+  year: 2024
+  featured: false
+  image: null
+  title: { zh: 单相功率分析仪, en: Single-Phase Power Analyzer }
+  claim: { zh: '2024 年 TI 电子设计竞赛项目，面向单相交流负载进行电参量采集、频域分析与触控显示。', en: 'A 2024 TI electronics design contest project for single-phase AC electrical-parameter acquisition, frequency-domain analysis, and touch-display presentation.' }
+  category: { zh: '嵌入式测量 / 信号处理', en: 'Embedded Measurement / Signal Processing' }
+  summary:
+    zh: 基于 TI MSP432E401Y 的单相电参量分析仪，使用电压、电流互感器和 ADC 采集信号，通过 FFT 进行 RMS、有功功率、功率因数、THD 与谐波分析，并以串口触控显示呈现结果。
+    en: A single-phase power analyzer based on the TI MSP432E401Y. Voltage and current transformers with ADC acquisition feed FFT-based RMS, active-power, power-factor, THD, and harmonic analysis, with results presented on a serial touch display.
+  contribution: null
+  tags:
+    - { zh: TI MSP432E401Y, en: TI MSP432E401Y }
+    - { zh: ADC / FFT, en: ADC / FFT }
+    - { zh: 电参量分析, en: Power Analysis }
+    - { zh: THD / 谐波, en: THD / Harmonics }
+    - { zh: 串口触控屏, en: Serial Touch Display }
+    - { zh: 电压 / 电流互感器, en: Voltage / Current Transformers }
+    - { zh: RMS / 功率因数, en: RMS / Power Factor }
+  figures: []
+  links: []
+- id: traffic-sign-recognition
+  year: 2024
+  featured: false
+  image: projects/traffic-sign-recognition/traffic-sign-device.jpg
+  title: { zh: 基于轻量化TensorFlow的智联交通标识识别系统, en: Intelligent Connected Traffic-Sign Recognition System Based on Lightweight TensorFlow }
+  claim: { zh: '2024 年计算机设计竞赛物联网应用 / RTT 专项赛题，结合图像采集、轻量模型与嵌入式物联网架构进行交通标识识别。', en: 'A 2024 computer design contest entry in IoT Applications / RTT Special Topic, combining image capture, a lightweight model, and an embedded IoT architecture for traffic-sign recognition.' }
+  category: { zh: '物联网应用 / RTT专项赛题', en: 'IoT Applications / RTT Special Topic' }
+  summary:
+    zh: 系统基于 RT-Thread 与 Vision Board，使用 OpenMV 完成图像采集和预处理，并部署轻量化 TensorFlow/TensorFlow Lite 模型。工作包括项目协调、概念定义、技术分析、系统设计和实现。
+    en: The system is based on RT-Thread and a Vision Board, using OpenMV for image capture and preprocessing with a lightweight TensorFlow/TensorFlow Lite model. Work covered project coordination, concept definition, technical analysis, system design, and implementation.
+  contribution: { zh: 负责项目协调、概念定义与技术分析，并参与系统设计和实现。, en: 'Responsible for project coordination, concept definition, and technical analysis, and participated in system design and implementation.' }
+  tags:
+    - { zh: RT-Thread, en: RT-Thread }
+    - { zh: Vision Board, en: Vision Board }
+    - { zh: OpenMV, en: OpenMV }
+    - { zh: TensorFlow Lite, en: TensorFlow Lite }
+    - { zh: 嵌入式物联网, en: Embedded IoT }
+  figures:
+    - { id: traffic-sign-device, src: projects/traffic-sign-recognition/traffic-sign-device.jpg, zh: 交通标识识别装置, en: Traffic-Sign Recognition Device }
+  links: []
+- id: intelligent-reconnaissance-2024
+  year: 2024
+  featured: false
+  image: null
+  title: { zh: 2024 智能侦察系统, en: 2024 Intelligent Reconnaissance System }
+  claim: { zh: '2024 年睿抗智能侦察竞赛项目，整合嵌入式设计、目标识别与测距、ROS 服务及建图导航任务。', en: 'A 2024 RAICOM intelligent reconnaissance competition project integrating embedded design, object recognition and ranging, ROS services, and mapping and navigation tasks.' }
+  category: { zh: '机器人 / 计算机视觉', en: 'Robotics / Computer Vision' }
+  summary:
+    zh: 项目归档涵盖嵌入式设计、目标识别与测距、ROS 服务、建图和导航等任务，使用 OpenCV、YOLOv5、ROS 与 Python，记录团队系统集成范围。
+    en: The project archive covers embedded design, object recognition and ranging, ROS services, mapping, and navigation. It uses OpenCV, YOLOv5, ROS, and Python to document the team-level system-integration scope.
+  contribution: null
+  tags:
+    - { zh: OpenCV, en: OpenCV }
+    - { zh: YOLOv5, en: YOLOv5 }
+    - { zh: ROS, en: ROS }
+    - { zh: Python, en: Python }
+    - { zh: 建图与导航, en: Mapping and Navigation }
+    - { zh: 目标识别与测距, en: Object Recognition & Ranging }
+    - { zh: 嵌入式系统集成, en: Embedded System Integration }
+  figures: []
+  links: []
+- id: full-model-smart-car
+  year: 2024
+  featured: false
+  image: null
+  title: { zh: 智能车模型组团队开发归档, en: Smart Car Model-Group Team Development Archive }
+  claim: { zh: '2024 年全国大学生智能汽车竞赛模型组的团队开发归档，记录控制、感知和硬件分支的探索。', en: 'A team development archive for the model group of the 2024 National College Student Intelligent Car Competition, documenting explorations in control, sensing, and hardware.' }
+  category: { zh: '嵌入式控制 / 智能车', en: 'Embedded Control / Smart Car' }
+  summary:
+    zh: 面向 TC264/TC264D 的团队开发归档涉及嵌入式 C、DRV8701E 电机驱动、PWM、编码器反馈、PID、舵机转向、相机图像实验、IMU、UART/显示及定制 PCB。记录仅描述开发分支。
+    en: This team development archive for the TC264/TC264D covers embedded C, a DRV8701E motor driver, PWM, encoder feedback, PID, servo steering, camera and image experiments, IMU, UART/display, and a custom PCB. It describes development branches only.
+  contribution: null
+  tags:
+    - { zh: TC264 / TC264D, en: TC264 / TC264D }
+    - { zh: 嵌入式 C, en: Embedded C }
+    - { zh: PWM / PID, en: PWM / PID }
+    - { zh: 编码器反馈, en: Encoder Feedback }
+    - { zh: IMU / UART, en: IMU / UART }
+    - { zh: DRV8701E 电机驱动, en: DRV8701E Motor Driver }
+    - { zh: 舵机控制, en: Servo Control }
+    - { zh: 相机图像实验, en: Camera / Image Experiments }
+    - { zh: 定制 PCB, en: Custom PCB }
+  figures: []
+  links: []
+- id: smart-harvesting-robot
+  year: 2023
+  featured: false
+  image: projects/smart-harvesting-robot/harvesting-workflow.png
+  title: { zh: 智能采摘机器人, en: Smart Harvesting Robot }
+  claim: { zh: '2023 年 iCAN 未来农业机器人挑战赛项目，结合自主导航、果实视觉识别与机械臂执行。', en: 'A 2023 iCAN Future Agriculture Robot Challenge project combining autonomous navigation, visual fruit recognition, and robotic-arm operation.' }
+  category: { zh: '机器人 / 农业视觉', en: 'Robotics / Agricultural Vision' }
+  summary:
+    zh: 基于 ROS 的自主采摘机器人，采用 GMapping/SLAM 与导航进行环境移动，以 PaddleDetection 和 OpenCV 进行果实视觉识别。机械臂配备眼在手上相机，并使用 3D 打印收集器完成采摘流程。
+    en: A ROS-based autonomous harvesting robot using GMapping/SLAM and navigation for movement, with PaddleDetection and OpenCV for visual fruit recognition. Its robotic arm uses an eye-in-hand camera and a 3D-printed collector in the harvesting workflow.
+  contribution: null
+  tags:
+    - { zh: ROS, en: ROS }
+    - { zh: GMapping / SLAM, en: GMapping / SLAM }
+    - { zh: PaddleDetection, en: PaddleDetection }
+    - { zh: OpenCV, en: OpenCV }
+    - { zh: 眼在手上相机, en: Eye-in-Hand Camera }
+  figures:
+    - { id: harvesting-workflow, src: projects/smart-harvesting-robot/harvesting-workflow.png, zh: 采摘流程, en: Harvesting Workflow }
+  links: []
+- id: intelligent-reconnaissance-2023
+  year: 2023
+  featured: false
+  image: null
+  title: { zh: 2023 智能侦察竞赛项目, en: 2023 Intelligent Reconnaissance Competition Project }
+  claim: { zh: '2023 年睿抗智能侦察竞赛的综合竞赛级记录，涵盖两个内部团队归档。', en: 'A consolidated competition-level record for the 2023 RAICOM intelligent reconnaissance competition, covering two internal team archives.' }
+  category: { zh: '机器人 / 智能侦察', en: 'Robotics / Intelligent Reconnaissance' }
+  summary:
+    zh: 该竞赛级记录汇总两个内部团队归档，任务涉及基于 OpenCV 的地雷位置与人群识别、目标距离检测，以及 ROS 控制与应用。记录只描述共同赛题和系统范围，不区分或归属任何团队的个人工作。
+    en: This competition-level record consolidates two internal team archives. Tasks covered OpenCV-based mine-location and crowd recognition, target-distance estimation, and ROS control and applications. It describes the shared challenge and system scope without distinguishing or assigning personal work to either team.
+  contribution: null
+  tags:
+    - { zh: 睿抗, en: RAICOM }
+    - { zh: 智能侦察, en: Intelligent Reconnaissance }
+    - { zh: OpenCV, en: OpenCV }
+    - { zh: ROS, en: ROS }
+    - { zh: 识别与测距, en: Recognition and Ranging }
+    - { zh: 地雷 / 人群识别, en: Mine / Crowd Recognition }
+    - { zh: ROS 控制, en: ROS Control }
+  figures: []
+  links: []
+- id: digikey-dual-light-thermal-imager-2024
+  year: 2024
+  featured: false
+  image: null
+  title: { zh: 2024 DigiKey“双光融合”智能热像仪', en: '2024 DigiKey "Dual-Light Fusion" Smart Thermal Imager' }
+  claim: { zh: '2024 年 DigiKey 竞赛参赛项目，以可见光与红外融合为核心的智能热像仪。', en: 'A 2024 DigiKey contest entry framing a smart thermal imager around visible and infrared fusion.' }
+  category: { zh: '计算机视觉 / 嵌入式系统', en: 'Computer Vision / Embedded Systems' }
+  summary:
+    zh: 该项目以与嵌入式芯片与系统设计竞赛相同的双光热像仪工作为基础，作为独立的 DigiKey 竞赛参赛项目呈现。工作参与可见光与红外融合的实现。
+    en: Based on the same dual-light thermal-imager work used in the embedded contest, this was presented as a distinct DigiKey contest entry. Work included participation in visible and infrared fusion implementation.
+  contribution: { zh: 参与可见光与红外融合实现。, en: 'Participated in visible and infrared fusion implementation.' }
+  tags:
+    - { zh: DigiKey, en: DigiKey }
+    - { zh: 可见光 / 红外融合, en: Visible / Infrared Fusion }
+    - { zh: 智能热像仪, en: Smart Thermal Imager }
+  figures: []
+  links: []
+- id: joeych-pages
+  year: 2025
+  featured: false
+  image: null
+  title: { zh: 张易成个人学术作品集网站, en: JOEYCH Personal Academic Portfolio Website }
+  claim: { zh: '面向个人学术与工程经历展示的中英双语响应式作品集网站。', en: 'A bilingual, responsive portfolio website for presenting personal academic and engineering work.' }
+  category: { zh: '个人网站 / 前端开发', en: 'Personal Website / Front-End Development' }
+  summary:
+    zh: 基于 Jekyll 与 GitHub Pages 构建的个人学术作品集，使用 YAML 数据组织个人资料、项目、论文、专利和获奖记录，并通过原生 JavaScript 实现中英双语切换、移动端导航、滚动揭示与证书浏览；仓库还包含 Playwright 端到端测试和本地预览脚本。
+    en: A Jekyll and GitHub Pages portfolio that organizes profile, project, publication, patent, and award records with YAML data. Vanilla JavaScript provides bilingual switching, mobile navigation, scroll reveal, and certificate browsing, while Playwright end-to-end tests and local preview scripts support maintenance.
+  contribution: { zh: '负责网站内容组织、页面实现、视觉设计系统、双语交互与持续维护。', en: 'Maintained and implemented the site content structure, page layouts, visual design system, bilingual interaction, and ongoing updates.' }
+  tags:
+    - { zh: Jekyll, en: Jekyll }
+    - { zh: GitHub Pages, en: GitHub Pages }
+    - { zh: JavaScript, en: JavaScript }
+    - { zh: 响应式网页, en: Responsive Web Design }
+    - { zh: 中英双语交互, en: Bilingual Interaction }
+    - { zh: Playwright E2E 测试, en: Playwright E2E Testing }
+  figures: []
+  links:
+    - { type: source, url: 'https://github.com/JOEYZYC/joeych-pages', label: { zh: GitHub 源码, en: GitHub Source } }
+- id: eflydrone-boards
+  year: 2026
+  featured: false
+  image: null
+  title: { zh: eFlyDrone 低成本模块化无人机硬件平台, en: eFlyDrone Low-Cost Modular Drone Hardware Platform }
+  claim: { zh: '面向个人制作与模块化扩展的低成本无人机硬件平台，涵盖飞控核心板、ELRS 接收机、M10S GPS 接收机与电调参考设计。', en: 'A low-cost, modular drone hardware platform for personal fabrication, covering a flight-controller core board, ELRS receiver, M10S GPS receiver, and ESC reference design.' }
+  category: { zh: '无人机硬件 / 嵌入式系统', en: 'Drone Hardware / Embedded Systems' }
+  summary:
+    zh: 项目基于 PX4 规范，使用 STM32H743VIT6 设计飞控核心板，并整合 ELRS 接收机、M10S GPS 接收机和电调参考设计的硬件资料。仓库包含原理图、PCB、BOM、元器件数据手册、PDF 文档和实物照片；相关模块明确参考 NxtPX4、SuperD 与立创开源项目，飞控底板仍在规划中，实物尚未完成测试。
+    en: Based on the PX4 specification, the project uses an STM32H743VIT6 flight-controller core board and integrates hardware materials for an ELRS receiver, M10S GPS receiver, and ESC reference design. The repository contains schematics, PCB and BOM materials, component datasheets, PDFs, and build photos. Its modules explicitly reference NxtPX4, SuperD, and LCSC open-source projects; the expansion baseboard remains planned, and physical testing is not yet complete.
+  contribution: { zh: '负责低成本无人机平台的硬件方案整合与资料整理，覆盖飞控核心板、ELRS 接收机、M10S GPS 接收机和电调参考设计。', en: 'Integrated and documented the hardware architecture of a low-cost drone platform, covering the flight-controller core board, ELRS receiver, M10S GPS receiver, and ESC reference design.' }
+  tags:
+    - { zh: STM32H743VIT6, en: STM32H743VIT6 }
+    - { zh: PX4, en: PX4 }
+    - { zh: PCB / 原理图 / BOM, en: PCB / Schematics / BOM }
+    - { zh: ELRS, en: ELRS }
+    - { zh: M10S GPS, en: M10S GPS }
+    - { zh: PWM / PPM / DShot, en: PWM / PPM / DShot }
+    - { zh: 模块化无人机硬件, en: Modular Drone Hardware }
+    - { zh: 立创 EDA, en: EasyEDA }
+  figures: []
+  links:
+    - { type: source, url: 'https://github.com/JOEYZYC/eFlyDrone-Boards', label: { zh: GitHub 硬件资料, en: GitHub Hardware Repository } }
