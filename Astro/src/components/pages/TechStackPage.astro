@@ -1,0 +1,21 @@
+---
+import type { Locale } from "../../i18n/locales"
+import { UI } from "../../i18n/ui"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import { getProfileData } from "../../lib/profile-data"
+import "../../styles/skills.css"
+import EditorialIntro from "../EditorialIntro.astro"
+import SkillGroup from "../SkillGroup.astro"
+
+type Props = { readonly locale: Locale }
+const { locale } = Astro.props
+const data = await getProfileData()
+const intro = UI[locale].routeIntros["tech-stack"]
+---
+
+<BaseLayout locale={locale} profile={data.profile} routeId="tech-stack">
+  <EditorialIntro overline={intro.overline} title={intro.title} summary={data.profile.summary[locale]} />
+  <div class="tech-stack-ledger" aria-label={UI[locale].sections["tech-stack"].skills}>
+    {data.profile.skills.map((group) => <SkillGroup group={group} locale={locale} />)}
+  </div>
+</BaseLayout>

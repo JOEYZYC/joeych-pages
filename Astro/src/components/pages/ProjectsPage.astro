@@ -1,0 +1,35 @@
+---
+import type { Locale } from "../../i18n/locales"
+import ProjectIndexItem from "../ProjectIndexItem.astro"
+import ProjectRecord from "../ProjectRecord.astro"
+import EditorialIntro from "../EditorialIntro.astro"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import { UI } from "../../i18n/ui"
+import { getProfileData } from "../../lib/profile-data"
+import "../../styles/projects.css"
+
+type Props = { readonly locale: Locale }
+
+const { locale } = Astro.props
+const data = await getProfileData()
+const labels = UI[locale]
+---
+
+<BaseLayout locale={locale} profile={data.profile} routeId="projects">
+  <EditorialIntro
+    overline={labels.routeIntros.projects.overline}
+    title={labels.routeIntros.projects.title}
+    summary={data.profile.summary[locale]}
+  />
+
+  <section class="editorial-section project-index-section" aria-labelledby="project-index-title" data-project-index data-signal-rail-group data-signal-rail-axis="vertical">
+    <span class="signal-rail" data-signal-rail aria-hidden="true"></span>
+    <p class="eyebrow">{labels.routeIntros.projects.overline}</p>
+    <h2 id="project-index-title" class="section-title">{labels.sections.projects.index}</h2>
+    {data.projects.map((project, index) => <ProjectIndexItem project={project} locale={locale} number={index + 1} />)}
+  </section>
+
+  <section class="project-records" aria-label={labels.navigation.projects}>
+    {data.projects.map((project, index) => <ProjectRecord project={project} locale={locale} number={index + 1} />)}
+  </section>
+</BaseLayout>
