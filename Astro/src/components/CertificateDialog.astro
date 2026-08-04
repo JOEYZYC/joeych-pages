@@ -1,0 +1,65 @@
+---
+import type { Certificate } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import { publicMediaUrl } from "../lib/urls"
+import { getDialogIds } from "../lib/dialog-ids"
+
+type Props = { readonly certificates: readonly Certificate[]; readonly id: string; readonly locale: Locale }
+const { certificates, id, locale } = Astro.props
+const labels = UI[locale].certificate
+const ids = getDialogIds(id)
+const first = certificates[0]
+---
+
+{first && <div data-certificate-dialog-root>
+    <button id={ids.trigger} type="button" class="certificate-control" aria-haspopup="dialog" aria-controls={ids.dialog}>{labels.view}</button>
+    <dialog id={ids.dialog} class="dialog-surface" aria-labelledby={ids.title} aria-label={labels.title}>
+      <button class="dialog-close" type="button" data-certificate-close aria-label={labels.close}>{labels.closeButton}</button>
+      <h2 id={ids.title} tabindex="-1">{labels.title}</h2>
+      <img data-certificate-image src={publicMediaUrl(first.src)} alt={first[locale]} />
+      <p class="certificate-caption" data-certificate-caption>{first[locale]}</p>
+      <p class="certificate-caption" data-certificate-unavailable hidden>{UI[locale].unavailable.media}</p>
+      <ol hidden data-certificate-items>{certificates.map((certificate) => <li data-source={publicMediaUrl(certificate.src)} data-label={certificate[locale]}></li>)}</ol>
+      <div class="certificate-actions">
+        <button type="button" class="certificate-control" data-certificate-previous disabled>{labels.previous}</button>
+        <button type="button" class="certificate-control" data-certificate-next disabled={certificates.length < 2}>{labels.next}</button>
+      </div>
+    </dialog>
+  </div>}
+  <script>
+    const roots = document.querySelectorAll<HTMLElement>("[data-certificate-dialog-root]")
+    for (const root of roots) {
+      const certificateDialog = root.querySelector<HTMLDialogElement>("dialog")
+      const certificateTrigger = root.querySelector<HTMLButtonElement>("[aria-haspopup='dialog']")
+      const title = root.querySelector<HTMLElement>("h2")
+      if (!certificateDialog || !certificateTrigger || !title) continue
+      const closeButton = certificateDialog.querySelector("[data-certificate-close]")
+      const image = certificateDialog.querySelector("[data-certificate-image]")
+      const caption = certificateDialog.querySelector("[data-certificate-caption]")
+      const unavailable = certificateDialog.querySelector("[data-certificate-unavailable]")
+      const previous = certificateDialog.querySelector("[data-certificate-previous]")
+      const next = certificateDialog.querySelector("[data-certificate-next]")
+      const certificateItems = certificateDialog.querySelectorAll("[data-certificate-items] li")
+      let index = 0
+      const update = () => {
+        const certificate = certificateItems.item(index)
+        const source = certificate?.dataset.source
+        const label = certificate?.dataset.label
+        if (!source || !label || !(image instanceof HTMLImageElement) || !(caption instanceof HTMLElement) || !(previous instanceof HTMLButtonElement) || !(next instanceof HTMLButtonElement)) return
+        image.src = source
+        image.alt = label
+        caption.textContent = label
+        unavailable?.setAttribute("hidden", "")
+        previous.disabled = index === 0
+        next.disabled = index === certificateItems.length - 1
+      }
+      certificateTrigger.addEventListener("click", () => { certificateDialog.showModal(); title.focus() })
+      closeButton?.addEventListener("click", () => certificateDialog.close())
+      previous?.addEventListener("click", () => { index -= 1; update() })
+      next?.addEventListener("click", () => { index += 1; update() })
+      image?.addEventListener("error", () => unavailable?.removeAttribute("hidden"))
+      certificateDialog.addEventListener("click", (event) => { if (event.target === certificateDialog) certificateDialog.close() })
+      certificateDialog.addEventListener("close", () => certificateTrigger.focus())
+    }
+  </script>
