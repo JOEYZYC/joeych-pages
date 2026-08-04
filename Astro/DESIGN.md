@@ -7,7 +7,7 @@ This is the implementation contract for the approved static Astro portfolio. Fut
 - Existing-design extraction: `../Jeklly/DESIGN.md` supplies the approved five-route gunmetal/cyan/ice-silver editorial identity, mobile geometry, evidence-first records, and interaction/accessibility baseline.
 - Public-content audit: `../Profile/README.md`, `../Profile/AGENTS.md`, and `../Profile/data/*.yml` establish `Profile/data/` and `Profile/media/` as the sole public content and media source. Astro owns presentation only; it must not create transformed or duplicate authored content.
 - Local reference audit: `Demo/README.md` and audited local snapshots were used as mechanism references only. Refined-X contributes external-content discipline and editorial framing; as-folio contributes academic information organization; astropages-bilingual contributes static Chinese-root and English-prefix locale routing; astro-starter-portfolio contributes minimal static primitives and centralized SEO; mirsazzathossain-me contributes selective publication-record density.
-- Adopt / adapt / reject: adopt static, data-led, minimal Astro primitives and bilingual route pairing; adapt the Jekyll visual identity and editorial records to a clean Astro component boundary; reject every Demo visual theme, dark mode, search, CMS, React islands, SSR, analytics, AI/Ask/MCP surfaces, deployment configuration, rounded-card grids, and unsupported academic metadata.
+- Adopt / adapt / reject: adopt static, data-led, minimal Astro primitives and bilingual route pairing; adapt the Jekyll visual identity and editorial records to a clean Astro component boundary; reject every Demo visual theme, dark mode, search, CMS, React islands, SSR, analytics, AI/Ask/MCP surfaces, deployment configuration outside the root GitHub Pages exception, rounded-card grids, and unsupported academic metadata.
 - Lazyweb: skipped. This is an extraction/redesign from an approved existing design and audited local references, not visual greenfield work.
 - Imagegen: skipped. The approved identity, public media, and evidence hierarchy already define the visual contract; generated artwork would weaken source-backed presentation.
 
@@ -17,7 +17,7 @@ The portfolio is a precise technical-editorial dossier: bright ice-silver paper,
 
 ### Content and implementation boundary
 
-- Target architecture is a static Astro 6 site with minimal vanilla CSS and vanilla TypeScript. Do not add React, client islands, SSR, a CMS, analytics, search, AI/Ask/MCP features, or deployment automation.
+- Target architecture is a static Astro 6 site with minimal vanilla CSS and vanilla TypeScript. Do not add React, client islands, SSR, a CMS, analytics, search, AI/Ask/MCP features, or deployment automation outside the root GitHub Pages exception.
 - `Profile/` is external to the future site implementation and is the sole content source. Read its YAML and referenced public media at build time; retain record IDs, ordering, localized values, nullability, source associations, and literal certificate paths.
 - Never read, enumerate, transform, copy, or publish `Profile/private/`. Do not make Astro-owned data aliases, content collections that duplicate Profile facts, or fixture content that can diverge from Profile.
 - `Astro/Demo/` is an audited local mechanism reference only. Do not copy its source hierarchy, visual theme, logos, copy, dark-mode behavior, packages, deployments, or optional integrations.
@@ -149,7 +149,7 @@ Chinese is the default locale at the base-aware root. English is a mirror under 
 | `/projects/` | `/en/projects/` | 项目介绍 / Projects | Numbered project index and full evidence records | Preserve `/projects.html` anchors using stable Profile project IDs. |
 | `/tech-stack/` | `/en/tech-stack/` | 技术栈 / Tech Stack | Evidence-backed professional skill groups | Preserve `/tech-stack.html` purpose; do not create ratings or a separate learning taxonomy. |
 
-The future implementation may provide explicit static compatibility redirects only after approval. This contract does not authorize a deployment rule, host configuration, or new route beyond the ten canonical locale paths above.
+The future implementation may provide explicit static compatibility redirects only after approval. This contract defers deployment only to the root GitHub Pages exception; it does not authorize host configuration or new routes beyond the ten canonical locale paths above.
 
 ## 5. Components & Primitive Showcase
 
@@ -308,7 +308,7 @@ No accepted design, accessibility, content, or implementation debt exists initia
 
 ### Must-not constraints
 
-- Do not add dark mode, search, CMS, React, SSR, analytics, AI/Ask/MCP, deployment workflow, decorative motion, purple AI gradients, rounded-card grids, unsupported claims, or additional public routes.
+- Do not add dark mode, search, CMS, React, SSR, analytics, AI/Ask/MCP, deployment workflow outside the root GitHub Pages exception, decorative motion, purple AI gradients, rounded-card grids, unsupported claims, or additional public routes.
 - Do not add publication counts, DOI, citation counts, affiliations, performance metrics, image associations, project contribution, skill level, or certificates that are not explicitly in Profile.
-- Do not copy a Demo theme or user-facing copy. Do not add broad hosting, publishing, or deployment instructions to this implementation contract.
+- Do not copy a Demo theme or user-facing copy. Do not add broad hosting, publishing, or deployment instructions to this implementation contract; defer only to the root GitHub Pages exception.
 - Do not modify Profile schemas or data to satisfy presentation. Extend this design system before adding a genuinely new reusable visual token, primitive, state, motion mechanism, accessibility constraint, or accepted debt.
