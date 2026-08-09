@@ -88,7 +88,7 @@ describe("Profile content boundary", () => {
     expect(content.profile.contact.hometown.en).toBe("Suzhou, Jiangsu")
     expect(content.profile.portrait).toBe("/portrait-b1-cutout.png")
     expect(content.profile.favicon).toBe("/favicon.svg")
-    expect(PROJECT_PLACEHOLDER_MEDIA_PATH).toBe("/profile-photo.jpg")
+    expect(PROJECT_PLACEHOLDER_MEDIA_PATH).toBe("/projects/project-placeholder.png")
     await expect(readFile(publicMediaFilePath(PROJECT_PLACEHOLDER_MEDIA_PATH))).resolves.toBeInstanceOf(
       Buffer,
     )

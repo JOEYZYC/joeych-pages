@@ -31,7 +31,7 @@ const locales = [
     navigation: "项目介绍",
     title: "项目介绍",
     pending: "项目图片待补充",
-    pendingAlt: "临时使用个人证件照；项目图片待补充",
+    pendingAlt: "项目占位图片；项目图片待补充",
   },
   {
     path: "en/projects/",
@@ -39,7 +39,7 @@ const locales = [
     navigation: "Projects",
     title: "Projects",
     pending: "Project image pending",
-    pendingAlt: "Temporary profile photo; project image pending",
+    pendingAlt: "Project placeholder image; project image pending",
   },
 ] as const
 
@@ -77,7 +77,7 @@ test.describe("projects archive", () => {
       await expect(records.locator('[data-project-media-kind="placeholder"]')).toHaveCount(9)
       await expect(tiles.locator('[data-project-media-kind="placeholder"] img')).toHaveCount(9)
       for (const image of await tiles.locator('[data-project-media-kind="placeholder"] img').all()) {
-        await expect(image).toHaveAttribute("src", /\/joeych-pages\/profile-photo\.jpg$/)
+        await expect(image).toHaveAttribute("src", /\/joeych-pages\/projects\/project-placeholder\.png$/)
         await expect(image).toHaveAttribute("alt", locale.pendingAlt)
       }
       await expect(tiles.locator('[data-project-media-kind="placeholder"] .project-media-pending')).toHaveText(
@@ -93,7 +93,7 @@ test.describe("projects archive", () => {
 
     await expect(resgatnet.locator('[data-project-media-kind="placeholder"] img')).toHaveAttribute(
       "src",
-      /\/joeych-pages\/profile-photo\.jpg$/,
+      /\/joeych-pages\/projects\/project-placeholder\.png$/,
     )
     await expect(resgatnet.locator(".project-figure-grid img")).toHaveCount(0)
     await expect(resgatnet.locator(".project-figure-unavailable figcaption")).toHaveText(
@@ -112,7 +112,7 @@ test.describe("projects archive", () => {
     )
   })
 
-  test("shows unavailable media without substituting the portrait after a real image fails", async ({ page }) => {
+  test("shows unavailable media without substituting the placeholder after a real image fails", async ({ page }) => {
     await page.goto("en/projects/")
     const media = page.locator('[data-project-tile] [data-project-media-kind="real"]').first()
     const source = await media.getAttribute("data-project-media-source")
@@ -122,7 +122,7 @@ test.describe("projects archive", () => {
     await expect(media).toHaveAttribute("data-media-error", "true")
     await expect(media.locator("[data-project-media-image]")).toBeHidden()
     await expect(media.locator("[data-project-media-unavailable]")).toBeVisible()
-    expect(source).not.toBe("/profile-photo.jpg")
+    expect(source).not.toBe("/projects/project-placeholder.png")
     await expect(media).toHaveAttribute("data-project-media-source", source ?? "")
   })
 

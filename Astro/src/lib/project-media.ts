@@ -12,5 +12,5 @@ export const PROJECT_MEDIA_DIMENSIONS: Readonly<
   },
   "/projects/traffic-sign-recognition/traffic-sign-device.jpg": { width: 1600, height: 1745 },
   "/projects/smart-harvesting-robot/harvesting-workflow.png": { width: 691, height: 290 },
-  "/profile-photo.jpg": { width: 1006, height: 1006 },
+  "/projects/project-placeholder.png": { width: 657, height: 420 },
 }

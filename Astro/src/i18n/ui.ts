@@ -125,7 +125,7 @@ export const UI = {
       current: "当前项目",
       skillOrigin: "来自技能证据",
       imagePending: "项目图片待补充",
-      imagePendingAlt: "临时使用个人证件照；项目图片待补充",
+      imagePendingAlt: "项目占位图片；项目图片待补充",
     },
     language: {
       label: "English",
@@ -223,7 +223,7 @@ export const UI = {
       current: "Current project",
       skillOrigin: "From skill evidence",
       imagePending: "Project image pending",
-      imagePendingAlt: "Temporary profile photo; project image pending",
+      imagePendingAlt: "Project placeholder image; project image pending",
     },
     language: {
       label: "中文",
