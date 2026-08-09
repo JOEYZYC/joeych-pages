@@ -10,6 +10,10 @@ import {
   type ProfileDocuments,
   parseProfileDocuments,
 } from "../src/lib/profile-data"
+import {
+  PROJECT_PLACEHOLDER_MEDIA_PATH,
+  publicMediaFilePath,
+} from "../src/lib/profile-paths"
 
 const DATA_ROOT = new URL("../../Profile/data/", import.meta.url)
 
@@ -84,6 +88,10 @@ describe("Profile content boundary", () => {
     expect(content.profile.contact.hometown.en).toBe("Suzhou, Jiangsu")
     expect(content.profile.portrait).toBe("/portrait-b1-cutout.png")
     expect(content.profile.favicon).toBe("/favicon.svg")
+    expect(PROJECT_PLACEHOLDER_MEDIA_PATH).toBe("/profile-photo.jpg")
+    await expect(readFile(publicMediaFilePath(PROJECT_PLACEHOLDER_MEDIA_PATH))).resolves.toBeInstanceOf(
+      Buffer,
+    )
     expect(content.projects.find(({ id }) => id === "resgatnet")).toMatchObject({
       image: null,
       contribution: { zh: expect.any(String), en: expect.any(String) },

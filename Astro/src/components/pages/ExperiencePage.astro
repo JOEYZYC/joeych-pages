@@ -1,58 +1,71 @@
 ---
 import type { Locale } from "../../i18n/locales"
-import EditorialIntro from "../EditorialIntro.astro"
-import RuledRecord from "../RuledRecord.astro"
-import BaseLayout from "../../layouts/BaseLayout.astro"
 import { UI } from "../../i18n/ui"
+import BaseLayout from "../../layouts/BaseLayout.astro"
 import { getProfileData } from "../../lib/profile-data"
 import "../../styles/experience.css"
+import EditorialIntro from "../EditorialIntro.astro"
 
 type Props = { readonly locale: Locale }
 
 const { locale } = Astro.props
 const data = await getProfileData()
 const { profile } = data
+const labels = UI[locale]
 ---
 
 <BaseLayout locale={locale} profile={profile} routeId="experience">
   <EditorialIntro
-    overline={UI[locale].routeIntros.experience.overline}
-    title={UI[locale].routeIntros.experience.title}
+    overline={labels.routeIntros.experience.overline}
+    title={labels.routeIntros.experience.title}
     summary={profile.summary[locale]}
   />
 
-  <section class="editorial-section experience-section" aria-labelledby="education-title">
-    <p class="eyebrow">{UI[locale].routeIntros.experience.overline}</p>
-    <h2 id="education-title" class="section-title">{UI[locale].sections.experience.education}</h2>
-    <div class="experience-chronology">
+  <section class="experience-section" aria-label={labels.routeIntros.experience.title}>
+    <div class="experience-grid">
+      {profile.education.length > 0 && (
+        <header class="experience-heading">
+          <p class="eyebrow">{labels.routeIntros.experience.overline}</p>
+          <h2>{labels.sections.experience.education}</h2>
+        </header>
+      )}
       {profile.education.map((education) => (
-        <section id={`education-${education.id}`} class="experience-record">
-          <RuledRecord meta={education.period}>
-            <h3>{education.school[locale]}</h3>
-            <p>{education.degree[locale]}</p>
-            <ul>
-              {education.highlights.map((highlight) => <li>{highlight[locale]}</li>)}
-            </ul>
-          </RuledRecord>
-        </section>
+        <article
+          id={`education-${education.id}`}
+          class="experience-panel experience-panel--education"
+          data-experience-record
+          data-experience-kind="education"
+        >
+          <p class="experience-period">{education.period}</p>
+          <h3>{education.school[locale]}</h3>
+          <p class="experience-role">{education.degree[locale]}</p>
+          <ul>
+            {education.highlights.map((highlight) => <li>{highlight[locale]}</li>)}
+          </ul>
+        </article>
       ))}
-    </div>
-  </section>
 
-  <section class="editorial-section experience-section" aria-labelledby="campus-title">
-    <p class="eyebrow">{UI[locale].routeIntros.experience.overline}</p>
-    <h2 id="campus-title" class="section-title">{UI[locale].sections.experience.campus}</h2>
-    <div class="experience-chronology">
-      {profile.campus_experience.map((experience) => (
-        <section id={`campus-${experience.id}`} class="experience-record">
-          <RuledRecord meta={experience.period}>
-            <h3>{experience.organization[locale]}</h3>
-            <p>{experience.role[locale]}</p>
-            <ul>
-              {experience.details.map((detail) => <li>{detail[locale]}</li>)}
-            </ul>
-          </RuledRecord>
-        </section>
+      {profile.campus_experience.length > 0 && (
+        <header class="experience-heading experience-heading--campus">
+          <p class="eyebrow">{labels.routeIntros.experience.overline}</p>
+          <h2>{labels.sections.experience.campus}</h2>
+        </header>
+      )}
+      {profile.campus_experience.map((experience, index) => (
+        <article
+          id={`campus-${experience.id}`}
+          class="experience-panel experience-panel--campus"
+          data-experience-record
+          data-experience-kind="campus"
+          data-experience-position={index + 1}
+        >
+          <p class="experience-period">{experience.period}</p>
+          <h3>{experience.organization[locale]}</h3>
+          <p class="experience-role">{experience.role[locale]}</p>
+          <ul>
+            {experience.details.map((detail) => <li>{detail[locale]}</li>)}
+          </ul>
+        </article>
       ))}
     </div>
   </section>

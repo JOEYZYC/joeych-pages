@@ -83,6 +83,8 @@ export const publicMediaPathSchema = z
   .min(1)
   .transform(normalizeMediaPath)
   .brand("PublicMediaPath")
+export const PROJECT_PLACEHOLDER_MEDIA_PATH = publicMediaPathSchema.parse("profile-photo.jpg")
+
 export const certificatePathSchema = z
   .string()
   .min(1)

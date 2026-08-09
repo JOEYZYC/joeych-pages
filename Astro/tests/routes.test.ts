@@ -129,6 +129,7 @@ describe("locale and route manifests", () => {
         navigation: expectedRouteKeys,
         routeIntros: expectedRouteKeys,
         groups: [
+          "actions",
           "certificate",
           "contact",
           "evidence",
@@ -136,9 +137,13 @@ describe("locale and route manifests", () => {
           "links",
           "mainNavigation",
           "menu",
+          "menuClose",
+          "menuOpen",
           "navigation",
+          "projectExplorer",
           "routeIntros",
           "sections",
+          "theme",
           "unavailable",
         ],
       },
@@ -147,6 +152,7 @@ describe("locale and route manifests", () => {
         navigation: expectedRouteKeys,
         routeIntros: expectedRouteKeys,
         groups: [
+          "actions",
           "certificate",
           "contact",
           "evidence",
@@ -154,13 +160,98 @@ describe("locale and route manifests", () => {
           "links",
           "mainNavigation",
           "menu",
+          "menuClose",
+          "menuOpen",
           "navigation",
+          "projectExplorer",
           "routeIntros",
           "sections",
+          "theme",
           "unavailable",
         ],
       },
     ])
+  })
+
+  it("exposes the complete redesign labels in both locales", () => {
+    // Given: every new interactive and archive label required by the redesign
+    const expected = {
+      zh: {
+        theme: { light: "浅色", dark: "深色", toLight: "切换至浅色主题", toDark: "切换至深色主题" },
+        actions: { experience: "查看经历", projects: "探索项目" },
+        projectExplorer: {
+          category: "项目类别",
+          tag: "技术标签",
+          allCategories: "全部类别",
+          allTags: "全部标签",
+          clear: "清除筛选",
+          results: "筛选结果",
+          empty: "没有符合当前筛选条件的项目。",
+          emptySource: "暂无项目资料。",
+          navigator: "项目导航",
+          details: "项目详情",
+          current: "当前项目",
+          skillOrigin: "来自技能证据",
+          imagePending: "项目图片待补充",
+          imagePendingAlt: "临时使用个人证件照；项目图片待补充",
+        },
+        archive: { ledgerOverline: "获奖档案", researchOverline: "研究档案" },
+        menuOpen: "打开菜单",
+        menuClose: "关闭菜单",
+      },
+      en: {
+        theme: { light: "Light", dark: "Dark", toLight: "Switch to light theme", toDark: "Switch to dark theme" },
+        actions: { experience: "View experience", projects: "Explore projects" },
+        projectExplorer: {
+          category: "Project category",
+          tag: "Technology tag",
+          allCategories: "All categories",
+          allTags: "All tags",
+          clear: "Clear filters",
+          results: "Filter results",
+          empty: "No projects match the current filters.",
+          emptySource: "No project records available.",
+          navigator: "Project navigator",
+          details: "Project details",
+          current: "Current project",
+          skillOrigin: "From skill evidence",
+          imagePending: "Project image pending",
+          imagePendingAlt: "Temporary profile photo; project image pending",
+        },
+        archive: { ledgerOverline: "Achievement ledger", researchOverline: "Research archive" },
+        menuOpen: "Open menu",
+        menuClose: "Close menu",
+      },
+    }
+
+    // When: both locale objects expose their redesign groups
+    const actual = {
+      zh: {
+        theme: UI.zh.theme,
+        actions: UI.zh.actions,
+        projectExplorer: UI.zh.projectExplorer,
+        archive: {
+          ledgerOverline: UI.zh.sections.awards.ledgerOverline,
+          researchOverline: UI.zh.sections.awards.researchOverline,
+        },
+        menuOpen: UI.zh.menuOpen,
+        menuClose: UI.zh.menuClose,
+      },
+      en: {
+        theme: UI.en.theme,
+        actions: UI.en.actions,
+        projectExplorer: UI.en.projectExplorer,
+        archive: {
+          ledgerOverline: UI.en.sections.awards.ledgerOverline,
+          researchOverline: UI.en.sections.awards.researchOverline,
+        },
+        menuOpen: UI.en.menuOpen,
+        menuClose: UI.en.menuClose,
+      },
+    }
+
+    // Then: visible text, accessible destinations, and archive overlines stay exact
+    expect(actual).toEqual(expected)
   })
 
   it("provides visible general-ability evidence levels in both locales", () => {

@@ -37,20 +37,19 @@ async function htmlFiles(directory: string): Promise<readonly string[]> {
 test.describe("formal site shell", () => {
   for (const route of routes) {
     test(`renders the complete localized shell for ${route.path || "root"}`, async ({ page }) => {
-      // Given: an approved public route
       await page.goto(route.path)
-
-      // When: the static document becomes available
       const personJsonLd = await page.locator('script[type="application/ld+json"]').textContent()
 
-      // Then: localization, landmarks, navigation, and truthful metadata are complete
       await expect(page.locator("html")).toHaveAttribute("lang", route.locale === "zh" ? "zh-CN" : "en")
+      await expect(page.locator("html")).toHaveAttribute("data-js", "true")
       await expect(page.getByRole("banner")).toBeVisible()
-      await expect(page.getByRole("navigation")).toBeVisible()
+      await expect(page.locator("#primary-navigation")).toBeVisible()
       await expect(page.getByRole("main")).toBeVisible()
       await expect(page.getByRole("contentinfo")).toBeVisible()
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1)
       await expect(page.locator('[aria-current="page"]')).toHaveCount(1)
+      await expect(page.locator("[data-theme-toggle]")).toBeVisible()
+      await expect(page.locator("[data-contact-trigger]")).toBeVisible()
       await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", route.canonical)
       await expect(page.locator('link[rel="alternate"][hreflang="zh-CN"]')).toHaveAttribute(
@@ -77,90 +76,155 @@ test.describe("formal site shell", () => {
   }
 
   test("serves the Profile-backed SVG favicon", async ({ page }) => {
-    // Given: the base-aware public favicon path
     const favicon = await page.request.get(`${basePath}/favicon.svg`)
-
-    // When: the static preview serves the public media asset
-
-    // Then: browsers receive the favicon without an implicit icon fallback
     expect(favicon.status()).toBe(200)
   })
 
-  test("opens the contact dialog by keyboard and restores focus after Escape", async ({ page }) => {
-    // Given: a formal Chinese home page contact trigger
+  test("opens contact by keyboard and restores focus after every close path", async ({ page }) => {
     await page.goto("")
-    const trigger = page.locator('[aria-haspopup="dialog"]')
+    const trigger = page.locator("[data-contact-trigger]")
+    const dialog = page.locator("[data-contact-dialog]")
 
-    // When: keyboard opens the dialog and then dismisses it
     await trigger.focus()
     await page.keyboard.press("Enter")
-    const dialog = page.getByRole("dialog")
     await expect(dialog).toBeVisible()
     await page.keyboard.press("Escape")
+    await expect(dialog).not.toBeVisible()
+    await expect(trigger).toBeFocused()
 
-    // Then: native modal closing returns focus to the originating control
+    await trigger.click()
+    await dialog.dispatchEvent("click")
     await expect(dialog).not.toBeVisible()
     await expect(trigger).toBeFocused()
   })
 
-  test("closes the compact menu with Escape and restores focus", async ({ page }) => {
-    // Given: the mobile formal home header
+  test("compact navigation focuses its first route and closes on route, outside, and Escape", async ({ page }) => {
     await page.setViewportSize(viewports[0])
     await page.goto("")
     const toggle = page.locator("[data-menu-toggle]")
+    const navigation = page.locator("#primary-navigation")
+    const firstRoute = navigation.getByRole("link").first()
 
-    // When: the compact navigation opens and Escape is pressed
     await toggle.click()
-    await expect(toggle).toHaveAttribute("aria-expanded", "true")
-    await page.keyboard.press("Escape")
+    await expect(firstRoute).toBeFocused()
+    await firstRoute.evaluate((element) => element.addEventListener("click", (event) => event.preventDefault(), { once: true }))
+    await firstRoute.click()
+    await expect(toggle).toHaveAttribute("aria-expanded", "false")
 
-    // Then: navigation closes and focus returns to its control
+    await toggle.click()
+    await page.locator("main").dispatchEvent("pointerdown")
+    await expect(toggle).toHaveAttribute("aria-expanded", "false")
+
+    await toggle.click()
+    await page.keyboard.press("Escape")
     await expect(toggle).toHaveAttribute("aria-expanded", "false")
     await expect(toggle).toBeFocused()
   })
 
-  test("honors reduced motion and moves the formal project rail vertically", async ({ page }) => {
-    // Given: a motion-sensitive desktop visitor on the formal projects route
+  test("JavaScript-disabled shell expands navigation and exposes real contact fallback anchors", async ({ browser }) => {
+    const context = await browser.newContext({
+      baseURL: "http://127.0.0.1:4321/joeych-pages/",
+      javaScriptEnabled: false,
+    })
+    const page = await context.newPage()
+    await page.setViewportSize(viewports[0])
+    await page.goto("en/")
+
+    await expect(page.locator("html")).toHaveAttribute("data-js", "false")
+    await expect(page.locator("[data-menu-toggle]")).toBeHidden()
+    await expect(page.locator("#primary-navigation")).toBeVisible()
+    await expect(page.locator("#primary-navigation a")).toHaveCount(5)
+    await expect(page.locator("[data-theme-toggle]")).toBeHidden()
+    await expect(page.locator("[data-contact-trigger]")).toBeHidden()
+    await expect(page.locator("[data-contact-fallback]")).toBeVisible()
+    await expect(page.locator("[data-contact-fallback]")).toHaveAttribute("href", /^mailto:/)
+
+    await context.close()
+  })
+
+  test("native View Transition support enhances but never owns route navigation", async ({ page }) => {
+    await page.setViewportSize(viewports[2])
+    await page.goto("")
+    const hasViewTransitionRule = await page.evaluate(() => [...document.styleSheets].some((sheet) => {
+      try {
+        return [...sheet.cssRules].some((rule) => rule.cssText.startsWith("@view-transition"))
+      } catch {
+        return false
+      }
+    }))
+    expect(hasViewTransitionRule).toBe(true)
+
+    await page.locator("#primary-navigation").getByRole("link", { name: "个人经历" }).click()
+    await expect(page).toHaveURL(/\/experience\/$/)
+
+    await page.addInitScript(() => {
+      Object.defineProperty(Document.prototype, "startViewTransition", {
+        configurable: true,
+        value: undefined,
+      })
+    })
+    await page.goto("")
+    await page.locator("#primary-navigation").getByRole("link", { name: "获奖证书" }).click()
+    await expect(page).toHaveURL(/\/awards\/$/)
+  })
+
+  test("reduced motion makes project and view-transition durations instantaneous", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.setViewportSize(viewports[2])
-    await page.goto("projects/")
-    const group = page.locator('[data-signal-rail-axis="vertical"]')
-    const rail = group.locator("[data-signal-rail]")
-    const projects = group.locator("[data-signal-target]")
+    await page.goto("en/projects/")
+    const tile = page.locator("[data-project-tile]").first()
 
-    // When: keyboard focus moves between project index items
-    await projects.nth(0).focus()
-    const firstTransform = await rail.evaluate((element) => element.style.transform)
-    await projects.nth(1).focus()
-    const secondTransform = await rail.evaluate((element) => element.style.transform)
-
-    // Then: the shared rail moves vertically without transition motion
-    await expect(rail).toHaveCSS("transition-duration", "0s")
-    expect(secondTransform).not.toBe(firstTransform)
-    expect(secondTransform).toMatch(/^translateY\(/)
+    expect(await tile.evaluate((element) => getComputedStyle(element).transitionDuration.split(", ").every((value) => value === "0s"))).toBe(true)
+    const reducedViewTransitions = await page.evaluate(() => {
+      const oldRoot = getComputedStyle(document.documentElement, "::view-transition-old(root)")
+      const newRoot = getComputedStyle(document.documentElement, "::view-transition-new(root)")
+      return [oldRoot, newRoot].every((style) =>
+        style.animationName === "none" || style.animationDuration.split(", ").every((value) => value === "0s")
+      )
+    })
+    expect(reducedViewTransitions).toBe(true)
+    await expect(page.locator("[data-project-filter-controls]")).toBeVisible()
   })
 
-  test("keeps the current project fragment when changing locales", async ({ page }) => {
-    // Given: a Chinese project record addressed by its stable fragment
-    await page.goto("projects/#resgatnet")
+  test("local fonts and build-time icons are ready without failed page resources", async ({ page }) => {
+    const pageErrors: string[] = []
+    const failedRequests: string[] = []
+    page.on("pageerror", (error) => pageErrors.push(error.message))
+    page.on("requestfailed", (request) => {
+      if (new URL(request.url()).origin === "http://127.0.0.1:4321") failedRequests.push(`${request.method()} ${request.url()}`)
+    })
 
-    // When: the language counterpart is selected
-    await page.locator("a.language-link").click()
+    for (const route of routes) {
+      await page.goto(route.path, { waitUntil: "load" })
+      const readiness = await page.evaluate(async () => {
+        await document.fonts.ready
+        const icons = [...document.querySelectorAll<SVGElement>("svg[data-icon]")]
+        return {
+          fontStatus: document.fonts.status,
+          iconCount: icons.length,
+          invalidIcons: icons.filter((icon) =>
+            icon.getAttribute("focusable") !== "false" ||
+            icon.getAttribute("aria-hidden") !== "true" ||
+            icon.querySelector("path")?.getAttribute("fill") !== "currentColor"
+          ).length,
+          resourceCount: performance.getEntriesByType("resource").filter((entry) => entry.name.startsWith(window.location.origin)).length,
+        }
+      })
+      expect(readiness.fontStatus).toBe("loaded")
+      expect(readiness.iconCount).toBeGreaterThan(0)
+      expect(readiness.invalidIcons).toBe(0)
+      expect(readiness.resourceCount).toBeGreaterThan(0)
+    }
 
-    // Then: the English mirror retains the current project record
-    await expect(page).toHaveURL(/\/en\/projects\/#resgatnet$/)
+    expect(pageErrors).toEqual([])
+    expect(failedRequests).toEqual([])
   })
 
-  test("keeps every visible enabled link and button at the required pointer size", async ({ page }) => {
-    // Given: every approved route at the required mobile viewport
+  test("keeps every visible enabled link, button, and select at the required pointer size", async ({ page }) => {
     await page.setViewportSize(viewports[0])
-
-    // When: each visible enabled link and button is measured
     for (const route of routes) {
       await page.goto(route.path)
-      const controls = page.locator("a[href]:visible, button:visible:not([disabled])")
-
-      // Then: touch targets meet the 44px minimum in both dimensions
+      const controls = page.locator("a[href]:visible, button:visible:not([disabled]), select:visible:not([disabled])")
       for (const control of await controls.all()) {
         const box = await control.boundingBox()
         expect(box).not.toBeNull()
@@ -172,29 +236,20 @@ test.describe("formal site shell", () => {
 
   for (const viewport of viewports) {
     test(`keeps all approved routes within the ${viewport.name} viewport`, async ({ page }) => {
-      // Given: a required responsive viewport
       await page.setViewportSize(viewport)
-
-      // When: every approved public route renders
       for (const route of routes) {
         await page.goto(route.path)
-
-        // Then: no formal page introduces document-level horizontal overflow
         await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width)
       }
     })
   }
 
   test("builds only approved HTML documents and their canonical sitemap URLs", async () => {
-    // Given: Playwright's production build output
     const dist = join(process.cwd(), "dist")
-
-    // When: generated HTML and sitemap URLs are enumerated
     const html = await htmlFiles(dist)
     const sitemap = await readFile(join(dist, "sitemap-0.xml"), "utf8")
     const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1])
 
-    // Then: exactly the approved ten documents and canonical URLs are published
     expect(html).toHaveLength(routes.length)
     expect([...sitemapUrls].sort()).toEqual(routes.map((route) => route.canonical).sort())
   })

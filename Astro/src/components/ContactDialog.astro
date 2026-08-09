@@ -1,8 +1,10 @@
 ---
-import type { Locale } from "../i18n/locales"
+import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import type { Profile } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import { getDialogIds } from "../lib/dialog-ids"
+import Icon from "./Icon.astro"
 
 type Props = { readonly id: string; readonly locale: Locale; readonly profile: Profile }
 const { id, locale, profile } = Astro.props
@@ -17,27 +19,66 @@ const contacts = [
 ---
 
 <div data-contact-dialog-root>
-  <button id={ids.trigger} class="header-button" type="button" aria-haspopup="dialog" aria-controls={ids.dialog}>{labels.open}</button>
-  <dialog id={ids.dialog} class="dialog-surface" aria-labelledby={ids.title}>
-    <button class="dialog-close" type="button" data-dialog-close aria-label={labels.close}>{labels.closeButton}</button>
+  <a class="header-button contact-fallback" data-contact-fallback href={`mailto:${profile.contact.email}`}>
+    {labels.open}
+  </a>
+  <button
+    id={ids.trigger}
+    class="header-button"
+    type="button"
+    data-contact-trigger
+    aria-haspopup="dialog"
+    aria-controls={ids.dialog}
+    hidden
+  >{labels.open}</button>
+  <dialog id={ids.dialog} class="dialog-surface" data-contact-dialog aria-labelledby={ids.title} hidden>
+    <button
+      class="dialog-close"
+      type="button"
+      data-dialog-close
+      aria-label={labels.close}
+      title={labels.close}
+    ><Icon definition={faXmark} /></button>
     <h2 id={ids.title} tabindex="-1">{labels.title}</h2>
     <ul class="contact-list">
-      {contacts.map((contact) => <li><strong>{contact.label}</strong><br /><a href={contact.href} target={contact.href.startsWith("mailto:") ? undefined : "_blank"} rel="noopener noreferrer">{contact.value}</a></li>)}
+      {contacts.map((contact) => (
+        <li>
+          <strong>{contact.label}</strong>
+          <a
+            href={contact.href}
+            target={contact.href.startsWith("mailto:") ? undefined : "_blank"}
+            rel={contact.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+          >{contact.value}</a>
+        </li>
+      ))}
     </ul>
   </dialog>
 </div>
 
 <script>
-  const roots = document.querySelectorAll<HTMLElement>("[data-contact-dialog-root]")
-  for (const root of roots) {
-    const trigger = root.querySelector<HTMLButtonElement>("[aria-haspopup='dialog']")
-    const dialog = root.querySelector<HTMLDialogElement>("dialog")
-    const title = root.querySelector<HTMLElement>("h2")
-    if (!trigger || !dialog || !title) continue
-    const close = dialog.querySelector("[data-dialog-close]")
-    trigger.addEventListener("click", () => { dialog.showModal(); title.focus() })
-    close?.addEventListener("click", () => dialog.close())
-    dialog.addEventListener("click", (event) => { if (event.target === dialog) dialog.close() })
+  const contactRoots = document.querySelectorAll<HTMLElement>("[data-contact-dialog-root]")
+  for (const root of contactRoots) {
+    if (root.dataset.contactReady === "true") continue
+    const fallback = root.querySelector<HTMLAnchorElement>("[data-contact-fallback]")
+    const trigger = root.querySelector<HTMLButtonElement>("[data-contact-trigger]")
+    const dialog = root.querySelector<HTMLDialogElement>("[data-contact-dialog]")
+    const title = dialog?.querySelector<HTMLElement>("h2")
+    const close = dialog?.querySelector<HTMLButtonElement>("[data-dialog-close]")
+    if (!fallback || !trigger || !dialog || !title || !close) continue
+
+    trigger.addEventListener("click", () => {
+      dialog.showModal()
+      title.focus({ preventScroll: true })
+    })
+    close.addEventListener("click", () => dialog.close())
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close()
+    })
     dialog.addEventListener("close", () => trigger.focus())
+
+    root.dataset.contactReady = "true"
+    dialog.hidden = false
+    trigger.hidden = false
+    fallback.hidden = true
   }
 </script>

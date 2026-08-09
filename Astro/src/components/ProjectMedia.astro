@@ -1,0 +1,68 @@
+---
+import type { Project } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import { PROJECT_MEDIA_DIMENSIONS } from "../lib/project-media"
+import { PROJECT_PLACEHOLDER_MEDIA_PATH } from "../lib/profile-paths"
+import { publicMediaUrl } from "../lib/urls"
+
+type Props = {
+  readonly context: "tile" | "record"
+  readonly locale: Locale
+  readonly project: Project
+  readonly loading: "eager" | "lazy"
+}
+
+const { context, locale, project, loading } = Astro.props
+const labels = UI[locale]
+const isPlaceholder = project.image === null
+const mediaPath = project.image ?? PROJECT_PLACEHOLDER_MEDIA_PATH
+const matchingFigure = project.image === null
+  ? undefined
+  : project.figures.find((figure) => figure.src === project.image)
+const alt = isPlaceholder
+  ? labels.projectExplorer.imagePendingAlt
+  : matchingFigure?.[locale] ?? project.title[locale]
+const caption = context === "record" && !isPlaceholder ? matchingFigure?.[locale] : undefined
+const dimensions = PROJECT_MEDIA_DIMENSIONS[mediaPath]
+---
+
+<figure
+  class:list={["project-media", `project-media--${context}`, { "project-media--placeholder": isPlaceholder }]}
+  data-project-media
+  data-project-media-context={context}
+  data-project-media-kind={isPlaceholder ? "placeholder" : "real"}
+  data-project-media-source={mediaPath}
+>
+  <div class="project-media-well">
+    <img
+      class:list={["project-media-image", { "project-media-image--placeholder": isPlaceholder }]}
+      data-project-media-image
+      src={publicMediaUrl(mediaPath)}
+      alt={alt}
+      loading={loading}
+      decoding="async"
+      width={dimensions?.width}
+      height={dimensions?.height}
+    />
+    <p class="project-media-unavailable" data-project-media-unavailable hidden>{labels.unavailable.media}</p>
+  </div>
+  {isPlaceholder && <figcaption class="project-media-pending">{labels.projectExplorer.imagePending}</figcaption>}
+  {caption !== undefined && <figcaption>{caption}</figcaption>}
+</figure>
+
+<script>
+  const projectMedia = document.querySelectorAll<HTMLElement>("[data-project-media]")
+  for (const media of projectMedia) {
+    if (media.dataset.mediaReady === "true") continue
+    const image = media.querySelector<HTMLImageElement>("[data-project-media-image]")
+    const unavailable = media.querySelector<HTMLElement>("[data-project-media-unavailable]")
+    if (!image || !unavailable) continue
+    image.addEventListener("error", () => {
+      image.hidden = true
+      unavailable.hidden = false
+      media.dataset.mediaError = "true"
+    })
+    media.dataset.mediaReady = "true"
+  }
+</script>

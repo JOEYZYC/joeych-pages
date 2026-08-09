@@ -1,6 +1,6 @@
 ---
-import type { Locale } from "../i18n/locales"
 import type { Profile } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 
 type Props = { readonly locale: Locale; readonly profile: Profile }
@@ -14,10 +14,15 @@ const links = [
 
 <footer class="footer">
   <div class="footer-inner">
-    <p>{profile.name[locale]} · {profile.role[locale]}</p>
-    <div class="footer-links">
+    <div class="footer-contact">
+      <p class="footer-label">{UI[locale].contact.email}</p>
       <a href={`mailto:${profile.contact.email}`}>{profile.contact.email}</a>
-      {links.map((link) => <a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
     </div>
+    <nav class="footer-destinations" aria-label={UI[locale].links.related}>
+      <p class="footer-label">{UI[locale].links.related}</p>
+      <ul class="footer-links">
+        {links.map((link) => <li><a href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</a></li>)}
+      </ul>
+    </nav>
   </div>
 </footer>

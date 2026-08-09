@@ -1,57 +1,87 @@
 import { expect, test } from "@playwright/test"
 
+import { getProfileData } from "../../src/lib/profile-data"
+
 const routes = [
-  { path: "awards/", heading: "获奖证书", language: "zh-CN" },
-  { path: "en/awards/", heading: "Awards", language: "en" },
+  { path: "awards/", locale: "zh", heading: "获奖证书", language: "zh-CN", ledger: "获奖档案", research: "研究档案" },
+  { path: "en/awards/", locale: "en", heading: "Awards", language: "en", ledger: "Achievement ledger", research: "Research archive" },
 ] as const
 
 test.describe("awards archive", () => {
   for (const route of routes) {
-    test(`renders the canonical archive in ${route.language}`, async ({ page }) => {
-      // Given: the locale-specific awards route
+    test(`renders source-order Bento evidence with uniform literal prizes in ${route.language}`, async ({ page }) => {
+      const data = await getProfileData()
       await page.goto(route.path)
-
-      // When: canonical Profile records are rendered
       const awards = page.locator("[data-award-id]")
+      const research = page.locator("[data-research-kind]")
 
-      // Then: the route exposes its localized archive and source-order records
       await expect(page.locator("html")).toHaveAttribute("lang", route.language)
       await expect(page.getByRole("heading", { level: 1, name: route.heading })).toBeVisible()
-      await expect(awards).toHaveCount(10)
-      await expect(awards.first()).toHaveAttribute("data-award-id", "ic-vocational-national-third-2025")
-      await expect(page.locator("[data-research-kind='publication']")).toHaveCount(6)
-      await expect(page.locator("[data-research-kind='patent']")).toHaveCount(4)
-      await expect(page.locator("[data-research-kind='thesis']")).toHaveCount(1)
+      await expect(page.locator(".achievement-ledger .eyebrow")).toHaveText(route.ledger)
+      await expect(page.locator(".research-archive .eyebrow")).toHaveText(route.research)
+      await expect(awards).toHaveCount(data.awards.length)
+      expect(await awards.evaluateAll((elements) => elements.map((element) => element.getAttribute("data-award-id")))).toEqual(
+        data.awards.map((award) => award.id),
+      )
+      expect(await research.evaluateAll((elements) => elements.map((element) => ({
+        id: element.getAttribute("data-research-id"),
+        kind: element.getAttribute("data-research-kind"),
+      })))).toEqual([
+        ...data.publications.map((publication) => ({ id: publication.id, kind: "publication" })),
+        ...data.patents.map((patent) => ({ id: patent.id, kind: "patent" })),
+        { id: data.thesis.id, kind: "thesis" },
+      ])
+
+      for (const award of data.awards) {
+        const panel = page.locator(`[data-award-id="${award.id}"]`)
+        await expect(panel.locator(".award-prize")).toHaveText(award.prizes.map((prize) => prize[route.locale]))
+        await expect(panel).toHaveAttribute("data-award-featured", String(award.featured))
+      }
+      await expect(page.locator(".award-prize--top-tier")).toHaveCount(0)
     })
   }
 
-  test("keeps certificate galleries independent and restores keyboard focus", async ({ page }) => {
-    // Given: two records with separate certificate galleries
-    await page.goto("awards/")
-    const awardTrigger = page.locator("#awards-award-renesas-east-first-national-third-2024-trigger")
+  test("certificate galleries expose loading, error, boundaries, and focus restoration", async ({ page }) => {
+    await page.goto("en/awards/")
+    const trigger = page.locator("#awards-award-renesas-east-first-national-third-2024-trigger")
+    const dialog = page.locator("#awards-award-renesas-east-first-national-third-2024-dialog")
+    const previous = dialog.locator("[data-certificate-previous]")
+    const next = dialog.locator("[data-certificate-next]")
+    const caption = dialog.locator("[data-certificate-caption]")
 
-    // When: the award certificate dialog opens and closes from the keyboard
-    await awardTrigger.focus()
+    await trigger.focus()
     await page.keyboard.press("Enter")
-    const awardDialog = page.locator("#awards-award-renesas-east-first-national-third-2024-dialog")
-    await expect(awardDialog).toBeVisible()
-    await expect(awardDialog.getByRole("button", { name: "下一张证书" })).toBeEnabled()
-    await page.keyboard.press("Escape")
+    await expect(dialog).toBeVisible()
+    await expect(dialog.locator("[data-certificate-loading]")).toBeHidden()
+    await expect(previous).toBeDisabled()
+    await expect(next).toBeEnabled()
+    await expect(caption).toHaveText("Electronic Design Contest (Renesas) — Eastern-China First")
 
-    // Then: focus returns to the source and the publication gallery remains closed
-    await expect(awardTrigger).toBeFocused()
+    await next.click()
+    await expect(previous).toBeEnabled()
+    await expect(next).toBeDisabled()
+    await expect(caption).toHaveText("Electronic Design Contest (Renesas) — National Third")
+
+    await dialog.locator("[data-certificate-image]").dispatchEvent("error")
+    await expect(dialog.locator("[data-certificate-image]")).toBeHidden()
+    await expect(dialog.locator("[data-certificate-unavailable]")).toHaveText("Certificate unavailable")
+    await expect(dialog.locator("[data-certificate-unavailable]")).toBeVisible()
+
+    await page.keyboard.press("Escape")
+    await expect(dialog).not.toBeVisible()
+    await expect(trigger).toBeFocused()
     await expect(page.locator("#awards-publication-bifunctional-flexible-metasurface-dialog")).not.toBeVisible()
   })
 
-  test("does not create certificate controls for records without evidence", async ({ page }) => {
-    // Given: a source-backed record with an empty certificate collection
+  test("records without certificate evidence expose no trigger or fallback", async ({ page }) => {
     await page.goto("en/awards/")
+    const publication = page.locator('[data-research-id="tri-band-metasurface-absorber"]')
+    const patent = page.locator('[data-research-id="vo2-broadband-absorber"]')
+    const thesis = page.locator('[data-research-kind="thesis"]')
 
-    // When: the archive is available
-    const record = page.locator("[data-research-id='tri-band-metasurface-absorber']")
-
-    // Then: its source content stays visible without an empty control
-    await expect(record).toContainText("A Tri-band Metasurface Absorber")
-    await expect(record.getByRole("button")).toHaveCount(0)
+    await expect(publication).toContainText("A Tri-band Metasurface Absorber")
+    await expect(publication.locator("[data-certificate-dialog-root]")).toHaveCount(0)
+    await expect(patent.locator("[data-certificate-dialog-root]")).toHaveCount(0)
+    await expect(thesis.locator("[data-certificate-dialog-root]")).toHaveCount(0)
   })
 })

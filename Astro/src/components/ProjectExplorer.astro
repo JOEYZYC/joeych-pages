@@ -1,0 +1,339 @@
+---
+import type { Profile, Project } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import ProjectTile from "./ProjectTile.astro"
+
+type Props = {
+  readonly locale: Locale
+  readonly projects: readonly Project[]
+  readonly skills: Profile["skills"]
+}
+
+const { locale, projects, skills } = Astro.props
+const labels = UI[locale]
+const categories: { value: string; label: string }[] = []
+const tags: { value: string; label: string }[] = []
+const seenCategories = new Set<string>()
+const seenTags = new Set<string>()
+
+for (const project of projects) {
+  if (!seenCategories.has(project.category.en)) {
+    seenCategories.add(project.category.en)
+    categories.push({ value: project.category.en, label: project.category[locale] })
+  }
+  for (const tag of project.tags) {
+    if (seenTags.has(tag.en)) continue
+    seenTags.add(tag.en)
+    tags.push({ value: tag.en, label: tag[locale] })
+  }
+}
+
+const skillEvidence = Object.fromEntries(
+  skills.flatMap((group) => group.tags).map((tag) => [
+    tag.id,
+    {
+      label: tag[locale],
+      projectIds: [...new Set(tag.evidence.flatMap((evidence) =>
+        evidence.type === "project" ? [evidence.project_id] : []
+      ))],
+    },
+  ]),
+)
+const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\\u003c")
+---
+
+<section class="project-explorer" data-project-explorer aria-labelledby="project-explorer-title">
+  <header class="project-explorer-heading">
+    <p class="eyebrow">{labels.routeIntros.projects.overline}</p>
+    <h2 id="project-explorer-title">{labels.sections.projects.index}</h2>
+  </header>
+
+  {projects.length === 0 ? (
+    <p class="project-empty-source" data-project-source-empty>{labels.projectExplorer.emptySource}</p>
+  ) : (
+    <>
+      <div class="project-filter-bar" data-project-filter-controls hidden>
+        <label class="project-filter-field" for="project-category-filter">
+          <span>{labels.projectExplorer.category}</span>
+          <select id="project-category-filter" data-project-category-filter>
+            <option value="">{labels.projectExplorer.allCategories}</option>
+            {categories.map((category) => <option value={category.value}>{category.label}</option>)}
+          </select>
+        </label>
+        <label class="project-filter-field" for="project-tag-filter">
+          <span>{labels.projectExplorer.tag}</span>
+          <select id="project-tag-filter" data-project-tag-filter>
+            <option value="">{labels.projectExplorer.allTags}</option>
+            {tags.map((tag) => <option value={tag.value}>{tag.label}</option>)}
+          </select>
+        </label>
+        <button type="button" class="project-filter-clear" data-project-filter-clear disabled>
+          {labels.projectExplorer.clear}
+        </button>
+        <p class="project-filter-results">
+          <span>{labels.projectExplorer.results}</span>
+          <output
+            for="project-category-filter project-tag-filter"
+            aria-live="polite"
+            data-project-filter-results
+          >{projects.length} / {projects.length}</output>
+        </p>
+      </div>
+
+      <p class="project-filter-empty" data-project-filter-empty hidden>{labels.projectExplorer.empty}</p>
+      <div class="project-catalog-grid" data-project-catalog>
+        {projects.map((project, index) => (
+          <ProjectTile locale={locale} number={index + 1} project={project} variant="catalog" />
+        ))}
+      </div>
+      <script type="application/json" data-project-skill-evidence set:html={serializedSkillEvidence}></script>
+    </>
+  )}
+</section>
+
+<script>
+  type EvidenceMap = Record<string, { label: string; projectIds: string[] }>
+
+  const explorerRoots = document.querySelectorAll<HTMLElement>("[data-project-explorer]")
+  for (const explorer of explorerRoots) {
+    if (explorer.dataset.explorerReady === "true") continue
+    const pageRoot = explorer.closest<HTMLElement>("[data-projects-page]") ?? document.documentElement
+    const controls = explorer.querySelector<HTMLElement>("[data-project-filter-controls]")
+    const categoryFilter = explorer.querySelector<HTMLSelectElement>("[data-project-category-filter]")
+    const tagFilter = explorer.querySelector<HTMLSelectElement>("[data-project-tag-filter]")
+    const clearButton = explorer.querySelector<HTMLButtonElement>("[data-project-filter-clear]")
+    const resultOutput = explorer.querySelector<HTMLOutputElement>("[data-project-filter-results]")
+    const emptyPanel = explorer.querySelector<HTMLElement>("[data-project-filter-empty]")
+    const tiles = [...explorer.querySelectorAll<HTMLAnchorElement>("[data-project-tile]")]
+    const records = [...pageRoot.querySelectorAll<HTMLElement>("[data-project-record]")]
+    const navigatorShell = pageRoot.querySelector<HTMLElement>("[data-project-navigator-shell]")
+    const navigator = pageRoot.querySelector<HTMLSelectElement>("[data-project-navigator]")
+    const evidenceSource = explorer.querySelector<HTMLScriptElement>("[data-project-skill-evidence]")
+    if (
+      !controls ||
+      !categoryFilter ||
+      !tagFilter ||
+      !clearButton ||
+      !resultOutput ||
+      !emptyPanel ||
+      tiles.length === 0 ||
+      records.length === 0 ||
+      !navigatorShell ||
+      !navigator ||
+      !evidenceSource
+    ) continue
+
+    const evidenceMap = JSON.parse(evidenceSource.textContent ?? "{}") as EvidenceMap
+    const tileById = new Map(tiles.map((tile) => [tile.dataset.projectId ?? "", tile]))
+    const recordById = new Map(records.map((record) => [record.id, record]))
+    const projectIds = tiles.map((tile) => tile.dataset.projectId).filter((id): id is string => Boolean(id))
+    const tagsById = new Map(tiles.map((tile) => {
+      try {
+        const parsed = JSON.parse(tile.dataset.projectTags ?? "[]")
+        return [tile.dataset.projectId ?? "", Array.isArray(parsed) ? parsed.filter((tag): tag is string => typeof tag === "string") : []]
+      } catch {
+        return [tile.dataset.projectId ?? "", []]
+      }
+    }))
+    const intersectionRatios = new Map<string, number>()
+    let visibleIds = [...projectIds]
+    let enhancementsReady = false
+
+    const currentHashId = () => {
+      if (window.location.hash.length < 2) return ""
+      try {
+        return decodeURIComponent(window.location.hash.slice(1))
+      } catch {
+        return window.location.hash.slice(1)
+      }
+    }
+
+    const replaceUrl = (url: URL) => {
+      window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`)
+    }
+
+    const clearActiveState = () => {
+      for (const tile of tiles) {
+        tile.dataset.active = "false"
+        tile.removeAttribute("aria-current")
+      }
+      for (const record of records) record.dataset.active = "false"
+    }
+
+    const setActiveProject = (id: string) => {
+      if (!visibleIds.includes(id)) return
+      clearActiveState()
+      const tile = tileById.get(id)
+      const record = recordById.get(id)
+      if (tile) {
+        tile.dataset.active = "true"
+        tile.setAttribute("aria-current", "location")
+      }
+      if (record) record.dataset.active = "true"
+      if ([...navigator.options].some((option) => option.value === id)) navigator.value = id
+    }
+
+    const observer = "IntersectionObserver" in window
+      ? new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            const id = (entry.target as HTMLElement).id
+            intersectionRatios.set(id, entry.isIntersecting ? entry.intersectionRatio : 0)
+          }
+          const active = visibleIds
+            .map((id) => ({
+              id,
+              ratio: intersectionRatios.get(id) ?? 0,
+              top: recordById.get(id)?.getBoundingClientRect().top ?? Number.POSITIVE_INFINITY,
+            }))
+            .filter(({ ratio }) => ratio > 0)
+            .sort((left, right) => right.ratio - left.ratio || left.top - right.top)[0]
+          if (active) setActiveProject(active.id)
+        }, { rootMargin: "-25% 0px -60% 0px", threshold: [0, 0.25, 0.6] })
+      : null
+
+    const rebuildNavigator = () => {
+      navigator.replaceChildren()
+      for (const id of visibleIds) {
+        const record = recordById.get(id)
+        if (!record) continue
+        const ordinal = record.dataset.projectOrdinal
+        const title = record.dataset.projectTitle
+        if (!ordinal || !title) continue
+        navigator.add(new Option(`${ordinal} — ${title}`, id))
+      }
+      navigator.disabled = visibleIds.length === 0
+      navigatorShell.hidden = !enhancementsReady || visibleIds.length === 0
+    }
+
+    const rebuildObserver = () => {
+      observer?.disconnect()
+      intersectionRatios.clear()
+      for (const id of visibleIds) {
+        const record = recordById.get(id)
+        if (record) observer?.observe(record)
+      }
+    }
+
+    const clearSkillOrigin = (removeQuery: boolean) => {
+      for (const element of [...tiles, ...records]) {
+        delete element.dataset.evidenceOrigin
+        const message = element.querySelector<HTMLElement>("[data-project-origin-label]")
+        if (message) message.textContent = ""
+      }
+      if (!removeQuery) return
+      const url = new URL(window.location.href)
+      if (!url.searchParams.has("skill")) return
+      url.searchParams.delete("skill")
+      replaceUrl(url)
+    }
+
+    const applySkillOrigin = () => {
+      clearSkillOrigin(false)
+      const url = new URL(window.location.href)
+      const skillId = url.searchParams.get("skill")
+      if (!skillId) return
+      const projectId = currentHashId()
+      const evidence = evidenceMap[skillId]
+      if (!projectId || !evidence?.projectIds.includes(projectId)) {
+        url.searchParams.delete("skill")
+        replaceUrl(url)
+        return
+      }
+      for (const element of [tileById.get(projectId), recordById.get(projectId)]) {
+        if (!element) continue
+        element.dataset.evidenceOrigin = "true"
+        const message = element.querySelector<HTMLElement>("[data-project-origin-label]")
+        const prefix = message?.dataset.originPrefix
+        if (message && prefix) message.textContent = `${prefix}: ${evidence.label}`
+      }
+    }
+
+    const updateFilterSummary = () => {
+      resultOutput.value = `${visibleIds.length} / ${projectIds.length}`
+      resultOutput.textContent = resultOutput.value
+      emptyPanel.hidden = visibleIds.length !== 0
+      clearButton.disabled = categoryFilter.value === "" && tagFilter.value === ""
+    }
+
+    const applyFilters = ({ clearOrigin = true } = {}) => {
+      if (clearOrigin) clearSkillOrigin(true)
+      const category = categoryFilter.value
+      const tag = tagFilter.value
+      visibleIds = projectIds.filter((id) => {
+        const tile = tileById.get(id)
+        const matchesCategory = category === "" || tile?.dataset.projectCategory === category
+        const matchesTag = tag === "" || tagsById.get(id)?.includes(tag)
+        return matchesCategory && matchesTag
+      })
+      const visibleSet = new Set(visibleIds)
+      for (const id of projectIds) {
+        const hidden = !visibleSet.has(id)
+        const tile = tileById.get(id)
+        const record = recordById.get(id)
+        if (tile) tile.hidden = hidden
+        if (record) record.hidden = hidden
+      }
+
+      const hashId = currentHashId()
+      if (hashId && !visibleSet.has(hashId)) {
+        const url = new URL(window.location.href)
+        url.hash = ""
+        replaceUrl(url)
+      }
+
+      rebuildNavigator()
+      observer?.disconnect()
+      clearActiveState()
+      rebuildObserver()
+      updateFilterSummary()
+      const activeId = currentHashId()
+      if (activeId && visibleSet.has(activeId)) setActiveProject(activeId)
+      else if (visibleIds[0]) setActiveProject(visibleIds[0])
+    }
+
+    const handleHashChange = (focusTitle: boolean) => {
+      const id = currentHashId()
+      const record = recordById.get(id)
+      if (!record) {
+        applySkillOrigin()
+        return
+      }
+      if (record.hidden) {
+        categoryFilter.value = ""
+        tagFilter.value = ""
+        applyFilters({ clearOrigin: false })
+      }
+      record.hidden = false
+      tileById.get(id)?.removeAttribute("hidden")
+      setActiveProject(id)
+      record.scrollIntoView({ block: "start", behavior: "auto" })
+      if (focusTitle) record.querySelector<HTMLElement>("[data-project-record-title]")?.focus({ preventScroll: true })
+      applySkillOrigin()
+    }
+
+    categoryFilter.addEventListener("change", () => applyFilters())
+    tagFilter.addEventListener("change", () => applyFilters())
+    clearButton.addEventListener("click", () => {
+      categoryFilter.value = ""
+      tagFilter.value = ""
+      applyFilters()
+    })
+    navigator.addEventListener("change", () => {
+      const id = navigator.value
+      const record = recordById.get(id)
+      if (!record) return
+      setActiveProject(id)
+      record.scrollIntoView({ block: "start", behavior: "auto" })
+    })
+    window.addEventListener("hashchange", () => handleHashChange(true))
+
+    applyFilters({ clearOrigin: false })
+    applySkillOrigin()
+    enhancementsReady = true
+    controls.hidden = false
+    navigatorShell.hidden = visibleIds.length === 0
+    explorer.dataset.explorerReady = "true"
+    if (currentHashId()) handleHashChange(false)
+  }
+</script>

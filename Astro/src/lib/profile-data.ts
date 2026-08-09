@@ -22,6 +22,7 @@ import { assertPublicMediaExists, MissingPublicMediaError } from "./media"
 import {
   PROFILE_DATA_FILES,
   PROFILE_DATA_URLS,
+  PROJECT_PLACEHOLDER_MEDIA_PATH,
   ProfilePathError,
   type PublicMediaPath,
 } from "./profile-paths"
@@ -148,6 +149,7 @@ export async function parseProfileDocuments(documents: ProfileDocuments): Promis
   const associatedMedia = [
     profile.portrait,
     profile.favicon,
+    PROJECT_PLACEHOLDER_MEDIA_PATH,
     ...validateProjectMedia(projects),
     ...certificates.map(({ src }) => src),
   ]

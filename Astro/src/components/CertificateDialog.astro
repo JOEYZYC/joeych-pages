@@ -1,9 +1,11 @@
 ---
+import { faAward, faChevronLeft, faChevronRight, faXmark } from "@fortawesome/free-solid-svg-icons"
 import type { Certificate } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
-import { publicMediaUrl } from "../lib/urls"
 import { getDialogIds } from "../lib/dialog-ids"
+import { publicMediaUrl } from "../lib/urls"
+import Icon from "./Icon.astro"
 
 type Props = { readonly certificates: readonly Certificate[]; readonly id: string; readonly locale: Locale }
 const { certificates, id, locale } = Astro.props
@@ -12,54 +14,155 @@ const ids = getDialogIds(id)
 const first = certificates[0]
 ---
 
-{first && <div data-certificate-dialog-root>
-    <button id={ids.trigger} type="button" class="certificate-control" aria-haspopup="dialog" aria-controls={ids.dialog}>{labels.view}</button>
-    <dialog id={ids.dialog} class="dialog-surface" aria-labelledby={ids.title} aria-label={labels.title}>
-      <button class="dialog-close" type="button" data-certificate-close aria-label={labels.close}>{labels.closeButton}</button>
+{first && (
+  <div data-certificate-dialog-root>
+    <a class="certificate-control certificate-fallback" data-certificate-fallback href={publicMediaUrl(first.src)}>
+      <Icon definition={faAward} />
+      <span>{labels.view}</span>
+    </a>
+    <button
+      id={ids.trigger}
+      type="button"
+      class="certificate-control"
+      data-certificate-trigger
+      aria-haspopup="dialog"
+      aria-controls={ids.dialog}
+      hidden
+    >
+      <Icon definition={faAward} />
+      <span>{labels.view}</span>
+    </button>
+    <dialog id={ids.dialog} class="dialog-surface certificate-dialog" data-certificate-dialog aria-labelledby={ids.title} hidden>
+      <button
+        class="dialog-close"
+        type="button"
+        data-certificate-close
+        aria-label={labels.close}
+        title={labels.close}
+      ><Icon definition={faXmark} /></button>
       <h2 id={ids.title} tabindex="-1">{labels.title}</h2>
-      <img data-certificate-image src={publicMediaUrl(first.src)} alt={first[locale]} />
+      <p class="certificate-status" data-certificate-loading>{labels.loading}</p>
+      <img
+        class="certificate-image"
+        data-certificate-image
+        src={publicMediaUrl(first.src)}
+        alt={first[locale]}
+        loading="lazy"
+      />
       <p class="certificate-caption" data-certificate-caption>{first[locale]}</p>
-      <p class="certificate-caption" data-certificate-unavailable hidden>{UI[locale].unavailable.media}</p>
-      <ol hidden data-certificate-items>{certificates.map((certificate) => <li data-source={publicMediaUrl(certificate.src)} data-label={certificate[locale]}></li>)}</ol>
-      <div class="certificate-actions">
-        <button type="button" class="certificate-control" data-certificate-previous disabled>{labels.previous}</button>
-        <button type="button" class="certificate-control" data-certificate-next disabled={certificates.length < 2}>{labels.next}</button>
-      </div>
+      <p class="certificate-status" data-certificate-unavailable hidden>{labels.unavailable}</p>
+      <ol hidden data-certificate-items>
+        {certificates.map((certificate) => (
+          <li data-source={publicMediaUrl(certificate.src)} data-label={certificate[locale]}></li>
+        ))}
+      </ol>
+      {certificates.length > 1 && (
+        <div class="certificate-actions">
+          <button
+            type="button"
+            class="certificate-control"
+            data-certificate-previous
+            aria-label={labels.previous}
+            title={labels.previous}
+            disabled
+          >
+            <Icon definition={faChevronLeft} />
+            <span>{labels.previous}</span>
+          </button>
+          <button
+            type="button"
+            class="certificate-control"
+            data-certificate-next
+            aria-label={labels.next}
+            title={labels.next}
+          >
+            <span>{labels.next}</span>
+            <Icon definition={faChevronRight} />
+          </button>
+        </div>
+      )}
     </dialog>
-  </div>}
-  <script>
-    const roots = document.querySelectorAll<HTMLElement>("[data-certificate-dialog-root]")
-    for (const root of roots) {
-      const certificateDialog = root.querySelector<HTMLDialogElement>("dialog")
-      const certificateTrigger = root.querySelector<HTMLButtonElement>("[aria-haspopup='dialog']")
-      const title = root.querySelector<HTMLElement>("h2")
-      if (!certificateDialog || !certificateTrigger || !title) continue
-      const closeButton = certificateDialog.querySelector("[data-certificate-close]")
-      const image = certificateDialog.querySelector("[data-certificate-image]")
-      const caption = certificateDialog.querySelector("[data-certificate-caption]")
-      const unavailable = certificateDialog.querySelector("[data-certificate-unavailable]")
-      const previous = certificateDialog.querySelector("[data-certificate-previous]")
-      const next = certificateDialog.querySelector("[data-certificate-next]")
-      const certificateItems = certificateDialog.querySelectorAll("[data-certificate-items] li")
-      let index = 0
-      const update = () => {
-        const certificate = certificateItems.item(index)
-        const source = certificate?.dataset.source
-        const label = certificate?.dataset.label
-        if (!source || !label || !(image instanceof HTMLImageElement) || !(caption instanceof HTMLElement) || !(previous instanceof HTMLButtonElement) || !(next instanceof HTMLButtonElement)) return
-        image.src = source
-        image.alt = label
-        caption.textContent = label
-        unavailable?.setAttribute("hidden", "")
-        previous.disabled = index === 0
-        next.disabled = index === certificateItems.length - 1
-      }
-      certificateTrigger.addEventListener("click", () => { certificateDialog.showModal(); title.focus() })
-      closeButton?.addEventListener("click", () => certificateDialog.close())
-      previous?.addEventListener("click", () => { index -= 1; update() })
-      next?.addEventListener("click", () => { index += 1; update() })
-      image?.addEventListener("error", () => unavailable?.removeAttribute("hidden"))
-      certificateDialog.addEventListener("click", (event) => { if (event.target === certificateDialog) certificateDialog.close() })
-      certificateDialog.addEventListener("close", () => certificateTrigger.focus())
+  </div>
+)}
+
+<script>
+  const certificateRoots = document.querySelectorAll<HTMLElement>("[data-certificate-dialog-root]")
+  for (const root of certificateRoots) {
+    if (root.dataset.certificateReady === "true") continue
+    const fallback = root.querySelector<HTMLAnchorElement>("[data-certificate-fallback]")
+    const trigger = root.querySelector<HTMLButtonElement>("[data-certificate-trigger]")
+    const dialog = root.querySelector<HTMLDialogElement>("[data-certificate-dialog]")
+    const title = dialog?.querySelector<HTMLElement>("h2")
+    const close = dialog?.querySelector<HTMLButtonElement>("[data-certificate-close]")
+    const image = dialog?.querySelector<HTMLImageElement>("[data-certificate-image]")
+    const caption = dialog?.querySelector<HTMLElement>("[data-certificate-caption]")
+    const loading = dialog?.querySelector<HTMLElement>("[data-certificate-loading]")
+    const unavailable = dialog?.querySelector<HTMLElement>("[data-certificate-unavailable]")
+    const previous = dialog?.querySelector<HTMLButtonElement>("[data-certificate-previous]")
+    const next = dialog?.querySelector<HTMLButtonElement>("[data-certificate-next]")
+    const items = dialog?.querySelectorAll<HTMLElement>("[data-certificate-items] li")
+    if (!fallback || !trigger || !dialog || !title || !close || !image || !caption || !loading || !unavailable || !items?.length) continue
+
+    let index = 0
+    const showLoading = () => {
+      loading.hidden = false
+      unavailable.hidden = true
+      image.hidden = false
     }
-  </script>
+    const showLoaded = () => {
+      loading.hidden = true
+      unavailable.hidden = true
+      image.hidden = false
+    }
+    const showUnavailable = () => {
+      loading.hidden = true
+      unavailable.hidden = false
+      image.hidden = true
+    }
+    const settleImage = () => {
+      if (!image.complete) return
+      if (image.naturalWidth > 0) showLoaded()
+      else showUnavailable()
+    }
+    const update = () => {
+      const certificate = items.item(index)
+      const source = certificate?.dataset.source
+      const label = certificate?.dataset.label
+      if (!source || !label) return
+      showLoading()
+      image.src = source
+      image.alt = label
+      caption.textContent = label
+      if (previous) previous.disabled = index === 0
+      if (next) next.disabled = index === items.length - 1
+      queueMicrotask(settleImage)
+    }
+
+    trigger.addEventListener("click", () => {
+      update()
+      dialog.showModal()
+      title.focus({ preventScroll: true })
+    })
+    close.addEventListener("click", () => dialog.close())
+    previous?.addEventListener("click", () => {
+      index = Math.max(0, index - 1)
+      update()
+    })
+    next?.addEventListener("click", () => {
+      index = Math.min(items.length - 1, index + 1)
+      update()
+    })
+    image.addEventListener("load", showLoaded)
+    image.addEventListener("error", showUnavailable)
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close()
+    })
+    dialog.addEventListener("close", () => trigger.focus())
+
+    root.dataset.certificateReady = "true"
+    update()
+    dialog.hidden = false
+    trigger.hidden = false
+    fallback.hidden = true
+  }
+</script>

@@ -1,0 +1,54 @@
+---
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
+import type { Project } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import { getRoutePath } from "../lib/routes"
+import Icon from "./Icon.astro"
+import ProjectMedia from "./ProjectMedia.astro"
+
+type Props = {
+  readonly locale: Locale
+  readonly number: number
+  readonly project: Project
+  readonly variant: "featured" | "catalog"
+}
+
+const { locale, number, project, variant } = Astro.props
+const labels = UI[locale]
+const ordinal = String(number).padStart(2, "0")
+const loading = variant === "featured" && number === 1 ? "eager" : "lazy"
+---
+
+<a
+  class:list={["project-tile", `project-tile--${variant}`]}
+  href={`${getRoutePath("projects", locale)}#${project.id}`}
+  data-project-tile
+  data-project-id={project.id}
+  data-project-category={project.category.en}
+  data-project-tags={JSON.stringify(project.tags.map((tag) => tag.en))}
+  data-project-variant={variant}
+  data-active="false"
+>
+  <ProjectMedia context="tile" locale={locale} project={project} loading={loading} />
+  <div class="project-tile-body">
+    <div class="project-tile-meta">
+      <span>{ordinal} / {project.year}</span>
+      <span>{project.category[locale]}</span>
+    </div>
+    <h3>{project.title[locale]}</h3>
+    <p class="project-tile-claim">{project.claim[locale]}</p>
+    <ul class="project-tile-tags" aria-label={labels.projectExplorer.tag}>
+      {project.tags.map((tag) => <li>{tag[locale]}</li>)}
+    </ul>
+    <div class="project-tile-footer">
+      <span class="project-state project-current-state" data-project-current-label>{labels.projectExplorer.current}</span>
+      <span
+        class="project-state project-origin-state"
+        data-project-origin-label
+        data-origin-prefix={labels.projectExplorer.skillOrigin}
+      ></span>
+      <span class="project-tile-arrow" aria-hidden="true"><Icon definition={faArrowRight} /></span>
+    </div>
+  </div>
+</a>

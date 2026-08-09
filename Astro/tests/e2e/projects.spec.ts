@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test"
 import { expect, test } from "@playwright/test"
 
 const projectIds = [
@@ -23,32 +24,38 @@ const viewports = [
   { name: "desktop", width: 1280, height: 900 },
 ] as const
 
-test.describe("projects archive", () => {
-  for (const locale of [
-    {
-      path: "projects/",
-      htmlLanguage: "zh-CN",
-      navigation: "项目介绍",
-      title: "项目介绍",
-      unavailable: "链接暂不可用",
-    },
-    {
-      path: "en/projects/",
-      htmlLanguage: "en",
-      navigation: "Projects",
-      title: "Projects",
-      unavailable: "Link unavailable",
-    },
-  ] as const) {
-    test(`renders the ${locale.path} archive in canonical source order`, async ({ page }) => {
-      // Given: a localized canonical project route
-      await page.goto(locale.path)
+const locales = [
+  {
+    path: "projects/",
+    htmlLanguage: "zh-CN",
+    navigation: "项目介绍",
+    title: "项目介绍",
+    pending: "项目图片待补充",
+    pendingAlt: "临时使用个人证件照；项目图片待补充",
+  },
+  {
+    path: "en/projects/",
+    htmlLanguage: "en",
+    navigation: "Projects",
+    title: "Projects",
+    pending: "Project image pending",
+    pendingAlt: "Temporary profile photo; project image pending",
+  },
+] as const
 
-      // When: the static archive is available
-      const index = page.locator("[data-project-index]")
+async function visibleIds(page: Page, selector: string): Promise<string[]> {
+  return page.locator(selector).evaluateAll((elements) => elements
+    .filter((element) => !(element as HTMLElement).hidden)
+    .map((element) => element.getAttribute("data-project-id") ?? element.id))
+}
+
+test.describe("projects archive", () => {
+  for (const locale of locales) {
+    test(`renders the ${locale.path} explorer and archive in source order`, async ({ page }) => {
+      await page.goto(locale.path)
+      const tiles = page.locator("[data-project-tile]")
       const records = page.locator("[data-project-record]")
 
-      // Then: the route exposes one localized document heading and all source-backed records
       await expect(page.getByRole("heading", { level: 1, name: locale.title })).toHaveCount(1)
       await expect(page.locator("html")).toHaveAttribute("lang", locale.htmlLanguage)
       await expect(page.getByRole("navigation").getByRole("link", { name: locale.navigation })).toHaveAttribute(
@@ -56,57 +63,201 @@ test.describe("projects archive", () => {
         "page",
       )
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/${locale.path}$`))
-      await expect(index.locator("a[data-signal-target]")).toHaveCount(projectIds.length)
+      await expect(tiles).toHaveCount(projectIds.length)
       await expect(records).toHaveCount(projectIds.length)
-      const indexLinks = await index
-        .locator("a[data-signal-target]")
-        .evaluateAll((links) => links.map((link) => link.getAttribute("href")))
-      const recordIds = await records.evaluateAll((items) => items.map((item) => item.id))
-      expect(indexLinks).toEqual(projectIds.map((id) => `#${id}`))
-      expect(recordIds).toEqual(projectIds)
-    })
+      expect(await tiles.evaluateAll((elements) => elements.map((element) => element.getAttribute("data-project-id")))).toEqual(projectIds)
+      expect(await records.evaluateAll((elements) => elements.map((element) => element.id))).toEqual(projectIds)
+      expect(await tiles.evaluateAll((elements) => elements.map((element) => element.getAttribute("href")))).toEqual(
+        projectIds.map((id) => expect.stringMatching(new RegExp(`/projects/#${id}$`))),
+      )
 
-    test(`preserves absent media and links on ${locale.path}`, async ({ page }) => {
-      // Given: the record whose source data contains null media and links
-      await page.goto(locale.path)
-      const record = page.locator("#resgatnet")
-
-      // When: its evidence record is rendered
-      const unavailableLinks = record.getByText(locale.unavailable)
-
-      // Then: source-backed text remains, while absent evidence has no fabricated image or anchor
-      await expect(record).toContainText("ResGatNet")
-      await expect(record.locator("img")).toHaveCount(0)
-      await expect(record.locator("figure")).toHaveCount(0)
-      await expect(unavailableLinks).toHaveCount(2)
-      await expect(record.locator("a")).toHaveCount(0)
+      await expect(tiles.locator('[data-project-media-kind="real"]')).toHaveCount(5)
+      await expect(tiles.locator('[data-project-media-kind="placeholder"]')).toHaveCount(9)
+      await expect(records.locator('[data-project-media-kind="real"]')).toHaveCount(5)
+      await expect(records.locator('[data-project-media-kind="placeholder"]')).toHaveCount(9)
+      await expect(tiles.locator('[data-project-media-kind="placeholder"] img')).toHaveCount(9)
+      for (const image of await tiles.locator('[data-project-media-kind="placeholder"] img').all()) {
+        await expect(image).toHaveAttribute("src", /\/joeych-pages\/profile-photo\.jpg$/)
+        await expect(image).toHaveAttribute("alt", locale.pendingAlt)
+      }
+      await expect(tiles.locator('[data-project-media-kind="placeholder"] .project-media-pending')).toHaveText(
+        Array.from({ length: 9 }, () => locale.pending),
+      )
     })
   }
 
-  test("renders a restrained target record for its stable fragment", async ({ page }) => {
-    // Given: a direct link to a source-backed project anchor
-    await page.goto("projects/#resgatnet")
+  test("keeps primary visuals separate from complete figure and link evidence", async ({ page }) => {
+    await page.goto("en/projects/#resgatnet")
+    const resgatnet = page.locator("#resgatnet")
+    const powerPrint = page.locator("#power-print-recognition")
 
-    // When: the target record becomes the active reading location
-    const record = page.locator("#resgatnet")
+    await expect(resgatnet.locator('[data-project-media-kind="placeholder"] img')).toHaveAttribute(
+      "src",
+      /\/joeych-pages\/profile-photo\.jpg$/,
+    )
+    await expect(resgatnet.locator(".project-figure-grid img")).toHaveCount(0)
+    await expect(resgatnet.locator(".project-figure-unavailable figcaption")).toHaveText(
+      "Fig.7 ResGatNet Architecture",
+    )
+    await expect(resgatnet.locator(".project-figure-unavailable")).toContainText("Media unavailable")
+    await expect(resgatnet.locator(".project-record-contribution")).toHaveCount(1)
+    await expect(resgatnet.locator(".project-link-unavailable")).toHaveCount(2)
+    await expect(resgatnet.locator(".project-links a")).toHaveCount(0)
+    await expect(powerPrint.locator(".project-record-contribution")).toHaveCount(0)
+    await expect(powerPrint.locator(".project-figure-grid img")).toHaveCount(2)
+    await expect(page.locator(".project-figure-grid img")).toHaveCount(3)
+    await expect(page.locator("#joeych-pages .project-links a")).toHaveAttribute(
+      "href",
+      "https://github.com/JOEYZYC/joeych-pages",
+    )
+  })
 
-    // Then: it is preserved as a semantic project record without fabricated media
-    await expect(record).toBeVisible()
-    await expect(record).toHaveCSS("background-color", "rgb(243, 246, 248)")
-    await expect(record.locator("img")).toHaveCount(0)
+  test("shows unavailable media without substituting the portrait after a real image fails", async ({ page }) => {
+    await page.goto("en/projects/")
+    const media = page.locator('[data-project-tile] [data-project-media-kind="real"]').first()
+    const source = await media.getAttribute("data-project-media-source")
+
+    await media.locator("[data-project-media-image]").dispatchEvent("error")
+
+    await expect(media).toHaveAttribute("data-media-error", "true")
+    await expect(media.locator("[data-project-media-image]")).toBeHidden()
+    await expect(media.locator("[data-project-media-unavailable]")).toBeVisible()
+    expect(source).not.toBe("/profile-photo.jpg")
+    await expect(media).toHaveAttribute("data-project-media-source", source ?? "")
+  })
+
+  test("combines category and tag filters with AND semantics and Clear restores the archive", async ({ page }) => {
+    await page.goto("en/projects/")
+
+    await page.selectOption('[data-project-category-filter]', "Personal Website / Front-End Development")
+    await page.selectOption('[data-project-tag-filter]', "OpenCV")
+
+    await expect(page.locator("[data-project-filter-results]")).toHaveText("0 / 14")
+    await expect(page.locator("[data-project-filter-empty]")).toBeVisible()
+    expect(await visibleIds(page, "[data-project-tile]")).toEqual([])
+    expect(await visibleIds(page, "[data-project-record]")).toEqual([])
+    await expect(page.locator("[data-project-navigator-shell]")).toBeHidden()
+    await expect(page.locator("[data-project-filter-clear]")).toBeEnabled()
+
+    await page.locator("[data-project-filter-clear]").click()
+
+    await expect(page.locator("[data-project-filter-results]")).toHaveText("14 / 14")
+    await expect(page.locator("[data-project-filter-empty]")).toBeHidden()
+    expect(await visibleIds(page, "[data-project-tile]")).toEqual(projectIds)
+    expect(await visibleIds(page, "[data-project-record]")).toEqual(projectIds)
+    await expect(page.locator("[data-project-navigator] option")).toHaveCount(14)
+    await expect(page.locator("[data-project-filter-clear]")).toBeDisabled()
+  })
+
+  test("rebuilds navigator and observer state around filtered records", async ({ page }) => {
+    await page.setViewportSize(viewports[2])
+    await page.goto("en/projects/#resgatnet")
+
+    await page.selectOption('[data-project-tag-filter]', "OpenCV")
+    const expectedVisible = [
+      "intelligent-reconnaissance-2024",
+      "smart-harvesting-robot",
+      "intelligent-reconnaissance-2023",
+    ]
+    expect(await visibleIds(page, "[data-project-tile]")).toEqual(expectedVisible)
+    expect(await page.locator("[data-project-navigator] option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual(expectedVisible)
+    await expect(page).toHaveURL(/\/projects\/$/)
+
+    await page.locator("#smart-harvesting-robot").evaluate((element) => element.scrollIntoView({ block: "start" }))
+    await expect(page.locator("[data-project-navigator]")).toHaveValue("smart-harvesting-robot")
+    await expect(page.locator('[data-project-tile][data-project-id="smart-harvesting-robot"]')).toHaveAttribute(
+      "aria-current",
+      "location",
+    )
+
+    await page.locator("[data-project-filter-clear]").click()
+    await page.locator("#resgatnet").evaluate((element) => element.scrollIntoView({ block: "start" }))
+    await expect(page.locator("[data-project-navigator]")).toHaveValue("resgatnet")
+    await expect(page.locator("#resgatnet")).toHaveAttribute("data-active", "true")
+  })
+
+  test("a hash change to a hidden record clears filters, reveals it, and focuses its title", async ({ page }) => {
+    await page.goto("en/projects/")
+    await page.selectOption('[data-project-category-filter]', "Personal Website / Front-End Development")
+    await expect(page.locator("[data-project-filter-results]")).toHaveText("1 / 14")
+
+    await page.evaluate(() => {
+      window.location.hash = "#resgatnet"
+    })
+
+    await expect(page.locator('[data-project-category-filter]')).toHaveValue("")
+    await expect(page.locator('[data-project-tag-filter]')).toHaveValue("")
+    await expect(page.locator("[data-project-filter-results]")).toHaveText("14 / 14")
+    await expect(page.locator("#resgatnet")).toBeVisible()
+    await expect(page.locator("#resgatnet [data-project-record-title]")).toBeFocused()
+    await expect(page.locator("#resgatnet [data-project-current-label]")).toBeVisible()
+    await expect(page).toHaveURL(/#resgatnet$/)
+  })
+
+  test("navigator selection synchronizes visible current labels without adding history", async ({ page }) => {
+    await page.setViewportSize(viewports[2])
+    await page.goto("en/projects/")
+    const historyLength = await page.evaluate(() => window.history.length)
+
+    await page.selectOption("[data-project-navigator]", "resgatnet")
+
+    await expect(page.locator('[data-project-tile][data-project-id="resgatnet"]')).toHaveAttribute(
+      "aria-current",
+      "location",
+    )
+    await expect(page.locator('[data-project-tile][data-project-id="resgatnet"] [data-project-current-label]')).toBeVisible()
+    await expect(page.locator("#resgatnet [data-project-current-label]")).toBeVisible()
+    expect(await page.evaluate(() => window.history.length)).toBe(historyLength)
+    await expect(page).toHaveURL(/\/projects\/$/)
+  })
+
+  test("valid skill provenance is visible while invalid pairs are removed", async ({ page }) => {
+    await page.goto("en/projects/?skill=vision-halcon-opencv#intelligent-reconnaissance-2024")
+    const tile = page.locator('[data-project-tile][data-project-id="intelligent-reconnaissance-2024"]')
+    const record = page.locator("#intelligent-reconnaissance-2024")
+
+    await expect(tile).toHaveAttribute("data-evidence-origin", "true")
+    await expect(record).toHaveAttribute("data-evidence-origin", "true")
+    await expect(tile.locator("[data-project-origin-label]")).toHaveText(
+      "From skill evidence: Halcon / OpenCV image processing & vision",
+    )
+    await expect(record.locator("[data-project-origin-label]")).toBeVisible()
+    await expect(page.locator("a.language-link")).toHaveAttribute(
+      "href",
+      "/joeych-pages/projects/#intelligent-reconnaissance-2024",
+    )
+
+    await page.goto("en/projects/?skill=vision-halcon-opencv#resgatnet")
+    await expect(page).toHaveURL(/\/en\/projects\/#resgatnet$/)
+    await expect(page.locator('[data-evidence-origin="true"]')).toHaveCount(0)
+  })
+
+  test("JavaScript-disabled projects keep all stable records and ordinary hash navigation", async ({ browser }) => {
+    const context = await browser.newContext({
+      baseURL: "http://127.0.0.1:4321/joeych-pages/",
+      javaScriptEnabled: false,
+    })
+    const page = await context.newPage()
+
+    await page.goto("en/projects/?skill=vision-halcon-opencv#resgatnet")
+
+    await expect(page.locator("[data-project-filter-controls]")).toBeHidden()
+    await expect(page.locator("[data-project-navigator-shell]")).toBeHidden()
+    await expect(page.locator("[data-project-tile]")).toHaveCount(14)
+    await expect(page.locator("[data-project-record]")).toHaveCount(14)
+    await expect(page.locator("#resgatnet")).toBeVisible()
+    await expect(page.locator("#resgatnet [data-project-current-label]")).toBeVisible()
+    await expect(page).toHaveURL(/\?skill=vision-halcon-opencv#resgatnet$/)
+
+    await context.close()
   })
 
   for (const viewport of viewports) {
-    test(`fits the project archive at ${viewport.name} width`, async ({ page }) => {
-      // Given: the required viewport
+    test(`fits the project explorer at ${viewport.name} width`, async ({ page }) => {
       await page.setViewportSize(viewport)
-      await page.goto("projects/")
+      await page.goto("en/projects/")
 
-      // When: the full source-backed archive is rendered
-      const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth)
-
-      // Then: the editorial record surface remains within the viewport
-      expect(documentWidth).toBeLessThanOrEqual(viewport.width)
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width)
     })
   }
 })

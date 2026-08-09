@@ -1,34 +1,69 @@
-.achievement-year + .achievement-year,
-.research-section {
-  margin-block-start: var(--space-10);
+.achievement-ledger,
+.research-archive {
+  margin-block-start: var(--space-12);
 }
 
-.year-heading {
-  color: var(--color-ink-muted);
-  font-family: var(--font-mono);
-  font-size: var(--type-overline);
-  letter-spacing: 0.1em;
+.archive-heading h2,
+.research-section > h2 {
+  font-family: var(--font-display);
+  font-size: var(--type-h2);
+  line-height: 1.16;
   margin: 0;
 }
 
-.achievement-year .record-row:first-of-type {
-  border-block-start: 1px solid var(--color-rule);
+.achievement-year {
+  margin-block-start: var(--space-8);
 }
 
-.record-content .record-detail {
-  color: var(--color-ink-muted);
-  font-size: var(--type-small);
-  margin-block-start: var(--space-2);
+.year-heading {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-overline);
+  letter-spacing: 0.1em;
+  margin: 0 0 var(--space-3);
+}
+
+.achievement-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.award-panel,
+.research-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+  min-inline-size: 0;
+  padding: var(--space-4);
+}
+
+.award-year,
+.research-year {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-meta);
+  margin: 0;
+}
+
+.award-panel h4,
+.research-panel h3 {
+  font-family: var(--font-display);
+  font-size: var(--type-h3);
+  line-height: 1.28;
+  margin: var(--space-3) 0 0;
+}
+
+.award-prizes,
+.record-detail {
+  color: var(--color-text-muted);
+  margin: var(--space-3) 0 0;
 }
 
 .award-prize + .award-prize::before {
-  color: var(--color-ink-faint);
+  color: var(--color-text-subtle);
   content: " / ";
-}
-
-.award-prize--top-tier {
-  color: var(--color-award-gold);
-  font-weight: 600;
 }
 
 .tag-list {
@@ -36,13 +71,14 @@
   flex-wrap: wrap;
   gap: var(--space-2);
   list-style: none;
-  margin: var(--space-3) 0;
+  margin: var(--space-4) 0;
   padding: 0;
 }
 
 .tag-list li {
-  border: 1px solid var(--color-rule);
-  color: var(--color-ink-muted);
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-control);
+  color: var(--color-text-muted);
   font-family: var(--font-mono);
   font-size: var(--type-overline);
   letter-spacing: 0.04em;
@@ -57,15 +93,98 @@
 }
 
 .unavailable-link {
-  color: var(--color-ink-faint);
+  color: var(--color-text-subtle);
 }
 
-.record-content .certificate-control {
+.award-panel .certificate-control,
+.research-panel .certificate-control {
   margin-block-start: var(--space-3);
 }
 
-@media (max-width: 47.99rem) {
-  .record-meta {
-    margin-block-end: var(--space-2);
+@media (min-width: 48rem) {
+  .achievement-grid {
+    gap: var(--space-5);
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .award-panel {
+    padding: var(--space-6);
+  }
+
+  .award-panel[data-award-featured="true"] {
+    grid-column: span 5;
+  }
+
+  .award-panel[data-award-featured="false"] {
+    grid-column: span 3;
+  }
+}
+
+@media (min-width: 64rem) {
+  .achievement-grid {
+    gap: var(--space-6);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .award-panel {
+    padding: var(--space-8);
+  }
+
+  .award-panel[data-award-featured="true"] {
+    grid-column: span 6;
+  }
+
+  .award-panel[data-award-featured="false"] {
+    grid-column: span 4;
+  }
+}
+
+.research-section {
+  margin-block-start: var(--space-8);
+}
+
+.research-section > h2 {
+  margin-block-end: var(--space-4);
+}
+
+.research-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.research-panel--thesis {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 48rem) {
+  .research-grid {
+    gap: var(--space-5);
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .research-panel {
+    grid-column: span 4;
+    padding: var(--space-6);
+  }
+
+  .research-panel--thesis {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 64rem) {
+  .research-grid {
+    gap: var(--space-6);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .research-panel {
+    grid-column: span 6;
+    padding: var(--space-8);
+  }
+
+  .research-panel--thesis {
+    grid-column: 1 / -1;
   }
 }

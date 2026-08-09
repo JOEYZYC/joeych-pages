@@ -4,11 +4,11 @@
   padding: var(--space-12) var(--space-4) var(--space-16);
 }
 .editorial-section {
-  border-block-start: 1px solid var(--color-rule);
+  border-block-start: 1px solid var(--color-border);
   padding-block: var(--space-10);
 }
 .eyebrow {
-  color: var(--color-ink-muted);
+  color: var(--color-text-muted);
   font-family: var(--font-mono);
   font-size: var(--type-overline);
   font-weight: 600;
@@ -16,9 +16,9 @@
   margin: 0 0 var(--space-3);
 }
 .section-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: var(--type-h2);
-  line-height: 1.22;
+  line-height: 1.16;
   margin: 0 0 var(--space-6);
 }
 .record-grid {

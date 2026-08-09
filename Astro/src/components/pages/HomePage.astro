@@ -1,12 +1,13 @@
 ---
 import type { Locale } from "../../i18n/locales"
-import RuledRecord from "../RuledRecord.astro"
-import BaseLayout from "../../layouts/BaseLayout.astro"
 import { UI } from "../../i18n/ui"
+import BaseLayout from "../../layouts/BaseLayout.astro"
 import { getProfileData } from "../../lib/profile-data"
 import { getRoutePath } from "../../lib/routes"
 import { publicMediaUrl } from "../../lib/urls"
 import "../../styles/home.css"
+import "../../styles/projects.css"
+import ProjectTile from "../ProjectTile.astro"
 
 type Props = { readonly locale: Locale }
 
@@ -15,19 +16,28 @@ const data = await getProfileData()
 const { profile } = data
 const education = profile.education[0]
 const featuredProjects = data.projects.filter(({ featured }) => featured)
+const labels = UI[locale]
 ---
 
 <BaseLayout locale={locale} profile={profile} routeId="home">
-  <section class="home-identity" aria-labelledby="page-title">
-    <div class="home-identity-intro">
-      <p class="eyebrow">{UI[locale].routeIntros.home.overline}</p>
+  <div class="home-grid" data-home-grid>
+    <section class="home-hero" data-home-hero aria-labelledby="page-title">
+      <p class="eyebrow">{labels.routeIntros.home.overline}</p>
       <h1 id="page-title">{profile.name[locale]}</h1>
       <p class="home-role">{profile.role[locale]}</p>
       <p class="home-tagline">{profile.tagline[locale]}</p>
       <p class="home-summary">{profile.summary[locale]}</p>
-    </div>
+      <div class="home-actions">
+        <a class="home-action home-action--primary" href={getRoutePath("experience", locale)}>
+          {labels.actions.experience}
+        </a>
+        <a class="home-action home-action--secondary" href={getRoutePath("projects", locale)}>
+          {labels.actions.projects}
+        </a>
+      </div>
+    </section>
 
-    <figure class="home-portrait">
+    <figure class="home-portrait" data-home-portrait>
       <img
         src={publicMediaUrl(profile.portrait)}
         alt={profile.name[locale]}
@@ -36,47 +46,55 @@ const featuredProjects = data.projects.filter(({ featured }) => featured)
       />
     </figure>
 
-    <section class="home-profile" aria-label={UI[locale].sections.home.profile}>
-      <p class="eyebrow">{UI[locale].sections.home.profile}</p>
-      <dl class="profile-statistics">
-        {profile.statistics.map((statistic) => (
-          <div>
-            <dt>{statistic.label[locale]}</dt>
-            <dd>{statistic.value}</dd>
-          </div>
-        ))}
-      </dl>
-      <a class="experience-cta" href={getRoutePath("experience", locale)}>{UI[locale].navigation.experience}</a>
-    </section>
-  </section>
+    {profile.statistics.length > 0 && (
+      <section
+        class:list={["home-facts", { "home-facts--wide": education === undefined }]}
+        data-home-facts
+        aria-labelledby="home-facts-title"
+      >
+        <p class="eyebrow">{labels.sections.home.profile}</p>
+        <h2 id="home-facts-title">{labels.sections.home.profile}</h2>
+        <dl>
+          {profile.statistics.map((statistic) => (
+            <div>
+              <dt>{statistic.label[locale]}</dt>
+              <dd>{statistic.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )}
 
-  {education && (
-    <section class="editorial-section home-education" id={`education-${education.id}`} aria-labelledby="education-title">
-      <p class="eyebrow">{UI[locale].routeIntros.experience.overline}</p>
-      <h2 id="education-title" class="section-title">{UI[locale].sections.home.education}</h2>
-      <RuledRecord meta={education.period}>
+    {education && (
+      <article
+        id={`education-${education.id}`}
+        class="home-education"
+        data-home-education
+        aria-labelledby="home-education-title"
+      >
+        <p class="eyebrow">{labels.routeIntros.experience.overline}</p>
+        <h2 id="home-education-title">{labels.sections.home.education}</h2>
+        <p class="home-education-period">{education.period}</p>
         <h3>{education.school[locale]}</h3>
         <p>{education.degree[locale]}</p>
         <ul>
           {education.highlights.map((highlight) => <li>{highlight[locale]}</li>)}
         </ul>
-      </RuledRecord>
-    </section>
-  )}
+      </article>
+    )}
 
-  <section class="editorial-section home-featured" aria-labelledby="featured-title">
-    <p class="eyebrow">{UI[locale].routeIntros.projects.overline}</p>
-    <h2 id="featured-title" class="section-title">{UI[locale].sections.home.featured}</h2>
-    <div class="featured-projects" data-signal-rail-group data-signal-rail-axis="vertical">
-      <span class="signal-rail" data-signal-rail aria-hidden="true"></span>
-      {featuredProjects.map((project, index) => (
-        <RuledRecord meta={`${String(index + 1).padStart(2, "0")} / ${project.year}`}>
-          <a href={`${getRoutePath("projects", locale)}#${project.id}`} data-signal-target>
-            <h3>{project.title[locale]}</h3>
-            <p>{project.category[locale]}</p>
-          </a>
-        </RuledRecord>
-      ))}
-    </div>
-  </section>
+    {featuredProjects.length > 0 && (
+      <section class="home-featured" aria-labelledby="featured-title">
+        <div class="home-featured-heading">
+          <p class="eyebrow">{labels.routeIntros.projects.overline}</p>
+          <h2 id="featured-title">{labels.sections.home.featured}</h2>
+        </div>
+        <div class="home-featured-grid">
+          {featuredProjects.map((project, index) => (
+            <ProjectTile locale={locale} number={index + 1} project={project} variant="featured" />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
 </BaseLayout>

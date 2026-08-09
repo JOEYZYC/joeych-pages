@@ -1,25 +1,136 @@
 ---
-import type { Locale } from "../i18n/locales"
-import type { RouteId } from "../lib/routes"
-import { ROUTE_IDS, getRoutePath } from "../lib/routes"
-import { UI } from "../i18n/ui"
-import LanguageLink from "./LanguageLink.astro"
-import ContactDialog from "./ContactDialog.astro"
+import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons"
 import type { Profile } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import type { RouteId } from "../lib/routes"
+import { getRoutePath, ROUTE_IDS } from "../lib/routes"
+import ContactDialog from "./ContactDialog.astro"
+import Icon from "./Icon.astro"
+import LanguageLink from "./LanguageLink.astro"
+import ThemeToggle from "./ThemeToggle.astro"
 
 type Props = { readonly locale: Locale; readonly profile: Profile; readonly routeId: RouteId }
 const { locale, profile, routeId } = Astro.props
+const labels = UI[locale]
 ---
 
-<header class="site-header">
+<header class="site-header" data-site-header>
   <div class="header-inner">
     <a class="wordmark" href={getRoutePath("home", locale)}>{profile.name[locale]}</a>
-    <button class="header-button menu-button" type="button" data-menu-toggle aria-expanded="false" aria-controls="primary-navigation">{UI[locale].menu}</button>
-    <nav id="primary-navigation" class="header-nav" aria-label={UI[locale].mainNavigation} data-signal-rail-group data-signal-rail-axis="horizontal">
+    <button
+      class="header-button menu-button"
+      type="button"
+      data-menu-toggle
+      data-menu-open-label={labels.menuOpen}
+      data-menu-close-label={labels.menuClose}
+      aria-expanded="false"
+      aria-controls="primary-navigation"
+      aria-label={labels.menuOpen}
+      title={labels.menuOpen}
+      hidden
+    >
+      <span class="header-icon" data-menu-open-icon><Icon definition={faBars} /></span>
+      <span class="header-icon" data-menu-close-icon hidden><Icon definition={faXmark} /></span>
+    </button>
+    <nav
+      id="primary-navigation"
+      class="header-nav"
+      aria-label={labels.mainNavigation}
+      data-header-navigation
+      data-open="false"
+      data-signal-rail-group
+    >
       <span class="signal-rail" data-signal-rail aria-hidden="true"></span>
-      {ROUTE_IDS.map((id) => <a class="header-link" href={getRoutePath(id, locale)} aria-current={id === routeId ? "page" : undefined} data-signal-target>{UI[locale].navigation[id]}</a>)}
+      {ROUTE_IDS.map((id) => (
+        <a
+          class="header-link"
+          href={getRoutePath(id, locale)}
+          aria-current={id === routeId ? "page" : undefined}
+          data-header-route
+          data-signal-target
+        >{labels.navigation[id]}</a>
+      ))}
     </nav>
-    <LanguageLink routeId={routeId} locale={locale} />
-    <ContactDialog id="site-contact" locale={locale} profile={profile} />
+    <div class="header-actions">
+      <LanguageLink routeId={routeId} locale={locale} />
+      <ThemeToggle locale={locale} />
+      <ContactDialog id="site-contact" locale={locale} profile={profile} />
+    </div>
   </div>
 </header>
+
+<script>
+  const headers = document.querySelectorAll<HTMLElement>("[data-site-header]")
+
+  for (const header of headers) {
+    const menuToggle = header.querySelector<HTMLButtonElement>("[data-menu-toggle]")
+    const navigation = header.querySelector<HTMLElement>("[data-header-navigation]")
+    const routeLinks = navigation?.querySelectorAll<HTMLAnchorElement>("[data-header-route]") ?? []
+    const rail = navigation?.querySelector<HTMLElement>("[data-signal-rail]")
+    const railTargets = navigation?.querySelectorAll<HTMLElement>("[data-signal-target]") ?? []
+    const openIcon = menuToggle?.querySelector<HTMLElement>("[data-menu-open-icon]")
+    const closeIcon = menuToggle?.querySelector<HTMLElement>("[data-menu-close-icon]")
+
+    const moveRail = (target: HTMLElement) => {
+      if (!navigation || !rail) return
+      const targetBounds = target.getBoundingClientRect()
+      const navigationBounds = navigation.getBoundingClientRect()
+      rail.style.inlineSize = `${targetBounds.width}px`
+      rail.style.transform = `translateX(${targetBounds.left - navigationBounds.left}px)`
+      rail.style.opacity = "1"
+    }
+
+    const restoreRail = () => {
+      const current = navigation?.querySelector<HTMLElement>('[aria-current="page"]')
+      if (current) moveRail(current)
+    }
+
+    const setMenuOpen = (open: boolean, restoreFocus = false) => {
+      if (!menuToggle || !navigation) return
+      menuToggle.setAttribute("aria-expanded", String(open))
+      navigation.dataset.open = String(open)
+      const label = open ? menuToggle.dataset.menuCloseLabel : menuToggle.dataset.menuOpenLabel
+      if (label) {
+        menuToggle.setAttribute("aria-label", label)
+        menuToggle.title = label
+      }
+      if (openIcon) openIcon.hidden = open
+      if (closeIcon) closeIcon.hidden = !open
+      if (open) routeLinks.item(0)?.focus()
+      if (!open && restoreFocus) menuToggle.focus()
+    }
+
+    menuToggle?.addEventListener("click", () => {
+      setMenuOpen(menuToggle.getAttribute("aria-expanded") !== "true")
+    })
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || menuToggle?.getAttribute("aria-expanded") !== "true") return
+      event.preventDefault()
+      setMenuOpen(false, true)
+    })
+    document.addEventListener("pointerdown", (event) => {
+      if (
+        menuToggle?.getAttribute("aria-expanded") === "true" &&
+        event.target instanceof Node &&
+        !header.contains(event.target)
+      ) {
+        setMenuOpen(false)
+      }
+    })
+    for (const link of routeLinks) link.addEventListener("click", () => setMenuOpen(false))
+
+    for (const target of railTargets) {
+      target.addEventListener("pointerenter", () => moveRail(target))
+      target.addEventListener("focus", () => moveRail(target))
+    }
+    navigation?.addEventListener("pointerleave", restoreRail)
+    navigation?.addEventListener("focusout", () => queueMicrotask(() => {
+      if (!navigation.matches(":focus-within")) restoreRail()
+    }))
+    window.addEventListener("resize", restoreRail)
+
+    restoreRail()
+    if (menuToggle) menuToggle.hidden = false
+  }
+</script>

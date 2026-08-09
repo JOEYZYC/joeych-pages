@@ -1,8 +1,10 @@
 ---
+import { Font } from "astro:assets"
 import type { Locale } from "../i18n/locales"
 import type { RouteId } from "../lib/routes"
 import type { Profile } from "../content/schemas"
 import { getPageMeta } from "../lib/page-meta"
+import "../styles/fonts.css"
 import "../styles/base.css"
 import "../styles/layout.css"
 import "../styles/components.css"
@@ -21,88 +23,29 @@ const { title, description } = getPageMeta({ locale, profile, routeId })
 ---
 
 <!doctype html>
-<html lang={locale === "zh" ? "zh-CN" : "en"}>
+<html lang={locale === "zh" ? "zh-CN" : "en"} data-js="false">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement
+        root.dataset.js = "true"
+        let theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+        try {
+          const storedTheme = window.localStorage.getItem("joeych-theme")
+          if (storedTheme === "light" || storedTheme === "dark") theme = storedTheme
+        } catch {}
+        root.dataset.theme = theme
+        root.style.colorScheme = theme
+      })()
+    </script>
+    <Font cssVariable="--font-google-sans-code" preload />
     <SeoHead routeId={routeId} locale={locale} profile={profile} title={title} description={description} noindex={noindex} />
   </head>
   <body>
     <SiteHeader locale={locale} profile={profile} routeId={routeId} />
     <main class="site-main"><slot /></main>
     <SiteFooter locale={locale} profile={profile} />
-    <script>
-      const groups = document.querySelectorAll<HTMLElement>("[data-signal-rail-group]")
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
-      for (const group of groups) {
-        const rail = group.querySelector<HTMLElement>("[data-signal-rail]")
-        const targets = group.querySelectorAll<HTMLElement>("[data-signal-target]")
-        const axis = group.dataset.signalRailAxis
-        const resolveRestingTarget = () =>
-          group.querySelector<HTMLElement>('[aria-current="page"]') ??
-          [...targets].find((target) => target.getAttribute("href") === window.location.hash)
-        const move = (target: HTMLElement) => {
-          if (!rail) return
-          const targetBounds = target.getBoundingClientRect()
-          const groupBounds = group.getBoundingClientRect()
-          if (axis === "vertical") {
-            rail.style.inlineSize = "0.125rem"
-            rail.style.blockSize = `${target.offsetHeight}px`
-            rail.style.transform = `translateY(${targetBounds.top - groupBounds.top}px)`
-          } else {
-            rail.style.inlineSize = `${target.offsetWidth}px`
-            rail.style.blockSize = "0.125rem"
-            rail.style.transform = `translateX(${targetBounds.left - groupBounds.left}px)`
-          }
-          rail.style.opacity = "1"
-          rail.style.transitionDuration = reducedMotion.matches ? "0ms" : ""
-        }
-        const updateRestingTarget = () => {
-          const restingTarget = resolveRestingTarget()
-          if (restingTarget) {
-            move(restingTarget)
-          } else if (rail) {
-            rail.style.opacity = "0"
-          }
-        }
-        updateRestingTarget()
-        window.addEventListener("hashchange", updateRestingTarget)
-        for (const target of targets) {
-          target.addEventListener("pointerenter", () => move(target))
-          target.addEventListener("focus", () => move(target))
-        }
-        group.addEventListener("pointerleave", () => {
-          if (group.matches(":focus-within")) return
-          updateRestingTarget()
-        })
-      }
-      const menuToggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]")
-      const menu = document.querySelector<HTMLElement>("#primary-navigation")
-      const header = menuToggle?.closest("header")
-      const setMenuOpen = (open: boolean, restoreFocus = false) => {
-        menuToggle?.setAttribute("aria-expanded", String(open))
-        menu?.setAttribute("data-open", String(open))
-        if (restoreFocus) menuToggle?.focus()
-      }
-      menuToggle?.addEventListener("click", () => {
-        const open = menuToggle.getAttribute("aria-expanded") !== "true"
-        setMenuOpen(open)
-      })
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && menuToggle?.getAttribute("aria-expanded") === "true") {
-          setMenuOpen(false, true)
-        }
-      })
-      document.addEventListener("pointerdown", (event) => {
-        if (
-          menuToggle?.getAttribute("aria-expanded") === "true" &&
-          header &&
-          event.target instanceof Node &&
-          !header.contains(event.target)
-        ) {
-          setMenuOpen(false)
-        }
-      })
-    </script>
   </body>
 </html>

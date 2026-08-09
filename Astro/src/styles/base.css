@@ -1,3 +1,4 @@
+/* biome-ignore-all lint/complexity/noImportantStyles: Hidden and reduced-motion contracts must override component declarations. */
 @import "./tokens.css";
 
 *,
@@ -5,39 +6,44 @@
 *::after {
   box-sizing: border-box;
 }
+
+[hidden] {
+  display: none !important;
+}
 html {
-  background: var(--color-paper);
-  color: var(--color-gunmetal);
-  font-family: var(--font-sans);
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-family: var(--font-body);
 }
 body {
-  margin: 0;
-  min-width: 20rem;
+  background: var(--color-canvas);
   font-size: var(--type-body);
   line-height: 1.7;
+  margin: 0;
+  min-inline-size: 20rem;
 }
 a {
   align-items: center;
-  color: var(--color-signal-fg);
+  color: var(--color-accent);
   display: inline-flex;
   max-inline-size: 100%;
   overflow-wrap: anywhere;
   text-underline-offset: var(--space-1);
 }
 a:hover {
-  color: var(--color-signal-hover);
+  color: var(--color-accent-hover);
 }
 button {
   font: inherit;
 }
 button,
 a {
-  min-block-size: 2.75rem;
-  min-inline-size: 2.75rem;
+  min-block-size: var(--target-size);
+  min-inline-size: var(--target-size);
 }
 button:focus-visible,
 a:focus-visible {
-  outline: 0.125rem solid var(--color-signal-fg);
+  outline: 0.125rem solid var(--color-focus);
   outline-offset: 0.125rem;
 }
 img {
@@ -46,9 +52,62 @@ img {
   block-size: auto;
 }
 dialog {
+  background: var(--color-surface);
   border: 0;
-  color: var(--color-gunmetal);
+  color: var(--color-text);
 }
 dialog::backdrop {
-  background: color-mix(in srgb, var(--color-ice) 82%, var(--color-gunmetal));
+  background: var(--color-backdrop);
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: root-view-out var(--motion-standard) var(--ease-standard) both;
+}
+
+::view-transition-new(root) {
+  animation: root-view-in var(--motion-dialog) var(--ease-standard) both;
+}
+
+@keyframes root-view-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
+
+@keyframes root-view-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0ms !important;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }

@@ -10,6 +10,34 @@ type UiLabels = {
   readonly navigation: Readonly<Record<RouteId, string>>
   readonly menu: string
   readonly mainNavigation: string
+  readonly menuOpen: string
+  readonly menuClose: string
+  readonly theme: {
+    readonly light: string
+    readonly dark: string
+    readonly toLight: string
+    readonly toDark: string
+  }
+  readonly actions: {
+    readonly experience: string
+    readonly projects: string
+  }
+  readonly projectExplorer: {
+    readonly category: string
+    readonly tag: string
+    readonly allCategories: string
+    readonly allTags: string
+    readonly clear: string
+    readonly results: string
+    readonly empty: string
+    readonly emptySource: string
+    readonly navigator: string
+    readonly details: string
+    readonly current: string
+    readonly skillOrigin: string
+    readonly imagePending: string
+    readonly imagePendingAlt: string
+  }
   readonly language: {
     readonly label: string
     readonly switchToEnglish: string
@@ -71,6 +99,34 @@ export const UI = {
     },
     menu: "菜单",
     mainNavigation: "主导航",
+    menuOpen: "打开菜单",
+    menuClose: "关闭菜单",
+    theme: {
+      light: "浅色",
+      dark: "深色",
+      toLight: "切换至浅色主题",
+      toDark: "切换至深色主题",
+    },
+    actions: {
+      experience: "查看经历",
+      projects: "探索项目",
+    },
+    projectExplorer: {
+      category: "项目类别",
+      tag: "技术标签",
+      allCategories: "全部类别",
+      allTags: "全部标签",
+      clear: "清除筛选",
+      results: "筛选结果",
+      empty: "没有符合当前筛选条件的项目。",
+      emptySource: "暂无项目资料。",
+      navigator: "项目导航",
+      details: "项目详情",
+      current: "当前项目",
+      skillOrigin: "来自技能证据",
+      imagePending: "项目图片待补充",
+      imagePendingAlt: "临时使用个人证件照；项目图片待补充",
+    },
     language: {
       label: "English",
       switchToEnglish: "切换至英文",
@@ -106,7 +162,14 @@ export const UI = {
     sections: {
       home: { profile: "个人档案", education: "教育经历", featured: "精选证据" },
       experience: { education: "教育经历", campus: "校园经历" },
-      awards: { awards: "获奖记录", publications: "学术论文", patents: "发明专利", thesis: "毕业设计" },
+      awards: {
+        awards: "获奖记录",
+        publications: "学术论文",
+        patents: "发明专利",
+        thesis: "毕业设计",
+        ledgerOverline: "获奖档案",
+        researchOverline: "研究档案",
+      },
       projects: { index: "项目索引", contribution: "个人贡献", links: "相关链接", figures: "项目图示" },
       "tech-stack": { skills: "技能证据", evidence: "证据依据" },
     },
@@ -134,6 +197,34 @@ export const UI = {
     },
     menu: "Menu",
     mainNavigation: "Primary navigation",
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+    theme: {
+      light: "Light",
+      dark: "Dark",
+      toLight: "Switch to light theme",
+      toDark: "Switch to dark theme",
+    },
+    actions: {
+      experience: "View experience",
+      projects: "Explore projects",
+    },
+    projectExplorer: {
+      category: "Project category",
+      tag: "Technology tag",
+      allCategories: "All categories",
+      allTags: "All tags",
+      clear: "Clear filters",
+      results: "Filter results",
+      empty: "No projects match the current filters.",
+      emptySource: "No project records available.",
+      navigator: "Project navigator",
+      details: "Project details",
+      current: "Current project",
+      skillOrigin: "From skill evidence",
+      imagePending: "Project image pending",
+      imagePendingAlt: "Temporary profile photo; project image pending",
+    },
     language: {
       label: "中文",
       switchToEnglish: "Switch to English",
@@ -169,7 +260,14 @@ export const UI = {
     sections: {
       home: { profile: "Profile", education: "Education", featured: "Featured evidence" },
       experience: { education: "Education", campus: "Campus experience" },
-      awards: { awards: "Awards", publications: "Publications", patents: "Patent applications", thesis: "Thesis" },
+      awards: {
+        awards: "Awards",
+        publications: "Publications",
+        patents: "Patent applications",
+        thesis: "Thesis",
+        ledgerOverline: "Achievement ledger",
+        researchOverline: "Research archive",
+      },
       projects: { index: "Project index", contribution: "Contribution", links: "Related links", figures: "Figures" },
       "tech-stack": { skills: "Skill evidence", evidence: "Evidence basis" },
     },

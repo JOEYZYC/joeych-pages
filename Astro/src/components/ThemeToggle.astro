@@ -1,0 +1,101 @@
+---
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import Icon from "./Icon.astro"
+
+type Props = { readonly locale: Locale }
+const { locale } = Astro.props
+const labels = UI[locale].theme
+---
+
+<button
+  class="header-button theme-toggle"
+  type="button"
+  data-theme-toggle
+  data-label-light={labels.light}
+  data-label-dark={labels.dark}
+  data-to-light={labels.toLight}
+  data-to-dark={labels.toDark}
+  aria-pressed="false"
+  aria-label={labels.toDark}
+  title={labels.toDark}
+  hidden
+>
+  <span class="theme-toggle-icon" data-theme-destination="light" hidden><Icon definition={faSun} /></span>
+  <span class="theme-toggle-icon" data-theme-destination="dark"><Icon definition={faMoon} /></span>
+  <span data-theme-label>{labels.dark}</span>
+</button>
+
+<script>
+  type Theme = "light" | "dark"
+
+  const themeButtons = document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]")
+  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+
+  for (const button of themeButtons) {
+    const root = document.documentElement
+    const visibleLabel = button.querySelector<HTMLElement>("[data-theme-label]")
+    const lightIcon = button.querySelector<HTMLElement>('[data-theme-destination="light"]')
+    const darkIcon = button.querySelector<HTMLElement>('[data-theme-destination="dark"]')
+    let storedTheme: Theme | null = null
+    let memoryOverride: Theme | null = null
+
+    try {
+      const value = window.localStorage.getItem("joeych-theme")
+      if (value === "light" || value === "dark") storedTheme = value
+    } catch {}
+
+    const applyTheme = (theme: Theme) => {
+      root.dataset.theme = theme
+      root.style.colorScheme = theme
+    }
+
+    const currentTheme = (): Theme =>
+      root.dataset.theme === "dark" || root.dataset.theme === "light"
+        ? root.dataset.theme
+        : systemTheme.matches
+          ? "dark"
+          : "light"
+
+    const updateButton = () => {
+      const current = currentTheme()
+      const destination: Theme = current === "dark" ? "light" : "dark"
+      const destinationLabel =
+        destination === "light" ? button.dataset.labelLight : button.dataset.labelDark
+      const accessibleLabel = destination === "light" ? button.dataset.toLight : button.dataset.toDark
+
+      button.setAttribute("aria-pressed", String(current === "dark"))
+      if (accessibleLabel) {
+        button.setAttribute("aria-label", accessibleLabel)
+        button.title = accessibleLabel
+      }
+      if (visibleLabel && destinationLabel) visibleLabel.textContent = destinationLabel
+      if (lightIcon) lightIcon.hidden = destination !== "light"
+      if (darkIcon) darkIcon.hidden = destination !== "dark"
+    }
+
+    button.addEventListener("click", () => {
+      const next: Theme = currentTheme() === "dark" ? "light" : "dark"
+      applyTheme(next)
+      try {
+        window.localStorage.setItem("joeych-theme", next)
+        storedTheme = next
+        memoryOverride = null
+      } catch {
+        storedTheme = null
+        memoryOverride = next
+      }
+      updateButton()
+    })
+
+    systemTheme.addEventListener("change", (event) => {
+      if (storedTheme !== null || memoryOverride !== null) return
+      applyTheme(event.matches ? "dark" : "light")
+      updateButton()
+    })
+
+    updateButton()
+    button.hidden = false
+  }
+</script>

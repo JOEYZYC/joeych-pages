@@ -1,0 +1,19 @@
+---
+import { icon, type IconDefinition } from "@fortawesome/fontawesome-svg-core"
+
+type Props = {
+  readonly definition: IconDefinition
+  readonly class?: string
+}
+
+const { definition, class: className } = Astro.props
+const svg = icon(definition, {
+  attributes: {
+    "aria-hidden": "true",
+    focusable: "false",
+  },
+  classes: className === undefined ? [] : [className],
+}).html.join("")
+---
+
+<Fragment set:html={svg} />
