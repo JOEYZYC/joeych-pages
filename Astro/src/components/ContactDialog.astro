@@ -1,5 +1,4 @@
 ---
-import { faXmark } from "@fortawesome/free-solid-svg-icons"
 import type { Profile } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
@@ -30,7 +29,7 @@ const contacts = [
     aria-haspopup="dialog"
     aria-controls={ids.dialog}
     hidden
-  >{labels.open}</button>
+  ><Icon name="envelope" /> {labels.open}</button>
   <dialog id={ids.dialog} class="dialog-surface" data-contact-dialog aria-labelledby={ids.title} hidden>
     <button
       class="dialog-close"
@@ -38,7 +37,7 @@ const contacts = [
       data-dialog-close
       aria-label={labels.close}
       title={labels.close}
-    ><Icon definition={faXmark} /></button>
+    ><Icon name="xmark" /></button>
     <h2 id={ids.title} tabindex="-1">{labels.title}</h2>
     <ul class="contact-list">
       {contacts.map((contact) => (

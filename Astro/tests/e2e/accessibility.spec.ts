@@ -1,27 +1,46 @@
 import AxeBuilder from "@axe-core/playwright"
-import type { Locator, Page } from "@playwright/test"
+import type { Locator, Page, TestInfo } from "@playwright/test"
 import { expect, test } from "@playwright/test"
 
-const wcagTags = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]
-const mobileViewport = { width: 375, height: 812 }
-const desktopViewport = { width: 1280, height: 900 }
-const zoomViewport = { width: 640, height: 450 }
-const themes = ["light", "dark"] as const
-const routes = [
-  { path: "", label: "Chinese home" },
-  { path: "en/", label: "English home" },
-  { path: "experience/", label: "Chinese experience" },
-  { path: "en/experience/", label: "English experience" },
-  { path: "awards/", label: "Chinese awards" },
-  { path: "en/awards/", label: "English awards" },
-  { path: "projects/", label: "Chinese projects" },
-  { path: "en/projects/", label: "English projects" },
-  { path: "tech-stack/", label: "Chinese tech stack" },
-  { path: "en/tech-stack/", label: "English tech stack" },
-] as const
+import { CANONICAL_ROUTES, THEMES, VIEWPORTS } from "./support/site-matrix"
 
-async function expectNoWcagViolations(page: Page): Promise<void> {
+const wcagTags = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]
+const mobileViewport = VIEWPORTS[0]
+const desktopViewport = VIEWPORTS[2]
+const zoomViewport = { width: 640, height: 450 }
+const themes = THEMES
+const routes = CANONICAL_ROUTES
+type AxeEvidence = {
+  readonly route: string
+  readonly state: string
+  readonly theme: string
+  readonly viewport: number
+  readonly violations: readonly {
+    readonly id: string
+    readonly impact: string | null
+    readonly targets: readonly string[]
+  }[]
+}
+
+async function expectNoWcagViolations(
+  page: Page,
+  evidence: Omit<AxeEvidence, "violations">,
+  testInfo: TestInfo,
+): Promise<void> {
   const results = await new AxeBuilder({ page }).withTags(wcagTags).analyze()
+  const violations = results.violations
+    .map((violation) => ({
+      id: violation.id,
+      impact: violation.impact ?? null,
+      targets: violation.nodes.flatMap((node) => node.target.map((target) =>
+        typeof target === "string" ? target : target.join(" "),
+      )).sort(),
+    }))
+    .sort((left, right) => left.id.localeCompare(right.id))
+  await testInfo.attach("axe-results.json", {
+    body: JSON.stringify({ ...evidence, violations }, null, 2),
+    contentType: "application/json",
+  })
   const message = results.violations
     .map((violation) => `${violation.id} (${violation.impact ?? "unknown"}): ${violation.nodes.map((node) => node.target.join(" ")).join(", ")}`)
     .join("\n")
@@ -48,32 +67,39 @@ async function expectReachable(control: Locator): Promise<void> {
 }
 
 test.describe("WCAG accessibility and 200% reflow", () => {
+  test.describe.configure({ mode: "serial" })
+
   for (const viewport of [mobileViewport, desktopViewport]) {
     for (const theme of themes) {
-      test(`has no WCAG A/AA Axe violations on all routes in ${theme} at ${viewport.width}px`, async ({ page }) => {
+      test(`has no WCAG A/AA Axe violations on all routes in ${theme} at ${viewport.width}px`, async ({ page }, testInfo) => {
         await page.setViewportSize(viewport)
         await page.addInitScript(({ key, value }) => window.localStorage.setItem(key, value), { key: "joeych-theme", value: theme })
 
         for (const route of routes) {
           await page.goto(route.path)
           await expect(page.locator("html")).toHaveAttribute("data-theme", theme)
-          await expectNoWcagViolations(page)
+          await expectNoWcagViolations(page, {
+            route: route.path || "/",
+            state: "document",
+            theme,
+            viewport: viewport.width,
+          }, testInfo)
         }
       })
     }
   }
 
   for (const theme of themes) {
-    test(`has no WCAG A/AA Axe violations in contact and certificate dialogs in ${theme}`, async ({ page }) => {
+    test(`has no WCAG A/AA Axe violations in contact and certificate dialogs in ${theme}`, async ({ page }, testInfo) => {
       await page.addInitScript(({ key, value }) => window.localStorage.setItem(key, value), { key: "joeych-theme", value: theme })
       await page.goto("")
       await page.locator("[data-contact-trigger]").click()
-      await expectNoWcagViolations(page)
+      await expectNoWcagViolations(page, { route: "/", state: "contact-dialog", theme, viewport: desktopViewport.width }, testInfo)
       await page.locator("[data-dialog-close]").click()
 
       await page.goto("awards/")
       await page.locator("#awards-award-renesas-east-first-national-third-2024-trigger").click()
-      await expectNoWcagViolations(page)
+      await expectNoWcagViolations(page, { route: "/awards/", state: "certificate-dialog", theme, viewport: desktopViewport.width }, testInfo)
     })
   }
 
@@ -126,5 +152,23 @@ test.describe("WCAG accessibility and 200% reflow", () => {
     await expect(dialog.locator("[data-certificate-next]")).toBeDisabled()
     await dialog.locator("[data-certificate-close]").press("Enter")
     await expect(dialog).not.toBeVisible()
+  })
+
+  test("detects and removes a temporary unlabeled control", async ({ page }) => {
+    // Given: a canonical document and a test-owned accessibility violation
+    await page.goto("")
+    await page.evaluate(() => {
+      const control = document.createElement("button")
+      control.setAttribute("data-axe-sensitivity", "true")
+      document.body.append(control)
+    })
+
+    // When: the same WCAG Axe rules evaluate the temporary control
+    const results = await new AxeBuilder({ page }).withTags(wcagTags).analyze()
+
+    // Then: the gate rejects the violation and the fixture is removed before the test ends
+    expect(results.violations.some((violation) => violation.id === "button-name")).toBe(true)
+    await page.locator("[data-axe-sensitivity]").evaluate((element) => element.remove())
+    await expect(page.locator("[data-axe-sensitivity]")).toHaveCount(0)
   })
 })
