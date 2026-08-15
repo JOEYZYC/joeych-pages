@@ -1,19 +1,52 @@
+import type { Locator } from "@playwright/test"
 import { expect, test } from "@playwright/test"
 
 import { UI } from "../../src/i18n/ui"
 import { getProfileData } from "../../src/lib/profile-data"
 import { getRoutePath } from "../../src/lib/routes"
 
+import { VIEWPORTS } from "./support/site-matrix"
+
 const routes = [
   { locale: "zh", path: "tech-stack/", language: "zh-CN" },
   { locale: "en", path: "en/tech-stack/", language: "en" },
 ] as const
 
-const viewports = [
-  { name: "mobile", width: 375, height: 812 },
-  { name: "tablet", width: 768, height: 1024 },
-  { name: "desktop", width: 1280, height: 900 },
-] as const
+const viewports = VIEWPORTS
+
+async function phraseLineCount(locator: Locator, phrase: string): Promise<number> {
+  return locator.evaluate((element, expectedPhrase) => {
+    const textNodes: Text[] = []
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT)
+    let text = ""
+    let node = walker.nextNode()
+
+    while (node) {
+      if (node instanceof Text) {
+        textNodes.push(node)
+        text += node.data
+      }
+      node = walker.nextNode()
+    }
+
+    const start = text.indexOf(expectedPhrase)
+    if (start === -1) return 0
+
+    let offset = 0
+    const range = document.createRange()
+    for (const textNode of textNodes) {
+      const nextOffset = offset + textNode.length
+      if (start >= offset && start < nextOffset) range.setStart(textNode, start - offset)
+      if (start + expectedPhrase.length > offset && start + expectedPhrase.length <= nextOffset) {
+        range.setEnd(textNode, start + expectedPhrase.length - offset)
+        break
+      }
+      offset = nextOffset
+    }
+
+    return new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size
+  }, phrase)
+}
 
 test.describe("tech stack", () => {
   for (const route of routes) {
@@ -25,6 +58,7 @@ test.describe("tech stack", () => {
 
       await expect(page.locator("html")).toHaveAttribute("lang", route.language)
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1)
+      await expect(page.locator(".intro > p:not(.eyebrow)")).toHaveText(UI[route.locale].routeIntros["tech-stack"].summary)
       await expect(page.locator('[aria-current="page"]')).toHaveText(
         route.locale === "zh" ? "技术栈" : "Tech Stack",
       )
@@ -35,6 +69,7 @@ test.describe("tech stack", () => {
       for (const group of data.profile.skills) {
         const groupLocator = page.locator(`[data-skill-group="${group.id}"]`)
         await expect(groupLocator.getByRole("heading", { level: 2 })).toHaveText(group.title[route.locale])
+        await expect(groupLocator.locator(".skill-group-heading > svg[data-icon=\"microchip\"]")).toHaveCount(1)
         expect(await groupLocator.locator("[data-skill-tag]").evaluateAll(
           (tags) => tags.map((tag) => tag.getAttribute("data-skill-tag")),
         )).toEqual(group.tags.map((tag) => tag.id))
@@ -60,6 +95,7 @@ test.describe("tech stack", () => {
               const expectedTitle = projectTitles.get(evidence.project_id)
               expect(expectedTitle).toBeDefined()
               await expect(evidenceLocator.locator(".skill-evidence-type")).toHaveText(UI[route.locale].evidence.project)
+              await expect(evidenceLocator.locator('.skill-evidence-type > svg[data-icon="link"]')).toHaveCount(1)
               await expect(evidenceLocator.getByRole("link")).toHaveText(expectedTitle ?? "")
               await expect(evidenceLocator.getByRole("link")).toHaveAttribute(
                 "href",
@@ -68,10 +104,12 @@ test.describe("tech stack", () => {
             }
             if (evidence.type === "credential") {
               await expect(evidenceLocator).toContainText(UI[route.locale].evidence.credential)
+              await expect(evidenceLocator.locator('.skill-evidence-type > svg[data-icon="file-lines"]')).toHaveCount(1)
             }
             if (evidence.type === "general-ability") {
               await expect(evidenceLocator).toHaveAttribute("data-evidence-level", evidence.level)
               await expect(evidenceLocator).toContainText(UI[route.locale].evidence.levels[evidence.level])
+              await expect(evidenceLocator.locator('.skill-evidence-type > svg[data-icon="file-lines"]')).toHaveCount(1)
             }
           }
         }
@@ -114,6 +152,33 @@ test.describe("tech stack", () => {
 
     await context.close()
   })
+
+  for (const theme of ["light", "dark"] as const) {
+    test(`keeps Chinese semantic phrases and labels intact at 375px in ${theme}`, async ({ page }) => {
+      await page.setViewportSize({ width: 375, height: 812 })
+      await page.addInitScript((selectedTheme) => {
+        window.localStorage.setItem("joeych-theme", selectedTheme)
+      }, theme)
+      await page.goto("tech-stack/")
+
+      await expect(page.locator("html")).toHaveAttribute("data-theme", theme)
+      await expect(page.locator(".intro > p:not(.eyebrow)")).toHaveText(
+        UI.zh.routeIntros["tech-stack"].summary,
+      )
+      await expect(page.getByRole("heading", { level: 3, name: /焊接调试/ })).toHaveCount(1)
+      expect(await phraseLineCount(page.locator(".intro > p:not(.eyebrow)"), "项目证据")).toBe(1)
+      expect(await phraseLineCount(page.getByRole("heading", { level: 3, name: /焊接调试/ }), "焊接调试")).toBe(1)
+      expect(await page.locator(".skill-evidence-type > span").evaluateAll((labels) => labels.every((label) => {
+        const range = document.createRange()
+        range.selectNodeContents(label)
+        return new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size === 1
+      }))).toBe(true)
+      expect(await page.locator(".skill-evidence-type > span").evaluateAll((labels) => labels.every((label) => {
+        const { left, right } = label.getBoundingClientRect()
+        return left >= 0 && right <= window.innerWidth
+      }))).toBe(true)
+    })
+  }
 
   for (const viewport of viewports) {
     test(`reflows the bilingual evidence ledger at ${viewport.name}`, async ({ page }) => {

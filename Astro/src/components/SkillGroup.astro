@@ -3,6 +3,7 @@ import type { Profile, Project } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import { getRoutePath } from "../lib/routes"
+import Icon from "./Icon.astro"
 
 type Props = {
   readonly group: Profile["skills"][number]
@@ -13,7 +14,9 @@ const { group, locale, projectTitles } = Astro.props
 ---
 
 <section class="skill-group" data-skill-group={group.id} aria-labelledby={group.id}>
-  <h2 id={group.id} class="section-title">{group.title[locale]}</h2>
+  <h2 id={group.id} class="section-title">
+    <span class="skill-group-heading"><Icon name="microchip" /><span>{group.title[locale]}</span></span>
+  </h2>
   {group.tags.map((tag) => {
     const tagTitleId = `${tag.id}-title`
     const evidenceTitleId = `${tag.id}-evidence`
@@ -40,7 +43,7 @@ const { group, locale, projectTitles } = Astro.props
                   data-supports={supports}
                 >
                   <div class="skill-evidence-reference">
-                    <span class="skill-evidence-type">{UI[locale].evidence.project}</span>
+                    <span class="skill-evidence-type"><Icon name="link" /><span>{UI[locale].evidence.project}</span></span>
                     <a href={`${getRoutePath("projects", locale)}?skill=${encodeURIComponent(tag.id)}#${evidence.project_id}`}>
                       {projectTitle}
                     </a>
@@ -50,7 +53,9 @@ const { group, locale, projectTitles } = Astro.props
               }
               case "credential":
                 return <li class="skill-evidence-row" data-skill-evidence="credential" data-supports={supports}>
-                  <span>{UI[locale].evidence.credential}</span>
+                  <div class="skill-evidence-reference">
+                    <span class="skill-evidence-type"><Icon name="file-lines" /><span>{UI[locale].evidence.credential}</span></span>
+                  </div>
                   <span class="skill-evidence-supports">{evidence.supports.join(", ")}</span>
                 </li>
               case "general-ability":
@@ -60,7 +65,10 @@ const { group, locale, projectTitles } = Astro.props
                   data-evidence-level={evidence.level}
                   data-supports={supports}
                 >
-                  <span>{UI[locale].evidence.generalAbility} · {UI[locale].evidence.levels[evidence.level]}</span>
+                  <div class="skill-evidence-reference">
+                    <span class="skill-evidence-type"><Icon name="file-lines" /><span>{UI[locale].evidence.generalAbility}</span></span>
+                    <span class="skill-evidence-level">{UI[locale].evidence.levels[evidence.level]}</span>
+                  </div>
                   <span class="skill-evidence-supports">{evidence.supports.join(", ")}</span>
                 </li>
             }

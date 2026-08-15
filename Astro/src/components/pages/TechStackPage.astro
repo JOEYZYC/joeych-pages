@@ -18,7 +18,7 @@ const projectTitles: ReadonlyMap<Project["id"], string> = new Map(
 ---
 
 <BaseLayout locale={locale} profile={data.profile} routeId="tech-stack">
-  <EditorialIntro overline={intro.overline} title={intro.title} summary={data.profile.summary[locale]} />
+  <EditorialIntro overline={intro.overline} title={intro.title} summary={intro.summary} />
   <div class="tech-stack-ledger" aria-label={UI[locale].sections["tech-stack"].skills}>
     {data.profile.skills.map((group) => (
       <SkillGroup group={group} locale={locale} projectTitles={projectTitles} />
