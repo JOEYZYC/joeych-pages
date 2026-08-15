@@ -4,7 +4,10 @@ import type { Locale } from "./locales"
 type RouteIntro = {
   readonly overline: string
   readonly title: string
-}
+} & (
+  | { readonly summary?: never }
+  | { readonly summary: string }
+)
 
 type UiLabels = {
   readonly navigation: Readonly<Record<RouteId, string>>
@@ -17,6 +20,16 @@ type UiLabels = {
     readonly dark: string
     readonly toLight: string
     readonly toDark: string
+  }
+  readonly tooltips: {
+    readonly menu: string
+    readonly language: string
+    readonly contact: string
+    readonly theme: string
+  }
+  readonly archive: {
+    readonly ledgerOverline: string
+    readonly researchOverline: string
   }
   readonly actions: {
     readonly experience: string
@@ -107,6 +120,13 @@ export const UI = {
       toLight: "切换至浅色主题",
       toDark: "切换至深色主题",
     },
+    tooltips: {
+      menu: "打开导航菜单",
+      language: "切换语言",
+      contact: "打开联系方式",
+      theme: "切换主题",
+    },
+    archive: { ledgerOverline: "获奖档案", researchOverline: "研究档案" },
     actions: {
       experience: "查看经历",
       projects: "探索项目",
@@ -181,10 +201,10 @@ export const UI = {
     },
     routeIntros: {
       home: { overline: "个人档案", title: "自我介绍" },
-      experience: { overline: "经历", title: "个人经历" },
-      awards: { overline: "成果", title: "获奖证书" },
-      projects: { overline: "工程实践", title: "项目介绍" },
-      "tech-stack": { overline: "专业能力", title: "技术栈" },
+      experience: { overline: "经历", title: "个人经历", summary: "按时间查看教育经历与校园实践。" },
+      awards: { overline: "成果", title: "获奖证书", summary: "按年份查阅竞赛荣誉、出版成果、专利与毕业论文。" },
+      projects: { overline: "工程实践", title: "项目介绍", summary: "从项目索引进入完整的工程实践、贡献与图文证据。" },
+      "tech-stack": { overline: "专业能力", title: "技术栈", summary: "按技能领域查看对应组件、能力语境与项目证据。" },
     },
   },
   en: {
@@ -205,6 +225,13 @@ export const UI = {
       toLight: "Switch to light theme",
       toDark: "Switch to dark theme",
     },
+    tooltips: {
+      menu: "Open navigation menu",
+      language: "Change language",
+      contact: "Open contact details",
+      theme: "Change theme",
+    },
+    archive: { ledgerOverline: "Achievement ledger", researchOverline: "Research archive" },
     actions: {
       experience: "View experience",
       projects: "Explore projects",
@@ -279,10 +306,10 @@ export const UI = {
     },
     routeIntros: {
       home: { overline: "Profile", title: "About" },
-      experience: { overline: "Background", title: "Experience" },
-      awards: { overline: "Achievements", title: "Awards" },
-      projects: { overline: "Engineering Work", title: "Projects" },
-      "tech-stack": { overline: "Capabilities", title: "Tech Stack" },
+      experience: { overline: "Background", title: "Experience", summary: "Review education and campus experience in chronological order." },
+      awards: { overline: "Achievements", title: "Awards", summary: "Review awards, publications, patents, and thesis evidence by year." },
+      projects: { overline: "Engineering Work", title: "Projects", summary: "Use the project index to inspect engineering work, contributions, and supporting figures." },
+      "tech-stack": { overline: "Capabilities", title: "Tech Stack", summary: "Browse technical capabilities by domain with their components, context, and project evidence." },
     },
   },
 } as const satisfies Readonly<Record<Locale, UiLabels>>

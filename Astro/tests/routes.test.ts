@@ -130,6 +130,7 @@ describe("locale and route manifests", () => {
         routeIntros: expectedRouteKeys,
         groups: [
           "actions",
+          "archive",
           "certificate",
           "contact",
           "evidence",
@@ -144,6 +145,7 @@ describe("locale and route manifests", () => {
           "routeIntros",
           "sections",
           "theme",
+          "tooltips",
           "unavailable",
         ],
       },
@@ -153,6 +155,7 @@ describe("locale and route manifests", () => {
         routeIntros: expectedRouteKeys,
         groups: [
           "actions",
+          "archive",
           "certificate",
           "contact",
           "evidence",
@@ -167,6 +170,7 @@ describe("locale and route manifests", () => {
           "routeIntros",
           "sections",
           "theme",
+          "tooltips",
           "unavailable",
         ],
       },
@@ -178,6 +182,7 @@ describe("locale and route manifests", () => {
     const expected = {
       zh: {
         theme: { light: "浅色", dark: "深色", toLight: "切换至浅色主题", toDark: "切换至深色主题" },
+        tooltips: { menu: "打开导航菜单", language: "切换语言", contact: "打开联系方式", theme: "切换主题" },
         actions: { experience: "查看经历", projects: "探索项目" },
         projectExplorer: {
           category: "项目类别",
@@ -201,6 +206,7 @@ describe("locale and route manifests", () => {
       },
       en: {
         theme: { light: "Light", dark: "Dark", toLight: "Switch to light theme", toDark: "Switch to dark theme" },
+        tooltips: { menu: "Open navigation menu", language: "Change language", contact: "Open contact details", theme: "Change theme" },
         actions: { experience: "View experience", projects: "Explore projects" },
         projectExplorer: {
           category: "Project category",
@@ -228,23 +234,19 @@ describe("locale and route manifests", () => {
     const actual = {
       zh: {
         theme: UI.zh.theme,
+        tooltips: UI.zh.tooltips,
         actions: UI.zh.actions,
         projectExplorer: UI.zh.projectExplorer,
-        archive: {
-          ledgerOverline: UI.zh.sections.awards.ledgerOverline,
-          researchOverline: UI.zh.sections.awards.researchOverline,
-        },
+        archive: UI.zh.archive,
         menuOpen: UI.zh.menuOpen,
         menuClose: UI.zh.menuClose,
       },
       en: {
         theme: UI.en.theme,
+        tooltips: UI.en.tooltips,
         actions: UI.en.actions,
         projectExplorer: UI.en.projectExplorer,
-        archive: {
-          ledgerOverline: UI.en.sections.awards.ledgerOverline,
-          researchOverline: UI.en.sections.awards.researchOverline,
-        },
+        archive: UI.en.archive,
         menuOpen: UI.en.menuOpen,
         menuClose: UI.en.menuClose,
       },
