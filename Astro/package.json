@@ -15,6 +15,7 @@
     "build": "astro build",
     "preview": "astro preview --host 127.0.0.1 --port 4321",
     "test:e2e": "playwright test",
+    "test:e2e:visual": "playwright test tests/e2e/visual.spec.ts",
     "verify": "pnpm run check && pnpm run lint && pnpm run test:unit && pnpm run build"
   },
   "dependencies": {
