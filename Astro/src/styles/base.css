@@ -22,6 +22,11 @@ body {
   margin: 0;
   min-inline-size: 20rem;
 }
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
 a {
   align-items: center;
   color: var(--color-accent);
@@ -41,8 +46,25 @@ a {
   min-block-size: var(--target-size);
   min-inline-size: var(--target-size);
 }
+button:disabled,
+select:disabled,
+[aria-disabled="true"] {
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0,
+    transparent 0.25rem,
+    var(--color-border) 0.25rem,
+    var(--color-border) 0.3125rem
+  );
+  border-style: dashed;
+  cursor: not-allowed;
+  filter: grayscale(1);
+  opacity: 0.65;
+  text-decoration-style: dashed;
+}
 button:focus-visible,
-a:focus-visible {
+a:focus-visible,
+select:focus-visible {
   outline: 0.125rem solid var(--color-focus);
   outline-offset: 0.125rem;
 }
