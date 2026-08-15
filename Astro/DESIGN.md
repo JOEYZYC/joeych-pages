@@ -57,9 +57,11 @@ All visible colors are semantic CSS custom properties defined once in `tokens.cs
 | `--color-border-strong` | `#8194a8` | `#5b7591` | Control boundaries requiring 3:1 contrast |
 | `--color-accent` | `#086b8b` | `#63d8f5` | Links, states, and restrained signals |
 | `--color-accent-hover` | `#05556f` | `#a2eafa` | Hover/pressed foreground |
+| `--color-control-hover` | `#004861` | `#a2eafa` | Hover foreground on standard and muted controls |
 | `--color-accent-soft` | `#d8f3fb` | `#103c4d` | Selected-state field |
 | `--color-accent-on` | `#f9fcff` | `#08202c` | Text on accent |
 | `--color-on-strong` | `#f8fbff` | `#f3f8fc` | Text on strong surfaces |
+| `--color-on-strong-hover` | `#e1f7ff` | `#d5f7ff` | Hover foreground on strong surfaces |
 | `--color-focus` | `#005f82` | `#78dff8` | Focus outline |
 | `--color-success` | `#166447` | `#7de0b5` | Success state |
 | `--color-warning` | `#7a4b00` | `#ffcc70` | Unavailable/source-pending state |
@@ -82,9 +84,9 @@ Light shadows are `--shadow-panel: 0 1px 2px rgb(20 36 52 / .06), 0 12px 32px rg
 
 - Display and editorial headings: `--font-display: "Source Han Serif SC", "Source Serif 4", "Songti SC", Georgia, serif`. Installed local Source Han Serif assets remain within the existing 42 MiB emitted budget.
 - Body and UI: `--font-body: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif` with no runtime external dependency.
-- Technical metadata: `--font-mono: var(--font-google-sans-code), "SFMono-Regular", Consolas, monospace`, limited to dates, route labels, IDs, counts, and source-link types.
+- Technical metadata: `--font-mono: var(--font-google-sans-code), "SFMono-Regular", Consolas, monospace`, using only the local Google Sans Code normal variable face and limited to dates, route labels, IDs, counts, and source-link types. Its emitted WOFF2 face is at most 256 KiB.
 
-All font assets are local, version-pinned, licensed, base-aware, and available before visual QA captures. Never request an external font host.
+All font assets are local, version-pinned, licensed, base-aware, and available before visual QA captures. The uncached first-load transfer budget is 6 MiB. Never request an external font host.
 
 ### Scale
 
@@ -110,7 +112,7 @@ All font assets are local, version-pinned, licensed, base-aware, and available b
 
 ### Spacing, shape, and shell tokens
 
-Retain `--space-1` through `--space-20` at `.25rem`, `.5rem`, `.75rem`, `1rem`, `1.25rem`, `1.5rem`, `2rem`, `2.5rem`, `3rem`, `4rem`, and `5rem`. Use `--radius-control: .5rem`, `--radius-panel: 1rem`, `--radius-hero: 1.5rem`, `--header-height: 4.5rem`, `--content-max: 75rem`, `--prose-max: 42rem`, and `--target-size: 2.75rem`.
+Retain `--space-1` through `--space-20` at `.25rem`, `.5rem`, `.75rem`, `1rem`, `1.25rem`, `1.5rem`, `2rem`, `2.5rem`, `3rem`, `4rem`, and `5rem`. Use `--radius-control: .5rem`, `--radius-panel: 1rem`, `--radius-hero: 1.5rem`, `--header-height: 4.5rem`, `--content-max: 75rem`, `--prose-max: 45rem`, and `--target-size: 2.75rem`.
 
 ### Responsive Bento grid
 
@@ -119,8 +121,8 @@ Retain `--space-1` through `--space-20` at `.25rem`, `.5rem`, `.75rem`, `1rem`, 
 | `<768px` | One column; `1rem` page gutter, grid gap, and panel padding |
 | `768px–1023px` | Eight columns; `1.25rem` gutter/gap; `1.5rem` panel padding |
 | `>=1024px` | Twelve columns; `1.5rem` gap; `2rem` panel padding |
-| `>=1200px` | Inline primary navigation may replace compact navigation |
 
+- Inline primary navigation appears at `>=1024px`.
 - The document owns vertical scrolling. Only viewport-safe modal bodies may create an internal scroll area.
 - Shared route content is centered within `--content-max`. Panels use semantic `section`/`article`/`figure` structure and source order remains DOM order.
 - Home is one Bento grid: desktop hero `1–7`, portrait `8–12`, facts `1–4`, education `5–7`, featured work `1–12`; tablet hero `1–5`, portrait `6–8`, facts `1–3`, education `4–8`; mobile follows hero, portrait, facts, education, and three featured tiles.
@@ -156,7 +158,7 @@ The build remains static Astro, emits exactly these ten documents, and publishes
 ### `SiteHeader`, `ThemeToggle`, and `LanguageLink`
 
 - The sticky header is a solid canvas/surface with a bottom border and 2px horizontal signal rail; no backdrop blur.
-- Retain wordmark, five base-aware routes, `aria-current="page"`, language counterpart, contact, and theme controls. Inline navigation appears only at `>=1200px`.
+- Retain wordmark, five base-aware routes, `aria-current="page"`, language counterpart, contact, and theme controls. Inline primary navigation appears at `>=1024px`.
 - Compact navigation opens from a labelled icon button, focuses its first route, and closes on Escape, outside pointer, or route activation. Escape restores the toggle. With no JavaScript, the menu button is hidden and route anchors remain expanded in normal flow.
 - `ThemeToggle` is hidden until listeners attach. `aria-pressed="true"` means dark; visible and accessible text describe the destination theme.
 - `LanguageLink` preserves the route and project hash while intentionally dropping ephemeral project filter/provenance query state.
@@ -171,7 +173,7 @@ The build remains static Astro, emits exactly these ten documents, and publishes
 ### Project presentation
 
 - `ProjectMedia` is the only primary project visual primitive. Real project images remain contained and use matching sourced figure text; record context also shows the sourced caption. Null project images use the dedicated Profile project placeholder with contained positioning, a localized pending label, and explicit placeholder alt text. Failed real images never switch to the placeholder.
-- `ProjectTile` is one non-nested anchor containing media, ordinal/year, category, title, claim, tags, arrow, current-project label, and skill-origin label. Fine-pointer hover may lift the tile; keyboard focus never moves it.
+- `ProjectTile` is one non-nested anchor containing media, ordinal/year, category, title, claim, tags, arrow, current-project label, and skill-origin label. Under fine-pointer hover, it uses exactly `translateY(-2px) scale(1.015)` and `--shadow-raised` for 180ms. Keyboard focus retains its visible outline and may use only the bounded `translateY(-1px) scale(1.01)` transform. Coarse pointers do not lift or scale project tiles.
 - `ProjectExplorer` progressively enhances a complete static catalog/archive with native category and tag selects, AND filtering, Clear, polite result count, localized empty states, a sticky native project navigator, and validated skill provenance. Controls remain hidden until every listener is attached.
 - `ProjectRecord` is a full-width evidence article with stable ID, disclosed primary visual, visible state labels, contribution, remaining source-order figures, and links. Primary-image figures are not duplicated in the later figure grid. Missing figure sources become text-only evidence rows; null contribution/empty figure sections are omitted; null URLs retain their source label plus unavailable text.
 
@@ -195,10 +197,10 @@ Only `transform` and `opacity` animate in the new interaction system. Never use 
 ### Header rail and project feedback
 
 - The header owns the only shared signal rail. Pointer hover and keyboard focus move it to a route; `aria-current` defines its resting position. Every route remains legible without the rail.
-- Fine-pointer project tiles use `translateY(-2px)` and `--shadow-raised` for 180ms. Active returns to zero over 120ms. Keyboard focus receives its outline without spatial movement. Coarse pointers do not lift.
+- Fine-pointer project tiles use exactly `translateY(-2px) scale(1.015)` and `--shadow-raised` for 180ms. Active returns to zero over 120ms. Keyboard focus retains its outline and may use only `translateY(-1px) scale(1.01)`. Coarse pointers do not lift or scale project tiles.
 - Project record `:target`, `data-active`, and `data-evidence-origin` are persistent static states using a 4px logical-start accent inset plus visible localized labels. Observer-driven current state never rewrites history.
 - Dialog, menu, filter, navigator, and theme states remain understandable without animation.
-- Under `prefers-reduced-motion: reduce`, all new transition and animation durations are `0ms`, view-transition animations are `none`, and every control, status, target, and evidence item remains visible.
+- Under `prefers-reduced-motion: reduce`, all new transition and animation durations are `0ms`, view-transition animations are `none`, project-tile transforms are none, and every control, status, target, and evidence item remains visible.
 
 ## 7. Depth & Surface
 
