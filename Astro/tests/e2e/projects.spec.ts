@@ -1,6 +1,8 @@
 import type { Page } from "@playwright/test"
 import { expect, test } from "@playwright/test"
 
+import { VIEWPORTS } from "./support/site-matrix"
+
 const projectIds = [
   "power-print-recognition",
   "dual-light-fusion",
@@ -18,11 +20,7 @@ const projectIds = [
   "eflydrone-boards",
 ] as const
 
-const viewports = [
-  { name: "mobile", width: 375, height: 812 },
-  { name: "tablet", width: 768, height: 1024 },
-  { name: "desktop", width: 1280, height: 900 },
-] as const
+const viewports = VIEWPORTS
 
 const locales = [
   {
@@ -30,16 +28,16 @@ const locales = [
     htmlLanguage: "zh-CN",
     navigation: "项目介绍",
     title: "项目介绍",
+    summary: "从项目索引进入完整的工程实践、贡献与图文证据。",
     pending: "项目图片待补充",
-    pendingAlt: "项目占位图片；项目图片待补充",
   },
   {
     path: "en/projects/",
     htmlLanguage: "en",
     navigation: "Projects",
     title: "Projects",
+    summary: "Use the project index to inspect engineering work, contributions, and supporting figures.",
     pending: "Project image pending",
-    pendingAlt: "Project placeholder image; project image pending",
   },
 ] as const
 
@@ -47,6 +45,28 @@ async function visibleIds(page: Page, selector: string): Promise<string[]> {
   return page.locator(selector).evaluateAll((elements) => elements
     .filter((element) => !(element as HTMLElement).hidden)
     .map((element) => element.getAttribute("data-project-id") ?? element.id))
+}
+
+async function replaceEvidencePayloadBeforeEnhancement(page: Page, payload: string): Promise<void> {
+  await page.addInitScript((replacement) => {
+    const replacePayload = (node: Node) => {
+      if (node instanceof HTMLScriptElement && node.matches("[data-project-skill-evidence]")) {
+        node.textContent = replacement
+      }
+      if (node instanceof Element) {
+        for (const script of node.querySelectorAll<HTMLScriptElement>("[data-project-skill-evidence]")) {
+          script.textContent = replacement
+        }
+      }
+    }
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        for (const node of mutation.addedNodes) replacePayload(node)
+      }
+    })
+    observer.observe(document, { childList: true, subtree: true })
+  }, payload)
 }
 
 test.describe("projects archive", () => {
@@ -57,6 +77,7 @@ test.describe("projects archive", () => {
       const records = page.locator("[data-project-record]")
 
       await expect(page.getByRole("heading", { level: 1, name: locale.title })).toHaveCount(1)
+      await expect(page.locator(".intro > p").last()).toHaveText(locale.summary)
       await expect(page.locator("html")).toHaveAttribute("lang", locale.htmlLanguage)
       await expect(page.getByRole("navigation").getByRole("link", { name: locale.navigation })).toHaveAttribute(
         "aria-current",
@@ -72,15 +93,11 @@ test.describe("projects archive", () => {
       )
 
       await expect(tiles.locator('[data-project-media-kind="real"]')).toHaveCount(5)
-      await expect(tiles.locator('[data-project-media-kind="placeholder"]')).toHaveCount(9)
+      await expect(tiles.locator('[data-project-media-kind="unavailable"]')).toHaveCount(9)
       await expect(records.locator('[data-project-media-kind="real"]')).toHaveCount(5)
-      await expect(records.locator('[data-project-media-kind="placeholder"]')).toHaveCount(9)
-      await expect(tiles.locator('[data-project-media-kind="placeholder"] img')).toHaveCount(9)
-      for (const image of await tiles.locator('[data-project-media-kind="placeholder"] img').all()) {
-        await expect(image).toHaveAttribute("src", /\/joeych-pages\/projects\/project-placeholder\.png$/)
-        await expect(image).toHaveAttribute("alt", locale.pendingAlt)
-      }
-      await expect(tiles.locator('[data-project-media-kind="placeholder"] .project-media-pending')).toHaveText(
+      await expect(records.locator('[data-project-media-kind="unavailable"]')).toHaveCount(9)
+      await expect(tiles.locator('[data-project-media-kind="unavailable"] img')).toHaveCount(0)
+      await expect(tiles.locator('[data-project-media-kind="unavailable"] .project-media-pending')).toHaveText(
         Array.from({ length: 9 }, () => locale.pending),
       )
     })
@@ -91,9 +108,8 @@ test.describe("projects archive", () => {
     const resgatnet = page.locator("#resgatnet")
     const powerPrint = page.locator("#power-print-recognition")
 
-    await expect(resgatnet.locator('[data-project-media-kind="placeholder"] img')).toHaveAttribute(
-      "src",
-      /\/joeych-pages\/projects\/project-placeholder\.png$/,
+    await expect(resgatnet.locator('[data-project-media-kind="unavailable"] .project-media-pending')).toHaveText(
+      "Project image pending",
     )
     await expect(resgatnet.locator(".project-figure-grid img")).toHaveCount(0)
     await expect(resgatnet.locator(".project-figure-unavailable figcaption")).toHaveText(
@@ -110,6 +126,8 @@ test.describe("projects archive", () => {
       "href",
       "https://github.com/JOEYZYC/joeych-pages",
     )
+    await expect(page.locator("#joeych-pages [data-project-link-marker]")).toHaveText("External link")
+    await expect(page.locator("#resgatnet [data-project-link-unavailable]")).toHaveCount(2)
   })
 
   test("shows unavailable media without substituting the placeholder after a real image fails", async ({ page }) => {
@@ -231,6 +249,28 @@ test.describe("projects archive", () => {
     await expect(page).toHaveURL(/\/en\/projects\/#resgatnet$/)
     await expect(page.locator('[data-evidence-origin="true"]')).toHaveCount(0)
   })
+
+  for (const scenario of [
+    { name: "malformed JSON", payload: "{" },
+    {
+      name: "a mixed valid and malformed evidence entry",
+      payload: '{"vision-halcon-opencv":{"label":"Vision","projectIds":["intelligent-reconnaissance-2024"]},"broken":{"label":7,"projectIds":[]}}',
+    },
+  ] as const) {
+    test(`keeps the complete static archive usable when evidence payload contains ${scenario.name}`, async ({ page }) => {
+      const pageErrors: string[] = []
+      page.on("pageerror", (error) => pageErrors.push(error.message))
+      await replaceEvidencePayloadBeforeEnhancement(page, scenario.payload)
+
+      await page.goto("en/projects/?skill=vision-halcon-opencv#intelligent-reconnaissance-2024")
+
+      expect(pageErrors).toEqual([])
+      await expect(page.locator("[data-project-filter-controls]")).toBeHidden()
+      await expect(page.locator("[data-project-navigator-shell]")).toBeHidden()
+      expect(await visibleIds(page, "[data-project-tile]")).toEqual(projectIds)
+      expect(await visibleIds(page, "[data-project-record]")).toEqual(projectIds)
+    })
+  }
 
   test("JavaScript-disabled projects keep all stable records and ordinary hash navigation", async ({ browser }) => {
     const context = await browser.newContext({

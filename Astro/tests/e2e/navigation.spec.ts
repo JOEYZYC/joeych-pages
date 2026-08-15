@@ -1,7 +1,23 @@
-import { expect, test } from "@playwright/test"
+import type { Page } from "@playwright/test"
+import { chromium, expect, test } from "@playwright/test"
 
-const basePath = "/joeych-pages"
+import { BASE_PATH, CANONICAL_ROUTES, VIEWPORTS } from "./support/site-matrix"
+
+const basePath = BASE_PATH
 const projectFragment = "#resgatnet"
+const siteBaseUrl = "http://127.0.0.1:4321/joeych-pages/"
+const navigationDisabledFeature = "--disable-features=ViewTransitionOnNavigation"
+const unloadMarker = "navigation-e2e-beforeunload"
+
+async function expectHeaderRoutes(page: Page, locale: "zh" | "en"): Promise<void> {
+  const routes = CANONICAL_ROUTES.filter((route) => route.locale === locale)
+  const links = page.locator("[data-header-route]")
+
+  await expect(links).toHaveCount(routes.length)
+  for (const [index, route] of routes.entries()) {
+    await expect(links.nth(index)).toHaveAttribute("href", `${basePath}/${route.path}`)
+  }
+}
 
 test.describe("navigation state synchronization", () => {
   test("keeps the locale counterpart ready for a direct project fragment load", async ({ page }) => {
@@ -29,7 +45,7 @@ test.describe("navigation state synchronization", () => {
   })
 
   test("synchronizes the project navigator, visible state labels, and scrolling without history writes", async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.setViewportSize(VIEWPORTS[2])
     await page.goto("en/projects/")
     const navigator = page.locator("[data-project-navigator]")
     const historyLength = await page.evaluate(() => window.history.length)
@@ -68,6 +84,7 @@ test.describe("navigation state synchronization", () => {
       "href",
       `${basePath}/projects/#resgatnet`,
     )
+    await expect(page.locator("#resgatnet")).toHaveCSS("border-left-width", "4px")
   })
 
   test("dismisses the compact menu only for outside pointers and restores focus with Escape", async ({ page }) => {
@@ -90,5 +107,63 @@ test.describe("navigation state synchronization", () => {
     await page.keyboard.press("Escape")
     await expect(toggle).toHaveAttribute("aria-expanded", "false")
     await expect(toggle).toBeFocused()
+  })
+
+  test("keeps all locale route concepts as base-aware trailing-slash anchors with native View Transition support", async ({ page }) => {
+    await page.goto("")
+    expect(await page.evaluate(() => "startViewTransition" in document)).toBe(true)
+
+    for (const route of CANONICAL_ROUTES) {
+      await page.goto(route.path)
+      await expectHeaderRoutes(page, route.locale)
+    }
+  })
+
+  test("uses ordinary document navigation when ViewTransitionOnNavigation is disabled in isolated Chrome", async () => {
+    const browser = await chromium.launch({
+      channel: "chrome",
+      args: ["--enable-automation", navigationDisabledFeature],
+    })
+
+    try {
+      const context = await browser.newContext({ baseURL: siteBaseUrl })
+      try {
+        const page = await context.newPage()
+        const cdp = await browser.newBrowserCDPSession()
+        const commandLine = await cdp.send("Browser.getBrowserCommandLine")
+
+        expect(commandLine.arguments).toContain(navigationDisabledFeature)
+        await page.addInitScript((marker) => {
+          window.addEventListener("beforeunload", () => window.sessionStorage.setItem(marker, "true"))
+        }, unloadMarker)
+
+        for (const locale of ["zh", "en"] as const) {
+          const routes = CANONICAL_ROUTES.filter((route) => route.locale === locale)
+          const homePath = locale === "zh" ? "" : "en/"
+          const destinations = routes.slice(1)
+
+          await page.goto(homePath)
+          expect(await page.evaluate(() => "startViewTransition" in document)).toBe(true)
+          await expectHeaderRoutes(page, locale)
+
+          for (const destination of destinations) {
+            await page.evaluate((marker) => window.sessionStorage.removeItem(marker), unloadMarker)
+            const link = page.locator(`[data-header-route][href="${basePath}/${destination.path}"]`)
+
+            await Promise.all([
+              page.waitForURL(new URL(destination.path, siteBaseUrl).toString()),
+              link.click(),
+            ])
+
+            await expect(page).toHaveURL(new URL(destination.path, siteBaseUrl).toString())
+            await expect.poll(() => page.evaluate((marker) => window.sessionStorage.getItem(marker), unloadMarker)).toBe("true")
+          }
+        }
+      } finally {
+        await context.close()
+      }
+    } finally {
+      await browser.close()
+    }
   })
 })
