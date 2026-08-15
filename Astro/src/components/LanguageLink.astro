@@ -3,6 +3,7 @@ import type { Locale } from "../i18n/locales"
 import type { RouteId } from "../lib/routes"
 import { getCorrespondingLocalePath } from "../lib/routes"
 import { UI } from "../i18n/ui"
+import Icon from "./Icon.astro"
 
 type Props = { readonly routeId: RouteId; readonly locale: Locale }
 const { routeId, locale } = Astro.props
@@ -19,7 +20,11 @@ const counterpartPath = getCorrespondingLocalePath(routeId, locale)
   lang={targetLocale}
   title={locale === "zh" ? labels.switchToEnglish : labels.switchToChinese}
   aria-label={locale === "zh" ? labels.switchToEnglishVersion : labels.switchToChineseVersion}
->{labels.label}</a>
+>
+  <Icon name="language" />
+  <span>{labels.label}</span>
+  <span class="control-tooltip" data-control-tooltip aria-hidden="true">{locale === "zh" ? labels.switchToEnglish : labels.switchToChinese}</span>
+</a>
 
 <script>
   const links = document.querySelectorAll<HTMLAnchorElement>(".language-link")
