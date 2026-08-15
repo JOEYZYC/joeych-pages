@@ -32,10 +32,15 @@ const { title, description } = getPageMeta({ locale, profile, routeId })
         const root = document.documentElement
         root.dataset.js = "true"
         let theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+        let hasThemeOverride = false
         try {
           const storedTheme = window.localStorage.getItem("joeych-theme")
-          if (storedTheme === "light" || storedTheme === "dark") theme = storedTheme
+          if (storedTheme === "light" || storedTheme === "dark") {
+            theme = storedTheme
+            hasThemeOverride = true
+          }
         } catch {}
+        root.dataset.themeOverride = String(hasThemeOverride)
         root.dataset.theme = theme
         root.style.colorScheme = theme
       })()

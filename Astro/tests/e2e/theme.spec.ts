@@ -76,6 +76,47 @@ test.describe("explicit light and dark themes", () => {
     await expectTheme(page, "light", { label: "Dark", name: "Switch to dark theme" })
   })
 
+  test("reads stored theme once before first paint and preserves the explicit override", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" })
+    await page.addInitScript((key) => {
+      let reads = 0
+      Object.defineProperty(Storage.prototype, "getItem", {
+        configurable: true,
+        value: (requestedKey: string) => {
+          reads += 1
+          // biome-ignore lint/complexity/useLiteralKeys: DOMStringMap requires indexed access under strict config.
+          document.documentElement.dataset["themeStorageReads"] = String(reads)
+          if (requestedKey === key && reads === 1) return "light"
+          throw new DOMException("Storage denied", "SecurityError")
+        },
+      })
+    }, themeKey)
+
+    await page.goto("en/")
+    await expectTheme(page, "light", { label: "Dark", name: "Switch to dark theme" })
+    await expect(page.locator("html")).toHaveAttribute("data-theme-storage-reads", "1")
+
+    await page.emulateMedia({ colorScheme: "light" })
+    await page.emulateMedia({ colorScheme: "dark" })
+
+    await expectTheme(page, "light", { label: "Dark", name: "Switch to dark theme" })
+  })
+
+  test("sets the selected theme before the first animation frame", async ({ page }) => {
+    await page.emulateMedia({ colorScheme: "dark" })
+    await page.addInitScript(() => {
+      requestAnimationFrame(() => {
+        const root = document.documentElement
+        // biome-ignore lint/complexity/useLiteralKeys: DOMStringMap requires indexed access under strict config.
+        root.dataset["firstFrameTheme"] = `${root.dataset["js"]}:${root.dataset["theme"]}:${root.style.colorScheme}`
+      })
+    })
+
+    await page.goto("")
+
+    await expect(page.locator("html")).toHaveAttribute("data-first-frame-theme", "true:dark:dark")
+  })
+
   test("toggle choices persist across reload", async ({ page }) => {
     await page.emulateMedia({ colorScheme: "light" })
     await page.goto("en/")
@@ -135,8 +176,28 @@ test.describe("explicit light and dark themes", () => {
     expect(await root.evaluate((element) => getComputedStyle(element).colorScheme)).toContain("dark")
     await expect(page.locator("[data-menu-toggle]")).toBeHidden()
     await expect(page.getByRole("navigation").getByRole("link", { name: "Projects" })).toBeVisible()
-    await expect(page.locator("[data-contact-fallback]")).toHaveAttribute("href", /^mailto:/)
-    await expect(page.locator("[data-contact-fallback]")).toBeVisible()
+    await expect(page.locator("[data-contact-fallback]")).toBeHidden()
+    const emailFallback = page.locator('[data-noscript-contact-links] a[href^="mailto:"]')
+    await expect(emailFallback).toHaveCount(1)
+    await expect(emailFallback).toBeVisible()
+    await expect(page.getByRole("main")).toBeVisible()
+
+    await context.close()
+  })
+
+  test("JavaScript-disabled light-system fallback keeps content readable", async ({ browser }) => {
+    const context = await browser.newContext({
+      baseURL: "http://127.0.0.1:4321/joeych-pages/",
+      colorScheme: "light",
+      javaScriptEnabled: false,
+    })
+    const page = await context.newPage()
+
+    await page.goto("")
+
+    const root = page.locator("html")
+    await expect(root).toHaveAttribute("data-js", "false")
+    expect(await root.evaluate((element) => getComputedStyle(element).colorScheme)).toContain("light")
     await expect(page.getByRole("main")).toBeVisible()
 
     await context.close()

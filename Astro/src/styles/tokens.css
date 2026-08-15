@@ -11,9 +11,11 @@
   --color-border-strong: #8194a8;
   --color-accent: #086b8b;
   --color-accent-hover: #05556f;
+  --color-control-hover: #004861;
   --color-accent-soft: #d8f3fb;
   --color-accent-on: #f9fcff;
   --color-on-strong: #f8fbff;
+  --color-on-strong-hover: #e1f7ff;
   --color-focus: #005f82;
   --color-success: #166447;
   --color-warning: #7a4b00;
@@ -39,7 +41,7 @@
   --radius-hero: 1.5rem;
   --header-height: 4.5rem;
   --content-max: 75rem;
-  --prose-max: 42rem;
+  --prose-max: 45rem;
   --target-size: 2.75rem;
   --type-display: clamp(3rem, 7vw, 5.25rem);
   --type-h1: clamp(2.375rem, 5vw, 4rem);
@@ -73,9 +75,11 @@ html[data-theme="dark"] {
   --color-border-strong: #5b7591;
   --color-accent: #63d8f5;
   --color-accent-hover: #a2eafa;
+  --color-control-hover: #a2eafa;
   --color-accent-soft: #103c4d;
   --color-accent-on: #08202c;
   --color-on-strong: #f3f8fc;
+  --color-on-strong-hover: #d5f7ff;
   --color-focus: #78dff8;
   --color-success: #7de0b5;
   --color-warning: #ffcc70;
@@ -101,9 +105,11 @@ html[data-theme="dark"] {
     --color-border-strong: #5b7591;
     --color-accent: #63d8f5;
     --color-accent-hover: #a2eafa;
+    --color-control-hover: #a2eafa;
     --color-accent-soft: #103c4d;
     --color-accent-on: #08202c;
     --color-on-strong: #f3f8fc;
+    --color-on-strong-hover: #d5f7ff;
     --color-focus: #78dff8;
     --color-success: #7de0b5;
     --color-warning: #ffcc70;

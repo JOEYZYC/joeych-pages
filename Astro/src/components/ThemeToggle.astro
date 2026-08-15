@@ -1,5 +1,4 @@
 ---
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import Icon from "./Icon.astro"
@@ -22,8 +21,8 @@ const labels = UI[locale].theme
   title={labels.toDark}
   hidden
 >
-  <span class="theme-toggle-icon" data-theme-destination="light" hidden><Icon definition={faSun} /></span>
-  <span class="theme-toggle-icon" data-theme-destination="dark"><Icon definition={faMoon} /></span>
+  <span class="theme-toggle-icon" data-theme-destination="light" hidden><Icon name="sun" /></span>
+  <span class="theme-toggle-icon" data-theme-destination="dark"><Icon name="moon" /></span>
   <span data-theme-label>{labels.dark}</span>
 </button>
 
@@ -38,14 +37,6 @@ const labels = UI[locale].theme
     const visibleLabel = button.querySelector<HTMLElement>("[data-theme-label]")
     const lightIcon = button.querySelector<HTMLElement>('[data-theme-destination="light"]')
     const darkIcon = button.querySelector<HTMLElement>('[data-theme-destination="dark"]')
-    let storedTheme: Theme | null = null
-    let memoryOverride: Theme | null = null
-
-    try {
-      const value = window.localStorage.getItem("joeych-theme")
-      if (value === "light" || value === "dark") storedTheme = value
-    } catch {}
-
     const applyTheme = (theme: Theme) => {
       root.dataset.theme = theme
       root.style.colorScheme = theme
@@ -78,19 +69,15 @@ const labels = UI[locale].theme
     button.addEventListener("click", () => {
       const next: Theme = currentTheme() === "dark" ? "light" : "dark"
       applyTheme(next)
+      root.dataset.themeOverride = "true"
       try {
         window.localStorage.setItem("joeych-theme", next)
-        storedTheme = next
-        memoryOverride = null
-      } catch {
-        storedTheme = null
-        memoryOverride = next
-      }
+      } catch {}
       updateButton()
     })
 
     systemTheme.addEventListener("change", (event) => {
-      if (storedTheme !== null || memoryOverride !== null) return
+      if (root.dataset.themeOverride === "true") return
       applyTheme(event.matches ? "dark" : "light")
       updateButton()
     })
