@@ -44,7 +44,20 @@ const remainingFigures = project.figures.filter((figure) => figure.src !== proje
     <p class="project-record-claim">{project.claim[locale]}</p>
   </header>
 
-  <ProjectMedia context="record" locale={locale} project={project} loading="lazy" />
+  {project.image === null ? (
+    <div
+      class="project-media project-media--record project-media--unavailable"
+      data-project-media
+      data-project-media-context="record"
+      data-project-media-kind="unavailable"
+      role="img"
+      aria-label={labels.projectExplorer.imagePendingAlt}
+    >
+      <div class="project-media-well">
+        <p class="project-media-pending">{labels.projectExplorer.imagePending}</p>
+      </div>
+    </div>
+  ) : <ProjectMedia context="record" locale={locale} project={project} loading="lazy" />}
 
   <div class="project-record-body">
     <p class="project-record-summary">{project.summary[locale]}</p>
@@ -98,8 +111,8 @@ const remainingFigures = project.figures.filter((figure) => figure.src !== proje
           {project.links.map((link) => (
             <li>
               {link.url === null
-                ? <span class="project-link-unavailable">{link.label[locale]} — {labels.unavailable.link}</span>
-                : <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label[locale]}</a>}
+                ? <span class="project-link-unavailable" data-project-link-unavailable>{link.label[locale]} — {labels.unavailable.link}</span>
+                : <a href={link.url} target="_blank" rel="noopener noreferrer"><span data-project-link-marker aria-hidden="true">External link</span>{link.label[locale]}</a>}
             </li>
           ))}
         </ul>

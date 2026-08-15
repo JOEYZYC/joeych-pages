@@ -1,5 +1,4 @@
 ---
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import type { Project } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
@@ -30,7 +29,20 @@ const loading = variant === "featured" && number === 1 ? "eager" : "lazy"
   data-project-variant={variant}
   data-active="false"
 >
-  <ProjectMedia context="tile" locale={locale} project={project} loading={loading} />
+  {project.image === null ? (
+    <div
+      class="project-media project-media--tile project-media--unavailable"
+      data-project-media
+      data-project-media-context="tile"
+      data-project-media-kind="unavailable"
+      role="img"
+      aria-label={labels.projectExplorer.imagePendingAlt}
+    >
+      <div class="project-media-well">
+        <p class="project-media-pending">{labels.projectExplorer.imagePending}</p>
+      </div>
+    </div>
+  ) : <ProjectMedia context="tile" locale={locale} project={project} loading={loading} />}
   <div class="project-tile-body">
     <div class="project-tile-meta">
       <span>{ordinal} / {project.year}</span>
@@ -48,7 +60,7 @@ const loading = variant === "featured" && number === 1 ? "eager" : "lazy"
         data-project-origin-label
         data-origin-prefix={labels.projectExplorer.skillOrigin}
       ></span>
-      <span class="project-tile-arrow" aria-hidden="true"><Icon definition={faArrowRight} /></span>
+      <span class="project-tile-arrow" data-project-arrow-marker aria-hidden="true"><Icon name="arrow-right" /></span>
     </div>
   </div>
 </a>

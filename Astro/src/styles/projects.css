@@ -34,6 +34,13 @@
   font-size: var(--type-meta);
 }
 
+.project-media--unavailable .project-media-pending {
+  margin: 0;
+  max-inline-size: var(--prose-max);
+  padding: var(--space-4);
+  text-align: center;
+}
+
 .project-media-unavailable {
   padding: var(--space-4);
   text-align: center;
@@ -53,6 +60,31 @@
   font-size: var(--type-h2);
   line-height: 1.16;
   margin: 0;
+}
+
+.project-explorer-heading {
+  align-items: end;
+  display: grid;
+  gap: var(--space-2) var(--space-4);
+}
+
+.project-explorer-heading .eyebrow {
+  margin: 0;
+}
+
+.project-index-summary {
+  align-items: baseline;
+  color: var(--color-text-muted);
+  display: flex;
+  font-family: var(--font-mono);
+  font-size: var(--type-meta);
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.project-index-summary strong {
+  color: var(--color-text);
+  font: inherit;
 }
 
 .project-filter-bar {
@@ -262,8 +294,8 @@
 
 .project-records {
   display: grid;
-  gap: var(--space-6);
-  margin-block-start: var(--space-5);
+  gap: var(--space-10);
+  margin-block-start: var(--space-6);
 }
 
 .project-record {
@@ -339,7 +371,7 @@
 }
 
 .project-record-section {
-  margin-block-start: var(--space-6);
+  margin-block-start: var(--space-8);
 }
 
 .project-record-section h3 {
@@ -395,7 +427,27 @@
   color: var(--color-text-subtle);
 }
 
+.project-links a {
+  align-items: baseline;
+  display: inline-flex;
+  gap: var(--space-2);
+}
+
+.project-links [data-project-link-marker] {
+  color: var(--color-text-subtle);
+  font-family: var(--font-mono);
+  font-size: var(--type-overline);
+}
+
 @media (min-width: 48rem) {
+  .project-explorer-heading {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .project-explorer-heading .eyebrow {
+    grid-column: 1 / -1;
+  }
+
   .project-filter-bar {
     align-items: end;
     gap: var(--space-5);
@@ -470,14 +522,12 @@
 
 @media (hover: hover) and (pointer: fine) {
   [data-project-tile] {
-    transition:
-      box-shadow var(--motion-standard) var(--ease-emphasis),
-      transform var(--motion-standard) var(--ease-emphasis);
+    transition: transform var(--motion-standard) var(--ease-emphasis);
   }
 
   [data-project-tile]:hover {
     box-shadow: var(--shadow-raised);
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.015);
   }
 
   [data-project-tile]:active {
@@ -485,6 +535,18 @@
     transition-duration: var(--motion-fast);
   }
 
+  [data-project-tile]:focus-visible {
+    transform: translateY(-1px) scale(1.01);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-project-tile] {
+    transition-duration: 0ms;
+  }
+
+  [data-project-tile]:hover,
+  [data-project-tile]:active,
   [data-project-tile]:focus-visible {
     transform: none;
   }
