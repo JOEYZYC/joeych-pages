@@ -66,11 +66,37 @@
   color: var(--color-accent);
 }
 
+@media (hover: hover) and (pointer: fine) {
+  .header-button:enabled:hover,
+  .language-link:hover,
+  .dialog-close:enabled:hover,
+  .certificate-control:enabled:hover {
+    color: var(--color-control-hover);
+    text-decoration-thickness: 0.125rem;
+  }
+
+  .footer-link:hover {
+    color: var(--color-on-strong-hover);
+    text-decoration-thickness: 0.125rem;
+  }
+}
+
+.header-button:enabled:active,
+.dialog-close:enabled:active,
+.certificate-control:enabled:active {
+  transform: translateY(0.0625rem);
+}
+
 .header-actions {
   align-items: center;
   display: flex;
   gap: var(--space-1);
   margin-inline-start: auto;
+}
+
+.header-control-group {
+  display: inline-flex;
+  position: relative;
 }
 
 .header-button,
@@ -82,6 +108,10 @@
   min-inline-size: var(--target-size);
 }
 
+.header-button {
+  white-space: nowrap;
+}
+
 .header-icon,
 .theme-toggle-icon {
   align-items: center;
@@ -90,7 +120,8 @@
 }
 
 .header-icon svg,
-.theme-toggle-icon svg {
+.theme-toggle-icon svg,
+.language-link svg {
   block-size: 1em;
   inline-size: 1em;
 }
@@ -101,10 +132,42 @@
 }
 
 .language-link {
+  gap: var(--space-1);
   color: var(--color-accent);
   font-size: var(--type-small);
   padding-inline: var(--space-2);
   text-decoration: none;
+}
+
+.control-tooltip {
+  background: var(--color-surface-strong);
+  border-radius: var(--radius-control);
+  color: var(--color-on-strong);
+  font-family: var(--font-body);
+  font-size: var(--type-small);
+  inline-size: max-content;
+  inset-block-start: calc(100% + var(--space-1));
+  inset-inline-end: 0;
+  max-inline-size: min(16rem, calc(100vw - var(--space-8)));
+  opacity: 0;
+  padding: var(--space-2) var(--space-3);
+  pointer-events: none;
+  position: absolute;
+  transform: translateY(-0.25rem);
+  transition: opacity var(--motion-fast) var(--ease-standard), transform var(--motion-fast) var(--ease-standard);
+  visibility: hidden;
+  z-index: 30;
+}
+
+.header-button:hover .control-tooltip,
+.header-button:focus-visible .control-tooltip,
+.language-link:hover .control-tooltip,
+.language-link:focus-visible .control-tooltip,
+.header-control-group:focus-within .control-tooltip,
+.header-control-group:hover .control-tooltip {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
 }
 
 .signal-rail {
@@ -123,6 +186,36 @@
 
 html[data-js="true"] .header-nav[data-open="false"] {
   display: none;
+}
+
+html[data-js="false"] .header-inner {
+  display: none;
+}
+
+.noscript-header-fallback {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0 auto;
+  max-inline-size: var(--content-max);
+  padding: var(--space-4);
+}
+
+.noscript-header-fallback nav,
+.noscript-header-fallback ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.noscript-header-fallback a {
+  align-items: center;
+  color: var(--color-text);
+  display: inline-flex;
+  min-block-size: var(--target-size);
+  padding-inline: var(--space-2);
 }
 
 html[data-js="true"] .header-nav[data-open="true"] {
@@ -145,7 +238,7 @@ html[data-js="true"] .header-nav[data-open="true"] {
   }
 }
 
-@media (min-width: 75rem) {
+@media (min-width: 64rem) {
   .header-inner {
     flex-wrap: nowrap;
     gap: var(--space-3);
@@ -208,8 +301,22 @@ html[data-js="true"] .header-nav[data-open="true"] {
   color: var(--color-on-strong);
 }
 
-.footer a:hover {
-  color: var(--color-accent-hover);
+.footer-link {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--space-2);
+  text-decoration-thickness: 0.0625rem;
+}
+
+.footer-link svg {
+  block-size: 1em;
+  flex: 0 0 auto;
+  inline-size: 1em;
+}
+
+.footer-link svg[data-icon="external"] {
+  block-size: 0.75em;
+  inline-size: 0.75em;
 }
 
 .intro {
@@ -243,6 +350,37 @@ html[data-js="true"] .header-nav[data-open="true"] {
   max-block-size: calc(100dvh - var(--space-8));
   overflow: auto;
   padding: var(--space-6);
+}
+
+.dialog-surface[open] {
+  animation: dialog-open var(--motion-dialog) var(--ease-emphasis);
+}
+
+.dialog-surface::backdrop {
+  background: var(--color-backdrop);
+  animation: dialog-backdrop-open var(--motion-dialog) var(--ease-standard);
+}
+
+@keyframes dialog-open {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-2));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dialog-backdrop-open {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .dialog-surface h2 {
@@ -312,6 +450,7 @@ html[data-js="true"] .header-nav[data-open="true"] {
 }
 
 .certificate-caption {
+  color: var(--color-text);
   margin-block-end: 0;
 }
 
@@ -342,4 +481,13 @@ html[data-js="true"] .header-nav[data-open="true"] {
     grid-template-columns: minmax(0, 1fr);
   }
 }
-@media (prefers-reduced-motion: reduce) { .signal-rail { transition-duration: 0ms; } }
+@media (prefers-reduced-motion: reduce) {
+  .control-tooltip,
+  .dialog-surface,
+  .dialog-surface[open],
+  .dialog-surface::backdrop,
+  .signal-rail {
+    animation: none;
+    transition-duration: 0ms;
+  }
+}
