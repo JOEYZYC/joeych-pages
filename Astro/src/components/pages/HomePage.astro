@@ -7,6 +7,7 @@ import { getRoutePath } from "../../lib/routes"
 import { publicMediaUrl } from "../../lib/urls"
 import "../../styles/home.css"
 import "../../styles/projects.css"
+import Icon from "../Icon.astro"
 import ProjectTile from "../ProjectTile.astro"
 
 type Props = { readonly locale: Locale }
@@ -29,10 +30,12 @@ const labels = UI[locale]
       <p class="home-summary">{profile.summary[locale]}</p>
       <div class="home-actions">
         <a class="home-action home-action--primary" href={getRoutePath("experience", locale)}>
-          {labels.actions.experience}
+          <span>{labels.actions.experience}</span>
+          <span class="home-action-icon" aria-hidden="true"><Icon name="arrow-right" /></span>
         </a>
         <a class="home-action home-action--secondary" href={getRoutePath("projects", locale)}>
-          {labels.actions.projects}
+          <span>{labels.actions.projects}</span>
+          <span class="home-action-icon" aria-hidden="true"><Icon name="arrow-right" /></span>
         </a>
       </div>
     </section>
@@ -73,7 +76,10 @@ const labels = UI[locale]
         aria-labelledby="home-education-title"
       >
         <p class="eyebrow">{labels.routeIntros.experience.overline}</p>
-        <h2 id="home-education-title">{labels.sections.home.education}</h2>
+        <h2 id="home-education-title">
+          <span class="home-section-icon" data-home-education-icon aria-hidden="true"><Icon name="graduation-cap" /></span>
+          {labels.sections.home.education}
+        </h2>
         <p class="home-education-period">{education.period}</p>
         <h3>{education.school[locale]}</h3>
         <p>{education.degree[locale]}</p>
@@ -87,7 +93,10 @@ const labels = UI[locale]
       <section class="home-featured" aria-labelledby="featured-title">
         <div class="home-featured-heading">
           <p class="eyebrow">{labels.routeIntros.projects.overline}</p>
-          <h2 id="featured-title">{labels.sections.home.featured}</h2>
+          <h2 id="featured-title">
+            <span class="home-section-icon" data-home-featured-icon aria-hidden="true"><Icon name="arrow-right" /></span>
+            {labels.sections.home.featured}
+          </h2>
         </div>
         <div class="home-featured-grid">
           {featuredProjects.map((project, index) => (

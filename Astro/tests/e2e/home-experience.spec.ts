@@ -3,11 +3,9 @@ import { expect, test } from "@playwright/test"
 
 import { getProfileData } from "../../src/lib/profile-data"
 
-const viewports = [
-  { name: "mobile", width: 375, height: 812 },
-  { name: "tablet", width: 768, height: 1024 },
-  { name: "desktop", width: 1280, height: 900 },
-] as const
+import { VIEWPORTS } from "./support/site-matrix"
+
+const viewports = VIEWPORTS
 
 const pages = [
   { path: "", locale: "zh", heading: "张易成", counterpart: /\/en\/$/ },
@@ -55,6 +53,25 @@ test.describe("home and experience routes", () => {
   }
 
   for (const route of homeRoutes) {
+    test(`orients ${route.locale} Home actions and evidence sections without changing source content`, async ({ page }) => {
+      // Given: the localized Home document
+      await page.goto(route.path)
+
+      // When: the action and evidence section affordances are inspected
+      const home = page.locator("[data-home-grid]")
+
+      // Then: only the approved CTA and section-level icons orient the existing source-backed content
+      const actionIcons = home.locator(".home-action svg[data-icon='arrow-right']")
+      await expect(actionIcons).toHaveCount(2)
+      for (const actionIcon of await actionIcons.all()) {
+        const actionIconBox = await box(actionIcon)
+        expect(actionIconBox.width).toBeGreaterThan(0)
+        expect(actionIconBox.height).toBeGreaterThan(0)
+      }
+      await expect(home.locator("[data-home-education-icon] svg[data-icon='graduation-cap']")).toHaveCount(1)
+      await expect(home.locator("[data-home-featured-icon] svg[data-icon='arrow-right']")).toHaveCount(1)
+    })
+
     test(`keeps ${route.locale} Home source order and responsive Bento geometry`, async ({ page }) => {
       const data = await getProfileData()
 
@@ -70,16 +87,22 @@ test.describe("home and experience routes", () => {
         const education = grid.locator("[data-home-education]")
         const tiles = grid.locator("[data-project-tile]")
 
-        expect(await grid.locator(":scope > *").evaluateAll((elements) => elements.map((element) => {
-          if (element.matches("[data-home-hero]")) return "hero"
-          if (element.matches("[data-home-portrait]")) return "portrait"
-          if (element.matches("[data-home-facts]")) return "facts"
-          if (element.matches("[data-home-education]")) return "education"
-          return element.className
+        expect(await grid.evaluate((element) => [...element.children].map((child) => {
+          if (child.matches("[data-home-hero]")) return "hero"
+          if (child.matches("[data-home-portrait]")) return "portrait"
+          if (child.matches("[data-home-facts]")) return "facts"
+          if (child.matches("[data-home-education]")) return "education"
+          return child.className
         }))).toEqual(["hero", "portrait", "facts", "education", "home-featured"])
         await expect(hero.getByRole("heading", { level: 1, name: route.name })).toBeVisible()
-        await expect(hero.getByRole("link", { name: route.experienceAction })).toBeVisible()
-        await expect(hero.getByRole("link", { name: route.projectsAction })).toBeVisible()
+        await expect(hero.getByRole("link", { name: route.experienceAction })).toHaveAttribute(
+          "href",
+          `/joeych-pages/${route.locale === "en" ? "en/" : ""}experience/`,
+        )
+        await expect(hero.getByRole("link", { name: route.projectsAction })).toHaveAttribute(
+          "href",
+          `/joeych-pages/${route.locale === "en" ? "en/" : ""}projects/`,
+        )
         await expect(portrait.getByRole("img", { name: route.name })).toHaveCSS("object-fit", "contain")
         await expect(facts.locator("dl > div")).toHaveCount(4)
         await expect(education).toHaveAttribute("id", `education-${data.profile.education[0]?.id}`)
@@ -89,6 +112,11 @@ test.describe("home and experience routes", () => {
           "dual-light-fusion",
           "resgatnet",
         ])
+        expect(await tiles.evaluateAll((elements) => elements.map((element) => element.getAttribute("href")))).toEqual(
+          data.projects
+            .filter(({ featured }) => featured)
+            .map((project) => `/joeych-pages/${route.locale === "en" ? "en/" : ""}projects/#${project.id}`),
+        )
         await expect(tiles.first()).toHaveCSS("display", "grid")
         const arrowBox = await box(tiles.first().locator(".project-tile-arrow svg"))
         expect(arrowBox.width).toBeLessThanOrEqual(24)
@@ -128,6 +156,24 @@ test.describe("home and experience routes", () => {
   }
 
   for (const route of experienceRoutes) {
+    test(`uses the approved ${route.locale} Experience summary and section-level chronology orientation`, async ({ page }) => {
+      // Given: the localized Experience document
+      await page.goto(route.path)
+
+      // When: the route introduction and chronology headings are inspected
+      const headings = page.locator("[data-experience-heading]")
+
+      // Then: the UI-owned summary and restrained section icon clarify the source-backed chronology
+      await expect(page.locator(".intro > p").last()).toHaveText(
+        route.locale === "zh"
+          ? "按时间查看教育经历与校园实践。"
+          : "Review education and campus experience in chronological order.",
+      )
+      await expect(headings).toHaveCount(2)
+      await expect(headings.locator("svg[data-icon='graduation-cap']")).toHaveCount(1)
+      await expect(page.locator("[data-experience-record] svg")).toHaveCount(0)
+    })
+
     test(`keeps ${route.locale} Experience source order and campus spans`, async ({ page }) => {
       for (const viewport of viewports) {
         await page.setViewportSize(viewport)

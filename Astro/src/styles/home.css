@@ -61,10 +61,13 @@
 }
 
 .home-action {
+  align-items: center;
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-control);
+  display: inline-flex;
   font-family: var(--font-mono);
   font-size: var(--type-small);
+  gap: var(--space-2);
   justify-content: center;
   padding: var(--space-2) var(--space-4);
   text-decoration: none;
@@ -87,17 +90,26 @@
   color: var(--color-text);
 }
 
+.home-action-icon {
+  display: inline-flex;
+}
+
+.home-action-icon svg {
+  block-size: 0.8em;
+  inline-size: 0.8em;
+}
+
 .home-portrait {
+  align-self: start;
   display: grid;
   margin: 0;
-  overflow: hidden;
   padding: 0;
   place-items: center;
 }
 
 .home-portrait img {
-  block-size: 100%;
-  inline-size: 100%;
+  inline-size: min(100%, 25rem);
+  max-block-size: calc(var(--space-20) * 5);
   object-fit: contain;
 }
 
@@ -112,16 +124,19 @@
 
 .home-facts dl {
   display: grid;
-  gap: var(--space-3);
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  grid-template-columns: minmax(0, 1fr);
   margin: var(--space-5) 0 0;
 }
 
 .home-facts dl > div {
-  background: var(--color-surface-muted);
-  border-radius: var(--radius-control);
+  align-items: baseline;
+  border-block-end: 1px solid var(--color-border);
+  display: flex;
+  gap: var(--space-4);
+  justify-content: space-between;
   min-inline-size: 0;
-  padding: var(--space-3);
+  padding-block: var(--space-2);
 }
 
 .home-facts dt {
@@ -131,8 +146,19 @@
 
 .home-facts dd {
   font-family: var(--font-mono);
-  font-size: var(--type-h3);
-  margin: var(--space-1) 0 0;
+  font-size: var(--type-small);
+  margin: 0;
+  text-align: end;
+}
+
+.home-section-icon {
+  color: var(--color-accent);
+  margin-inline-end: var(--space-2);
+}
+
+.home-section-icon svg {
+  block-size: 0.8em;
+  inline-size: 0.8em;
 }
 
 .home-education-period {

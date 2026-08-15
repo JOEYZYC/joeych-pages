@@ -5,6 +5,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro"
 import { getProfileData } from "../../lib/profile-data"
 import "../../styles/experience.css"
 import EditorialIntro from "../EditorialIntro.astro"
+import Icon from "../Icon.astro"
 
 type Props = { readonly locale: Locale }
 
@@ -18,15 +19,18 @@ const labels = UI[locale]
   <EditorialIntro
     overline={labels.routeIntros.experience.overline}
     title={labels.routeIntros.experience.title}
-    summary={profile.summary[locale]}
+    summary={labels.routeIntros.experience.summary}
   />
 
   <section class="experience-section" aria-label={labels.routeIntros.experience.title}>
     <div class="experience-grid">
       {profile.education.length > 0 && (
-        <header class="experience-heading">
+        <header class="experience-heading" data-experience-heading>
           <p class="eyebrow">{labels.routeIntros.experience.overline}</p>
-          <h2>{labels.sections.experience.education}</h2>
+          <h2>
+            <span class="experience-heading-icon" aria-hidden="true"><Icon name="graduation-cap" /></span>
+            {labels.sections.experience.education}
+          </h2>
         </header>
       )}
       {profile.education.map((education) => (
@@ -46,7 +50,7 @@ const labels = UI[locale]
       ))}
 
       {profile.campus_experience.length > 0 && (
-        <header class="experience-heading experience-heading--campus">
+        <header class="experience-heading experience-heading--campus" data-experience-heading>
           <p class="eyebrow">{labels.routeIntros.experience.overline}</p>
           <h2>{labels.sections.experience.campus}</h2>
         </header>
