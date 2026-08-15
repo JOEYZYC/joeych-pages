@@ -1,0 +1,50 @@
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core"
+import { faGithub, faGoogleScholar, faOrcid } from "@fortawesome/free-brands-svg-icons"
+import {
+  faArrowRight,
+  faBars,
+  faBookOpen,
+  faCertificate,
+  faChevronLeft,
+  faChevronRight,
+  faEnvelope,
+  faExternalLink,
+  faFileLines,
+  faGraduationCap,
+  faHouse,
+  faLanguage,
+  faLightbulb,
+  faLink,
+  faMicrochip,
+  faMoon,
+  faSun,
+  faTrophy,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons"
+
+export const ICONS = {
+  house: faHouse,
+  bars: faBars,
+  language: faLanguage,
+  envelope: faEnvelope,
+  sun: faSun,
+  moon: faMoon,
+  xmark: faXmark,
+  "chevron-left": faChevronLeft,
+  "chevron-right": faChevronRight,
+  certificate: faCertificate,
+  trophy: faTrophy,
+  "graduation-cap": faGraduationCap,
+  "book-open": faBookOpen,
+  lightbulb: faLightbulb,
+  "file-lines": faFileLines,
+  microchip: faMicrochip,
+  link: faLink,
+  "arrow-right": faArrowRight,
+  external: faExternalLink,
+  github: faGithub,
+  "google-scholar": faGoogleScholar,
+  orcid: faOrcid,
+} as const satisfies Readonly<Record<string, IconDefinition>>
+
+export type IconName = keyof typeof ICONS
