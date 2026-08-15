@@ -3,6 +3,7 @@ import type { Patent, Publication, Thesis } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import CertificateDialog from "./CertificateDialog.astro"
+import Icon from "./Icon.astro"
 
 type Props = {
   readonly locale: Locale
@@ -20,8 +21,11 @@ const labels = UI[locale]
   </header>
 
   {publications.length > 0 && (
-    <section class="research-section" aria-labelledby="publications-title">
-      <h2 id="publications-title">{labels.sections.awards.publications}</h2>
+    <section class="research-section research-section--publications" aria-labelledby="publications-title">
+      <header class="research-section-heading">
+        <span class="section-icon" aria-hidden="true"><Icon name="book-open" /></span>
+        <h2 id="publications-title">{labels.sections.awards.publications}</h2>
+      </header>
       <div class="research-grid">
         {publications.map((publication) => (
           <article
@@ -54,8 +58,11 @@ const labels = UI[locale]
   )}
 
   {patents.length > 0 && (
-    <section class="research-section" aria-labelledby="patents-title">
-      <h2 id="patents-title">{labels.sections.awards.patents}</h2>
+    <section class="research-section research-section--patents" aria-labelledby="patents-title">
+      <header class="research-section-heading">
+        <span class="section-icon" aria-hidden="true"><Icon name="lightbulb" /></span>
+        <h2 id="patents-title">{labels.sections.awards.patents}</h2>
+      </header>
       <div class="research-grid">
         {patents.map((patent) => (
           <article
@@ -87,8 +94,11 @@ const labels = UI[locale]
     </section>
   )}
 
-  <section class="research-section" aria-labelledby="thesis-title">
-    <h2 id="thesis-title">{labels.sections.awards.thesis}</h2>
+  <section class="research-section research-section--thesis" aria-labelledby="thesis-title">
+    <header class="research-section-heading">
+      <span class="section-icon" aria-hidden="true"><Icon name="file-lines" /></span>
+      <h2 id="thesis-title">{labels.sections.awards.thesis}</h2>
+    </header>
     <div class="research-grid">
       <article
         class="research-panel research-panel--thesis"

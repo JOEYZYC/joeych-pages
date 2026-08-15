@@ -3,8 +3,24 @@ import { expect, test } from "@playwright/test"
 import { getProfileData } from "../../src/lib/profile-data"
 
 const routes = [
-  { path: "awards/", locale: "zh", heading: "获奖证书", language: "zh-CN", ledger: "获奖档案", research: "研究档案" },
-  { path: "en/awards/", locale: "en", heading: "Awards", language: "en", ledger: "Achievement ledger", research: "Research archive" },
+  {
+    path: "awards/",
+    locale: "zh",
+    heading: "获奖证书",
+    language: "zh-CN",
+    summary: "按年份查阅竞赛荣誉、出版成果、专利与毕业论文。",
+    ledger: "获奖档案",
+    research: "研究档案",
+  },
+  {
+    path: "en/awards/",
+    locale: "en",
+    heading: "Awards",
+    language: "en",
+    summary: "Review awards, publications, patents, and thesis evidence by year.",
+    ledger: "Achievement ledger",
+    research: "Research archive",
+  },
 ] as const
 
 test.describe("awards archive", () => {
@@ -17,8 +33,13 @@ test.describe("awards archive", () => {
 
       await expect(page.locator("html")).toHaveAttribute("lang", route.language)
       await expect(page.getByRole("heading", { level: 1, name: route.heading })).toBeVisible()
+      await expect(page.locator(".intro > p:not(.eyebrow)")).toHaveText(route.summary)
       await expect(page.locator(".achievement-ledger .eyebrow")).toHaveText(route.ledger)
       await expect(page.locator(".research-archive .eyebrow")).toHaveText(route.research)
+      await expect(page.locator('.achievement-ledger > .archive-heading svg[data-icon="trophy"]')).toHaveCount(1)
+      await expect(page.locator('.research-section--publications > header svg[data-icon="book-open"]')).toHaveCount(1)
+      await expect(page.locator('.research-section--patents > header svg[data-icon="lightbulb"]')).toHaveCount(1)
+      await expect(page.locator('.research-section--thesis > header svg[data-icon="file-lines"]')).toHaveCount(1)
       await expect(awards).toHaveCount(data.awards.length)
       expect(await awards.evaluateAll((elements) => elements.map((element) => element.getAttribute("data-award-id")))).toEqual(
         data.awards.map((award) => award.id),
@@ -38,6 +59,14 @@ test.describe("awards archive", () => {
         await expect(panel).toHaveAttribute("data-award-featured", String(award.featured))
       }
       await expect(page.locator(".award-prize--top-tier")).toHaveCount(0)
+      expect([
+        ...data.awards,
+        ...data.publications,
+        ...data.patents,
+        data.thesis,
+      ].every((record) => record.links.length === 0)).toBe(true)
+      await expect(page.locator(".archive-link")).toHaveCount(0)
+      await expect(page.locator(".unavailable-link")).toHaveCount(0)
     })
   }
 
@@ -49,9 +78,15 @@ test.describe("awards archive", () => {
     const next = dialog.locator("[data-certificate-next]")
     const caption = dialog.locator("[data-certificate-caption]")
 
+    await expect(trigger.locator('svg[data-icon="certificate"]')).toHaveCount(1)
+    await expect(trigger).toContainText("View certificate")
     await trigger.focus()
     await page.keyboard.press("Enter")
     await expect(dialog).toBeVisible()
+    await expect(dialog.locator("h2")).toBeFocused()
+    await expect(dialog.locator('[data-certificate-close] svg[data-icon="xmark"]')).toHaveCount(1)
+    await expect(previous.locator('svg[data-icon="chevron-left"]')).toHaveCount(1)
+    await expect(next.locator('svg[data-icon="chevron-right"]')).toHaveCount(1)
     await expect(dialog.locator("[data-certificate-loading]")).toBeHidden()
     await expect(previous).toBeDisabled()
     await expect(next).toBeEnabled()
@@ -66,6 +101,11 @@ test.describe("awards archive", () => {
     await expect(dialog.locator("[data-certificate-image]")).toBeHidden()
     await expect(dialog.locator("[data-certificate-unavailable]")).toHaveText("Certificate unavailable")
     await expect(dialog.locator("[data-certificate-unavailable]")).toBeVisible()
+    await expect(caption).toHaveText("Electronic Design Contest (Renesas) — National Third")
+
+    await previous.click()
+    await expect(dialog.locator("[data-certificate-unavailable]")).toBeHidden()
+    await expect(caption).toHaveText("Electronic Design Contest (Renesas) — Eastern-China First")
 
     await page.keyboard.press("Escape")
     await expect(dialog).not.toBeVisible()

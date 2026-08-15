@@ -3,6 +3,7 @@ import type { Award } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import CertificateDialog from "./CertificateDialog.astro"
+import Icon from "./Icon.astro"
 
 type Props = { readonly awards: readonly Award[]; readonly locale: Locale }
 const { awards, locale } = Astro.props
@@ -12,9 +13,12 @@ const years = [...new Set(awards.map((award) => award.year))]
 
 {awards.length > 0 && (
   <section class="achievement-ledger" aria-labelledby="awards-title">
-    <header class="archive-heading">
+    <header class="archive-heading archive-heading--awards">
       <p class="eyebrow">{labels.sections.awards.ledgerOverline}</p>
-      <h2 id="awards-title">{labels.sections.awards.awards}</h2>
+      <div class="archive-heading-title">
+        <span class="section-icon" aria-hidden="true"><Icon name="trophy" /></span>
+        <h2 id="awards-title">{labels.sections.awards.awards}</h2>
+      </div>
     </header>
     {years.map((year) => (
       <section class="achievement-year" aria-labelledby={`awards-${year}`}>
