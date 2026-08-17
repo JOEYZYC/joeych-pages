@@ -8,6 +8,18 @@ const routes = CANONICAL_ROUTES
 const viewports = VIEWPORTS
 
 test.describe("formal site shell", () => {
+  test("offers a localized keyboard shortcut to the main content", async ({ page }) => {
+    await page.goto("en/")
+
+    await page.keyboard.press("Tab")
+    const skipLink = page.getByRole("link", { name: "Skip to main content" })
+    await expect(skipLink).toBeVisible()
+    await expect(skipLink).toBeFocused()
+    await page.keyboard.press("Enter")
+
+    await expect(page.getByRole("main")).toBeFocused()
+  })
+
   for (const route of routes) {
     test(`renders the complete localized shell for ${route.path || "root"}`, async ({ page }) => {
       await page.goto(route.path)

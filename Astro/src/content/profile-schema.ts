@@ -4,6 +4,7 @@ import { publicMediaPathSchema } from "../lib/profile-paths"
 import {
   componentIdSchema,
   hasUniqueIds,
+  httpsUrlSchema,
   localizedSchema,
   projectIdSchema,
   recordIdSchema,
@@ -98,9 +99,9 @@ export const profileSchema = z
         email: z.email(),
         hometown: localizedSchema,
         political: localizedSchema,
-        github: z.url(),
-        scholar: z.url(),
-        orcid: z.url(),
+        github: httpsUrlSchema,
+        scholar: httpsUrlSchema,
+        orcid: httpsUrlSchema,
       })
       .strict()
       .readonly(),

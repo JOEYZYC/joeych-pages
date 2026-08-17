@@ -1,3 +1,16 @@
+.skip-link {
+  background: var(--color-surface);
+  border: 1px solid var(--color-focus);
+  inset-block-start: var(--space-3);
+  inset-inline-start: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  position: fixed;
+  transform: translateY(calc(-100% - var(--space-4)));
+  z-index: 100;
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
 .site-main {
   margin: 0 auto;
   max-inline-size: var(--content-max);

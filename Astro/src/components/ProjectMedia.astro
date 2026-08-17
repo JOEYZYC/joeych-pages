@@ -58,11 +58,13 @@ const dimensions = PROJECT_MEDIA_DIMENSIONS[mediaPath]
     const image = media.querySelector<HTMLImageElement>("[data-project-media-image]")
     const unavailable = media.querySelector<HTMLElement>("[data-project-media-unavailable]")
     if (!image || !unavailable) continue
-    image.addEventListener("error", () => {
+    const showUnavailable = () => {
       image.hidden = true
       unavailable.hidden = false
       media.dataset.mediaError = "true"
-    })
+    }
+    image.addEventListener("error", showUnavailable)
+    if (image.complete && image.naturalWidth === 0) showUnavailable()
     media.dataset.mediaReady = "true"
   }
 </script>

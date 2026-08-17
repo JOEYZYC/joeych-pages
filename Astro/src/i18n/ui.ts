@@ -10,6 +10,7 @@ type RouteIntro = {
 )
 
 type UiLabels = {
+  readonly skipToContent: string
   readonly navigation: Readonly<Record<RouteId, string>>
   readonly menu: string
   readonly mainNavigation: string
@@ -83,6 +84,7 @@ type UiLabels = {
     readonly unavailable: string
   }
   readonly links: {
+    readonly external: string
     readonly github: string
     readonly scholar: string
     readonly orcid: string
@@ -103,6 +105,7 @@ type UiLabels = {
 
 export const UI = {
   zh: {
+    skipToContent: "跳到主要内容",
     navigation: {
       home: "自我介绍",
       experience: "个人经历",
@@ -178,7 +181,7 @@ export const UI = {
       loading: "证书加载中",
       unavailable: "证书暂不可用",
     },
-    links: { github: "GitHub", scholar: "Google Scholar", orcid: "ORCID", related: "相关链接" },
+    links: { external: "外部链接", github: "GitHub", scholar: "Google Scholar", orcid: "ORCID", related: "相关链接" },
     sections: {
       home: { profile: "个人档案", education: "教育经历", featured: "精选证据" },
       experience: { education: "教育经历", campus: "校园经历" },
@@ -208,6 +211,7 @@ export const UI = {
     },
   },
   en: {
+    skipToContent: "Skip to main content",
     navigation: {
       home: "About",
       experience: "Experience",
@@ -283,7 +287,7 @@ export const UI = {
       loading: "Loading certificate",
       unavailable: "Certificate unavailable",
     },
-    links: { github: "GitHub", scholar: "Google Scholar", orcid: "ORCID", related: "Related links" },
+    links: { external: "External link", github: "GitHub", scholar: "Google Scholar", orcid: "ORCID", related: "Related links" },
     sections: {
       home: { profile: "Profile", education: "Education", featured: "Featured evidence" },
       experience: { education: "Education", campus: "Campus experience" },

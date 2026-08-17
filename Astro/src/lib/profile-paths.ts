@@ -1,4 +1,5 @@
-import path, { resolve } from "node:path"
+import { existsSync } from "node:fs"
+import path from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
 
 import { z } from "astro/zod"
@@ -21,9 +22,26 @@ export const PROFILE_CONTENT_PATHS = {
   thesis: "../Profile/data/thesis.yml",
 } as const
 
-const PROFILE_ROOT = pathToFileURL(`${resolve(process.cwd(), "../Profile")}/`)
+function resolveProfileRoot(): URL {
+  const candidates = [
+    fileURLToPath(new URL("../../../Profile/", import.meta.url)),
+    fileURLToPath(new URL("../../../../Profile/", import.meta.url)),
+    path.resolve(process.cwd(), "../Profile"),
+    path.resolve(process.cwd(), "Profile"),
+  ]
+  const root = candidates.find(
+    (candidate) => existsSync(path.join(candidate, "data")) && existsSync(path.join(candidate, "media")),
+  )
+  if (root === undefined) {
+    throw new Error("Unable to locate the public Profile package")
+  }
+  return pathToFileURL(`${root}${path.sep}`)
+}
+
+const PROFILE_ROOT = resolveProfileRoot()
 const PROFILE_DATA_ROOT = new URL("data/", PROFILE_ROOT)
 const PROFILE_MEDIA_ROOT = new URL("media/", PROFILE_ROOT)
+export const PROFILE_MEDIA_DIRECTORY = fileURLToPath(PROFILE_MEDIA_ROOT)
 const CERTIFICATE_PREFIX = "assets/img/certificates/"
 
 export const PROFILE_DATA_URLS = {
@@ -47,6 +65,12 @@ export class ProfilePathError extends Error {
 }
 
 function normalizeRelativePath(sourcePath: string, pathKind: "media" | "certificate"): string {
+  let decodedPath: string
+  try {
+    decodedPath = decodeURIComponent(sourcePath)
+  } catch {
+    throw new ProfilePathError(sourcePath, pathKind)
+  }
   const normalized = path.posix.normalize(sourcePath)
   const segments = sourcePath.split("/")
   const hasUnsafeSegment = segments.some(
@@ -55,6 +79,7 @@ function normalizeRelativePath(sourcePath: string, pathKind: "media" | "certific
 
   if (
     sourcePath.includes("\\") ||
+    decodedPath !== sourcePath ||
     path.posix.isAbsolute(sourcePath) ||
     normalized !== sourcePath ||
     hasUnsafeSegment
@@ -94,5 +119,14 @@ export const certificatePathSchema = z
 export type PublicMediaPath = z.infer<typeof publicMediaPathSchema>
 
 export function publicMediaFilePath(publicPath: PublicMediaPath): string {
-  return fileURLToPath(new URL(`.${publicPath}`, PROFILE_MEDIA_ROOT))
+  const filePath = path.resolve(PROFILE_MEDIA_DIRECTORY, publicPath.slice(1))
+  const relativePath = path.relative(PROFILE_MEDIA_DIRECTORY, filePath)
+  if (
+    relativePath === ".." ||
+    relativePath.startsWith(`..${path.sep}`) ||
+    path.isAbsolute(relativePath)
+  ) {
+    throw new ProfilePathError(publicPath, "media")
+  }
+  return filePath
 }

@@ -1,7 +1,7 @@
 - id: dynamic-dictionary-learning
   year: 2024
   featured: true
-  title: { zh: 基于字典动态学习的目标参数估计方法、系统及存储介质, en: Target Parameter Estimation Method, System and Storage Medium Based on Dynamic Dictionary Learning }
+  title: { zh: 基于字典动态学习的目标参数估计方法、系统及存储介质, en: 'Target Parameter Estimation Method, System and Storage Medium Based on Dynamic Dictionary Learning' }
   authors: { zh: 作者位次 2/6, en: Author 2/6 }
   tags: [wireless-perception]
   links: []

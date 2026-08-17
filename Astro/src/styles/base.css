@@ -10,6 +10,14 @@
 [hidden] {
   display: none !important;
 }
+.visually-hidden {
+  block-size: 1px;
+  clip-path: inset(50%);
+  inline-size: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
 html {
   background: var(--color-canvas);
   color: var(--color-text);

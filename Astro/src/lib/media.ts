@@ -1,6 +1,11 @@
-import { stat } from "node:fs/promises"
+import { lstat } from "node:fs/promises"
+import path from "node:path"
 
-import { type PublicMediaPath, publicMediaFilePath } from "./profile-paths"
+import {
+  PROFILE_MEDIA_DIRECTORY,
+  type PublicMediaPath,
+  publicMediaFilePath,
+} from "./profile-paths"
 
 export class MissingPublicMediaError extends Error {
   override readonly name = "MissingPublicMediaError"
@@ -13,14 +18,35 @@ export class MissingPublicMediaError extends Error {
   }
 }
 
+export class UnsafePublicMediaError extends Error {
+  override readonly name = "UnsafePublicMediaError"
+
+  constructor(readonly publicPath: PublicMediaPath) {
+    super(`Public media path contains a symbolic link: ${publicPath}`)
+  }
+}
+
 async function assertPublicMediaFile(publicPath: PublicMediaPath): Promise<void> {
   try {
-    const mediaStat = await stat(publicMediaFilePath(publicPath))
+    const filePath = publicMediaFilePath(publicPath)
+    const relativePath = path.relative(PROFILE_MEDIA_DIRECTORY, filePath)
+    let currentPath = PROFILE_MEDIA_DIRECTORY
+    let mediaStat = await lstat(currentPath)
+    if (mediaStat.isSymbolicLink()) {
+      throw new UnsafePublicMediaError(publicPath)
+    }
+    for (const segment of relativePath.split(path.sep)) {
+      currentPath = path.join(currentPath, segment)
+      mediaStat = await lstat(currentPath)
+      if (mediaStat.isSymbolicLink()) {
+        throw new UnsafePublicMediaError(publicPath)
+      }
+    }
     if (!mediaStat.isFile()) {
       throw new MissingPublicMediaError(publicPath)
     }
   } catch (error) {
-    if (error instanceof MissingPublicMediaError) {
+    if (error instanceof MissingPublicMediaError || error instanceof UnsafePublicMediaError) {
       throw error
     }
     if (error instanceof Error) {

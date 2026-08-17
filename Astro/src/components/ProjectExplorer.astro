@@ -49,7 +49,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     <h2 id="project-explorer-title">{labels.sections.projects.index}</h2>
     <p class="project-index-summary" data-project-index-summary>
       <span>{labels.projectExplorer.results}</span>
-      <strong>{projects.length} / {projects.length}</strong>
+      <strong data-project-index-count>{projects.length} / {projects.length}</strong>
     </p>
   </header>
 
@@ -119,6 +119,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     if (explorer.dataset.explorerReady === "true") continue
     const pageRoot = explorer.closest<HTMLElement>("[data-projects-page]") ?? document.documentElement
     const controls = explorer.querySelector<HTMLElement>("[data-project-filter-controls]")
+    const staticCount = explorer.querySelector<HTMLElement>("[data-project-index-count]")
     const categoryFilter = explorer.querySelector<HTMLSelectElement>("[data-project-category-filter]")
     const tagFilter = explorer.querySelector<HTMLSelectElement>("[data-project-tag-filter]")
     const clearButton = explorer.querySelector<HTMLButtonElement>("[data-project-filter-clear]")
@@ -131,6 +132,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const evidenceSource = explorer.querySelector<HTMLScriptElement>("[data-project-skill-evidence]")
     if (
       !controls ||
+      !staticCount ||
       !categoryFilter ||
       !tagFilter ||
       !clearButton ||
@@ -279,6 +281,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const updateFilterSummary = () => {
       resultOutput.value = `${visibleIds.length} / ${projectIds.length}`
       resultOutput.textContent = resultOutput.value
+      staticCount.textContent = resultOutput.value
       emptyPanel.hidden = visibleIds.length !== 0
       clearButton.disabled = categoryFilter.value === "" && tagFilter.value === ""
     }

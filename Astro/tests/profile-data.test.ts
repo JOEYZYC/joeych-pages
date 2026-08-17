@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url"
 import { describe, expect, it } from "vitest"
 
 import { parseYamlValue } from "../src/content/loaders"
+import { httpsUrlSchema, localizedSchema } from "../src/content/schema-fields"
 import {
   loadProfileData,
   ProfileContentError,
@@ -89,6 +90,9 @@ describe("Profile content boundary", () => {
     expect(content.profile.portrait).toBe("/portrait-b1-cutout.png")
     expect(content.profile.favicon).toBe("/favicon.svg")
     expect(PROJECT_PLACEHOLDER_MEDIA_PATH).toBe("/projects/project-placeholder.png")
+    expect(publicMediaFilePath(PROJECT_PLACEHOLDER_MEDIA_PATH)).toBe(
+      fileURLToPath(new URL("../../Profile/media/projects/project-placeholder.png", import.meta.url)),
+    )
     await expect(readFile(publicMediaFilePath(PROJECT_PLACEHOLDER_MEDIA_PATH))).resolves.toBeInstanceOf(
       Buffer,
     )
@@ -193,6 +197,33 @@ describe("Profile content boundary", () => {
     await expect(result).rejects.toThrow(/media path/i)
   })
 
+  it.each(["%2e%2e/private/avatar.jpg", "%2E%2E/private/avatar.jpg", "projects%2f..%2fprivate/avatar.jpg"])(
+    "rejects encoded media traversal %s",
+    async (unsafePath) => {
+      const texts = await readCanonicalTexts()
+      const documents = documentsFrom({
+        ...texts,
+        projects: texts.projects.replace(
+          "projects/power-print-recognition/power-print-architecture.jpg",
+          `'${unsafePath}'`,
+        ),
+      })
+
+      await expect(parseProfileDocuments(documents)).rejects.toThrow(/media path/i)
+    },
+  )
+
+  it.each(["javascript:alert(1)", "data:text/html,unsafe", "file:///C:/private.txt", "http://example.com"])(
+    "rejects non-HTTPS external URL %s",
+    (unsafeUrl) => {
+      expect(httpsUrlSchema.safeParse(unsafeUrl).success).toBe(false)
+    },
+  )
+
+  it("accepts an HTTPS external URL", () => {
+    expect(httpsUrlSchema.parse("https://example.com/evidence")).toBe("https://example.com/evidence")
+  })
+
   it("rejects certificate paths outside the canonical prefix", async () => {
     // Given: a certificate associated through a non-certificate asset prefix
     const texts = await readCanonicalTexts()
@@ -254,5 +285,35 @@ describe("Profile content boundary", () => {
 
     // Then: missing favicon media fails the boundary
     await expect(result).rejects.toThrow(/missing public media/i)
+  })
+
+  it("rejects a thesis image whose public media file does not exist", async () => {
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      thesis: texts.thesis.replace("image: null", "image: thesis/missing-image.png"),
+    })
+
+    await expect(parseProfileDocuments(documents)).rejects.toThrow(/missing public media/i)
+  })
+
+  it("parses quoted flow values without rewriting authored YAML", () => {
+    const parsed = parseYamlValue("value: { zh: 江苏苏州, en: 'Suzhou, Jiangsu' }") as {
+      readonly value: unknown
+    }
+
+    expect(localizedSchema.parse(parsed.value)).toEqual({ zh: "江苏苏州", en: "Suzhou, Jiangsu" })
+  })
+
+  it("does not absorb unknown flow-mapping keys into localized text", () => {
+    const parsed = parseYamlValue("value: { zh: 测试, en: English, unexpected: value }") as {
+      readonly value: unknown
+    }
+
+    expect(localizedSchema.safeParse(parsed.value).success).toBe(false)
+  })
+
+  it("preserves YAML syntax failures", () => {
+    expect(() => parseYamlValue("value: [unterminated")).toThrow()
   })
 })

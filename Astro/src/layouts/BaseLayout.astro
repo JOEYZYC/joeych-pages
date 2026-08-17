@@ -3,6 +3,7 @@ import { Font } from "astro:assets"
 import type { Locale } from "../i18n/locales"
 import type { RouteId } from "../lib/routes"
 import type { Profile } from "../content/schemas"
+import { UI } from "../i18n/ui"
 import { getPageMeta } from "../lib/page-meta"
 import "../styles/fonts.css"
 import "../styles/base.css"
@@ -20,6 +21,7 @@ type Props = {
 }
 const { locale, profile, routeId, noindex = false } = Astro.props
 const { title, description } = getPageMeta({ locale, profile, routeId })
+const labels = UI[locale]
 ---
 
 <!doctype html>
@@ -49,8 +51,9 @@ const { title, description } = getPageMeta({ locale, profile, routeId })
     <SeoHead routeId={routeId} locale={locale} profile={profile} title={title} description={description} noindex={noindex} />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">{labels.skipToContent}</a>
     <SiteHeader locale={locale} profile={profile} routeId={routeId} />
-    <main class="site-main"><slot /></main>
+    <main id="main-content" class="site-main" tabindex="-1"><slot /></main>
     <SiteFooter locale={locale} profile={profile} />
   </body>
 </html>

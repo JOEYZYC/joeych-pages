@@ -69,6 +69,15 @@ async function expectReachable(control: Locator): Promise<void> {
 test.describe("WCAG accessibility and 200% reflow", () => {
   test.describe.configure({ mode: "serial" })
 
+  test("reflows every canonical route at a true 320px layout viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 320, height: 812 })
+
+    for (const route of routes) {
+      await page.goto(route.path)
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320)
+    }
+  })
+
   for (const viewport of [mobileViewport, desktopViewport]) {
     for (const theme of themes) {
       test(`has no WCAG A/AA Axe violations on all routes in ${theme} at ${viewport.width}px`, async ({ page }, testInfo) => {

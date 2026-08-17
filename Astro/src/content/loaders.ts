@@ -5,33 +5,8 @@ const yamlMappingSchema = z.record(z.string(), z.unknown())
 const yamlCollectionSchema = z.array(yamlMappingSchema)
 const thesisMappingSchema = z.object({ id: z.string().min(1) }).catchall(z.unknown())
 
-function preserveFlowMappingCommas(text: string): string {
-  return text
-    .split("\n")
-    .map((line) => {
-      const match = line.match(/^(.*\{\s*zh:\s*[^{}]+,\s*en:\s*)([^{}]+)(\s*\}.*)$/)
-      if (match === null) {
-        return line
-      }
-      const [, prefix, english, suffix] = match
-      if (prefix === undefined || english === undefined || suffix === undefined) {
-        return line
-      }
-      const trimmedEnglish = english.trim()
-      if (
-        !trimmedEnglish.includes(",") ||
-        trimmedEnglish.startsWith("'") ||
-        trimmedEnglish.startsWith('"')
-      ) {
-        return line
-      }
-      return `${prefix}${JSON.stringify(trimmedEnglish)}${suffix}`
-    })
-    .join("\n")
-}
-
 export function parseYamlValue(text: string): unknown {
-  const document = parseDocument(preserveFlowMappingCommas(text))
+  const document = parseDocument(text)
   const yamlError = document.errors[0]
   if (yamlError !== undefined) {
     throw yamlError

@@ -50,6 +50,7 @@ const first = certificates[0]
       />
       <p class="certificate-caption" data-certificate-caption>{first[locale]}</p>
       <p class="certificate-status" data-certificate-unavailable hidden>{labels.unavailable}</p>
+      <p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" data-certificate-announcement>{labels.loading}</p>
       <ol hidden data-certificate-items>
         {certificates.map((certificate) => (
           <li data-source={publicMediaUrl(certificate.src)} data-label={certificate[locale]}></li>
@@ -97,26 +98,30 @@ const first = certificates[0]
     const caption = dialog?.querySelector<HTMLElement>("[data-certificate-caption]")
     const loading = dialog?.querySelector<HTMLElement>("[data-certificate-loading]")
     const unavailable = dialog?.querySelector<HTMLElement>("[data-certificate-unavailable]")
+    const announcement = dialog?.querySelector<HTMLElement>("[data-certificate-announcement]")
     const previous = dialog?.querySelector<HTMLButtonElement>("[data-certificate-previous]")
     const next = dialog?.querySelector<HTMLButtonElement>("[data-certificate-next]")
     const items = dialog?.querySelectorAll<HTMLElement>("[data-certificate-items] li")
-    if (!fallback || !trigger || !dialog || !title || !close || !image || !caption || !loading || !unavailable || !items?.length) continue
+    if (!fallback || !trigger || !dialog || !title || !close || !image || !caption || !loading || !unavailable || !announcement || !items?.length) continue
 
     let index = 0
     const showLoading = () => {
       loading.hidden = false
       unavailable.hidden = true
       image.hidden = false
+      announcement.textContent = loading.textContent
     }
     const showLoaded = () => {
       loading.hidden = true
       unavailable.hidden = true
       image.hidden = false
+      announcement.textContent = caption.textContent
     }
     const showUnavailable = () => {
       loading.hidden = true
       unavailable.hidden = false
       image.hidden = true
+      announcement.textContent = unavailable.textContent
     }
     const settleImage = () => {
       if (!image.complete) return
@@ -154,7 +159,13 @@ const first = certificates[0]
     image.addEventListener("load", showLoaded)
     image.addEventListener("error", showUnavailable)
     dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) dialog.close()
+      if (event.target !== dialog) return
+      const bounds = dialog.getBoundingClientRect()
+      const outside = event.clientX < bounds.left ||
+        event.clientX > bounds.right ||
+        event.clientY < bounds.top ||
+        event.clientY > bounds.bottom
+      if (outside) dialog.close()
     })
     dialog.addEventListener("close", () => trigger.focus())
 

@@ -7,10 +7,20 @@ export const recordIdSchema = textSchema.brand("RecordId")
 export const projectIdSchema = textSchema.brand("ProjectId")
 export const componentIdSchema = textSchema.brand("ComponentId")
 export const localizedSchema = z.object({ zh: textSchema, en: textSchema }).strict().readonly()
+export const httpsUrlSchema = z.url().refine(
+  (value) => {
+    try {
+      return new URL(value).protocol === "https:"
+    } catch {
+      return false
+    }
+  },
+  "URL must use HTTPS",
+)
 export const linkSchema = z
   .object({
     type: textSchema,
-    url: z.url().nullable(),
+    url: httpsUrlSchema.nullable(),
     label: localizedSchema,
   })
   .strict()

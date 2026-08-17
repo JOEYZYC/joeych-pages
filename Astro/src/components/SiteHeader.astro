@@ -139,6 +139,7 @@ const labels = UI[locale]
       if (!navigation.matches(":focus-within")) restoreRail()
     }))
     window.addEventListener("resize", restoreRail)
+    document.fonts.ready.then(restoreRail)
 
     restoreRail()
     if (menuToggle) menuToggle.hidden = false

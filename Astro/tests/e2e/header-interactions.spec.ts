@@ -21,7 +21,18 @@ test.describe("header interactions", () => {
     await expect(trigger).toBeFocused()
 
     await trigger.click()
-    await dialog.dispatchEvent("click")
+    const bounds = await dialog.boundingBox()
+    expect(bounds).not.toBeNull()
+    if (bounds === null) return
+    await dialog.dispatchEvent("click", {
+      clientX: bounds.x + bounds.width / 2,
+      clientY: bounds.y + bounds.height / 2,
+    })
+    await expect(dialog).toBeVisible()
+    await dialog.dispatchEvent("click", {
+      clientX: bounds.x - 1,
+      clientY: bounds.y - 1,
+    })
     await expect(dialog).not.toBeVisible()
     await expect(trigger).toBeFocused()
   })

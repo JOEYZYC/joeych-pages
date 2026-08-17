@@ -112,7 +112,7 @@ const remainingFigures = project.figures.filter((figure) => figure.src !== proje
             <li>
               {link.url === null
                 ? <span class="project-link-unavailable" data-project-link-unavailable>{link.label[locale]} — {labels.unavailable.link}</span>
-                : <a href={link.url} target="_blank" rel="noopener noreferrer"><span data-project-link-marker aria-hidden="true">External link</span>{link.label[locale]}</a>}
+                : <a href={link.url} target="_blank" rel="noopener noreferrer"><span data-project-link-marker aria-hidden="true">{labels.links.external}</span>{link.label[locale]}</a>}
             </li>
           ))}
         </ul>

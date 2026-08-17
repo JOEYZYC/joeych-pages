@@ -18,7 +18,11 @@ import {
   type Thesis,
   thesisSchema,
 } from "../content/schemas"
-import { assertPublicMediaExists, MissingPublicMediaError } from "./media"
+import {
+  assertPublicMediaExists,
+  MissingPublicMediaError,
+  UnsafePublicMediaError,
+} from "./media"
 import {
   PROFILE_DATA_FILES,
   PROFILE_DATA_URLS,
@@ -59,6 +63,15 @@ export class ProfileContentError extends Error {
     options?: ErrorOptions,
   ) {
     super(`${issue.source}: ${issue.detail}`, options)
+  }
+}
+
+async function readProfileDocument(source: string, url: URL): Promise<unknown> {
+  try {
+    return parseYamlValue(await readFile(url, "utf8"))
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : "Unknown document loading failure"
+    throw new ProfileContentError({ source, detail }, { cause: error })
   }
 }
 
@@ -152,12 +165,13 @@ export async function parseProfileDocuments(documents: ProfileDocuments): Promis
     PROJECT_PLACEHOLDER_MEDIA_PATH,
     ...validateProjectMedia(projects),
     ...certificates.map(({ src }) => src),
+    ...(thesis.image === null ? [] : [thesis.image]),
   ]
 
   try {
     await assertPublicMediaExists(associatedMedia)
   } catch (error) {
-    if (error instanceof MissingPublicMediaError) {
+    if (error instanceof MissingPublicMediaError || error instanceof UnsafePublicMediaError) {
       throw new ProfileContentError(
         { source: "Profile/media", detail: error.message },
         { cause: error },
@@ -171,24 +185,20 @@ export async function parseProfileDocuments(documents: ProfileDocuments): Promis
 
 export async function loadProfileData(): Promise<ProfileData> {
   const [profile, projects, awards, publications, patents, thesis] = await Promise.all([
-    readFile(PROFILE_DATA_URLS.profile, "utf8"),
-    readFile(PROFILE_DATA_URLS.projects, "utf8"),
-    readFile(PROFILE_DATA_URLS.awards, "utf8"),
-    readFile(PROFILE_DATA_URLS.publications, "utf8"),
-    readFile(PROFILE_DATA_URLS.patents, "utf8"),
-    readFile(PROFILE_DATA_URLS.thesis, "utf8"),
+    readProfileDocument(PROFILE_DATA_FILES.profile, PROFILE_DATA_URLS.profile),
+    readProfileDocument(PROFILE_DATA_FILES.projects, PROFILE_DATA_URLS.projects),
+    readProfileDocument(PROFILE_DATA_FILES.awards, PROFILE_DATA_URLS.awards),
+    readProfileDocument(PROFILE_DATA_FILES.publications, PROFILE_DATA_URLS.publications),
+    readProfileDocument(PROFILE_DATA_FILES.patents, PROFILE_DATA_URLS.patents),
+    readProfileDocument(PROFILE_DATA_FILES.thesis, PROFILE_DATA_URLS.thesis),
   ])
 
-  return parseProfileDocuments({
-    profile: parseYamlValue(profile),
-    projects: parseYamlValue(projects),
-    awards: parseYamlValue(awards),
-    publications: parseYamlValue(publications),
-    patents: parseYamlValue(patents),
-    thesis: parseYamlValue(thesis),
-  })
+  return parseProfileDocuments({ profile, projects, awards, publications, patents, thesis })
 }
 
+let profileDataPromise: Promise<ProfileData> | undefined
+
 export function getProfileData(): Promise<ProfileData> {
-  return loadProfileData()
+  profileDataPromise ??= loadProfileData()
+  return profileDataPromise
 }

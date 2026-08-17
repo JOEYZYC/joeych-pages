@@ -130,6 +130,12 @@ test.describe("projects archive", () => {
     await expect(page.locator("#resgatnet [data-project-link-unavailable]")).toHaveCount(2)
   })
 
+  test("localizes the visible external-link marker on Chinese pages", async ({ page }) => {
+    await page.goto("projects/")
+
+    await expect(page.locator("#joeych-pages [data-project-link-marker]")).toHaveText("外部链接")
+  })
+
   test("shows unavailable media without substituting the placeholder after a real image fails", async ({ page }) => {
     await page.goto("en/projects/")
     const media = page.locator('[data-project-tile] [data-project-media-kind="real"]').first()
@@ -144,6 +150,16 @@ test.describe("projects archive", () => {
     await expect(media).toHaveAttribute("data-project-media-source", source ?? "")
   })
 
+  test("settles an image failure that occurs before enhancement", async ({ page }) => {
+    await page.route("**/projects/power-print-recognition/power-print-architecture.jpg", (route) => route.abort())
+    await page.goto("en/projects/")
+    const media = page.locator('[data-project-tile][data-project-id="power-print-recognition"] [data-project-media]')
+
+    await expect(media).toHaveAttribute("data-media-error", "true")
+    await expect(media.locator("[data-project-media-image]")).toBeHidden()
+    await expect(media.locator("[data-project-media-unavailable]")).toBeVisible()
+  })
+
   test("combines category and tag filters with AND semantics and Clear restores the archive", async ({ page }) => {
     await page.goto("en/projects/")
 
@@ -151,6 +167,7 @@ test.describe("projects archive", () => {
     await page.selectOption('[data-project-tag-filter]', "OpenCV")
 
     await expect(page.locator("[data-project-filter-results]")).toHaveText("0 / 14")
+    await expect(page.locator("[data-project-index-count]")).toHaveText("0 / 14")
     await expect(page.locator("[data-project-filter-empty]")).toBeVisible()
     expect(await visibleIds(page, "[data-project-tile]")).toEqual([])
     expect(await visibleIds(page, "[data-project-record]")).toEqual([])
@@ -160,6 +177,7 @@ test.describe("projects archive", () => {
     await page.locator("[data-project-filter-clear]").click()
 
     await expect(page.locator("[data-project-filter-results]")).toHaveText("14 / 14")
+    await expect(page.locator("[data-project-index-count]")).toHaveText("14 / 14")
     await expect(page.locator("[data-project-filter-empty]")).toBeHidden()
     expect(await visibleIds(page, "[data-project-tile]")).toEqual(projectIds)
     expect(await visibleIds(page, "[data-project-record]")).toEqual(projectIds)

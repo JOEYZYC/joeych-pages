@@ -77,6 +77,7 @@ test.describe("awards archive", () => {
     const previous = dialog.locator("[data-certificate-previous]")
     const next = dialog.locator("[data-certificate-next]")
     const caption = dialog.locator("[data-certificate-caption]")
+    const announcement = dialog.locator("[data-certificate-announcement]")
 
     await expect(trigger.locator('svg[data-icon="certificate"]')).toHaveCount(1)
     await expect(trigger).toContainText("View certificate")
@@ -91,16 +92,19 @@ test.describe("awards archive", () => {
     await expect(previous).toBeDisabled()
     await expect(next).toBeEnabled()
     await expect(caption).toHaveText("Electronic Design Contest (Renesas) — Eastern-China First")
+    await expect(announcement).toHaveText("Electronic Design Contest (Renesas) — Eastern-China First")
 
     await next.click()
     await expect(previous).toBeEnabled()
     await expect(next).toBeDisabled()
     await expect(caption).toHaveText("Electronic Design Contest (Renesas) — National Third")
+    await expect(announcement).toHaveText("Electronic Design Contest (Renesas) — National Third")
 
     await dialog.locator("[data-certificate-image]").dispatchEvent("error")
     await expect(dialog.locator("[data-certificate-image]")).toBeHidden()
     await expect(dialog.locator("[data-certificate-unavailable]")).toHaveText("Certificate unavailable")
     await expect(dialog.locator("[data-certificate-unavailable]")).toBeVisible()
+    await expect(announcement).toHaveText("Certificate unavailable")
     await expect(caption).toHaveText("Electronic Design Contest (Renesas) — National Third")
 
     await previous.click()
@@ -111,6 +115,28 @@ test.describe("awards archive", () => {
     await expect(dialog).not.toBeVisible()
     await expect(trigger).toBeFocused()
     await expect(page.locator("#awards-publication-bifunctional-flexible-metasurface-dialog")).not.toBeVisible()
+  })
+
+  test("certificate dialogs close only for clicks outside their visible bounds", async ({ page }) => {
+    await page.goto("en/awards/")
+    const trigger = page.locator("#awards-award-renesas-east-first-national-third-2024-trigger")
+    const dialog = page.locator("#awards-award-renesas-east-first-national-third-2024-dialog")
+    await trigger.click()
+    const bounds = await dialog.boundingBox()
+    expect(bounds).not.toBeNull()
+    if (bounds === null) return
+
+    await dialog.dispatchEvent("click", {
+      clientX: bounds.x + bounds.width / 2,
+      clientY: bounds.y + bounds.height / 2,
+    })
+    await expect(dialog).toBeVisible()
+    await dialog.dispatchEvent("click", {
+      clientX: bounds.x - 1,
+      clientY: bounds.y - 1,
+    })
+    await expect(dialog).not.toBeVisible()
+    await expect(trigger).toBeFocused()
   })
 
   test("records without certificate evidence expose no trigger or fallback", async ({ page }) => {

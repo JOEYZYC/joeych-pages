@@ -39,6 +39,7 @@ Thumbs.db
 
 # Tooling / agent working dirs #
 ################################
+/.devtools.json
 .codegraph/
 .omo/
 .playwright-mcp/

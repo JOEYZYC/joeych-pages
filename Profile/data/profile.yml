@@ -19,7 +19,7 @@ statistics:
   - { id: competition-records, label: { zh: 竞赛获奖, en: Competition records }, value: 10+ }
 contact:
   email: szjoeych@gmail.com
-  hometown: { zh: 江苏苏州, en: Suzhou, Jiangsu }
+  hometown: { zh: 江苏苏州, en: 'Suzhou, Jiangsu' }
   political: { zh: 中共党员, en: CPC Member }
   github: https://github.com/JOEYZYC
   scholar: https://scholar.google.com/citations?user=R_3hg2gAAAAJ
@@ -42,16 +42,16 @@ campus_experience:
     organization: { zh: 天际线航模社, en: Skyline Aeromodelling Club }
     role: { zh: 副社长, en: Vice President }
     details:
-      - { zh: 航模制作、社团招新、比赛组织、设备管理、志愿服务。, en: Model-aircraft building, recruitment, competition organization, equipment management, volunteering. }
+      - { zh: 航模制作、社团招新、比赛组织、设备管理、志愿服务。, en: 'Model-aircraft building, recruitment, competition organization, equipment management, volunteering.' }
   - id: media-center
     period: 2022.9 - 2025.6
     organization: { zh: 学校融媒体中心, en: University Media Center }
     role: { zh: 首席记者, en: Chief Reporter }
     details:
-      - { zh: '负责公众号推文摄影，累计超 20 篇；主讲新生摄影后期培训，授课 60 人次；2023「理工秋」校级摄影比赛二等奖；2023 江苏省大学生网络文化节三等奖。', en: Lead photographer for 20+ official-account features; led photo post-production training for 60 attendees; 2nd prize, campus photography contest (2023); 3rd prize, Jiangsu Provincial Collegiate Online Culture Festival (2023). }
+      - { zh: '负责公众号推文摄影，累计超 20 篇；主讲新生摄影后期培训，授课 60 人次；2023「理工秋」校级摄影比赛二等奖；2023 江苏省大学生网络文化节三等奖。', en: 'Lead photographer for 20+ official-account features; led photo post-production training for 60 attendees; 2nd prize, campus photography contest (2023); 3rd prize, Jiangsu Provincial Collegiate Online Culture Festival (2023).' }
   - id: party-branch
     period: 2024.7 - 2025.6
-    organization: { zh: 电子学院学生第二党支部, en: 2nd Student Party Branch, School of Electronics }
+    organization: { zh: 电子学院学生第二党支部, en: '2nd Student Party Branch, School of Electronics' }
     role: { zh: 负责人, en: Head }
     details:
       - { zh: 负责党的组织生活相关工作；支部获评校先进优秀党组织。, en: Organized Party activities; branch awarded Advanced Party Organization of the university. }
