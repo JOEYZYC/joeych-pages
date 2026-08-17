@@ -70,8 +70,8 @@
   figures:
     - { id: resgatnet-architecture, zh: 图7 ResGatNet 模型结构, en: Fig.7 ResGatNet Architecture }
   links:
-    - { type: paper, url: null, label: { zh: 论文链接待补充, en: Paper — coming soon } }
-    - { type: source, url: null, label: { zh: 开源链接待补充, en: Open-source — coming soon } }
+    - { type: paper, url: null, label: { zh: 论文, en: Paper } }
+    - { type: source, url: null, label: { zh: 开源仓库, en: Open-source repository } }
 - id: flexible-bifunctional-metasurface
   year: 2023
   featured: false

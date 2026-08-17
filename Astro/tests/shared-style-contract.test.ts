@@ -73,16 +73,20 @@ describe("shared visual system contract", () => {
     const controlHover = tokens.match(/--color-control-hover: (#[0-9a-f]{6})/i)?.[1]
     const surface = tokens.match(/--color-surface: (#[0-9a-f]{6})/i)?.[1]
     const mutedSurface = tokens.match(/--color-surface-muted: (#[0-9a-f]{6})/i)?.[1]
+    const strongBorder = tokens.match(/--color-border-strong: (#[0-9a-f]{6})/i)?.[1]
     const strongHover = tokens.match(/--color-on-strong-hover: (#[0-9a-f]{6})/i)?.[1]
     const strongSurface = tokens.match(/--color-surface-strong: (#[0-9a-f]{6})/i)?.[1]
     expect(controlHover).toBeDefined()
     expect(surface).toBeDefined()
     expect(mutedSurface).toBeDefined()
+    expect(strongBorder).toBeDefined()
     expect(strongHover).toBeDefined()
     expect(strongSurface).toBeDefined()
-    if (!controlHover || !surface || !mutedSurface || !strongHover || !strongSurface) return
+    if (!controlHover || !surface || !mutedSurface || !strongBorder || !strongHover || !strongSurface) return
     expect(contrastRatio(controlHover, surface)).toBeGreaterThanOrEqual(4.5)
     expect(contrastRatio(controlHover, mutedSurface)).toBeGreaterThanOrEqual(4.5)
+    expect(components).toMatch(/\.dialog-close,[\s\S]*background: var\(--color-surface\)/)
+    expect(contrastRatio(strongBorder, surface)).toBeGreaterThanOrEqual(3)
     expect(contrastRatio(strongHover, strongSurface)).toBeGreaterThanOrEqual(4.5)
   })
 

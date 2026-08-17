@@ -129,6 +129,8 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const records = [...pageRoot.querySelectorAll<HTMLElement>("[data-project-record]")]
     const navigatorShell = pageRoot.querySelector<HTMLElement>("[data-project-navigator-shell]")
     const navigator = pageRoot.querySelector<HTMLSelectElement>("[data-project-navigator]")
+    const detailsHeading = pageRoot.querySelector<HTMLElement>("[data-project-details-heading]")
+    const recordsSection = pageRoot.querySelector<HTMLElement>("[data-project-records]")
     const evidenceSource = explorer.querySelector<HTMLScriptElement>("[data-project-skill-evidence]")
     if (
       !controls ||
@@ -142,6 +144,8 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       records.length === 0 ||
       !navigatorShell ||
       !navigator ||
+      !detailsHeading ||
+      !recordsSection ||
       !evidenceSource
     ) continue
 
@@ -279,10 +283,13 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     }
 
     const updateFilterSummary = () => {
+      const empty = visibleIds.length === 0
       resultOutput.value = `${visibleIds.length} / ${projectIds.length}`
       resultOutput.textContent = resultOutput.value
       staticCount.textContent = resultOutput.value
-      emptyPanel.hidden = visibleIds.length !== 0
+      emptyPanel.hidden = !empty
+      detailsHeading.hidden = empty
+      recordsSection.hidden = empty
       clearButton.disabled = categoryFilter.value === "" && tagFilter.value === ""
     }
 

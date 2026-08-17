@@ -59,6 +59,13 @@ test.describe("navigation state synchronization", () => {
     )
     await expect(page.locator('[data-project-tile][data-project-id="resgatnet"] [data-project-current-label]')).toBeVisible()
     await expect(page.locator("#resgatnet [data-project-current-label]")).toBeVisible()
+    const [navigatorBox, recordBox] = await Promise.all([
+      page.locator("[data-project-navigator-shell]").boundingBox(),
+      page.locator("#resgatnet").boundingBox(),
+    ])
+    expect(navigatorBox).not.toBeNull()
+    expect(recordBox).not.toBeNull()
+    expect(recordBox?.y ?? 0).toBeGreaterThanOrEqual((navigatorBox?.y ?? 0) + (navigatorBox?.height ?? 0))
     expect(await page.evaluate(() => window.history.length)).toBe(historyLength)
     await expect(page).toHaveURL(/\/en\/projects\/$/)
 

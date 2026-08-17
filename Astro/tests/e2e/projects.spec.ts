@@ -172,6 +172,8 @@ test.describe("projects archive", () => {
     expect(await visibleIds(page, "[data-project-tile]")).toEqual([])
     expect(await visibleIds(page, "[data-project-record]")).toEqual([])
     await expect(page.locator("[data-project-navigator-shell]")).toBeHidden()
+    await expect(page.locator("[data-project-details-heading]")).toBeHidden()
+    await expect(page.locator("[data-project-records]")).toBeHidden()
     await expect(page.locator("[data-project-filter-clear]")).toBeEnabled()
 
     await page.locator("[data-project-filter-clear]").click()
@@ -181,6 +183,8 @@ test.describe("projects archive", () => {
     await expect(page.locator("[data-project-filter-empty]")).toBeHidden()
     expect(await visibleIds(page, "[data-project-tile]")).toEqual(projectIds)
     expect(await visibleIds(page, "[data-project-record]")).toEqual(projectIds)
+    await expect(page.locator("[data-project-details-heading]")).toBeVisible()
+    await expect(page.locator("[data-project-records]")).toBeVisible()
     await expect(page.locator("[data-project-navigator] option")).toHaveCount(14)
     await expect(page.locator("[data-project-filter-clear]")).toBeDisabled()
   })

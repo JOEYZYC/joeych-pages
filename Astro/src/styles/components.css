@@ -38,7 +38,7 @@
   flex: 1 0 100%;
   gap: var(--space-1);
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  order: 3;
+  order: 2;
   padding-block: var(--space-2);
   position: relative;
 }
@@ -92,6 +92,7 @@
   display: flex;
   gap: var(--space-1);
   margin-inline-start: auto;
+  order: 3;
 }
 
 .header-control-group {
@@ -181,7 +182,7 @@
 }
 
 .menu-button {
-  order: 2;
+  order: 1;
 }
 
 html[data-js="true"] .header-nav[data-open="false"] {
@@ -261,6 +262,10 @@ html[data-js="true"] .header-nav[data-open="true"] {
 
   .menu-button {
     display: none;
+  }
+
+  .header-actions {
+    order: initial;
   }
 }
 .footer {
@@ -394,7 +399,7 @@ html[data-js="true"] .header-nav[data-open="true"] {
 .dialog-close,
 .certificate-control {
   align-items: center;
-  background: var(--color-surface-muted);
+  background: var(--color-surface);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-control);
   color: var(--color-text);
@@ -437,6 +442,8 @@ html[data-js="true"] .header-nav[data-open="true"] {
 }
 
 .certificate-image {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
   inline-size: 100%;
   margin-inline: auto;
   max-block-size: 68dvh;

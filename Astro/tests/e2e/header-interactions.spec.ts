@@ -43,6 +43,12 @@ test.describe("header interactions", () => {
     const toggle = page.locator("[data-menu-toggle]")
     const navigation = page.locator("#primary-navigation")
     const firstRoute = navigation.getByRole("link").first()
+    const actions = page.locator(".header-actions")
+
+    const [toggleBox, actionsBox] = await Promise.all([toggle.boundingBox(), actions.boundingBox()])
+    expect(toggleBox).not.toBeNull()
+    expect(actionsBox).not.toBeNull()
+    expect(toggleBox?.x ?? 0).toBeLessThan(actionsBox?.x ?? 0)
 
     await toggle.click()
     await expect(firstRoute).toBeFocused()
@@ -105,7 +111,7 @@ test.describe("header interactions", () => {
       })
     })
     await page.goto("")
-    await page.locator("#primary-navigation").getByRole("link", { name: "获奖证书" }).click()
+    await page.locator("#primary-navigation").getByRole("link", { name: "成果与获奖" }).click()
     await expect(page).toHaveURL(/\/awards\/$/)
   })
 

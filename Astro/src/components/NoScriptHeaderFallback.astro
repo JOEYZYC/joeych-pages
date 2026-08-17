@@ -18,7 +18,7 @@ const contacts = [
 ] as const
 ---
 
-<section class="noscript-header-fallback" data-noscript-header-fallback aria-label={labels.mainNavigation}>
+<div class="noscript-header-fallback" data-noscript-header-fallback>
   <nav data-noscript-header-routes aria-label={labels.mainNavigation}>
     {ROUTE_IDS.map((id) => (
       <a href={getRoutePath(id, locale)} aria-current={id === routeId ? "page" : undefined}>{labels.navigation[id]}</a>
@@ -30,4 +30,4 @@ const contacts = [
       <li><a href={contact.href}>{contact.label}: {contact.value}</a></li>
     ))}
   </ul>
-</section>
+</div>

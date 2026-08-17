@@ -11,7 +11,7 @@ tagline:
   en: Embedded Systems / Wireless Perception / Metasurfaces & Terahertz
 summary:
   zh: "苏州工学院电子信息工程专业本科生，综测专业排名 5\u2060/\u206071。研究兴趣涵盖嵌入式系统、无线感知与深度学习、超表面\u2060/\u2060太赫兹器件与天线设计。已发表学术论文 6\u00a0篇，申请发明专利 4\u00a0项，斩获国家级与省级学科竞赛奖项十余项。热爱动手实践，擅长从电路设计、嵌入式开发到算法部署的软硬件全栈工程。"
-  en: Undergraduate in Electronic & Information Engineering at Suzhou Institute of Technology, ranked 5/71. Research interests span embedded systems, wireless perception with deep learning, and metasurface / terahertz devices and antenna design. Author of 6 publications, 4 patent applications, and 10+ national or provincial competition awards. A hands-on hardware-software engineer, from circuit design and embedded development to algorithm deployment.
+  en: Undergraduate in Electronic & Information Engineering at Suzhou Institute of Technology, ranked 5/71. Research interests span embedded systems, wireless perception with deep learning, and metasurface / terahertz devices and antenna design. Contributor to 6 publications and 4 patent applications, and recipient of 10+ national or provincial competition awards. A hands-on hardware-software engineer with experience spanning circuit design, embedded development, and algorithm deployment.
 statistics:
   - { id: academic-rank, label: { zh: 综测专业排名, en: Academic rank }, value: 5/71 }
   - { id: publications, label: { zh: 学术论文, en: Publications }, value: 6 }
@@ -26,7 +26,7 @@ contact:
   orcid: https://orcid.org/0009-0009-0202-8772
 education:
   - id: suzhou-institute-of-technology
-    period: 2022.9 - 2026.6
+    period: 2022-09–2026-06
     school: { zh: 苏州工学院, en: Suzhou Institute of Technology }
     degree: { zh: 电子信息工程 · 工学学士, en: B.Eng. in Electronic & Information Engineering }
     highlights:
@@ -38,25 +38,25 @@ education:
       - { zh: 校优秀毕业生, en: Outstanding Graduate }
 campus_experience:
   - id: aeromodelling-club
-    period: 2024.6 - 2025.6
+    period: 2024-06–2025-06
     organization: { zh: 天际线航模社, en: Skyline Aeromodelling Club }
     role: { zh: 副社长, en: Vice President }
     details:
       - { zh: 航模制作、社团招新、比赛组织、设备管理、志愿服务。, en: 'Model-aircraft building, recruitment, competition organization, equipment management, volunteering.' }
   - id: media-center
-    period: 2022.9 - 2025.6
+    period: 2022-09–2025-06
     organization: { zh: 学校融媒体中心, en: University Media Center }
     role: { zh: 首席记者, en: Chief Reporter }
     details:
       - { zh: '负责公众号推文摄影，累计超 20 篇；主讲新生摄影后期培训，授课 60 人次；2023「理工秋」校级摄影比赛二等奖；2023 江苏省大学生网络文化节三等奖。', en: 'Lead photographer for 20+ official-account features; led photo post-production training for 60 attendees; 2nd prize, campus photography contest (2023); 3rd prize, Jiangsu Provincial Collegiate Online Culture Festival (2023).' }
   - id: party-branch
-    period: 2024.7 - 2025.6
+    period: 2024-07–2025-06
     organization: { zh: 电子学院学生第二党支部, en: '2nd Student Party Branch, School of Electronics' }
     role: { zh: 负责人, en: Head }
     details:
       - { zh: 负责党的组织生活相关工作；支部获评校先进优秀党组织。, en: Organized Party activities; branch awarded Advanced Party Organization of the university. }
   - id: class-officer
-    period: 2023.9 - 2026.6
+    period: 2023-09–2026-06
     organization: { zh: 班级, en: Class }
     role: { zh: 组织委员 / 就业委员, en: Organization & Employment Officer }
     details:

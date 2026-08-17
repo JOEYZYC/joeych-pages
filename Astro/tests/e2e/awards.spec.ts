@@ -6,7 +6,7 @@ const routes = [
   {
     path: "awards/",
     locale: "zh",
-    heading: "获奖证书",
+    heading: "成果与获奖",
     language: "zh-CN",
     summary: "按年份查阅竞赛荣誉、出版成果、专利与毕业论文。",
     ledger: "获奖档案",
@@ -15,7 +15,7 @@ const routes = [
   {
     path: "en/awards/",
     locale: "en",
-    heading: "Awards",
+    heading: "Achievements",
     language: "en",
     summary: "Review awards, publications, patents, and thesis evidence by year.",
     ledger: "Achievement ledger",
