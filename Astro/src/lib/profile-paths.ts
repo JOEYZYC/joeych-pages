@@ -42,7 +42,6 @@ const PROFILE_ROOT = resolveProfileRoot()
 const PROFILE_DATA_ROOT = new URL("data/", PROFILE_ROOT)
 const PROFILE_MEDIA_ROOT = new URL("media/", PROFILE_ROOT)
 export const PROFILE_MEDIA_DIRECTORY = fileURLToPath(PROFILE_MEDIA_ROOT)
-const CERTIFICATE_PREFIX = "assets/img/certificates/"
 
 export const PROFILE_DATA_URLS = {
   profile: new URL(PROFILE_DATA_FILES.profile, PROFILE_DATA_ROOT),
@@ -58,13 +57,13 @@ export class ProfilePathError extends Error {
 
   constructor(
     readonly sourcePath: string,
-    readonly pathKind: "media" | "certificate",
+    readonly pathKind: "media",
   ) {
     super(`Invalid ${pathKind} path: ${sourcePath}`)
   }
 }
 
-function normalizeRelativePath(sourcePath: string, pathKind: "media" | "certificate"): string {
+function normalizeRelativePath(sourcePath: string, pathKind: "media"): string {
   let decodedPath: string
   try {
     decodedPath = decodeURIComponent(sourcePath)
@@ -94,27 +93,12 @@ export function normalizeMediaPath(sourcePath: string): string {
   return `/${normalizeRelativePath(sourcePath, "media")}`
 }
 
-export function normalizeCertificatePath(sourcePath: string): string {
-  if (!sourcePath.startsWith(CERTIFICATE_PREFIX)) {
-    throw new ProfilePathError(sourcePath, "certificate")
-  }
-
-  const certificatePath = sourcePath.slice(CERTIFICATE_PREFIX.length)
-  return `/certificates/${normalizeRelativePath(certificatePath, "certificate")}`
-}
-
 export const publicMediaPathSchema = z
   .string()
   .min(1)
   .transform(normalizeMediaPath)
   .brand("PublicMediaPath")
 export const PROJECT_PLACEHOLDER_MEDIA_PATH = publicMediaPathSchema.parse("projects/project-placeholder.png")
-
-export const certificatePathSchema = z
-  .string()
-  .min(1)
-  .transform(normalizeCertificatePath)
-  .brand("PublicMediaPath")
 
 export type PublicMediaPath = z.infer<typeof publicMediaPathSchema>
 

@@ -6,8 +6,7 @@
   authors: { zh: 作者位次 2/6, en: 2nd author of 6 }
   tags: [wireless-perception, deep-learning]
   links: []
-  certificates:
-    - { src: 'assets/img/certificates/2024/屏幕截图 2024-11-08 003146.png', zh: '论文收录截图：ResGatNet', en: 'Paper acceptance screenshot: ResGatNet' }
+  certificates: []
 - id: bifunctional-flexible-metasurface
   year: 2024
   featured: true
@@ -17,8 +16,7 @@
   tags: [metasurface, terahertz]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2024/Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption.png', zh: '论文：Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption', en: 'Paper: Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption' }
-    - { src: 'assets/img/certificates/2024/屏幕截图 2024-11-08 003221.png', zh: '论文收录截图：Bifunctional flexible metasurface', en: 'Paper acceptance screenshot: Bifunctional flexible metasurface' }
+    - { src: 'publications/bifunctional-flexible-metasurface/BifunctionalFlexibleMetasurfaceBasedOnGrapheneAndVanadiumDioxideForPolarizationConversionAndAbsorption.png', zh: '论文：Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption', en: 'Paper: Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption' }
 - id: tunable-bifunctional-metasurface-absorber
   year: 2024
   featured: true
@@ -28,8 +26,7 @@
   tags: [metasurface, terahertz]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2024/Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon.png', zh: '论文：Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon', en: 'Paper: Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon' }
-    - { src: 'assets/img/certificates/2024/屏幕截图 2024-11-08 003256.png', zh: '论文收录截图：Design and theoretical analysis', en: 'Paper acceptance screenshot: Design and theoretical analysis' }
+    - { src: 'publications/tunable-bifunctional-metasurface-absorber/DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon.png', zh: '论文：Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon', en: 'Paper: Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon' }
 - id: dual-broadband-flexible-metasurface
   year: 2024
   featured: true
@@ -39,7 +36,7 @@
   tags: [metasurface, rcs]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2024/Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction.png', zh: '论文：Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction', en: 'Paper: Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction' }
+    - { src: 'publications/dual-broadband-flexible-metasurface/DualBroadbandFlexibleMetasurfaceBasedOnTheStaggeredTriangularCheckerboardLayoutForRCSReduction.png', zh: '论文：Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction', en: 'Paper: Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction' }
 - id: dual-band-polarization-conversion
   year: 2024
   featured: false
@@ -48,8 +45,7 @@
   authors: { zh: 作者位次 3/6, en: 3rd author of 6 }
   tags: [metasurface]
   links: []
-  certificates:
-    - { src: 'assets/img/certificates/2024/屏幕截图 2024-11-08 003313.png', zh: '论文收录截图：双频带柔性极化转换超表面的仿真研究', en: 'Paper acceptance screenshot: Simulation Study of a Dual-band Flexible Polarization-Conversion Metasurface' }
+  certificates: []
 - id: tri-band-metasurface-absorber
   year: 2024
   featured: false

@@ -87,8 +87,8 @@ describe("Profile content boundary", () => {
       "string",
     ])
     expect(content.profile.contact.hometown.en).toBe("Suzhou, Jiangsu")
-    expect(content.profile.portrait).toBe("/portrait-b1-cutout.png")
-    expect(content.profile.favicon).toBe("/favicon.svg")
+    expect(content.profile.portrait).toBe("/profile/portrait-b1-cutout.png")
+    expect(content.profile.favicon).toBe("/profile/favicon.svg")
     expect(PROJECT_PLACEHOLDER_MEDIA_PATH).toBe("/projects/project-placeholder.png")
     expect(publicMediaFilePath(PROJECT_PLACEHOLDER_MEDIA_PATH)).toBe(
       fileURLToPath(new URL("../../Profile/media/projects/project-placeholder.png", import.meta.url)),
@@ -108,11 +108,8 @@ describe("Profile content boundary", () => {
     expect(content.projects[0]?.image).toBe(
       "/projects/power-print-recognition/power-print-architecture.jpg",
     )
-    expect(content.certificates).toHaveLength(22)
-    expect(content.certificates.every(({ src }) => src.startsWith("/certificates/"))).toBe(true)
-    expect(content.certificates.map(({ src }) => src)).not.toContain(
-      "/certificates/2025/五四奖章.jpg",
-    )
+    expect(content.certificates).toHaveLength(18)
+    expect(content.certificates.every(({ src }) => /^\/(awards|publications|patents)\//.test(src))).toBe(true)
     expect(fileURLToPath(DATA_ROOT)).not.toContain("private")
   })
 
@@ -224,19 +221,22 @@ describe("Profile content boundary", () => {
     expect(httpsUrlSchema.parse("https://example.com/evidence")).toBe("https://example.com/evidence")
   })
 
-  it("rejects certificate paths outside the canonical prefix", async () => {
-    // Given: a certificate associated through a non-certificate asset prefix
+  it("rejects certificate media traversal outside Profile media", async () => {
+    // Given: a certificate whose src attempts to traverse to private material
     const texts = await readCanonicalTexts()
     const documents = documentsFrom({
       ...texts,
-      awards: texts.awards.replace("assets/img/certificates/", "assets/img/other/"),
+      awards: texts.awards.replace(
+        "awards/ic-vocational-national-third-2025/集成电路国三.jpg",
+        "../private/cert.jpg",
+      ),
     })
 
-    // When: certificate associations are normalized
+    // When: the certificate src is normalized as public media
     const result = parseProfileDocuments(documents)
 
-    // Then: only the literal certificate source hierarchy is accepted
-    await expect(result).rejects.toThrow(/certificate/i)
+    // Then: traversal is structurally rejected
+    await expect(result).rejects.toThrow(/media path/i)
   })
 
   it("rejects an associated public media file that does not exist", async () => {
@@ -260,8 +260,8 @@ describe("Profile content boundary", () => {
     const documents = documentsFrom({
       ...texts,
       profile: texts.profile.replace(
-        "portrait: portrait-b1-cutout.png",
-        "portrait: missing-profile-portrait.png",
+        "portrait: profile/portrait-b1-cutout.png",
+        "portrait: profile/missing-profile-portrait.png",
       ),
     })
 
@@ -277,7 +277,7 @@ describe("Profile content boundary", () => {
     const texts = await readCanonicalTexts()
     const documents = documentsFrom({
       ...texts,
-      profile: texts.profile.replace("favicon: favicon.svg", "favicon: missing-favicon.svg"),
+      profile: texts.profile.replace("favicon: profile/favicon.svg", "favicon: profile/missing-favicon.svg"),
     })
 
     // When: the profile favicon association crosses the boundary

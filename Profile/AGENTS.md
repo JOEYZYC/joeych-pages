@@ -15,7 +15,7 @@
 - `data/publications.yml`: publication records, venues, author positions, and certificate associations.
 - `data/patents.yml`: patent records, author positions, and certificate associations.
 - `data/thesis.yml`: the single graduation-thesis record.
-- `media/`: published portraits, icons, and certificate files at their literal site-relative hierarchy.
+- `media/`: published portraits, icons, project figures, and certificate files, organized to mirror the `data/` record ownership (see CONVENTIONS).
 - Ignored Jekyll mirrors are not authored sources and do not change Profile ownership.
 
 ## CONVENTIONS
@@ -32,7 +32,7 @@
 - Award records use `prizes` with `level`, `zh`, and `en`.
 - Publication records include localized `venue` and `authors`; patent records include localized `authors`.
 - The thesis is a mapping, not a list. Keep its `id`, year, localized `title` and `award`, tags, and links shape.
-- Certificate entries are literal `{ src, zh, en }` values. Keep `src` under `assets/img/certificates`; the matching authored file lives under `Profile/media/certificates`.
+- Certificate entries are literal `{ src, zh, en }` values. `src` is a path relative to `Profile/media/`, placed under the owning record's folder by kind: `awards/<award-id>/…`, `publications/<publication-id>/…`, or `patents/<patent-id>/…`. Profile media lives under `media/profile/`, project media under `media/projects/<project-id>/`, and the shared placeholder stays at `media/projects/project-placeholder.png`.
 - New certificate files are not visible until an owning YAML record associates them. A project image should match its first sourced figure when figures provide `src`.
 
 ## SKILL EVIDENCE SCHEMA

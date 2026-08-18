@@ -8,7 +8,7 @@
   tags: [integrated-circuit]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2025/集成电路国三.jpg', zh: '全国大学生集成电路创新创业大赛（职业技能赛项）国三', en: 'IC Innovation Contest — National Third' }
+    - { src: 'awards/ic-vocational-national-third-2025/集成电路国三.jpg', zh: '全国大学生集成电路创新创业大赛（职业技能赛项）国三', en: 'IC Innovation Contest — National Third' }
 - id: renesas-east-first-national-third-2024
   year: 2024
   featured: true
@@ -19,8 +19,8 @@
   tags: [electronic-design]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2024/瑞萨省一.jpg', zh: '全国大学生电子设计竞赛（瑞萨杯）东部第一名', en: 'Electronic Design Contest (Renesas) — Eastern-China First' }
-    - { src: 'assets/img/certificates/2024/瑞萨国三.jpg', zh: '全国大学生电子设计竞赛（瑞萨杯）国三', en: 'Electronic Design Contest (Renesas) — National Third' }
+    - { src: 'awards/renesas-east-first-national-third-2024/瑞萨省一.jpg', zh: '全国大学生电子设计竞赛（瑞萨杯）东部第一名', en: 'Electronic Design Contest (Renesas) — Eastern-China First' }
+    - { src: 'awards/renesas-east-first-national-third-2024/瑞萨国三.jpg', zh: '全国大学生电子设计竞赛（瑞萨杯）国三', en: 'Electronic Design Contest (Renesas) — National Third' }
 - id: ti-first-2024
   year: 2024
   featured: true
@@ -31,7 +31,7 @@
   tags: [electronic-design]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2024/24电赛 省一.png', zh: '全国大学生电子设计竞赛（TI杯）省一', en: 'Electronic Design Contest (TI) — Provincial First' }
+    - { src: 'awards/ti-first-2024/24电赛省一.png', zh: '全国大学生电子设计竞赛（TI杯）省一', en: 'Electronic Design Contest (TI) — Provincial First' }
 - id: raicom-first-national-second-2024
   year: 2024
   featured: true
@@ -42,8 +42,8 @@
   tags: [robotics]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2024/24智能侦察 省一.jpg', zh: 'RAICOM 智能侦察省一', en: 'RAICOM Intelligent Reconnaissance — Provincial First' }
-    - { src: 'assets/img/certificates/2024/24智能侦察 国二.jpg', zh: 'RAICOM 智能侦察国二', en: 'RAICOM Intelligent Reconnaissance — National Second' }
+    - { src: 'awards/raicom-first-national-second-2024/24智能侦察省一.jpg', zh: 'RAICOM 智能侦察省一', en: 'RAICOM Intelligent Reconnaissance — Provincial First' }
+    - { src: 'awards/raicom-first-national-second-2024/24智能侦察国二.jpg', zh: 'RAICOM 智能侦察国二', en: 'RAICOM Intelligent Reconnaissance — National Second' }
 - id: smart-car-east-third-2024
   year: 2024
   featured: false
@@ -54,8 +54,8 @@
   tags: [smart-car]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2024/24智能车 省三（个人）.png', zh: '全国大学生智能汽车竞赛省三（个人）', en: 'Smart Car Competition — Provincial Third (Individual)' }
-    - { src: 'assets/img/certificates/2024/24智能车 省三（团队）.png', zh: '全国大学生智能汽车竞赛省三（团队）', en: 'Smart Car Competition — Provincial Third (Team)' }
+    - { src: 'awards/smart-car-east-third-2024/24智能车省三个人.png', zh: '全国大学生智能汽车竞赛省三（个人）', en: 'Smart Car Competition — Provincial Third (Individual)' }
+    - { src: 'awards/smart-car-east-third-2024/24智能车省三团队.png', zh: '全国大学生智能汽车竞赛省三（团队）', en: 'Smart Car Competition — Provincial Third (Team)' }
 - id: embedded-chip-third-2024
   year: 2024
   featured: false
@@ -66,7 +66,7 @@
   tags: [embedded]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2024/24嵌赛 省三.png', zh: '全国大学生嵌入式芯片与系统设计竞赛省三', en: 'Embedded Chip and System Design Contest — Provincial Third' }
+    - { src: 'awards/embedded-chip-third-2024/24嵌赛省三.png', zh: '全国大学生嵌入式芯片与系统设计竞赛省三', en: 'Embedded Chip and System Design Contest — Provincial Third' }
 - id: ican-national-first-2023
   year: 2023
   featured: true
@@ -77,7 +77,7 @@
   tags: [robotics]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2023/23ican 国一.jpg', zh: 'iCAN 大学生创新创业赛国一', en: 'iCAN Innovation Contest — National First' }
+    - { src: 'awards/ican-national-first-2023/23ican国一.jpg', zh: 'iCAN 大学生创新创业赛国一', en: 'iCAN Innovation Contest — National First' }
 - id: ti-second-2023
   year: 2023
   featured: false
@@ -88,7 +88,7 @@
   tags: [electronic-design]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2023/23电赛 省二.jpg', zh: '全国大学生电子设计竞赛（TI杯）省二', en: 'Electronic Design Contest (TI) — Provincial Second' }
+    - { src: 'awards/ti-second-2023/23电赛省二.jpg', zh: '全国大学生电子设计竞赛（TI杯）省二', en: 'Electronic Design Contest (TI) — Provincial Second' }
 - id: ic-yuzhou-east-third-2023
   year: 2023
   featured: false
@@ -99,7 +99,7 @@
   tags: [integrated-circuit]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2023/23集创赛 东部三.jpg', zh: '全国大学生集成电路创新创业大赛（雨骤杯）东部三等', en: 'IC Innovation Contest (Yuzhou Cup) — East-China Third' }
+    - { src: 'awards/ic-yuzhou-east-third-2023/23集创赛东部三.jpg', zh: '全国大学生集成电路创新创业大赛（雨骤杯）东部三等', en: 'IC Innovation Contest (Yuzhou Cup) — East-China Third' }
 - id: bochuang-national-third-2023
   year: 2023
   featured: false
@@ -110,4 +110,4 @@
   tags: [embedded-ai]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2023/23博创杯 国三.jpg', zh: '全国大学生嵌入式人工智能设计大赛（博创杯）国三', en: 'Embedded AI Design Contest (Bochuang Cup) — National Third' }
+    - { src: 'awards/bochuang-national-third-2023/23博创杯国三.jpg', zh: '全国大学生嵌入式人工智能设计大赛（博创杯）国三', en: 'Embedded AI Design Contest (Bochuang Cup) — National Third' }

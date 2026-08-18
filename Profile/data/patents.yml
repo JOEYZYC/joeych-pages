@@ -6,7 +6,7 @@
   tags: [wireless-perception]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2024/陶宇-发明专利证书-基于字典动态学习的目标参数估计方法、系统及存储介质.png', zh: '发明专利：基于字典动态学习的目标参数估计方法、系统及存储介质', en: 'Patent: Target parameter estimation based on dynamic dictionary learning' }
+    - { src: 'patents/dynamic-dictionary-learning/陶宇-发明专利证书-基于字典动态学习的目标参数估计方法、系统及存储介质.png', zh: '发明专利：基于字典动态学习的目标参数估计方法、系统及存储介质', en: 'Patent: Target parameter estimation based on dynamic dictionary learning' }
 - id: vo2-photoconductive-silicon-absorber
   year: 2024
   featured: true
@@ -15,7 +15,7 @@
   tags: [terahertz, metasurface]
   links: []
   certificates:
-    - { src: 'assets/img/certificates/2024/常熟理工学院-2024100166689 -一种基于二氧化钒和光导硅的动态可调太赫兹吸波器-发明专利证书(签章).png', zh: '发明专利：一种基于二氧化钒和光导硅的动态可调太赫兹吸波器', en: 'Patent: Tunable terahertz absorber based on VO2 and photoconductive silicon' }
+    - { src: 'patents/vo2-photoconductive-silicon-absorber/常熟理工学院-2024100166689一种基于二氧化钒和光导硅的动态可调太赫兹吸波器-发明专利证书签章.png', zh: '发明专利：一种基于二氧化钒和光导硅的动态可调太赫兹吸波器', en: 'Patent: Tunable terahertz absorber based on VO2 and photoconductive silicon' }
 - id: vo2-broadband-absorber
   year: 2024
   featured: false

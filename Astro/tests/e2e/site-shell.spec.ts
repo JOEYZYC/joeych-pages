@@ -51,7 +51,7 @@ test.describe("formal site shell", () => {
       )
       await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute(
         "href",
-        `${basePath}/favicon.svg`,
+        `${basePath}/profile/favicon.svg`,
       )
       expect(personJsonLd).not.toBeNull()
       expect(() => JSON.parse(personJsonLd ?? "")).not.toThrow()
@@ -61,7 +61,7 @@ test.describe("formal site shell", () => {
   }
 
   test("serves the Profile-backed SVG favicon", async ({ page }) => {
-    const favicon = await page.request.get(`${basePath}/favicon.svg`)
+    const favicon = await page.request.get(`${basePath}/profile/favicon.svg`)
     expect(favicon.status()).toBe(200)
   })
 

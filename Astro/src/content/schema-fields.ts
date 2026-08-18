@@ -1,6 +1,6 @@
 import { z } from "astro/zod"
 
-import { certificatePathSchema } from "../lib/profile-paths"
+import { publicMediaPathSchema } from "../lib/profile-paths"
 
 export const textSchema = z.string().trim().min(1)
 export const recordIdSchema = textSchema.brand("RecordId")
@@ -27,7 +27,7 @@ export const linkSchema = z
   .readonly()
 export const certificateSchema = z
   .object({
-    src: certificatePathSchema,
+    src: publicMediaPathSchema,
     zh: textSchema,
     en: textSchema,
   })

@@ -67,9 +67,9 @@ test.describe("JavaScript-disabled canonical routes", () => {
           const firstCertificate = page.locator("[data-certificate-fallback]").first()
 
           await expect(firstCertificate).toBeVisible()
-          await expect(firstCertificate).toHaveAttribute("href", new RegExp(`^${BASE_PATH}/certificates/`))
+          await expect(firstCertificate).toHaveAttribute("href", new RegExp(`^${BASE_PATH}/(awards|publications|patents)/`))
           await firstCertificate.click()
-          await expect(page).toHaveURL(new RegExp(`${BASE_PATH}/certificates/`))
+          await expect(page).toHaveURL(new RegExp(`${BASE_PATH}/(awards|publications|patents)/`))
         }
       }
 
