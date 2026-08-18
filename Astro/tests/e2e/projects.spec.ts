@@ -180,6 +180,8 @@ test.describe("projects archive", () => {
 
     await expect(page.locator("[data-project-filter-results]")).toHaveText("14 / 14")
     await expect(page.locator("[data-project-index-count]")).toHaveText("14 / 14")
+    await expect(page.locator("[data-project-index-summary]")).toHaveCount(1)
+    await expect(page.locator("[data-project-index-summary]")).toBeHidden()
     await expect(page.locator("[data-project-filter-empty]")).toBeHidden()
     expect(await visibleIds(page, "[data-project-tile]")).toEqual(projectIds)
     expect(await visibleIds(page, "[data-project-record]")).toEqual(projectIds)
@@ -320,6 +322,9 @@ test.describe("projects archive", () => {
       await page.goto("en/projects/")
 
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width)
+      if (viewport.name !== "mobile") {
+        await expect(page.locator("[data-project-tile]").last()).toHaveCSS("grid-column-end", "-1")
+      }
     })
   }
 })

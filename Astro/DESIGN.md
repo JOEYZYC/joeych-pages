@@ -10,6 +10,7 @@ This is the implementation contract for the approved static Astro portfolio. Fut
 - Adopt / adapt / reject: adopt static, data-led Astro primitives, bilingual route pairing, and source-backed evidence; adapt the Jekyll technical-editorial identity into explicit light/dark semantic themes and a responsive visual Bento system; reject copied Demo source or copy, search, CMS, React islands, SSR, analytics, AI/Ask/MCP surfaces, deployment configuration outside the root GitHub Pages exception, generic dashboard decoration, and unsupported academic metadata.
 - Lazyweb: skipped. This is an extraction/redesign from an approved existing design and audited local references, not visual greenfield work.
 - Imagegen: skipped. The approved identity, public media, and evidence hierarchy already define the visual contract; generated artwork would weaken source-backed presentation.
+- Online standards check: [MDN Grid accessibility](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout/Accessibility), [W3C Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html), and [web.dev responsive design basics](https://web.dev/articles/responsive-web-design-basics) reinforce source-ordered DOM, content-led breakpoints, ordinary row-major grids, and reflow over dense visual packing.
 
 ## 1. Atmosphere & Identity
 
@@ -125,10 +126,10 @@ Retain `--space-1` through `--space-20` at `.25rem`, `.5rem`, `.75rem`, `1rem`, 
 - Inline primary navigation appears at `>=1024px`.
 - The document owns vertical scrolling. Only viewport-safe modal bodies may create an internal scroll area.
 - Shared route content is centered within `--content-max`. Panels use semantic `section`/`article`/`figure` structure and source order remains DOM order.
-- Home is one Bento grid: desktop hero `1–7`, portrait `8–12`, facts `1–4`, education `5–7`, featured work `1–12`; tablet hero `1–5`, portrait `6–8`, facts `1–3`, education `4–8`; mobile follows hero, portrait, facts, education, and three featured tiles.
-- Project catalog placement is deterministic: desktop lead tile spans 7 columns/two rows, tiles 2–3 span 5, and tiles 4 onward span 4; tablet spans are 5/two rows, 3, 3, then 4; mobile is full width.
-- Experience uses one wide education panel, then four source-ordered campus panels with desktop spans `5,7,7,5`, tablet spans `3,5,5,3`, and full-width mobile panels.
-- Awards and research use evidence Bento panels: featured awards 6 desktop/5 tablet columns, ordinary awards 4/3, publications and patents 6/4, and the singleton thesis full width.
+- Home is one focused Bento pair: desktop hero `1–7` and portrait `8–12`; tablet hero `1–5` and portrait `6–8`; mobile follows hero then portrait. Detailed experience and project evidence remain on their dedicated routes.
+- Project catalog placement is deterministic: desktop lead tile spans 7 columns/two rows, tiles 2–3 span 5, and tiles 4 onward use two equal 6-column tracks; tablet spans are 5/two rows, 3, 3, then two equal 4-column tracks; mobile is full width. An odd final ordinary tile spans the row.
+- Experience uses one wide education panel, then four source-ordered campus panels with desktop spans `5,7,7,5`, tablet spans `3,5,5,3`, and full-width mobile panels. Panel padding follows the shared `1rem`/`1.5rem`/`2rem` responsive scale on every edge.
+- Awards use two equal source-ordered columns at tablet and desktop widths; an odd final record spans the row instead of leaving a grid hole. Publications and patents use 6 desktop/4 tablet columns, and the singleton thesis is full width.
 - Portraits and evidence figures remain uncropped where specified. Never hide source text behind media or hover state.
 - At 200% zoom, reflow rather than clip; preserve navigation, captions, controls, status labels, and 44px targets without horizontal page overflow.
 
@@ -179,7 +180,7 @@ The build remains static Astro, emits exactly these ten documents, and publishes
 
 ### Evidence presentation
 
-- Home uses the specified identity/portrait/facts/education/project Bento composition and two localized action links. Empty source groups are omitted without filler.
+- Home uses the specified identity/portrait Bento composition and two localized action links. Detailed profile statistics, education records, and featured projects remain on their dedicated routes.
 - Experience, awards, publications, patents, and thesis render as native semantic Bento articles in source order. Award prize labels are uniform literals; no rank is inferred.
 - `SkillGroup` keeps credential, project, working, and exposure evidence visually distinct. Project evidence links use localized project titles and the exact base-aware `?skill=<tag-id>#<project-id>` destination.
 - `SeoHead` remains the centralized static metadata primitive. No analytics, tracking, machine endpoints, dynamic remote images, or generated content pipeline is introduced.

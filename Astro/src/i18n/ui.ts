@@ -183,7 +183,7 @@ export const UI = {
     },
     links: { external: "外部链接", github: "GitHub", scholar: "Google Scholar", orcid: "ORCID", related: "相关链接" },
     sections: {
-      home: { profile: "个人档案", education: "教育经历", featured: "精选证据" },
+      home: {},
       experience: { education: "教育经历", campus: "校园经历" },
       awards: {
         awards: "获奖记录",
@@ -289,7 +289,7 @@ export const UI = {
     },
     links: { external: "External link", github: "GitHub", scholar: "Google Scholar", orcid: "ORCID", related: "Related links" },
     sections: {
-      home: { profile: "Profile", education: "Education", featured: "Featured evidence" },
+      home: {},
       experience: { education: "Education", campus: "Campus experience" },
       awards: {
         awards: "Awards",

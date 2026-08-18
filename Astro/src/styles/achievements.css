@@ -145,15 +145,12 @@
   }
 
   .award-panel {
+    grid-column: span 4;
     padding: var(--space-6);
   }
 
-  .award-panel[data-award-featured="true"] {
-    grid-column: span 5;
-  }
-
-  .award-panel[data-award-featured="false"] {
-    grid-column: span 3;
+  .award-panel:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
 }
 
@@ -164,15 +161,8 @@
   }
 
   .award-panel {
-    padding: var(--space-8);
-  }
-
-  .award-panel[data-award-featured="true"] {
     grid-column: span 6;
-  }
-
-  .award-panel[data-award-featured="false"] {
-    grid-column: span 4;
+    padding: var(--space-8);
   }
 }
 

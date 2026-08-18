@@ -100,7 +100,7 @@
   }
 
   .experience-panel {
-    padding-inline-start: var(--space-5);
+    padding: var(--space-6);
   }
 
   .experience-panel--campus[data-experience-position="1"],
@@ -121,7 +121,7 @@
   }
 
   .experience-panel {
-    padding-inline-start: var(--space-6);
+    padding: var(--space-8);
   }
 
   .experience-panel--campus[data-experience-position="1"],

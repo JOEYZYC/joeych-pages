@@ -119,6 +119,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     if (explorer.dataset.explorerReady === "true") continue
     const pageRoot = explorer.closest<HTMLElement>("[data-projects-page]") ?? document.documentElement
     const controls = explorer.querySelector<HTMLElement>("[data-project-filter-controls]")
+    const indexSummary = explorer.querySelector<HTMLElement>("[data-project-index-summary]")
     const staticCount = explorer.querySelector<HTMLElement>("[data-project-index-count]")
     const categoryFilter = explorer.querySelector<HTMLSelectElement>("[data-project-category-filter]")
     const tagFilter = explorer.querySelector<HTMLSelectElement>("[data-project-tag-filter]")
@@ -134,6 +135,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const evidenceSource = explorer.querySelector<HTMLScriptElement>("[data-project-skill-evidence]")
     if (
       !controls ||
+      !indexSummary ||
       !staticCount ||
       !categoryFilter ||
       !tagFilter ||
@@ -368,6 +370,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     applyFilters({ clearOrigin: false })
     applySkillOrigin()
     enhancementsReady = true
+    indexSummary.hidden = true
     controls.hidden = false
     navigatorShell.hidden = visibleIds.length === 0
     explorer.dataset.explorerReady = "true"

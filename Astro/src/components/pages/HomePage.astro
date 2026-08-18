@@ -6,17 +6,13 @@ import { getProfileData } from "../../lib/profile-data"
 import { getRoutePath } from "../../lib/routes"
 import { publicMediaUrl } from "../../lib/urls"
 import "../../styles/home.css"
-import "../../styles/projects.css"
 import Icon from "../Icon.astro"
-import ProjectTile from "../ProjectTile.astro"
 
 type Props = { readonly locale: Locale }
 
 const { locale } = Astro.props
 const data = await getProfileData()
 const { profile } = data
-const education = profile.education[0]
-const featuredProjects = data.projects.filter(({ featured }) => featured)
 const labels = UI[locale]
 ---
 
@@ -49,61 +45,5 @@ const labels = UI[locale]
       />
     </figure>
 
-    {profile.statistics.length > 0 && (
-      <section
-        class:list={["home-facts", { "home-facts--wide": education === undefined }]}
-        data-home-facts
-        aria-labelledby="home-facts-title"
-      >
-        <p class="eyebrow">{labels.sections.home.profile}</p>
-        <h2 id="home-facts-title">{labels.sections.home.profile}</h2>
-        <dl>
-          {profile.statistics.map((statistic) => (
-            <div>
-              <dt>{statistic.label[locale]}</dt>
-              <dd>{statistic.value}</dd>
-            </div>
-          ))}
-        </dl>
-      </section>
-    )}
-
-    {education && (
-      <article
-        id={`education-${education.id}`}
-        class="home-education"
-        data-home-education
-        aria-labelledby="home-education-title"
-      >
-        <p class="eyebrow">{labels.routeIntros.experience.overline}</p>
-        <h2 id="home-education-title">
-          <span class="home-section-icon" data-home-education-icon aria-hidden="true"><Icon name="graduation-cap" /></span>
-          {labels.sections.home.education}
-        </h2>
-        <p class="home-education-period">{education.period}</p>
-        <h3>{education.school[locale]}</h3>
-        <p>{education.degree[locale]}</p>
-        <ul>
-          {education.highlights.map((highlight) => <li>{highlight[locale]}</li>)}
-        </ul>
-      </article>
-    )}
-
-    {featuredProjects.length > 0 && (
-      <section class="home-featured" aria-labelledby="featured-title">
-        <div class="home-featured-heading">
-          <p class="eyebrow">{labels.routeIntros.projects.overline}</p>
-          <h2 id="featured-title">
-            <span class="home-section-icon" data-home-featured-icon aria-hidden="true"><Icon name="arrow-right" /></span>
-            {labels.sections.home.featured}
-          </h2>
-        </div>
-        <div class="home-featured-grid">
-          {featuredProjects.map((project, index) => (
-            <ProjectTile locale={locale} number={index + 1} project={project} variant="featured" />
-          ))}
-        </div>
-      </section>
-    )}
   </div>
 </BaseLayout>

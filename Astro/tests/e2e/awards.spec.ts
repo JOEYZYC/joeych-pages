@@ -117,6 +117,18 @@ test.describe("awards archive", () => {
     await expect(page.locator("#awards-publication-bifunctional-flexible-metasurface-dialog")).not.toBeVisible()
   })
 
+  test("fills award rows without visually reordering source records", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.goto("awards/")
+
+    for (const grid of await page.locator(".achievement-grid").all()) {
+      const panels = grid.locator(".award-panel")
+      const count = await panels.count()
+      if (count % 2 === 1) await expect(panels.last()).toHaveCSS("grid-column-end", "-1")
+      expect(await panels.evaluateAll((elements) => elements.map((element) => element.getAttribute("data-award-id")))).not.toContain(null)
+    }
+  })
+
   test("certificate dialogs close only for clicks outside their visible bounds", async ({ page }) => {
     await page.goto("en/awards/")
     const trigger = page.locator("#awards-award-renesas-east-first-national-third-2024-trigger")

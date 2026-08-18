@@ -1,8 +1,6 @@
 import type { Locator } from "@playwright/test"
 import { expect, test } from "@playwright/test"
 
-import { getProfileData } from "../../src/lib/profile-data"
-
 import { VIEWPORTS } from "./support/site-matrix"
 
 const viewports = VIEWPORTS
@@ -53,14 +51,14 @@ test.describe("home and experience routes", () => {
   }
 
   for (const route of homeRoutes) {
-    test(`orients ${route.locale} Home actions and evidence sections without changing source content`, async ({ page }) => {
+    test(`keeps ${route.locale} Home actions without duplicate preview sections`, async ({ page }) => {
       // Given: the localized Home document
       await page.goto(route.path)
 
-      // When: the action and evidence section affordances are inspected
+      // When: the Home composition is inspected
       const home = page.locator("[data-home-grid]")
 
-      // Then: only the approved CTA and section-level icons orient the existing source-backed content
+      // Then: the two route actions remain and removed preview sections leave no empty wrappers
       const actionIcons = home.locator(".home-action svg[data-icon='arrow-right']")
       await expect(actionIcons).toHaveCount(2)
       for (const actionIcon of await actionIcons.all()) {
@@ -68,13 +66,10 @@ test.describe("home and experience routes", () => {
         expect(actionIconBox.width).toBeGreaterThan(0)
         expect(actionIconBox.height).toBeGreaterThan(0)
       }
-      await expect(home.locator("[data-home-education-icon] svg[data-icon='graduation-cap']")).toHaveCount(1)
-      await expect(home.locator("[data-home-featured-icon] svg[data-icon='arrow-right']")).toHaveCount(1)
+      await expect(home.locator("[data-home-facts], [data-home-education], .home-featured")).toHaveCount(0)
     })
 
     test(`keeps ${route.locale} Home source order and responsive Bento geometry`, async ({ page }) => {
-      const data = await getProfileData()
-
       for (const viewport of viewports) {
         await page.setViewportSize(viewport)
         await page.goto(route.path)
@@ -83,17 +78,12 @@ test.describe("home and experience routes", () => {
         const grid = page.locator("[data-home-grid]")
         const hero = grid.locator("[data-home-hero]")
         const portrait = grid.locator("[data-home-portrait]")
-        const facts = grid.locator("[data-home-facts]")
-        const education = grid.locator("[data-home-education]")
-        const tiles = grid.locator("[data-project-tile]")
 
         expect(await grid.evaluate((element) => [...element.children].map((child) => {
           if (child.matches("[data-home-hero]")) return "hero"
           if (child.matches("[data-home-portrait]")) return "portrait"
-          if (child.matches("[data-home-facts]")) return "facts"
-          if (child.matches("[data-home-education]")) return "education"
           return child.className
-        }))).toEqual(["hero", "portrait", "facts", "education", "home-featured"])
+        }))).toEqual(["hero", "portrait"])
         await expect(hero.getByRole("heading", { level: 1, name: route.name })).toBeVisible()
         await expect(hero.getByRole("link", { name: route.experienceAction })).toHaveAttribute(
           "href",
@@ -104,50 +94,18 @@ test.describe("home and experience routes", () => {
           `/joeych-pages/${route.locale === "en" ? "en/" : ""}projects/`,
         )
         await expect(portrait.getByRole("img", { name: route.name })).toHaveCSS("object-fit", "contain")
-        await expect(facts.locator("dl > div")).toHaveCount(4)
-        await expect(education).toHaveAttribute("id", `education-${data.profile.education[0]?.id}`)
-        await expect(tiles).toHaveCount(3)
-        expect(await tiles.evaluateAll((elements) => elements.map((element) => element.getAttribute("data-project-id")))).toEqual([
-          "power-print-recognition",
-          "dual-light-fusion",
-          "resgatnet",
-        ])
-        expect(await tiles.evaluateAll((elements) => elements.map((element) => element.getAttribute("href")))).toEqual(
-          data.projects
-            .filter(({ featured }) => featured)
-            .map((project) => `/joeych-pages/${route.locale === "en" ? "en/" : ""}projects/#${project.id}`),
-        )
-        await expect(tiles.first()).toHaveCSS("display", "grid")
-        const arrowBox = await box(tiles.first().locator(".project-tile-arrow svg"))
-        expect(arrowBox.width).toBeLessThanOrEqual(24)
-        expect(arrowBox.height).toBeLessThanOrEqual(24)
-        const firstMediaBox = await box(tiles.first().locator(".project-media"))
-        const firstBodyBox = await box(tiles.first().locator(".project-tile-body"))
-        expectAligned(firstMediaBox.y + firstMediaBox.height, firstBodyBox.y)
 
         const heroBox = await box(hero)
         const portraitBox = await box(portrait)
-        const factsBox = await box(facts)
-        const educationBox = await box(education)
-        const firstTileBox = await box(tiles.first())
 
         if (viewport.name === "mobile") {
           expectAligned(heroBox.x, portraitBox.x)
           expectAligned(heroBox.width, portraitBox.width)
-          expectAligned(heroBox.width, factsBox.width)
-          expectAligned(heroBox.width, educationBox.width)
           expect(heroBox.y).toBeLessThan(portraitBox.y)
-          expect(portraitBox.y).toBeLessThan(factsBox.y)
-          expect(factsBox.y).toBeLessThan(educationBox.y)
-          expect(educationBox.y).toBeLessThan(firstTileBox.y)
         } else {
           expectAligned(heroBox.y, portraitBox.y)
-          expectAligned(factsBox.y, educationBox.y)
           expect(heroBox.x).toBeLessThan(portraitBox.x)
-          expect(factsBox.x).toBeLessThan(educationBox.x)
           expect(heroBox.width).toBeGreaterThan(portraitBox.width)
-          if (viewport.name === "tablet") expect(educationBox.width).toBeGreaterThan(factsBox.width)
-          if (viewport.name === "desktop") expect(factsBox.width).toBeGreaterThan(educationBox.width)
         }
 
         await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width)
@@ -181,6 +139,11 @@ test.describe("home and experience routes", () => {
         const records = page.locator("[data-experience-record]")
 
         await expect(records).toHaveCount(5)
+        const firstPadding = await records.first().evaluate((element) => {
+          const style = getComputedStyle(element)
+          return [style.paddingTop, style.paddingRight, style.paddingBottom, style.paddingLeft]
+        })
+        expect(new Set(firstPadding).size).toBe(1)
         expect(await records.evaluateAll((elements) => elements.map((element) => ({
           id: element.id,
           kind: element.getAttribute("data-experience-kind"),

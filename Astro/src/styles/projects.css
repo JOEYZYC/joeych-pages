@@ -485,6 +485,10 @@
     grid-column: span 4;
   }
 
+  .project-catalog-grid > .project-tile:last-child:nth-child(even) {
+    grid-column: 1 / -1;
+  }
+
   .project-navigator-shell {
     grid-template-columns: auto minmax(0, 1fr);
   }
@@ -519,7 +523,7 @@
   }
 
   .project-catalog-grid > .project-tile:nth-child(n + 4) {
-    grid-column: span 4;
+    grid-column: span 6;
   }
 
   .project-record {
