@@ -21,8 +21,8 @@ const projectIds = [
 ] as const
 
 const locales = [
-  { path: "projects/", htmlLanguage: "zh-CN", navigation: "项目介绍", title: "项目介绍", summary: "按项目类别与项目名称筛选，查看完整的工程实践、贡献与图文证据。", pending: "项目图片待补充" },
-  { path: "en/projects/", htmlLanguage: "en", navigation: "Projects", title: "Projects", summary: "Filter by project category and name to inspect complete engineering work, contributions, and supporting figures.", pending: "Project image pending" },
+  { path: "projects/", htmlLanguage: "zh-CN", navigation: "项目介绍", title: "项目介绍", summary: "按项目类别、项目名称与荣誉筛选，查看完整的工程实践、贡献与图文证据。", pending: "项目图片待补充" },
+  { path: "en/projects/", htmlLanguage: "en", navigation: "Projects", title: "Projects", summary: "Filter by project category, name, and honor to inspect complete engineering work, contributions, and supporting figures.", pending: "Project image pending" },
 ] as const
 
 async function visibleCardIds(page: Page): Promise<string[]> {
@@ -146,6 +146,7 @@ test.describe("projects archive", () => {
     expect(await visibleCardIds(page)).toEqual(["resgatnet"])
     await expect(page.locator('[data-project-dialog][data-project-id="resgatnet"]')).toBeHidden()
 
+    await name.selectOption("")
     await category.selectOption(websiteCategory ?? "")
     await expect(name).toHaveValue("")
     expect(await name.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual(["", "joeych-pages"])
@@ -160,6 +161,31 @@ test.describe("projects archive", () => {
 
     await expect(page.locator("[data-project-category-filter]")).toHaveValue("")
     await expect(page.locator("[data-project-name-filter]")).toHaveValue("")
+    expect(await visibleCardIds(page)).toEqual(["power-print-recognition"])
+  })
+
+  test("links category, project name, and honor choices", async ({ page }) => {
+    await page.goto("en/projects/")
+    const category = page.locator("[data-project-category-filter]")
+    const name = page.locator("[data-project-name-filter]")
+    const honor = page.locator("[data-project-honor-filter]")
+    const powerCategory = await page.locator('[data-project-card][data-project-id="power-print-recognition"]').getAttribute("data-project-category")
+
+    await category.selectOption(powerCategory ?? "")
+    expect(await honor.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual([
+      "",
+      "renesas-east-first-national-third-2024",
+    ])
+
+    await honor.selectOption("renesas-east-first-national-third-2024")
+    await expect(category).toHaveValue(powerCategory ?? "")
+    await expect(name).toHaveValue("")
+    expect(await name.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual(["", "power-print-recognition"])
+    expect(await visibleCardIds(page)).toEqual(["power-print-recognition"])
+
+    await honor.selectOption("")
+    await expect(category).toHaveValue(powerCategory ?? "")
+    await expect(name).toHaveValue("")
     expect(await visibleCardIds(page)).toEqual(["power-print-recognition"])
   })
 

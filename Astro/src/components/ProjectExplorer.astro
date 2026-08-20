@@ -145,6 +145,10 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const recordById = new Map(records.map((record) => [record.id, record]))
     const projectIds = cards.map((card) => card.dataset.projectId).filter((id): id is string => Boolean(id))
     const allProjectsLabel = nameFilter.dataset.allProjectsLabel ?? ""
+    const allCategoriesLabel = categoryFilter.options.item(0)?.textContent ?? ""
+    const allHonorsLabel = honorFilter.options.item(0)?.textContent ?? ""
+    const categoryLabels = new Map([...categoryFilter.options].flatMap((option) => option.value ? [[option.value, option.textContent ?? ""]] : []))
+    const honorLabels = new Map([...honorFilter.options].flatMap((option) => option.value ? [[option.value, option.textContent ?? ""]] : []))
     let trigger: HTMLElement | undefined
     let visibleIds = [...projectIds]
 
@@ -172,23 +176,67 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       dialog.dataset.active = "true"
     }
 
-    const categoryIds = () => projectIds.filter((id) => {
-      const card = cardById.get(id)
-      return categoryFilter.value === "" || card?.dataset.projectCategory === categoryFilter.value
+    type Filters = { readonly category: string; readonly name: string; readonly honor: string }
+    type FilterKey = keyof Filters
+
+    const currentFilters = (): Filters => ({
+      category: categoryFilter.value,
+      name: nameFilter.value,
+      honor: honorFilter.value,
     })
 
-    const rebuildNameFilter = (reset = false) => {
-      const previous = nameFilter.value
-      const ids = categoryIds()
-      nameFilter.replaceChildren(new Option(allProjectsLabel, ""))
-      for (const id of ids) {
+    const matchingIds = (filters: Filters) => projectIds.filter((id) => {
+      const card = cardById.get(id)
+      const matchesCategory = filters.category === "" || card?.dataset.projectCategory === filters.category
+      const matchesName = filters.name === "" || id === filters.name
+      const matchesHonor = filters.honor === "" || card?.dataset.projectHonors?.split(" ").includes(filters.honor)
+      return matchesCategory && matchesName && matchesHonor
+    })
+
+    const replaceOptions = (select: HTMLSelectElement, label: string, options: readonly (readonly [string, string])[], selected: string) => {
+      select.replaceChildren(new Option(label, ""), ...options.map(([value, text]) => new Option(text, value)))
+      select.value = options.some(([value]) => value === selected) ? selected : ""
+    }
+
+    const syncFacetOptions = () => {
+      const filters = currentFilters()
+      const categoryIds = matchingIds({ ...filters, category: "" })
+      const categories = [...new Map(categoryIds.flatMap((id) => {
+        const category = cardById.get(id)?.dataset.projectCategory
+        return category === undefined ? [] : [[category, categoryLabels.get(category) ?? category] as const]
+      })).entries()]
+      replaceOptions(categoryFilter, allCategoriesLabel, categories, filters.category)
+
+      const nameIds = matchingIds({ ...currentFilters(), name: "" })
+      const names = nameIds.flatMap((id) => {
         const record = recordById.get(id)
         const ordinal = record?.dataset.projectOrdinal
         const title = record?.dataset.projectTitle
-        if (!ordinal || !title) continue
-        nameFilter.add(new Option(`${ordinal} — ${title}`, id))
+        return !ordinal || !title ? [] : [[id, `${ordinal} — ${title}`] as const]
+      })
+      replaceOptions(nameFilter, allProjectsLabel, names, filters.name)
+
+      const honorIds = matchingIds({ ...currentFilters(), honor: "" }).flatMap((id) =>
+        cardById.get(id)?.dataset.projectHonors?.split(" ").filter(Boolean) ?? [],
+      )
+      const honors = [...new Set(honorIds)].map((id) => [id, honorLabels.get(id) ?? id] as const)
+      replaceOptions(honorFilter, allHonorsLabel, honors, filters.honor)
+    }
+
+    const normalizeSelections = (changed: FilterKey) => {
+      const filters = { ...currentFilters() }
+      const resetOrder: Record<FilterKey, readonly FilterKey[]> = {
+        category: ["name", "honor"],
+        name: ["honor", "category"],
+        honor: ["name", "category"],
       }
-      nameFilter.value = !reset && ids.includes(previous) ? previous : ""
+      for (const key of resetOrder[changed]) {
+        if (matchingIds(filters).length > 0) break
+        filters[key] = ""
+      }
+      categoryFilter.value = filters.category
+      nameFilter.value = filters.name
+      honorFilter.value = filters.honor
     }
 
     const clearSkillOrigin = (removeQuery: boolean) => {
@@ -228,14 +276,8 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
 
     const applyFilters = ({ clearOrigin = true } = {}) => {
       if (clearOrigin) clearSkillOrigin(true)
-      const category = categoryFilter.value
       const name = nameFilter.value
-      const honor = honorFilter.value
-      visibleIds = projectIds.filter((id) => {
-        const card = cardById.get(id)
-        const matchesHonor = honor === "" || card?.dataset.projectHonors?.split(" ").includes(honor)
-        return (category === "" || card?.dataset.projectCategory === category) && (name === "" || id === name) && matchesHonor
-      })
+      visibleIds = matchingIds(currentFilters())
       const visible = new Set(visibleIds)
       for (const id of projectIds) {
         const card = cardById.get(id)
@@ -268,10 +310,14 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       const card = cardById.get(id)
       if (!card) return
       const category = card.dataset.projectCategory
-      if (category) categoryFilter.value = category
-      rebuildNameFilter()
+      categoryFilter.value = ""
+      nameFilter.value = ""
       nameFilter.value = id
       honorFilter.value = ""
+      syncFacetOptions()
+      if (category) categoryFilter.value = category
+      syncFacetOptions()
+      nameFilter.value = id
       applyFilters({ clearOrigin: false })
       setActiveProject(id)
       openDialog(id, undefined, focusTitle)
@@ -297,27 +343,21 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     })
     dialog.addEventListener("close", () => trigger?.focus())
     dialog.hidden = false
-    categoryFilter.addEventListener("change", () => {
-      honorFilter.value = ""
-      rebuildNameFilter(true)
+    const updateFilters = (changed: FilterKey) => {
+      normalizeSelections(changed)
+      syncFacetOptions()
       applyFilters()
-    })
-    nameFilter.addEventListener("change", () => {
-      honorFilter.value = ""
-      applyFilters()
-    })
-    honorFilter.addEventListener("change", () => {
-      categoryFilter.value = ""
-      rebuildNameFilter(true)
-      applyFilters()
-    })
+    }
+    categoryFilter.addEventListener("change", () => updateFilters("category"))
+    nameFilter.addEventListener("change", () => updateFilters("name"))
+    honorFilter.addEventListener("change", () => updateFilters("honor"))
     window.addEventListener("hashchange", () => {
       const id = currentHashId()
       if (cardById.has(id)) revealProject(id, true)
       else applySkillOrigin()
     })
 
-    rebuildNameFilter()
+    syncFacetOptions()
     cardGrid.hidden = false
     controls.hidden = false
     recordsSection.hidden = true
