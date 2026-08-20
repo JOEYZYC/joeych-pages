@@ -1,0 +1,69 @@
+---
+import type { Publication } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import { publicMediaUrl } from "../lib/urls"
+
+type Props = {
+  readonly idPrefix: string
+  readonly locale: Locale
+  readonly mode: "dialog" | "record"
+  readonly publication: Publication
+}
+
+const { idPrefix, locale, mode, publication } = Astro.props
+const labels = UI[locale]
+const titleId = `${idPrefix}-title`
+---
+
+<header class="project-record-header">
+  <div class="project-record-meta">
+    <span>{publication.year}</span>
+    <span>{labels.sections.awards.publications}</span>
+  </div>
+  <div class="project-record-states">
+    <span class="project-state project-current-state" data-project-current-label>{labels.projectExplorer.current}</span>
+  </div>
+  <h2
+    id={titleId}
+    data-project-dialog-title={mode === "dialog" ? true : undefined}
+    data-project-record-title={mode === "record" ? true : undefined}
+    tabindex="-1"
+  >{publication.title[locale]}</h2>
+  <p class="project-record-claim">{publication.venue[locale]} · {publication.authors[locale]}</p>
+</header>
+
+<div class="project-record-body">
+  {publication.tags.length > 0 && (
+    <ul class="project-tag-list" aria-label={publication.title[locale]}>
+      {publication.tags.map((tag) => <li>{tag}</li>)}
+    </ul>
+  )}
+
+  {publication.certificates.length > 0 && (
+    <section class="project-record-section" aria-labelledby={`${idPrefix}-certificates`}>
+      <h3 id={`${idPrefix}-certificates`}>{labels.certificate.title}</h3>
+      <div class="project-related-certificate-grid">
+        {publication.certificates.map((certificate) => (
+          <figure>
+            <a href={publicMediaUrl(certificate.src)} target="_blank" rel="noopener noreferrer">
+              <img src={publicMediaUrl(certificate.src)} alt={certificate[locale]} loading="lazy" />
+            </a>
+            <figcaption>{certificate[locale]}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {publication.links.length > 0 && (
+    <section class="project-record-section project-links" aria-labelledby={`${idPrefix}-links`}>
+      <h3 id={`${idPrefix}-links`}>{labels.sections.projects.links}</h3>
+      <ul>
+        {publication.links.map((link) => link.url === null
+          ? <li><span class="project-link-unavailable" data-project-link-unavailable>{link.label[locale]} — {labels.unavailable.link}</span></li>
+          : <li><a href={link.url} target="_blank" rel="noopener noreferrer"><span data-project-link-marker aria-hidden="true">{labels.links.external}</span>{link.label[locale]}</a></li>)}
+      </ul>
+    </section>
+  )}
+</div>

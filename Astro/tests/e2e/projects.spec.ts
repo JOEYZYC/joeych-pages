@@ -4,25 +4,30 @@ import { expect, test } from "@playwright/test"
 import { VIEWPORTS } from "./support/site-matrix"
 
 const projectIds = [
+  "eflydrone-boards",
+  "joeych-pages",
   "power-print-recognition",
   "dual-light-fusion",
   "resgatnet",
-  "flexible-bifunctional-metasurface",
   "rigid-dual-polarization-metasurface",
   "single-phase-power-analyzer",
   "traffic-sign-recognition",
   "intelligent-reconnaissance-2024",
   "full-model-smart-car",
+  "digikey-dual-light-thermal-imager-2024",
+  "publication-bifunctional-flexible-metasurface",
+  "publication-tunable-bifunctional-metasurface-absorber",
+  "publication-dual-broadband-flexible-metasurface",
+  "publication-dual-band-polarization-conversion",
+  "publication-tri-band-metasurface-absorber",
+  "flexible-bifunctional-metasurface",
   "smart-harvesting-robot",
   "intelligent-reconnaissance-2023",
-  "digikey-dual-light-thermal-imager-2024",
-  "joeych-pages",
-  "eflydrone-boards",
 ] as const
 
 const locales = [
-  { path: "projects/", htmlLanguage: "zh-CN", navigation: "项目介绍", title: "项目介绍", summary: "按项目类别、项目名称与荣誉筛选，查看完整的工程实践、贡献与图文证据。", pending: "项目图片待补充" },
-  { path: "en/projects/", htmlLanguage: "en", navigation: "Projects", title: "Projects", summary: "Filter by project category, name, and honor to inspect complete engineering work, contributions, and supporting figures.", pending: "Project image pending" },
+  { path: "projects/", htmlLanguage: "zh-CN", navigation: "项目介绍", title: "项目介绍", summary: "按项目类别、项目名称与荣誉筛选，查看工程实践、论文与图文证据。", pending: "项目图片待补充" },
+  { path: "en/projects/", htmlLanguage: "en", navigation: "Projects", title: "Projects", summary: "Filter by project category, name, and honor to inspect engineering work, publications, and supporting figures.", pending: "Project image pending" },
 ] as const
 
 async function visibleCardIds(page: Page): Promise<string[]> {
@@ -47,7 +52,7 @@ async function replaceEvidencePayloadBeforeEnhancement(page: Page, payload: stri
 
 test.describe("projects archive", () => {
   for (const locale of locales) {
-    test(`renders the ${locale.path} source-order project cards with static detail fallback`, async ({ page }) => {
+    test(`renders the ${locale.path} year-ordered project and publication cards with static detail fallback`, async ({ page }) => {
       await page.goto(locale.path)
       const cards = page.locator("[data-project-card]")
       const records = page.locator("[data-project-record]")
@@ -94,6 +99,21 @@ test.describe("projects archive", () => {
     await expect(dialog.locator('[data-related-achievement-id="resgatnet"] a.project-related-achievement-link')).toHaveAttribute("href", "/joeych-pages/en/awards/#publication-resgatnet")
     await expect(dialog.locator(".project-figure-unavailable")).toContainText("Media unavailable")
     await expect(dialog.locator(".project-link-unavailable")).toHaveCount(2)
+  })
+
+  test("renders an unpaired publication as a compact project without duplicating ResGatNet", async ({ page }) => {
+    await page.goto("en/projects/")
+    const publicationId = "publication-bifunctional-flexible-metasurface"
+    const card = page.locator(`[data-project-card][data-project-id="${publicationId}"]`)
+
+    await expect(page.locator('[data-project-card][data-project-id="publication-resgatnet"]')).toHaveCount(0)
+    await expect(card).toContainText("Diamond and Related Materials · 3rd author of 8")
+    await card.click()
+
+    const dialog = page.locator(`[data-project-dialog][data-project-id="${publicationId}"]`)
+    await expect(dialog).toContainText("Publications")
+    await expect(dialog.locator(".project-record-contribution")).toHaveCount(0)
+    await expect(dialog.locator(".project-related-certificate-grid img")).toHaveCount(1)
   })
 
   test("keeps the detail template explicit when source fields are absent", async ({ page }) => {
@@ -151,6 +171,19 @@ test.describe("projects archive", () => {
     await expect(name).toHaveValue("")
     expect(await name.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual(["", "joeych-pages"])
     expect(await visibleCardIds(page)).toEqual(["joeych-pages"])
+  })
+
+  test("uses pure titles in project-name options and filters standalone publications", async ({ page }) => {
+    await page.goto("en/projects/")
+    const category = page.locator("[data-project-category-filter]")
+    const name = page.locator("[data-project-name-filter]")
+
+    await category.selectOption("publication")
+    await expect(name.locator("option").nth(1)).toHaveText("Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption")
+    expect((await name.locator("option").allTextContents()).some((title) => /^\d{2}\s+—/.test(title))).toBe(false)
+
+    await name.selectOption("publication-dual-band-polarization-conversion")
+    expect(await visibleCardIds(page)).toEqual(["publication-dual-band-polarization-conversion"])
   })
 
   test("filters cards by explicitly linked honor", async ({ page }) => {
@@ -226,7 +259,7 @@ test.describe("projects archive", () => {
       await expect(page.locator("[data-project-filter-controls]")).toBeHidden()
       await expect(page.locator("[data-project-card-grid]")).toBeHidden()
       await expect(page.locator("[data-project-records]")).toBeVisible()
-      await expect(page.locator("[data-project-record]")).toHaveCount(14)
+      await expect(page.locator("[data-project-record]")).toHaveCount(19)
     })
   }
 
@@ -238,7 +271,7 @@ test.describe("projects archive", () => {
     await expect(page.locator("[data-project-filter-controls]")).toBeHidden()
     await expect(page.locator("[data-project-card-grid]")).toBeHidden()
     await expect(page.locator("[data-project-records]")).toBeVisible()
-    await expect(page.locator("[data-project-record]")).toHaveCount(14)
+    await expect(page.locator("[data-project-record]")).toHaveCount(19)
     await expect(page.locator("#resgatnet [data-project-current-label]")).toBeVisible()
     await context.close()
   })

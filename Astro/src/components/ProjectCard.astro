@@ -7,14 +7,12 @@ import ProjectMedia from "./ProjectMedia.astro"
 
 type Props = {
   readonly locale: Locale
-  readonly number: number
   readonly project: Project
   readonly relatedAchievements: readonly RelatedAchievement[]
 }
 
-const { locale, number, project, relatedAchievements } = Astro.props
+const { locale, project, relatedAchievements } = Astro.props
 const labels = UI[locale]
-const ordinal = String(number).padStart(2, "0")
 ---
 
 <a
@@ -34,7 +32,7 @@ const ordinal = String(number).padStart(2, "0")
     </div>
   ) : <ProjectMedia context="card" locale={locale} project={project} loading="lazy" />}
   <div class="project-card-body">
-    <p class="project-card-meta"><span>{ordinal} / {project.year}</span><span>{project.category[locale]}</span></p>
+    <p class="project-card-meta"><span>{project.year}</span><span>{project.category[locale]}</span></p>
     <h2>{project.title[locale]}</h2>
     <p class="project-card-claim">{project.claim[locale]}</p>
     <p class="project-card-achievements">

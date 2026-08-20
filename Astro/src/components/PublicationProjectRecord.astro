@@ -1,0 +1,26 @@
+---
+import type { Publication } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import PublicationProjectDetail from "./PublicationProjectDetail.astro"
+
+type Props = {
+  readonly locale: Locale
+  readonly publication: Publication
+}
+
+const { locale, publication } = Astro.props
+const id = `publication-${publication.id}`
+---
+
+<article
+  id={id}
+  class="project-record project-record--publication"
+  data-project-record
+  data-project-id={id}
+  data-project-key={`publication:${publication.id}`}
+  data-project-category="publication"
+  data-project-title={publication.title[locale]}
+  data-active="false"
+>
+  <PublicationProjectDetail idPrefix={id} locale={locale} mode="record" publication={publication} />
+</article>

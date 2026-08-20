@@ -11,21 +11,19 @@ type Props = {
   readonly idPrefix: string
   readonly locale: Locale
   readonly mode: "dialog" | "record"
-  readonly number: number
   readonly project: Project
   readonly relatedAchievements: readonly RelatedAchievement[]
 }
 
-const { idPrefix, locale, mode, number, project, relatedAchievements } = Astro.props
+const { idPrefix, locale, mode, project, relatedAchievements } = Astro.props
 const labels = UI[locale]
-const ordinal = String(number).padStart(2, "0")
 const remainingFigures = project.figures.filter((figure) => figure.src !== project.image)
 const titleId = `${idPrefix}-title`
 ---
 
 <header class="project-record-header">
   <div class="project-record-meta">
-    <span>{ordinal} / {project.year}</span>
+    <span>{project.year}</span>
     <span>{project.category[locale]}</span>
   </div>
   <div class="project-record-states">

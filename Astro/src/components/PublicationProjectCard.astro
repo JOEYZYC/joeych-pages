@@ -1,0 +1,34 @@
+---
+import type { Publication } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+
+type Props = {
+  readonly locale: Locale
+  readonly publication: Publication
+}
+
+const { locale, publication } = Astro.props
+const labels = UI[locale]
+const id = `publication-${publication.id}`
+---
+
+<a
+  class="project-card project-card--publication"
+  href={`#${id}`}
+  data-project-card
+  data-project-id={id}
+  data-project-key={`publication:${publication.id}`}
+  data-project-category="publication"
+  data-project-honors=""
+  aria-controls="project-detail-dialog"
+  aria-haspopup="dialog"
+  hidden
+>
+  <div class="project-card-body">
+    <p class="project-card-meta"><span>{publication.year}</span><span>{labels.sections.awards.publications}</span></p>
+    <h2>{publication.title[locale]}</h2>
+    <p class="project-card-claim">{publication.venue[locale]} · {publication.authors[locale]}</p>
+    <span class="project-card-open">{labels.projectExplorer.open}</span>
+  </div>
+</a>

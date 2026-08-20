@@ -7,6 +7,9 @@ import ProjectCard from "./ProjectCard.astro"
 import ProjectDetail from "./ProjectDetail.astro"
 import ProjectDialog from "./ProjectDialog.astro"
 import ProjectRecord from "./ProjectRecord.astro"
+import PublicationProjectCard from "./PublicationProjectCard.astro"
+import PublicationProjectDetail from "./PublicationProjectDetail.astro"
+import PublicationProjectRecord from "./PublicationProjectRecord.astro"
 
 type Props = {
   readonly awards: readonly Award[]
@@ -18,6 +21,19 @@ type Props = {
 
 const { awards, locale, projects, publications, skills } = Astro.props
 const labels = UI[locale]
+type ExplorerItem =
+  | {
+    readonly kind: "project"
+    readonly project: Project
+    readonly relatedAchievements: readonly ReturnType<typeof resolveRelatedAchievements>[number][]
+    readonly sourceIndex: number
+  }
+  | {
+    readonly kind: "publication"
+    readonly publication: Publication
+    readonly sourceIndex: number
+  }
+
 const categories: { value: string; label: string }[] = []
 const seenCategories = new Set<string>()
 const relatedByProject = new Map(projects.map((project) => [
@@ -30,11 +46,33 @@ const honors = [...new Map(
     .map((achievement) => [achievement.record.id, achievement.record.title[locale]]),
   ),
 ).entries()].map(([value, label]) => ({ value, label }))
+const linkedPublicationIds = new Set(projects.flatMap((project) => project.related_achievements
+  .filter((achievement) => achievement.kind === "publication")
+  .map((achievement) => achievement.id)))
+const explorerItems: readonly ExplorerItem[] = [
+  ...projects.map((project, sourceIndex) => ({
+    kind: "project" as const,
+    project,
+    relatedAchievements: relatedByProject.get(project.id) ?? [],
+    sourceIndex,
+  })),
+  ...publications
+    .filter((publication) => !linkedPublicationIds.has(publication.id))
+    .map((publication, sourceIndex) => ({ kind: "publication" as const, publication, sourceIndex })),
+].sort((left, right) => {
+  const year = (left.kind === "project" ? left.project.year : left.publication.year) - (right.kind === "project" ? right.project.year : right.publication.year)
+  if (year !== 0) return -year
+  if (left.kind !== right.kind) return left.kind === "project" ? -1 : 1
+  return left.sourceIndex - right.sourceIndex
+})
 
-for (const project of projects) {
-  if (seenCategories.has(project.category.en)) continue
-  seenCategories.add(project.category.en)
-  categories.push({ value: project.category.en, label: project.category[locale] })
+for (const item of explorerItems) {
+  const category = item.kind === "project"
+    ? { value: item.project.category.en, label: item.project.category[locale] }
+    : { value: "publication", label: labels.sections.awards.publications }
+  if (seenCategories.has(category.value)) continue
+  seenCategories.add(category.value)
+  categories.push(category)
 }
 
 const skillEvidence = Object.fromEntries(
@@ -51,7 +89,7 @@ const skillEvidence = Object.fromEntries(
 const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\\u003c")
 ---
 
-{projects.length === 0 ? (
+{explorerItems.length === 0 ? (
   <p class="project-empty-source" data-project-source-empty>{labels.projectExplorer.emptySource}</p>
 ) : (
   <div class="project-explorer" data-project-explorer>
@@ -79,24 +117,26 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     </div>
 
     <div class="project-card-grid" data-project-card-grid hidden>
-      {projects.map((project, index) => (
-        <ProjectCard locale={locale} number={index + 1} project={project} relatedAchievements={relatedByProject.get(project.id) ?? []} />
-      ))}
+      {explorerItems.map((item) => item.kind === "project"
+        ? <ProjectCard locale={locale} project={item.project} relatedAchievements={item.relatedAchievements} />
+        : <PublicationProjectCard locale={locale} publication={item.publication} />)}
     </div>
 
     <ProjectDialog locale={locale} />
-    {projects.map((project, index) => (
-      <template data-project-dialog-template data-project-id={project.id}>
-        <ProjectDetail idPrefix={`project-dialog-${project.id}`} locale={locale} mode="dialog" number={index + 1} project={project} relatedAchievements={relatedByProject.get(project.id) ?? []} />
-      </template>
-    ))}
+    {explorerItems.map((item) => item.kind === "project"
+      ? <template data-project-dialog-template data-project-id={item.project.id}>
+          <ProjectDetail idPrefix={`project-dialog-${item.project.id}`} locale={locale} mode="dialog" project={item.project} relatedAchievements={item.relatedAchievements} />
+        </template>
+      : <template data-project-dialog-template data-project-id={`publication-${item.publication.id}`}>
+          <PublicationProjectDetail idPrefix={`project-dialog-publication-${item.publication.id}`} locale={locale} mode="dialog" publication={item.publication} />
+        </template>)}
 
     <script type="application/json" data-project-skill-evidence set:html={serializedSkillEvidence}></script>
 
     <section class="project-records" data-project-records>
-      {projects.map((project, index) => (
-        <ProjectRecord locale={locale} number={index + 1} project={project} relatedAchievements={relatedByProject.get(project.id) ?? []} />
-      ))}
+      {explorerItems.map((item) => item.kind === "project"
+        ? <ProjectRecord locale={locale} project={item.project} relatedAchievements={item.relatedAchievements} />
+        : <PublicationProjectRecord locale={locale} publication={item.publication} />)}
     </section>
   </div>
 )}
@@ -210,9 +250,8 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       const nameIds = matchingIds({ ...currentFilters(), name: "" })
       const names = nameIds.flatMap((id) => {
         const record = recordById.get(id)
-        const ordinal = record?.dataset.projectOrdinal
         const title = record?.dataset.projectTitle
-        return !ordinal || !title ? [] : [[id, `${ordinal} — ${title}`] as const]
+        return title === undefined ? [] : [[id, title] as const]
       })
       replaceOptions(nameFilter, allProjectsLabel, names, filters.name)
 
