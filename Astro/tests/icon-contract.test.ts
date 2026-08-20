@@ -55,13 +55,13 @@ describe("localized route and build-time icon contract", () => {
       zh: {
         experience: "按时间查看教育经历与校园实践。",
         awards: "按年份查阅竞赛荣誉、出版成果、专利与毕业论文。",
-        projects: "从项目索引进入完整的工程实践、贡献与图文证据。",
+        projects: "按项目类别与项目名称筛选，查看完整的工程实践、贡献与图文证据。",
         "tech-stack": "按技能领域查看对应组件、能力语境与项目证据。",
       },
       en: {
         experience: "Review education and campus experience in chronological order.",
         awards: "Review awards, publications, patents, and thesis evidence by year.",
-        projects: "Use the project index to inspect engineering work, contributions, and supporting figures.",
+        projects: "Filter by project category and name to inspect complete engineering work, contributions, and supporting figures.",
         "tech-stack": "Browse technical capabilities by domain with their components, context, and project evidence.",
       },
     } as const

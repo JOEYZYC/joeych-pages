@@ -7,7 +7,6 @@ const componentsUrl = new URL("../src/styles/components.css", import.meta.url)
 const designUrl = new URL("../DESIGN.md", import.meta.url)
 const footerUrl = new URL("../src/components/SiteFooter.astro", import.meta.url)
 const layoutUrl = new URL("../src/styles/layout.css", import.meta.url)
-const projectsUrl = new URL("../src/styles/projects.css", import.meta.url)
 const tokensUrl = new URL("../src/styles/tokens.css", import.meta.url)
 
 function contrastRatio(foreground: string, background: string): number {
@@ -152,21 +151,16 @@ describe("shared visual system contract", () => {
     expect(Number.parseInt(proseMax, 10)).toBeLessThanOrEqual(68)
   })
 
-  it("keeps the documented project motion, theme tokens, font budgets, and navigation breakpoint aligned with the approved contract", async () => {
+  it("keeps documented theme tokens, font budgets, and navigation breakpoint aligned with the approved contract", async () => {
     // Given: the implementation style sources and their public design contract
-    const [design, projects, tokens] = await Promise.all([
+    const [design, tokens] = await Promise.all([
       readFile(designUrl, "utf8"),
-      readFile(projectsUrl, "utf8"),
       readFile(tokensUrl, "utf8"),
     ])
 
     // When: the approved shared-system values are inspected
 
-    // Then: documented constraints match the tested values for motion, themes, transfer, measure, and navigation
-    expect(projects).toContain("@media (hover: hover) and (pointer: fine)")
-    expect(projects).toContain("transform: translateY(-2px) scale(1.015)")
-    expect(projects).toContain("transform: translateY(-1px) scale(1.01)")
-    expect(projects).toMatch(/prefers-reduced-motion: reduce[\s\S]*transform: none/)
+    // Then: documented constraints match the tested values for themes, transfer, measure, and navigation
     for (const scope of [":root", 'html[data-theme="dark"]'] as const) {
       const start = tokens.indexOf(scope)
       expect(start).toBeGreaterThanOrEqual(0)
@@ -181,10 +175,6 @@ describe("shared visual system contract", () => {
     expect(design).toContain("42 MiB")
     expect(design).toContain("6 MiB")
     expect(design).toContain("256 KiB")
-    expect(design).toContain("`translateY(-2px) scale(1.015)`")
-    expect(design).toContain("`translateY(-1px) scale(1.01)`")
-    expect(design).toContain("Coarse pointers do not lift or scale project tiles.")
-    expect(design).toContain("transforms are none")
     expect(design).toContain("Inline primary navigation appears at `>=1024px`.")
   })
 })

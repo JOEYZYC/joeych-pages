@@ -47,7 +47,7 @@ test.describe("deterministic visual baselines", () => {
           // Then: the complete route remains visually stable without hiding any content
           const snapshotName = routeSnapshotName(route.path, viewport.name, theme)
           if (route.path.includes("projects")) {
-            // Chromium full-page stitching scrolls the observer-driven project navigator. Capture its deterministic initial viewport; state baselines cover its target record.
+            // Chromium full-page stitching can alter sticky control state. Capture the deterministic initial viewport; target baselines cover record state.
             await expect(page).toHaveScreenshot(snapshotName)
           } else {
             await expect(page).toHaveScreenshot(snapshotName, { fullPage: true })
@@ -55,30 +55,6 @@ test.describe("deterministic visual baselines", () => {
         })
       }
     }
-
-    test(`captures project hover in ${theme}`, async ({ page }) => {
-      await openSettledProjectPage(page, theme, {})
-      const tile = page.locator(`[data-project-tile][data-project-id="${projectId}"]`)
-
-      await tile.hover()
-      await expect(tile).toHaveCSS("transform", "matrix(1.015, 0, 0, 1.015, 0, -2)")
-      await waitForStableScreenshot(page)
-
-      await expect(tile).toHaveScreenshot(`project-hover-${theme}.png`)
-    })
-
-    test(`captures project keyboard focus in ${theme}`, async ({ page }) => {
-      await openSettledProjectPage(page, theme, {})
-      const tile = page.locator(`[data-project-tile][data-project-id="${projectId}"]`)
-
-      await page.mouse.move(0, 0)
-      await tile.focus()
-      await expect(tile).toBeFocused()
-      await expect(tile).toHaveCSS("transform", "matrix(1.01, 0, 0, 1.01, 0, -1)")
-      await waitForStableScreenshot(page)
-
-      await expect(tile).toHaveScreenshot(`project-focus-${theme}.png`)
-    })
 
     test(`captures the resgatnet target in ${theme}`, async ({ page }) => {
       await openSettledProjectPage(page, theme, { hash: true })
@@ -92,11 +68,8 @@ test.describe("deterministic visual baselines", () => {
 
     test(`captures reduced-motion project state in ${theme}`, async ({ page }) => {
       await openSettledProjectPage(page, theme, { hash: true, reducedMotion: "reduce" })
-      const tile = page.locator(`[data-project-tile][data-project-id="${projectId}"]`)
       const target = page.locator(`#${projectId}`)
 
-      await tile.hover()
-      await expect(tile).toHaveCSS("transform", "none")
       await expect(target).toHaveCSS("border-left-width", "4px")
       await waitForStableScreenshot(page)
 

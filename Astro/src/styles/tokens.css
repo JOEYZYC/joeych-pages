@@ -22,7 +22,6 @@
   --color-error: #a32d2d;
   --color-backdrop: rgb(13 29 45 / 0.48);
   --shadow-panel: 0 1px 2px rgb(20 36 52 / 0.06), 0 12px 32px rgb(20 36 52 / 0.08);
-  --shadow-raised: 0 2px 4px rgb(20 36 52 / 0.08), 0 18px 42px rgb(20 36 52 / 0.12);
   --shadow-dialog: 0 24px 64px rgb(20 36 52 / 0.28);
   --gradient-hero: linear-gradient(135deg, #eef9fc 0%, #f7f8fc 54%, #d8f1f7 100%);
   --space-1: 0.25rem;
@@ -86,7 +85,6 @@ html[data-theme="dark"] {
   --color-error: #ff9f9f;
   --color-backdrop: rgb(2 9 18 / 0.68);
   --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.2), 0 12px 32px rgb(0 0 0 / 0.22);
-  --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.28), 0 18px 42px rgb(0 0 0 / 0.32);
   --shadow-dialog: 0 24px 64px rgb(0 0 0 / 0.52);
   --gradient-hero: linear-gradient(135deg, #142e43 0%, #103f52 54%, #1d6072 100%);
 }
@@ -116,7 +114,6 @@ html[data-theme="dark"] {
     --color-error: #ff9f9f;
     --color-backdrop: rgb(2 9 18 / 0.68);
     --shadow-panel: 0 1px 2px rgb(0 0 0 / 0.2), 0 12px 32px rgb(0 0 0 / 0.22);
-    --shadow-raised: 0 2px 4px rgb(0 0 0 / 0.28), 0 18px 42px rgb(0 0 0 / 0.32);
     --shadow-dialog: 0 24px 64px rgb(0 0 0 / 0.52);
     --gradient-hero: linear-gradient(135deg, #142e43 0%, #103f52 54%, #1d6072 100%);
   }

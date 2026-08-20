@@ -130,6 +130,7 @@ test.describe("tech stack", () => {
       "data-evidence-origin",
       "true",
     )
+    await expect(page.locator("[data-project-name-filter]")).toHaveValue("intelligent-reconnaissance-2024")
     await expect(page.locator("#intelligent-reconnaissance-2024 [data-project-origin-label]")).toHaveText(
       "From skill evidence: Halcon / OpenCV image processing & vision",
     )

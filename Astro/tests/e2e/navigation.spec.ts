@@ -44,47 +44,36 @@ test.describe("navigation state synchronization", () => {
     await expect(languageLink).toHaveAttribute("href", `${basePath}/en/projects/`)
   })
 
-  test("synchronizes the project navigator, visible state labels, and scrolling without history writes", async ({ page }) => {
+  test("filters a project name, preserves its visible state, and does not write history", async ({ page }) => {
     await page.setViewportSize(VIEWPORTS[2])
     await page.goto("en/projects/")
-    const navigator = page.locator("[data-project-navigator]")
+    const nameFilter = page.locator("[data-project-name-filter]")
     const historyLength = await page.evaluate(() => window.history.length)
 
-    await navigator.selectOption("resgatnet")
+    await nameFilter.selectOption("resgatnet")
 
-    await expect(navigator).toHaveValue("resgatnet")
-    await expect(page.locator('[data-project-tile][data-project-id="resgatnet"]')).toHaveAttribute(
-      "aria-current",
-      "location",
-    )
-    await expect(page.locator('[data-project-tile][data-project-id="resgatnet"] [data-project-current-label]')).toBeVisible()
+    await expect(nameFilter).toHaveValue("resgatnet")
     await expect(page.locator("#resgatnet [data-project-current-label]")).toBeVisible()
-    const [navigatorBox, recordBox] = await Promise.all([
-      page.locator("[data-project-navigator-shell]").boundingBox(),
+    await expect(page.locator("[data-project-record]:not([hidden])")).toHaveCount(1)
+    const [filterBox, recordBox] = await Promise.all([
+      page.locator("[data-project-filter-controls]").boundingBox(),
       page.locator("#resgatnet").boundingBox(),
     ])
-    expect(navigatorBox).not.toBeNull()
+    expect(filterBox).not.toBeNull()
     expect(recordBox).not.toBeNull()
-    expect(recordBox?.y ?? 0).toBeGreaterThanOrEqual((navigatorBox?.y ?? 0) + (navigatorBox?.height ?? 0))
+    expect(recordBox?.y ?? 0).toBeGreaterThanOrEqual((filterBox?.y ?? 0) + (filterBox?.height ?? 0))
     expect(await page.evaluate(() => window.history.length)).toBe(historyLength)
     await expect(page).toHaveURL(/\/en\/projects\/$/)
-
-    await page.locator("#traffic-sign-recognition").evaluate((element) => element.scrollIntoView({ block: "start" }))
-    await expect(navigator).toHaveValue("traffic-sign-recognition")
-    await expect(page.locator('[data-project-tile][aria-current="location"]')).toHaveAttribute(
-      "data-project-id",
-      "traffic-sign-recognition",
-    )
   })
 
-  test("a browser hash change updates navigator state and focuses the stable record title", async ({ page }) => {
+  test("a browser hash change synchronizes project filters and focuses the stable record title", async ({ page }) => {
     await page.goto("en/projects/")
 
     await page.evaluate(() => {
       window.location.hash = "#resgatnet"
     })
 
-    await expect(page.locator("[data-project-navigator]")).toHaveValue("resgatnet")
+    await expect(page.locator("[data-project-name-filter]")).toHaveValue("resgatnet")
     await expect(page.locator("#resgatnet")).toHaveAttribute("data-active", "true")
     await expect(page.locator("#resgatnet [data-project-record-title]")).toBeFocused()
     await expect(page.locator("a.language-link")).toHaveAttribute(

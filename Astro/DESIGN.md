@@ -69,7 +69,7 @@ All visible colors are semantic CSS custom properties defined once in `tokens.cs
 | `--color-error` | `#a32d2d` | `#ff9f9f` | Error state |
 | `--color-backdrop` | `rgb(13 29 45 / .48)` | `rgb(2 9 18 / .68)` | Modal backdrop |
 
-Light shadows are `--shadow-panel: 0 1px 2px rgb(20 36 52 / .06), 0 12px 32px rgb(20 36 52 / .08)`, `--shadow-raised: 0 2px 4px rgb(20 36 52 / .08), 0 18px 42px rgb(20 36 52 / .12)`, and `--shadow-dialog: 0 24px 64px rgb(20 36 52 / .28)`. Dark shadows keep the same geometry with black alpha `.20/.22`, `.28/.32`, and `.52` respectively.
+Light shadows are `--shadow-panel: 0 1px 2px rgb(20 36 52 / .06), 0 12px 32px rgb(20 36 52 / .08)` and `--shadow-dialog: 0 24px 64px rgb(20 36 52 / .28)`. Dark shadows keep the same geometry with black alpha `.20/.22` and `.52` respectively.
 
 `--gradient-hero` is `linear-gradient(135deg, #eef9fc 0%, #f7f8fc 54%, #d8f1f7 100%)` in light and `linear-gradient(135deg, #142e43 0%, #103f52 54%, #1d6072 100%)` in dark. It is used only on the Home identity panel.
 
@@ -127,7 +127,7 @@ Retain `--space-1` through `--space-20` at `.25rem`, `.5rem`, `.75rem`, `1rem`, 
 - The document owns vertical scrolling. Only viewport-safe modal bodies may create an internal scroll area.
 - Shared route content is centered within `--content-max`. Panels use semantic `section`/`article`/`figure` structure and source order remains DOM order.
 - Home is one focused Bento pair: desktop hero `1–7` and portrait `8–12`; tablet hero `1–5` and portrait `6–8`; mobile follows hero then portrait. Detailed experience and project evidence remain on their dedicated routes.
-- Project catalog placement is deterministic: desktop lead tile spans 7 columns/two rows, tiles 2–3 span 5, and tiles 4 onward use two equal 6-column tracks; tablet spans are 5/two rows, 3, 3, then two equal 4-column tracks; mobile is full width. An odd final ordinary tile spans the row.
+- Projects render as source-ordered full-width evidence records. A sticky two-select control filters first by category and then by project name; at every width its controls remain in normal logical order and records reflow to one column.
 - Experience uses one wide education panel, then four source-ordered campus panels with desktop spans `5,7,7,5`, tablet spans `3,5,5,3`, and full-width mobile panels. Panel padding follows the shared `1rem`/`1.5rem`/`2rem` responsive scale on every edge.
 - Awards use two equal source-ordered columns at tablet and desktop widths; an odd final record spans the row instead of leaving a grid hole. Publications and patents use 6 desktop/4 tablet columns, and the singleton thesis is full width.
 - Portraits and evidence figures remain uncropped where specified. Never hide source text behind media or hover state.
@@ -139,10 +139,10 @@ Chinese is the default locale at the base-aware root. English is a mirror under 
 
 | Canonical Chinese route | English mirror | Purpose |
 | --- | --- | --- |
-| `/` | `/en/` | Identity, summary, education preview, featured projects |
+| `/` | `/en/` | Identity, summary, and routes to detailed evidence |
 | `/experience/` | `/en/experience/` | Education and campus experience |
 | `/awards/` | `/en/awards/` | Awards, publications, patents, and thesis |
-| `/projects/` | `/en/projects/` | Progressive project explorer and complete records |
+| `/projects/` | `/en/projects/` | Sticky two-level project filtering and complete records |
 | `/tech-stack/` | `/en/tech-stack/` | Evidence-backed skill groups |
 
 The build remains static Astro, emits exactly these ten documents, and publishes only `Astro/dist` through the unchanged root GitHub Pages workflow.
@@ -174,8 +174,7 @@ The build remains static Astro, emits exactly these ten documents, and publishes
 ### Project presentation
 
 - `ProjectMedia` is the only primary project visual primitive. Real project images remain contained and use matching sourced figure text; record context also shows the sourced caption. Null project images use the dedicated Profile project placeholder with contained positioning, a localized pending label, and explicit placeholder alt text. Failed real images never switch to the placeholder.
-- `ProjectTile` is one non-nested anchor containing media, ordinal/year, category, title, claim, tags, arrow, current-project label, and skill-origin label. Under fine-pointer hover, it uses exactly `translateY(-2px) scale(1.015)` and `--shadow-raised` for 180ms. Keyboard focus retains its visible outline and may use only the bounded `translateY(-1px) scale(1.01)` transform. Coarse pointers do not lift or scale project tiles.
-- `ProjectExplorer` progressively enhances a complete static catalog/archive with native category and tag selects, AND filtering, Clear, polite result count, localized empty states, a sticky native project navigator, and validated skill provenance. Controls remain hidden until every listener is attached.
+- `ProjectExplorer` progressively enhances a complete static source-order archive with sticky native category and project-name selects. Category reveals its records, project name narrows to one record, and both default options reset their level. Controls remain hidden until every listener is attached; without JavaScript every record remains available.
 - `ProjectRecord` is a full-width evidence article with stable ID, disclosed primary visual, visible state labels, contribution, remaining source-order figures, and links. Primary-image figures are not duplicated in the later figure grid. Missing figure sources become text-only evidence rows; null contribution/empty figure sections are omitted; null URLs retain their source label plus unavailable text.
 
 ### Evidence presentation
@@ -198,10 +197,9 @@ Only `transform` and `opacity` animate in the new interaction system. Never use 
 ### Header rail and project feedback
 
 - The header owns the only shared signal rail. Pointer hover and keyboard focus move it to a route; `aria-current` defines its resting position. Every route remains legible without the rail.
-- Fine-pointer project tiles use exactly `translateY(-2px) scale(1.015)` and `--shadow-raised` for 180ms. Active returns to zero over 120ms. Keyboard focus retains its outline and may use only `translateY(-1px) scale(1.01)`. Coarse pointers do not lift or scale project tiles.
-- Project record `:target`, `data-active`, and `data-evidence-origin` are persistent static states using a 4px logical-start accent inset plus visible localized labels. Observer-driven current state never rewrites history.
+- Project record `:target`, `data-active`, and `data-evidence-origin` are persistent static states using a 4px logical-start accent inset plus visible localized labels. User filtering never writes history.
 - Dialog, menu, filter, navigator, and theme states remain understandable without animation.
-- Under `prefers-reduced-motion: reduce`, all new transition and animation durations are `0ms`, view-transition animations are `none`, project-tile transforms are none, and every control, status, target, and evidence item remains visible.
+- Under `prefers-reduced-motion: reduce`, all new transition and animation durations are `0ms`, view-transition animations are `none`, and every control, status, target, and evidence item remains visible.
 
 ## 7. Depth & Surface
 
@@ -216,7 +214,6 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 | Muted field | `--color-surface-muted` | Media wells, secondary facts, selected context |
 | Hero | `--gradient-hero`, `--radius-hero`, controlled panel shadow | Home identity panel only |
 | Strong surface | `--color-surface-strong`, `--color-on-strong` | Footer only |
-| Raised interactive | `--shadow-raised` | Fine-pointer project-tile hover only |
 | Dialog | `--color-surface`, `--radius-panel`, `--shadow-dialog` | Contact and certificate dialogs |
 
 No gradient appears outside the Home identity panel. No colored shadow, backdrop blur, image hover zoom, or shadow-dependent state is permitted. Evidence images use stable media wells and visible captions rather than decorative frames.

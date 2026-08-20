@@ -115,13 +115,10 @@ test.describe("header interactions", () => {
     await expect(page).toHaveURL(/\/awards\/$/)
   })
 
-  test("reduced motion makes project and view-transition durations instantaneous", async ({ page }) => {
+  test("reduced motion makes view-transition durations instantaneous", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.setViewportSize(viewports[2])
     await page.goto("en/projects/")
-    const tile = page.locator("[data-project-tile]").first()
-
-    expect(await tile.evaluate((element) => getComputedStyle(element).transitionDuration.split(", ").every((value) => value === "0s"))).toBe(true)
     const reducedViewTransitions = await page.evaluate(() => {
       const oldRoot = getComputedStyle(document.documentElement, "::view-transition-old(root)")
       const newRoot = getComputedStyle(document.documentElement, "::view-transition-new(root)")

@@ -38,15 +38,10 @@ type UiLabels = {
   }
   readonly projectExplorer: {
     readonly category: string
-    readonly tag: string
+    readonly name: string
     readonly allCategories: string
-    readonly allTags: string
-    readonly clear: string
-    readonly results: string
-    readonly empty: string
+    readonly allProjects: string
     readonly emptySource: string
-    readonly navigator: string
-    readonly details: string
     readonly current: string
     readonly skillOrigin: string
     readonly imagePending: string
@@ -136,15 +131,10 @@ export const UI = {
     },
     projectExplorer: {
       category: "项目类别",
-      tag: "技术标签",
+      name: "项目名称",
       allCategories: "全部类别",
-      allTags: "全部标签",
-      clear: "清除筛选",
-      results: "筛选结果",
-      empty: "没有符合当前筛选条件的项目。",
+      allProjects: "全部项目",
       emptySource: "暂无项目资料。",
-      navigator: "项目导航",
-      details: "项目详情",
       current: "当前项目",
       skillOrigin: "来自技能证据",
       imagePending: "项目图片待补充",
@@ -193,7 +183,7 @@ export const UI = {
         ledgerOverline: "获奖档案",
         researchOverline: "研究档案",
       },
-      projects: { index: "项目索引", contribution: "个人贡献", links: "相关链接", figures: "项目图示" },
+      projects: { contribution: "个人贡献", links: "相关链接", figures: "项目图示" },
       "tech-stack": { skills: "技能证据", evidence: "证据依据" },
     },
     evidence: {
@@ -206,7 +196,7 @@ export const UI = {
       home: { overline: "个人档案", title: "自我介绍" },
       experience: { overline: "经历", title: "个人经历", summary: "按时间查看教育经历与校园实践。" },
       awards: { overline: "成果", title: "成果与获奖", summary: "按年份查阅竞赛荣誉、出版成果、专利与毕业论文。" },
-      projects: { overline: "工程实践", title: "项目介绍", summary: "从项目索引进入完整的工程实践、贡献与图文证据。" },
+      projects: { overline: "工程实践", title: "项目介绍", summary: "按项目类别与项目名称筛选，查看完整的工程实践、贡献与图文证据。" },
       "tech-stack": { overline: "专业能力", title: "技术栈", summary: "按技能领域查看对应组件、能力语境与项目证据。" },
     },
   },
@@ -242,15 +232,10 @@ export const UI = {
     },
     projectExplorer: {
       category: "Project category",
-      tag: "Technology tag",
+      name: "Project name",
       allCategories: "All categories",
-      allTags: "All tags",
-      clear: "Clear filters",
-      results: "Filter results",
-      empty: "No projects match the current filters.",
+      allProjects: "All projects",
       emptySource: "No project records available.",
-      navigator: "Project navigator",
-      details: "Project details",
       current: "Current project",
       skillOrigin: "From skill evidence",
       imagePending: "Project image pending",
@@ -299,7 +284,7 @@ export const UI = {
         ledgerOverline: "Achievement ledger",
         researchOverline: "Research archive",
       },
-      projects: { index: "Project index", contribution: "Contribution", links: "Related links", figures: "Figures" },
+      projects: { contribution: "Contribution", links: "Related links", figures: "Figures" },
       "tech-stack": { skills: "Skill evidence", evidence: "Evidence" },
     },
     evidence: {
@@ -312,7 +297,7 @@ export const UI = {
       home: { overline: "Profile", title: "About" },
       experience: { overline: "Background", title: "Experience", summary: "Review education and campus experience in chronological order." },
       awards: { overline: "Achievements", title: "Achievements", summary: "Review awards, publications, patents, and thesis evidence by year." },
-      projects: { overline: "Engineering Work", title: "Projects", summary: "Use the project index to inspect engineering work, contributions, and supporting figures." },
+      projects: { overline: "Engineering Work", title: "Projects", summary: "Filter by project category and name to inspect complete engineering work, contributions, and supporting figures." },
       "tech-stack": { overline: "Capabilities", title: "Tech Stack", summary: "Browse technical capabilities by domain with their components, context, and project evidence." },
     },
   },

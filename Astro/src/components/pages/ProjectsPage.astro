@@ -6,7 +6,6 @@ import { getProfileData } from "../../lib/profile-data"
 import "../../styles/projects.css"
 import EditorialIntro from "../EditorialIntro.astro"
 import ProjectExplorer from "../ProjectExplorer.astro"
-import ProjectRecord from "../ProjectRecord.astro"
 
 type Props = { readonly locale: Locale }
 
@@ -24,22 +23,5 @@ const labels = UI[locale]
     />
 
     <ProjectExplorer locale={locale} projects={data.projects} skills={data.profile.skills} />
-
-    {data.projects.length > 0 && (
-      <>
-        <header class="project-details-heading" data-project-details-heading>
-          <div class="project-navigator-shell" data-project-navigator-shell hidden>
-            <label for="project-navigator">{labels.projectExplorer.navigator}</label>
-            <select id="project-navigator" data-project-navigator></select>
-          </div>
-          <h2 id="project-details-title">{labels.projectExplorer.details}</h2>
-        </header>
-        <section class="project-records" aria-labelledby="project-details-title" data-project-records>
-          {data.projects.map((project, index) => (
-            <ProjectRecord project={project} locale={locale} number={index + 1} />
-          ))}
-        </section>
-      </>
-    )}
   </div>
 </BaseLayout>
