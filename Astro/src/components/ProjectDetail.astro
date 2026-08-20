@@ -52,7 +52,7 @@ const titleId = `${idPrefix}-title`
       <p class="project-media-pending">{labels.projectExplorer.imagePending}</p>
     </div>
   </div>
-) : <ProjectMedia context="record" locale={locale} project={project} loading="lazy" />}
+) : <ProjectMedia context="record" locale={locale} record={project} loading="lazy" />}
 
 <div class="project-record-body">
   <p class="project-record-summary">{project.summary[locale]}</p>

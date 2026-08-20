@@ -68,8 +68,8 @@ test.describe("projects archive", () => {
       expect(await visibleCardIds(page)).toEqual(projectIds)
       await expect(page.locator("[data-project-records]")).toBeHidden()
       await expect(cards.locator('[data-project-media-kind="real"]')).toHaveCount(5)
-      await expect(cards.locator('[data-project-media-kind="unavailable"]')).toHaveCount(9)
-      await expect(cards.locator('[data-project-media-kind="unavailable"] .project-media-pending')).toHaveText(Array.from({ length: 9 }, () => locale.pending))
+      await expect(cards.locator('[data-project-media-kind="unavailable"]')).toHaveCount(14)
+      await expect(cards.locator('[data-project-media-kind="unavailable"] .project-media-pending')).toHaveText(Array.from({ length: 14 }, () => locale.pending))
     })
   }
 
@@ -113,6 +113,7 @@ test.describe("projects archive", () => {
     const dialog = page.locator(`[data-project-dialog][data-project-id="${publicationId}"]`)
     await expect(dialog).toContainText("Publications")
     await expect(dialog.locator(".project-record-contribution")).toHaveCount(0)
+    await expect(dialog.locator('[data-project-media-kind="unavailable"] .project-media-pending')).toHaveText("Project image pending")
     await expect(dialog.locator(".project-related-certificate-grid img")).toHaveCount(1)
   })
 

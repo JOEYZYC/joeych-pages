@@ -1,6 +1,7 @@
 - id: resgatnet
   year: 2024
   featured: true
+  image: null
   title: { zh: ResGatNet：低信噪比无线感知中的效率与精度协同, en: 'ResGatNet: Bridging Efficiency and Precision in Low-SNR Wireless Perception' }
   venue: { zh: IEEE Access, en: IEEE Access }
   authors: { zh: 作者位次 2/6, en: 2nd author of 6 }
@@ -10,6 +11,7 @@
 - id: bifunctional-flexible-metasurface
   year: 2024
   featured: true
+  image: null
   title: { zh: 基于石墨烯和二氧化钒的双功能柔性超表面：极化转换与吸收, en: Bifunctional flexible metasurface based on graphene and vanadium dioxide for polarization conversion and absorption }
   venue: { zh: Diamond and Related Materials, en: Diamond and Related Materials }
   authors: { zh: 作者位次 3/8, en: 3rd author of 8 }
@@ -20,6 +22,7 @@
 - id: tunable-bifunctional-metasurface-absorber
   year: 2024
   featured: true
+  image: null
   title: { zh: 基于二氧化钒和光导硅的可调谐双功能超表面吸收器设计与理论分析, en: Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon }
   venue: { zh: Dalton Transactions, en: Dalton Transactions }
   authors: { zh: 作者位次 5/8, en: 5th author of 8 }
@@ -30,6 +33,7 @@
 - id: dual-broadband-flexible-metasurface
   year: 2024
   featured: true
+  image: null
   title: { zh: 基于交错三角棋盘布局的双宽带柔性超表面用于 RCS 缩减, en: Dual-broadband flexible metasurface based on the staggered triangular checkerboard layout for RCS reduction }
   venue: { zh: Optics Communications, en: Optics Communications }
   authors: { zh: 作者位次 3/8, en: 3rd author of 8 }
@@ -40,6 +44,7 @@
 - id: dual-band-polarization-conversion
   year: 2024
   featured: false
+  image: null
   title: { zh: 双频带柔性极化转换超表面的仿真研究, en: Simulation Study of a Dual-band Flexible Polarization-Conversion Metasurface }
   venue: { zh: 光电子·激光, en: Journal of Optoelectronics·Laser }
   authors: { zh: 作者位次 3/6, en: 3rd author of 6 }
@@ -49,6 +54,7 @@
 - id: tri-band-metasurface-absorber
   year: 2024
   featured: false
+  image: null
   title: { zh: 基于超表面的三频带吸波器, en: A Tri-band Metasurface Absorber }
   venue: { zh: 光电子·激光, en: Journal of Optoelectronics·Laser }
   authors: { zh: 作者位次 3/6, en: 3rd author of 6 }

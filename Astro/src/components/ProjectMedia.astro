@@ -1,5 +1,5 @@
 ---
-import type { Project } from "../content/schemas"
+import type { Project, Publication } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import { PROJECT_MEDIA_DIMENSIONS } from "../lib/project-media"
@@ -9,20 +9,20 @@ import { publicMediaUrl } from "../lib/urls"
 type Props = {
   readonly context: "card" | "record"
   readonly locale: Locale
-  readonly project: Project
+  readonly record: Project | Publication
   readonly loading: "eager" | "lazy"
 }
 
-const { context, locale, project, loading } = Astro.props
+const { context, locale, record, loading } = Astro.props
 const labels = UI[locale]
-const isPlaceholder = project.image === null
-const mediaPath = project.image ?? PROJECT_PLACEHOLDER_MEDIA_PATH
-const matchingFigure = project.image === null
+const isPlaceholder = record.image === null
+const mediaPath = record.image ?? PROJECT_PLACEHOLDER_MEDIA_PATH
+const matchingFigure = record.image === null || !("figures" in record)
   ? undefined
-  : project.figures.find((figure) => figure.src === project.image)
+  : record.figures.find((figure) => figure.src === record.image)
 const alt = isPlaceholder
   ? labels.projectExplorer.imagePendingAlt
-  : matchingFigure?.[locale] ?? project.title[locale]
+  : matchingFigure?.[locale] ?? record.title[locale]
 const caption = context === "record" && !isPlaceholder ? matchingFigure?.[locale] : undefined
 const dimensions = PROJECT_MEDIA_DIMENSIONS[mediaPath]
 ---

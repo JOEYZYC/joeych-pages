@@ -30,7 +30,7 @@ const labels = UI[locale]
     <div class="project-media project-media--card project-media--unavailable" data-project-media data-project-media-context="card" data-project-media-kind="unavailable" role="img" aria-label={labels.projectExplorer.imagePendingAlt}>
       <div class="project-media-well"><p class="project-media-pending">{labels.projectExplorer.imagePending}</p></div>
     </div>
-  ) : <ProjectMedia context="card" locale={locale} project={project} loading="lazy" />}
+  ) : <ProjectMedia context="card" locale={locale} record={project} loading="lazy" />}
   <div class="project-card-body">
     <p class="project-card-meta"><span>{project.year}</span><span>{project.category[locale]}</span></p>
     <h2>{project.title[locale]}</h2>

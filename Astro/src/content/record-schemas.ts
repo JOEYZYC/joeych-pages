@@ -87,7 +87,7 @@ const authoredRecordShape = {
 } as const
 
 export const publicationSchema = z
-  .object({ ...authoredRecordShape, venue: localizedSchema })
+  .object({ ...authoredRecordShape, image: publicMediaPathSchema.nullable(), venue: localizedSchema })
   .strict()
   .readonly()
 export const patentSchema = z.object(authoredRecordShape).strict().readonly()

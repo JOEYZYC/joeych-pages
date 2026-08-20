@@ -3,6 +3,7 @@ import type { Publication } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import { publicMediaUrl } from "../lib/urls"
+import ProjectMedia from "./ProjectMedia.astro"
 
 type Props = {
   readonly idPrefix: string
@@ -32,6 +33,21 @@ const titleId = `${idPrefix}-title`
   >{publication.title[locale]}</h2>
   <p class="project-record-claim">{publication.venue[locale]} · {publication.authors[locale]}</p>
 </header>
+
+{publication.image === null ? (
+  <div
+    class="project-media project-media--record project-media--unavailable"
+    data-project-media
+    data-project-media-context="record"
+    data-project-media-kind="unavailable"
+    role="img"
+    aria-label={labels.projectExplorer.imagePendingAlt}
+  >
+    <div class="project-media-well">
+      <p class="project-media-pending">{labels.projectExplorer.imagePending}</p>
+    </div>
+  </div>
+) : <ProjectMedia context="record" locale={locale} record={publication} loading="lazy" />}
 
 <div class="project-record-body">
   {publication.tags.length > 0 && (

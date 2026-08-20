@@ -112,6 +112,7 @@ describe("Profile content boundary", () => {
       { kind: "award", id: "renesas-east-first-national-third-2024" },
     ])
     expect(content.projects.find(({ id }) => id === "flexible-bifunctional-metasurface")?.related_achievements).toEqual([])
+    expect(content.publications.every(({ image }) => image === null)).toBe(true)
     expect(content.certificates).toHaveLength(18)
     expect(content.certificates.every(({ src }) => /^\/(awards|publications|patents)\//.test(src))).toBe(true)
     expect(fileURLToPath(DATA_ROOT)).not.toContain("private")
@@ -322,6 +323,16 @@ describe("Profile content boundary", () => {
     const documents = documentsFrom({
       ...texts,
       thesis: texts.thesis.replace("image: null", "image: thesis/missing-image.png"),
+    })
+
+    await expect(parseProfileDocuments(documents)).rejects.toThrow(/missing public media/i)
+  })
+
+  it("rejects a publication image whose public media file does not exist", async () => {
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      publications: texts.publications.replace("image: null", "image: publications/resgatnet/missing-image.png"),
     })
 
     await expect(parseProfileDocuments(documents)).rejects.toThrow(/missing public media/i)

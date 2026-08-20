@@ -2,6 +2,7 @@
 import type { Publication } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
+import ProjectMedia from "./ProjectMedia.astro"
 
 type Props = {
   readonly locale: Locale
@@ -25,6 +26,11 @@ const id = `publication-${publication.id}`
   aria-haspopup="dialog"
   hidden
 >
+  {publication.image === null ? (
+    <div class="project-media project-media--card project-media--unavailable" data-project-media data-project-media-context="card" data-project-media-kind="unavailable" role="img" aria-label={labels.projectExplorer.imagePendingAlt}>
+      <div class="project-media-well"><p class="project-media-pending">{labels.projectExplorer.imagePending}</p></div>
+    </div>
+  ) : <ProjectMedia context="card" locale={locale} record={publication} loading="lazy" />}
   <div class="project-card-body">
     <p class="project-card-meta"><span>{publication.year}</span><span>{labels.sections.awards.publications}</span></p>
     <h2>{publication.title[locale]}</h2>

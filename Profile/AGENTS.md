@@ -32,9 +32,9 @@
 - Every project requires `related_achievements`. Use `[]` when no relationship is confirmed. Each entry is `{ kind, id }`, where `kind` is `award` or `publication` and `id` names an existing record in its owning YAML file. Never infer a relationship from a shared tag, year, or subject alone.
 - Project template fields have fixed presentation roles: `title` is the project name, `claim` is the card summary, `summary` is the full detail, `contribution` is the individual-work statement, `image` is the card primary image, `figures` are supplementary detail media, and `related_achievements` supplies the linked award/publication facts. Keep this single record as the only authored source for every project view.
 - Award records use `prizes` with `level`, `zh`, and `en`.
-- Publication records include localized `venue` and `authors`; patent records include localized `authors`.
+- Publication records include localized `venue` and `authors`, plus an `image` that may be `null` or a path relative to `Profile/media/`; patent records include localized `authors`.
 - The thesis is a mapping, not a list. Keep its `id`, year, localized `title` and `award`, tags, and links shape.
-- Certificate entries are literal `{ src, zh, en }` values. `src` is a path relative to `Profile/media/`, placed under the owning record's folder by kind: `awards/<award-id>/…`, `publications/<publication-id>/…`, or `patents/<patent-id>/…`. Profile media lives under `media/profile/`, project media under `media/projects/<project-id>/`, and the shared placeholder stays at `media/projects/project-placeholder.png`.
+- Certificate entries are literal `{ src, zh, en }` values. `src` is a path relative to `Profile/media/`, placed under the owning record's folder by kind: `awards/<award-id>/…`, `publications/<publication-id>/…`, or `patents/<patent-id>/…`. Publication images live with their publication under `media/publications/<publication-id>/`; profile media lives under `media/profile/`, project media under `media/projects/<project-id>/`, and the shared placeholder stays at `media/projects/project-placeholder.png`.
 - New certificate files are not visible until an owning YAML record associates them. A project image should match its first sourced figure when figures provide `src`.
 
 ## SKILL EVIDENCE SCHEMA

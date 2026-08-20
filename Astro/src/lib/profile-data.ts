@@ -147,6 +147,10 @@ function validateProjectMedia(projects: readonly Project[]): readonly PublicMedi
   return paths
 }
 
+function publicationImages(publications: readonly Publication[]): readonly PublicMediaPath[] {
+  return publications.flatMap((publication) => publication.image === null ? [] : [publication.image])
+}
+
 export async function parseProfileDocuments(documents: ProfileDocuments): Promise<ProfileData> {
   let profile: Profile
   let projects: readonly Project[]
@@ -188,6 +192,7 @@ export async function parseProfileDocuments(documents: ProfileDocuments): Promis
     profile.favicon,
     PROJECT_PLACEHOLDER_MEDIA_PATH,
     ...validateProjectMedia(projects),
+    ...publicationImages(publications),
     ...certificates.map(({ src }) => src),
     ...(thesis.image === null ? [] : [thesis.image]),
   ]
