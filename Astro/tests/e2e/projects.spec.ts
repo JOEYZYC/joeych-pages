@@ -152,6 +152,17 @@ test.describe("projects archive", () => {
     expect(await visibleCardIds(page)).toEqual(["joeych-pages"])
   })
 
+  test("filters cards by explicitly linked honor", async ({ page }) => {
+    await page.goto("en/projects/")
+    const honor = page.locator("[data-project-honor-filter]")
+
+    await honor.selectOption("renesas-east-first-national-third-2024")
+
+    await expect(page.locator("[data-project-category-filter]")).toHaveValue("")
+    await expect(page.locator("[data-project-name-filter]")).toHaveValue("")
+    expect(await visibleCardIds(page)).toEqual(["power-print-recognition"])
+  })
+
   test("a hash opens the matching dialog and synchronizes both filters", async ({ page }) => {
     await page.goto("en/projects/")
     const card = page.locator('[data-project-card][data-project-id="resgatnet"]')

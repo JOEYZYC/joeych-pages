@@ -41,6 +41,8 @@ type UiLabels = {
     readonly name: string
     readonly allCategories: string
     readonly allProjects: string
+    readonly honor: string
+    readonly allHonors: string
     readonly open: string
     readonly close: string
     readonly pending: string
@@ -137,6 +139,8 @@ export const UI = {
       name: "项目名称",
       allCategories: "全部类别",
       allProjects: "全部项目",
+      honor: "荣誉",
+      allHonors: "全部荣誉",
       open: "查看项目详情",
       close: "关闭项目详情",
       pending: "请补充",
@@ -241,6 +245,8 @@ export const UI = {
       name: "Project name",
       allCategories: "All categories",
       allProjects: "All projects",
+      honor: "Honor",
+      allHonors: "All honors",
       open: "Open project details",
       close: "Close project details",
       pending: "To be completed",

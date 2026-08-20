@@ -139,6 +139,7 @@ test.describe("WCAG accessibility and 200% reflow", () => {
         if (route.path.includes("projects")) {
           await expectReachable(page.locator("[data-project-category-filter]"))
           await expectReachable(page.locator("[data-project-name-filter]"))
+          await expectReachable(page.locator("[data-project-honor-filter]"))
         }
         await expectReachable(page.getByRole("contentinfo"))
       }

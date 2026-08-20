@@ -23,6 +23,7 @@ const ordinal = String(number).padStart(2, "0")
   data-project-card
   data-project-id={project.id}
   data-project-category={project.category.en}
+  data-project-honors={relatedAchievements.filter((achievement) => achievement.kind === "award").map((achievement) => achievement.record.id).join(" ")}
   aria-controls="project-detail-dialog"
   aria-haspopup="dialog"
   hidden

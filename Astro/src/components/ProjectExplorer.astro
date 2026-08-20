@@ -24,6 +24,12 @@ const relatedByProject = new Map(projects.map((project) => [
   project.id,
   resolveRelatedAchievements(project, awards, publications),
 ]))
+const honors = [...new Map(
+  projects.flatMap((project) => (relatedByProject.get(project.id) ?? [])
+    .filter((achievement) => achievement.kind === "award")
+    .map((achievement) => [achievement.record.id, achievement.record.title[locale]]),
+  ),
+).entries()].map(([value, label]) => ({ value, label }))
 
 for (const project of projects) {
   if (seenCategories.has(project.category.en)) continue
@@ -61,6 +67,13 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
         <span>{labels.projectExplorer.name}</span>
         <select id="project-name-filter" data-project-name-filter data-all-projects-label={labels.projectExplorer.allProjects}>
           <option value="">{labels.projectExplorer.allProjects}</option>
+        </select>
+      </label>
+      <label class="project-filter-field" for="project-honor-filter">
+        <span>{labels.projectExplorer.honor}</span>
+        <select id="project-honor-filter" data-project-honor-filter>
+          <option value="">{labels.projectExplorer.allHonors}</option>
+          {honors.map((honor) => <option value={honor.value}>{honor.label}</option>)}
         </select>
       </label>
     </div>
@@ -108,6 +121,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const cardGrid = explorer.querySelector<HTMLElement>("[data-project-card-grid]")
     const categoryFilter = explorer.querySelector<HTMLSelectElement>("[data-project-category-filter]")
     const nameFilter = explorer.querySelector<HTMLSelectElement>("[data-project-name-filter]")
+    const honorFilter = explorer.querySelector<HTMLSelectElement>("[data-project-honor-filter]")
     const cards = [...explorer.querySelectorAll<HTMLElement>("[data-project-card]")]
     const records = [...explorer.querySelectorAll<HTMLElement>("[data-project-record]")]
     const dialog = explorer.querySelector<HTMLDialogElement>("[data-project-dialog]")
@@ -115,7 +129,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const dialogTemplates = new Map([...explorer.querySelectorAll<HTMLTemplateElement>("[data-project-dialog-template]")].map((template) => [template.dataset.projectId ?? "", template]))
     const recordsSection = explorer.querySelector<HTMLElement>("[data-project-records]")
     const evidenceSource = explorer.querySelector<HTMLScriptElement>("[data-project-skill-evidence]")
-    if (!controls || !cardGrid || !categoryFilter || !nameFilter || cards.length === 0 || records.length === 0 || !dialog || !dialogContent || dialogTemplates.size !== cards.length || !recordsSection || !evidenceSource) continue
+    if (!controls || !cardGrid || !categoryFilter || !nameFilter || !honorFilter || cards.length === 0 || records.length === 0 || !dialog || !dialogContent || dialogTemplates.size !== cards.length || !recordsSection || !evidenceSource) continue
 
     let evidenceMap: EvidenceMap
     try {
@@ -216,9 +230,11 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       if (clearOrigin) clearSkillOrigin(true)
       const category = categoryFilter.value
       const name = nameFilter.value
+      const honor = honorFilter.value
       visibleIds = projectIds.filter((id) => {
         const card = cardById.get(id)
-        return (category === "" || card?.dataset.projectCategory === category) && (name === "" || id === name)
+        const matchesHonor = honor === "" || card?.dataset.projectHonors?.split(" ").includes(honor)
+        return (category === "" || card?.dataset.projectCategory === category) && (name === "" || id === name) && matchesHonor
       })
       const visible = new Set(visibleIds)
       for (const id of projectIds) {
@@ -255,6 +271,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       if (category) categoryFilter.value = category
       rebuildNameFilter()
       nameFilter.value = id
+      honorFilter.value = ""
       applyFilters({ clearOrigin: false })
       setActiveProject(id)
       openDialog(id, undefined, focusTitle)
@@ -281,10 +298,19 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     dialog.addEventListener("close", () => trigger?.focus())
     dialog.hidden = false
     categoryFilter.addEventListener("change", () => {
+      honorFilter.value = ""
       rebuildNameFilter(true)
       applyFilters()
     })
-    nameFilter.addEventListener("change", () => applyFilters())
+    nameFilter.addEventListener("change", () => {
+      honorFilter.value = ""
+      applyFilters()
+    })
+    honorFilter.addEventListener("change", () => {
+      categoryFilter.value = ""
+      rebuildNameFilter(true)
+      applyFilters()
+    })
     window.addEventListener("hashchange", () => {
       const id = currentHashId()
       if (cardById.has(id)) revealProject(id, true)
