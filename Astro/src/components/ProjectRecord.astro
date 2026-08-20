@@ -1,17 +1,17 @@
 ---
 import type { Project } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
-import { UI } from "../i18n/ui"
-import { PROJECT_MEDIA_DIMENSIONS } from "../lib/project-media"
-import { publicMediaUrl } from "../lib/urls"
-import ProjectMedia from "./ProjectMedia.astro"
+import type { RelatedAchievement } from "../lib/related-achievements"
+import ProjectDetail from "./ProjectDetail.astro"
 
-type Props = { readonly locale: Locale; readonly number: number; readonly project: Project }
+type Props = {
+  readonly locale: Locale
+  readonly number: number
+  readonly project: Project
+  readonly relatedAchievements: readonly RelatedAchievement[]
+}
 
-const { locale, number, project } = Astro.props
-const labels = UI[locale]
-const ordinal = String(number).padStart(2, "0")
-const remainingFigures = project.figures.filter((figure) => figure.src !== project.image)
+const { locale, number, project, relatedAchievements } = Astro.props
 ---
 
 <article
@@ -21,101 +21,8 @@ const remainingFigures = project.figures.filter((figure) => figure.src !== proje
   data-project-id={project.id}
   data-project-category={project.category.en}
   data-project-title={project.title[locale]}
-  data-project-ordinal={ordinal}
+  data-project-ordinal={String(number).padStart(2, "0")}
   data-active="false"
 >
-  <header class="project-record-header">
-    <div class="project-record-meta">
-      <span>{ordinal} / {project.year}</span>
-      <span>{project.category[locale]}</span>
-    </div>
-    <div class="project-record-states">
-      <span class="project-state project-current-state" data-project-current-label>
-        {labels.projectExplorer.current}
-      </span>
-      <span
-        class="project-state project-origin-state"
-        data-project-origin-label
-        data-origin-prefix={labels.projectExplorer.skillOrigin}
-      ></span>
-    </div>
-    <h2 data-project-record-title tabindex="-1">{project.title[locale]}</h2>
-    <p class="project-record-claim">{project.claim[locale]}</p>
-  </header>
-
-  {project.image === null ? (
-    <div
-      class="project-media project-media--record project-media--unavailable"
-      data-project-media
-      data-project-media-context="record"
-      data-project-media-kind="unavailable"
-      role="img"
-      aria-label={labels.projectExplorer.imagePendingAlt}
-    >
-      <div class="project-media-well">
-        <p class="project-media-pending">{labels.projectExplorer.imagePending}</p>
-      </div>
-    </div>
-  ) : <ProjectMedia locale={locale} project={project} loading="lazy" />}
-
-  <div class="project-record-body">
-    <p class="project-record-summary">{project.summary[locale]}</p>
-    <ul class="project-tag-list" aria-label={project.title[locale]}>
-      {project.tags.map((tag) => <li>{tag[locale]}</li>)}
-    </ul>
-
-    {project.contribution !== null && (
-      <section class="project-record-section project-record-contribution" aria-labelledby={`${project.id}-contribution`}>
-        <h3 id={`${project.id}-contribution`}>{labels.sections.projects.contribution}</h3>
-        <p>{project.contribution[locale]}</p>
-      </section>
-    )}
-
-    {remainingFigures.length > 0 && (
-      <section class="project-record-section project-figures" aria-labelledby={`${project.id}-figures`}>
-        <h3 id={`${project.id}-figures`}>{labels.sections.projects.figures}</h3>
-        <div class="project-figure-grid">
-          {remainingFigures.map((figure) => {
-            if (figure.src === undefined) {
-              return (
-                <figure class="project-figure-unavailable">
-                  <figcaption>{figure[locale]}</figcaption>
-                  <p>{labels.unavailable.media}</p>
-                </figure>
-              )
-            }
-            const size = PROJECT_MEDIA_DIMENSIONS[figure.src]
-            return (
-              <figure>
-                <img
-                  src={publicMediaUrl(figure.src)}
-                  alt={figure[locale]}
-                  loading="lazy"
-                  decoding="async"
-                  width={size?.width}
-                  height={size?.height}
-                />
-                <figcaption>{figure[locale]}</figcaption>
-              </figure>
-            )
-          })}
-        </div>
-      </section>
-    )}
-
-    {project.links.length > 0 && (
-      <section class="project-record-section project-links" aria-labelledby={`${project.id}-links`}>
-        <h3 id={`${project.id}-links`}>{labels.sections.projects.links}</h3>
-        <ul>
-          {project.links.map((link) => (
-            <li>
-              {link.url === null
-                ? <span class="project-link-unavailable" data-project-link-unavailable>{link.label[locale]} — {labels.unavailable.link}</span>
-                : <a href={link.url} target="_blank" rel="noopener noreferrer"><span data-project-link-marker aria-hidden="true">{labels.links.external}</span>{link.label[locale]}</a>}
-            </li>
-          ))}
-        </ul>
-      </section>
-    )}
-  </div>
+  <ProjectDetail idPrefix={project.id} locale={locale} mode="record" number={number} project={project} relatedAchievements={relatedAchievements} />
 </article>

@@ -74,7 +74,7 @@ Run package commands from `Astro/`:
 - Use `getRoutePath()`/`withBase()` from `Astro/src/lib/routes.ts` and `publicMediaUrl()` from `Astro/src/lib/urls.ts`. Never hand-write root-relative internal links or asset URLs; they break the deployment base.
 - Preserve the five route IDs and ten canonical trailing-slash URLs. Do not restore retired `showcase`/RSS routes or expand the public route set without an explicit requirement.
 - Keep browser behavior local and progressive: native DOM APIs, focus restoration, Escape handling, reduced-motion support, and semantic/ARIA state. Avoid introducing a client framework or global store for local interactions.
-- Content claims must be source-backed. When editing `Profile/`, follow `Profile/AGENTS.md`; preserve bilingual `{ zh, en }` values, stable IDs/order, project evidence links, and certificate media under `Profile/media/awards|publications|patents/<record-id>/`.
+- Content claims must be source-backed. When editing `Profile/`, follow `Profile/AGENTS.md`; preserve bilingual `{ zh, en }` values, stable IDs/order, explicit project-to-achievement references, project evidence links, and certificate media under `Profile/media/awards|publications|patents/<record-id>/`.
 
 ## Important Files
 

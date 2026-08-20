@@ -127,7 +127,7 @@ Retain `--space-1` through `--space-20` at `.25rem`, `.5rem`, `.75rem`, `1rem`, 
 - The document owns vertical scrolling. Only viewport-safe modal bodies may create an internal scroll area.
 - Shared route content is centered within `--content-max`. Panels use semantic `section`/`article`/`figure` structure and source order remains DOM order.
 - Home is one focused Bento pair: desktop hero `1–7` and portrait `8–12`; tablet hero `1–5` and portrait `6–8`; mobile follows hero then portrait. Detailed experience and project evidence remain on their dedicated routes.
-- Projects render as source-ordered full-width evidence records. A sticky two-select control filters first by category and then by project name; at every width its controls remain in normal logical order and records reflow to one column.
+- Projects use a source-ordered card grid: desktop and tablet use two columns, mobile uses one. A sticky two-select control filters first by category and then by project name. Cards retain the sourced primary image or the explicit Profile placeholder; a native dialog exposes complete project detail and its explicitly linked achievements.
 - Experience uses one wide education panel, then four source-ordered campus panels with desktop spans `5,7,7,5`, tablet spans `3,5,5,3`, and full-width mobile panels. Panel padding follows the shared `1rem`/`1.5rem`/`2rem` responsive scale on every edge.
 - Awards use two equal source-ordered columns at tablet and desktop widths; an odd final record spans the row instead of leaving a grid hole. Publications and patents use 6 desktop/4 tablet columns, and the singleton thesis is full width.
 - Portraits and evidence figures remain uncropped where specified. Never hide source text behind media or hover state.
@@ -142,7 +142,7 @@ Chinese is the default locale at the base-aware root. English is a mirror under 
 | `/` | `/en/` | Identity, summary, and routes to detailed evidence |
 | `/experience/` | `/en/experience/` | Education and campus experience |
 | `/awards/` | `/en/awards/` | Awards, publications, patents, and thesis |
-| `/projects/` | `/en/projects/` | Sticky two-level project filtering and complete records |
+| `/projects/` | `/en/projects/` | Sticky project filtering, cards, and complete detail dialogs |
 | `/tech-stack/` | `/en/tech-stack/` | Evidence-backed skill groups |
 
 The build remains static Astro, emits exactly these ten documents, and publishes only `Astro/dist` through the unchanged root GitHub Pages workflow.
@@ -173,9 +173,9 @@ The build remains static Astro, emits exactly these ten documents, and publishes
 
 ### Project presentation
 
-- `ProjectMedia` is the only primary project visual primitive. Real project images remain contained and use matching sourced figure text; record context also shows the sourced caption. Null project images use the dedicated Profile project placeholder with contained positioning, a localized pending label, and explicit placeholder alt text. Failed real images never switch to the placeholder.
-- `ProjectExplorer` progressively enhances a complete static source-order archive with sticky native category and project-name selects. Category reveals its records, project name narrows to one record, and both default options reset their level. Controls remain hidden until every listener is attached; without JavaScript every record remains available.
-- `ProjectRecord` is a full-width evidence article with stable ID, disclosed primary visual, visible state labels, contribution, remaining source-order figures, and links. Primary-image figures are not duplicated in the later figure grid. Missing figure sources become text-only evidence rows; null contribution/empty figure sections are omitted; null URLs retain their source label plus unavailable text.
+- `ProjectMedia` is the only primary project visual primitive. Real project images remain contained and use matching sourced figure text in detailed context. Null images use the dedicated Profile placeholder with contained positioning, a localized pending label, and explicit placeholder alt text. Failed real images never switch to the placeholder.
+- `ProjectExplorer` progressively enhances static source-order project details into sticky native category and project-name filtering, cards, and per-project native dialogs. Category narrows cards, project name narrows to one card, and both default options reset their level. Cards and dialogs appear only after every listener attaches; without JavaScript complete project details remain available.
+- `ProjectRecord` is the no-JavaScript full-width evidence fallback with a stable ID, disclosed primary visual, visible state labels, contribution, remaining source-order figures, links, and explicitly related achievements. Dialog detail uses the same sourced content. Primary-image figures are not duplicated in the later figure grid; missing figure sources become text-only evidence rows; incomplete contribution or achievement data visibly uses the localized pending literal; null URLs retain their source label plus unavailable text.
 
 ### Evidence presentation
 

@@ -29,6 +29,7 @@ const labels = UI[locale]
       <div class="research-grid">
         {publications.map((publication) => (
           <article
+            id={`publication-${publication.id}`}
             class="research-panel"
             data-research-id={publication.id}
             data-research-kind="publication"
@@ -66,6 +67,7 @@ const labels = UI[locale]
       <div class="research-grid">
         {patents.map((patent) => (
           <article
+            id={`patent-${patent.id}`}
             class="research-panel"
             data-research-id={patent.id}
             data-research-kind="patent"
@@ -101,6 +103,7 @@ const labels = UI[locale]
     </header>
     <div class="research-grid">
       <article
+        id={`thesis-${thesis.id}`}
         class="research-panel research-panel--thesis"
         data-research-id={thesis.id}
         data-research-kind="thesis"

@@ -41,6 +41,9 @@ type UiLabels = {
     readonly name: string
     readonly allCategories: string
     readonly allProjects: string
+    readonly open: string
+    readonly close: string
+    readonly pending: string
     readonly emptySource: string
     readonly current: string
     readonly skillOrigin: string
@@ -134,6 +137,9 @@ export const UI = {
       name: "项目名称",
       allCategories: "全部类别",
       allProjects: "全部项目",
+      open: "查看项目详情",
+      close: "关闭项目详情",
+      pending: "请补充",
       emptySource: "暂无项目资料。",
       current: "当前项目",
       skillOrigin: "来自技能证据",
@@ -183,7 +189,7 @@ export const UI = {
         ledgerOverline: "获奖档案",
         researchOverline: "研究档案",
       },
-      projects: { contribution: "个人贡献", links: "相关链接", figures: "项目图示" },
+      projects: { contribution: "个人贡献", links: "相关链接", figures: "项目图示", achievements: "关联成果", archive: "查看完整成果档案" },
       "tech-stack": { skills: "技能证据", evidence: "证据依据" },
     },
     evidence: {
@@ -235,6 +241,9 @@ export const UI = {
       name: "Project name",
       allCategories: "All categories",
       allProjects: "All projects",
+      open: "Open project details",
+      close: "Close project details",
+      pending: "To be completed",
       emptySource: "No project records available.",
       current: "Current project",
       skillOrigin: "From skill evidence",
@@ -284,7 +293,7 @@ export const UI = {
         ledgerOverline: "Achievement ledger",
         researchOverline: "Research archive",
       },
-      projects: { contribution: "Contribution", links: "Related links", figures: "Figures" },
+      projects: { contribution: "Contribution", links: "Related links", figures: "Figures", achievements: "Related achievements", archive: "View full achievement archive" },
       "tech-stack": { skills: "Skill evidence", evidence: "Evidence" },
     },
     evidence: {

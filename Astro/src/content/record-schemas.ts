@@ -21,6 +21,19 @@ const projectFigureSchema = z
   .strict()
   .readonly()
 
+const relatedAchievementSchema = z
+  .discriminatedUnion("kind", [
+    z.object({ kind: z.literal("award"), id: recordIdSchema }).strict().readonly(),
+    z.object({ kind: z.literal("publication"), id: recordIdSchema }).strict().readonly(),
+  ])
+  .readonly()
+
+function hasUniqueRelatedAchievements(
+  achievements: readonly { readonly kind: string; readonly id: string }[],
+): boolean {
+  return new Set(achievements.map(({ kind, id }) => `${kind}:${id}`)).size === achievements.length
+}
+
 export const projectSchema = z
   .object({
     id: projectIdSchema,
@@ -31,13 +44,17 @@ export const projectSchema = z
     claim: localizedSchema,
     category: localizedSchema,
     summary: localizedSchema,
-    contribution: localizedSchema.nullable(),
+    contribution: localizedSchema,
     tags: z.array(localizedSchema).readonly(),
     figures: z
       .array(projectFigureSchema)
       .refine(hasUniqueIds, "duplicate project figure ID")
       .readonly(),
     links: z.array(linkSchema).readonly(),
+    related_achievements: z
+      .array(relatedAchievementSchema)
+      .refine(hasUniqueRelatedAchievements, "duplicate related achievement")
+      .readonly(),
   })
   .strict()
   .readonly()

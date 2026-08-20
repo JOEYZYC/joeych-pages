@@ -108,6 +108,10 @@ describe("Profile content boundary", () => {
     expect(content.projects[0]?.image).toBe(
       "/projects/power-print-recognition/power-print-architecture.jpg",
     )
+    expect(content.projects.find(({ id }) => id === "power-print-recognition")?.related_achievements).toEqual([
+      { kind: "award", id: "renesas-east-first-national-third-2024" },
+    ])
+    expect(content.projects.find(({ id }) => id === "flexible-bifunctional-metasurface")?.related_achievements).toEqual([])
     expect(content.certificates).toHaveLength(18)
     expect(content.certificates.every(({ src }) => /^\/(awards|publications|patents)\//.test(src))).toBe(true)
     expect(fileURLToPath(DATA_ROOT)).not.toContain("private")
@@ -174,6 +178,32 @@ describe("Profile content boundary", () => {
 
     // Then: evidence cannot claim a component the tag does not define
     await expect(result).rejects.toThrow(/unknown-component/)
+  })
+
+  it("rejects unknown project achievement references", async () => {
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      projects: texts.projects.replace(
+        "renesas-east-first-national-third-2024",
+        "missing-award",
+      ),
+    })
+
+    await expect(parseProfileDocuments(documents)).rejects.toThrow(/missing-award/)
+  })
+
+  it("rejects duplicate project achievement references", async () => {
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      projects: texts.projects.replace(
+        "related_achievements:\n    - { kind: award, id: renesas-east-first-national-third-2024 }",
+        "related_achievements:\n    - { kind: award, id: renesas-east-first-national-third-2024 }\n    - { kind: award, id: renesas-east-first-national-third-2024 }",
+      ),
+    })
+
+    await expect(parseProfileDocuments(documents)).rejects.toThrow(/duplicate related achievement/i)
   })
 
   it("rejects media traversal outside Profile media", async () => {

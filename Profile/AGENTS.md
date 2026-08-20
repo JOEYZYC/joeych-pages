@@ -27,8 +27,10 @@
 - Preserve each record's stable `id`. Project IDs are HTML anchors.
 - Preserve project ordering. `tech-stack.html` links to projects by fixed array position and ID.
 - Keep list records in their existing field shape: IDs, years, featured flags, localized titles, tags, links, and record-specific fields.
-- Projects require localized `title`, `claim`, `category`, and `summary`; `contribution` may be `null`.
+- Projects require localized `title`, `claim`, `category`, `summary`, and `contribution`. Use `{ zh: 请补充, en: To be completed }` while a contribution is not yet documented.
 - Project `image` may be `null` or a path relative to `Profile/media/`. Figures require stable `id` plus `zh` and `en`, and may include an optional `src` path relative to `Profile/media/`; project links require `type`, `url`, and localized `label`.
+- Every project requires `related_achievements`. Use `[]` when no relationship is confirmed. Each entry is `{ kind, id }`, where `kind` is `award` or `publication` and `id` names an existing record in its owning YAML file. Never infer a relationship from a shared tag, year, or subject alone.
+- Project template fields have fixed presentation roles: `title` is the project name, `claim` is the card summary, `summary` is the full detail, `contribution` is the individual-work statement, `image` is the card primary image, `figures` are supplementary detail media, and `related_achievements` supplies the linked award/publication facts. Keep this single record as the only authored source for every project view.
 - Award records use `prizes` with `level`, `zh`, and `en`.
 - Publication records include localized `venue` and `authors`; patent records include localized `authors`.
 - The thesis is a mapping, not a list. Keep its `id`, year, localized `title` and `award`, tags, and links shape.

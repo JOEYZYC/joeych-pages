@@ -3,6 +3,7 @@
 `Profile/` owns the framework-neutral public profile package shared by the workspace.
 
 - `data/` contains the canonical public YAML records.
+- `projects.yml` owns explicit project-to-achievement references; award and publication facts remain in their own YAML records.
 - `media/` contains the published media bytes, organized to mirror `data/` ownership: `profile/` for the portrait and favicon, `projects/<project-id>/` for project media, and `awards/`, `publications/`, and `patents/` for certificate files under their owning record's `id` folder.
 - `private/` contains ignored local-only contact material and raw originals. It is never part of the distributable package.
 

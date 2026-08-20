@@ -126,12 +126,14 @@ test.describe("tech stack", () => {
     await expect(page).toHaveURL(
       /\/en\/projects\/\?skill=vision-halcon-opencv#intelligent-reconnaissance-2024$/,
     )
-    await expect(page.locator("#intelligent-reconnaissance-2024")).toHaveAttribute(
+    const dialog = page.locator('[data-project-dialog][data-project-id="intelligent-reconnaissance-2024"]')
+    await expect(dialog).toBeVisible()
+    await expect(dialog).toHaveAttribute(
       "data-evidence-origin",
       "true",
     )
     await expect(page.locator("[data-project-name-filter]")).toHaveValue("intelligent-reconnaissance-2024")
-    await expect(page.locator("#intelligent-reconnaissance-2024 [data-project-origin-label]")).toHaveText(
+    await expect(dialog.locator("[data-project-origin-label]")).toHaveText(
       "From skill evidence: Halcon / OpenCV image processing & vision",
     )
   })

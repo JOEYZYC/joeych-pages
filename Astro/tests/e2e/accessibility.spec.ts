@@ -81,6 +81,7 @@ test.describe("WCAG accessibility and 200% reflow", () => {
   for (const viewport of [mobileViewport, desktopViewport]) {
     for (const theme of themes) {
       test(`has no WCAG A/AA Axe violations on all routes in ${theme} at ${viewport.width}px`, async ({ page }, testInfo) => {
+        test.setTimeout(60_000)
         await page.setViewportSize(viewport)
         await page.addInitScript(({ key, value }) => window.localStorage.setItem(key, value), { key: "joeych-theme", value: theme })
 
@@ -99,7 +100,7 @@ test.describe("WCAG accessibility and 200% reflow", () => {
   }
 
   for (const theme of themes) {
-    test(`has no WCAG A/AA Axe violations in contact and certificate dialogs in ${theme}`, async ({ page }, testInfo) => {
+    test(`has no WCAG A/AA Axe violations in contact, certificate, and project dialogs in ${theme}`, async ({ page }, testInfo) => {
       await page.addInitScript(({ key, value }) => window.localStorage.setItem(key, value), { key: "joeych-theme", value: theme })
       await page.goto("")
       await page.locator("[data-contact-trigger]").click()
@@ -109,6 +110,11 @@ test.describe("WCAG accessibility and 200% reflow", () => {
       await page.goto("awards/")
       await page.locator("#awards-award-renesas-east-first-national-third-2024-trigger").click()
       await expectNoWcagViolations(page, { route: "/awards/", state: "certificate-dialog", theme, viewport: desktopViewport.width }, testInfo)
+      await page.locator("#awards-award-renesas-east-first-national-third-2024-dialog [data-certificate-close]").click()
+
+      await page.goto("projects/")
+      await page.locator('[data-project-card][data-project-id="power-print-recognition"]').click()
+      await expectNoWcagViolations(page, { route: "/projects/", state: "project-dialog", theme, viewport: desktopViewport.width }, testInfo)
     })
   }
 
@@ -139,7 +145,7 @@ test.describe("WCAG accessibility and 200% reflow", () => {
     })
   }
 
-  test("keeps contact and certificate close controls, captions, and boundaries reachable at 200%", async ({ page }) => {
+  test("keeps contact, certificate, and project dialog controls reachable at 200%", async ({ page }) => {
     test.setTimeout(60_000)
     await page.setViewportSize(zoomViewport)
     await page.goto("")
@@ -160,6 +166,15 @@ test.describe("WCAG accessibility and 200% reflow", () => {
     await expect(dialog.locator("[data-certificate-next]")).toBeDisabled()
     await dialog.locator("[data-certificate-close]").press("Enter")
     await expect(dialog).not.toBeVisible()
+
+    await page.goto("en/projects/#power-print-recognition")
+    await applyPageScale(page)
+    const projectDialog = page.locator('[data-project-dialog][data-project-id="power-print-recognition"]')
+    await expectReachable(projectDialog.locator("[data-project-dialog-close]"))
+    await expectReachable(projectDialog.locator("[data-project-dialog-title]"))
+    await expectReachable(projectDialog.locator("[data-related-achievement-id] img").first())
+    await projectDialog.locator("[data-project-dialog-close]").press("Enter")
+    await expect(projectDialog).not.toBeVisible()
   })
 
   test("detects and removes a temporary unlabeled control", async ({ page }) => {

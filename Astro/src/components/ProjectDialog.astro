@@ -1,0 +1,14 @@
+---
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import Icon from "./Icon.astro"
+
+type Props = { readonly locale: Locale }
+const { locale } = Astro.props
+const labels = UI[locale]
+---
+
+<dialog id="project-detail-dialog" class="dialog-surface project-dialog" data-project-dialog aria-label={labels.projectExplorer.open} hidden>
+  <button class="dialog-close" type="button" data-project-dialog-close aria-label={labels.projectExplorer.close} title={labels.projectExplorer.close}><Icon name="xmark" /></button>
+  <div data-project-dialog-content></div>
+</dialog>

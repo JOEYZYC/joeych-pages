@@ -57,7 +57,9 @@ test.describe("awards archive", () => {
         const panel = page.locator(`[data-award-id="${award.id}"]`)
         await expect(panel.locator(".award-prize")).toHaveText(award.prizes.map((prize) => prize[route.locale]))
         await expect(panel).toHaveAttribute("data-award-featured", String(award.featured))
+        await expect(panel).toHaveAttribute("id", `award-${award.id}`)
       }
+      for (const publication of data.publications) await expect(page.locator(`[data-research-id="${publication.id}"]`)).toHaveAttribute("id", `publication-${publication.id}`)
       await expect(page.locator(".award-prize--top-tier")).toHaveCount(0)
       expect([
         ...data.awards,

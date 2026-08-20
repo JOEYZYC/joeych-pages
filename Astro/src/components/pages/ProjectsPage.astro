@@ -22,6 +22,12 @@ const labels = UI[locale]
       summary={labels.routeIntros.projects.summary}
     />
 
-    <ProjectExplorer locale={locale} projects={data.projects} skills={data.profile.skills} />
+    <ProjectExplorer
+      awards={data.awards}
+      locale={locale}
+      projects={data.projects}
+      publications={data.publications}
+      skills={data.profile.skills}
+    />
   </div>
 </BaseLayout>

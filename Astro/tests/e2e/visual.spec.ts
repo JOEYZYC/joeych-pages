@@ -47,7 +47,7 @@ test.describe("deterministic visual baselines", () => {
           // Then: the complete route remains visually stable without hiding any content
           const snapshotName = routeSnapshotName(route.path, viewport.name, theme)
           if (route.path.includes("projects")) {
-            // Chromium full-page stitching can alter sticky control state. Capture the deterministic initial viewport; target baselines cover record state.
+            // Chromium full-page stitching can alter sticky control state. Capture the deterministic initial viewport; dialog baselines cover deep links.
             await expect(page).toHaveScreenshot(snapshotName)
           } else {
             await expect(page).toHaveScreenshot(snapshotName, { fullPage: true })
@@ -56,24 +56,23 @@ test.describe("deterministic visual baselines", () => {
       }
     }
 
-    test(`captures the resgatnet target in ${theme}`, async ({ page }) => {
+    test(`captures the resgatnet dialog in ${theme}`, async ({ page }) => {
       await openSettledProjectPage(page, theme, { hash: true })
-      const target = page.locator(`#${projectId}`)
+      const dialog = page.locator(`[data-project-dialog][data-project-id="${projectId}"]`)
 
-      await expect(target).toHaveCSS("border-left-width", "4px")
-      await expect(target).toHaveCSS("animation-name", "none")
+      await expect(dialog).toBeVisible()
 
-      await expect(target).toHaveScreenshot(`project-target-${theme}.png`)
+      await expect(dialog).toHaveScreenshot(`project-target-${theme}.png`)
     })
 
     test(`captures reduced-motion project state in ${theme}`, async ({ page }) => {
       await openSettledProjectPage(page, theme, { hash: true, reducedMotion: "reduce" })
-      const target = page.locator(`#${projectId}`)
+      const dialog = page.locator(`[data-project-dialog][data-project-id="${projectId}"]`)
 
-      await expect(target).toHaveCSS("border-left-width", "4px")
+      await expect(dialog).toBeVisible()
       await waitForStableScreenshot(page)
 
-      await expect(target).toHaveScreenshot(`project-reduced-motion-${theme}.png`)
+      await expect(dialog).toHaveScreenshot(`project-reduced-motion-${theme}.png`)
     })
   }
 })

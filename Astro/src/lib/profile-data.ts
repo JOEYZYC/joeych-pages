@@ -102,6 +102,29 @@ function validateEvidence(profile: Profile, projects: readonly Project[]): void 
   }
 }
 
+function validateRelatedAchievements(
+  projects: readonly Project[],
+  awards: readonly Award[],
+  publications: readonly Publication[],
+): void {
+  const awardIds = new Set(awards.map(({ id }) => id))
+  const publicationIds = new Set(publications.map(({ id }) => id))
+
+  for (const project of projects) {
+    for (const achievement of project.related_achievements) {
+      const known = achievement.kind === "award"
+        ? awardIds.has(achievement.id)
+        : publicationIds.has(achievement.id)
+      if (!known) {
+        throw new ProfileContentError({
+          source: PROFILE_DATA_FILES.projects,
+          detail: `project ${project.id} references unknown ${achievement.kind} ${achievement.id}`,
+        })
+      }
+    }
+  }
+}
+
 function validateProjectMedia(projects: readonly Project[]): readonly PublicMediaPath[] {
   const paths: PublicMediaPath[] = []
   for (const project of projects) {
@@ -154,6 +177,7 @@ export async function parseProfileDocuments(documents: ProfileDocuments): Promis
   }
 
   validateEvidence(profile, projects)
+  validateRelatedAchievements(projects, awards, publications)
   const certificates = [
     ...awards.flatMap(({ certificates: items }) => items),
     ...publications.flatMap(({ certificates: items }) => items),

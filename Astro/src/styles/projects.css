@@ -96,6 +96,91 @@
   padding: var(--space-6);
 }
 
+.project-card-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+  margin-block-start: var(--space-6);
+}
+
+.project-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  color: var(--color-text);
+  display: grid;
+  min-inline-size: 0;
+  overflow: hidden;
+  scroll-margin-block-start: calc(var(--header-height) + (var(--target-size) * 2) + var(--space-20));
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover {
+    border-color: var(--color-border-strong);
+  }
+}
+
+.project-card:focus-visible {
+  outline: 0.125rem solid var(--color-focus);
+  outline-offset: 0.125rem;
+}
+
+.project-card .project-media-well {
+  border-radius: 0;
+}
+
+.project-card .project-media-pending,
+.project-card .project-media > figcaption {
+  margin-inline: var(--space-4);
+}
+
+.project-card-body {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.project-card-meta {
+  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: var(--type-meta);
+  gap: var(--space-2) var(--space-4);
+  justify-content: space-between;
+  margin: 0;
+}
+
+.project-card h2 {
+  font-family: var(--font-display);
+  font-size: var(--type-h3);
+  line-height: 1.28;
+  margin: 0;
+}
+
+.project-card-claim,
+.project-card-achievements,
+.project-card-open {
+  margin: 0;
+}
+
+.project-card-achievements {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.project-card-claim {
+  color: var(--color-text-muted);
+}
+
+.project-card-achievements,
+.project-card-open {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: var(--type-meta);
+}
+
 .project-state {
   color: var(--color-accent);
   display: none;
@@ -105,7 +190,9 @@
 
 .project-record:target .project-current-state,
 .project-record[data-active="true"] .project-current-state,
-.project-record[data-evidence-origin="true"] .project-origin-state {
+.project-dialog[data-active="true"] .project-current-state,
+.project-record[data-evidence-origin="true"] .project-origin-state,
+.project-dialog[data-evidence-origin="true"] .project-origin-state {
   display: inline-flex;
 }
 
@@ -113,6 +200,10 @@
   display: grid;
   gap: var(--space-10);
   margin-block-start: var(--space-6);
+}
+
+.project-dialog {
+  inline-size: min(calc(100vw - var(--space-8)), var(--content-max));
 }
 
 .project-record {
@@ -146,6 +237,12 @@
   font-family: var(--font-mono);
   font-size: var(--type-meta);
   justify-content: space-between;
+}
+
+.project-dialog .project-record-meta,
+.project-dialog .project-media figcaption,
+.project-dialog .project-state {
+  color: var(--color-text);
 }
 
 .project-record-states {
@@ -209,6 +306,76 @@
 
 .project-record-section {
   margin-block-start: var(--space-8);
+}
+
+.project-related-achievement-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.project-template-unavailable {
+  color: var(--color-text-muted);
+}
+
+.project-related-achievement {
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-control);
+  min-inline-size: 0;
+  padding: var(--space-4);
+}
+
+.project-related-achievement-kind,
+.project-related-achievement-detail,
+.project-related-achievement h4 {
+  margin: 0;
+}
+
+.project-related-achievement-kind {
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-meta);
+}
+
+.project-related-achievement h4 {
+  font-family: var(--font-display);
+  font-size: var(--type-h3);
+  line-height: 1.28;
+  margin-block-start: var(--space-2);
+}
+
+.project-related-achievement-detail {
+  color: var(--color-text-muted);
+  margin-block-start: var(--space-2);
+}
+
+.project-related-achievement-link {
+  margin-block-start: var(--space-3);
+}
+
+.project-related-certificate-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-block-start: var(--space-4);
+}
+
+.project-related-certificate-grid figure {
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.project-related-certificate-grid img {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-control);
+  inline-size: 100%;
+}
+
+.project-related-certificate-grid figcaption {
+  color: var(--color-text-muted);
+  font-size: var(--type-small);
+  margin-block-start: var(--space-2);
 }
 
 .project-record-section h3 {
@@ -285,6 +452,16 @@
 
   .project-record {
     padding: var(--space-6);
+    scroll-margin-block-start: calc(var(--header-height) + var(--target-size) + var(--space-20) + var(--space-6));
+  }
+
+  .project-card-grid,
+  .project-related-achievement-grid {
+    gap: var(--space-5);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .project-card {
     scroll-margin-block-start: calc(var(--header-height) + var(--target-size) + var(--space-20) + var(--space-6));
   }
 

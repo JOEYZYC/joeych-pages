@@ -26,6 +26,7 @@ const years = [...new Set(awards.map((award) => award.year))]
         <div class="achievement-grid">
           {awards.filter((award) => award.year === year).map((award) => (
             <article
+              id={`award-${award.id}`}
               class="award-panel"
               data-award-id={award.id}
               data-award-featured={String(award.featured)}

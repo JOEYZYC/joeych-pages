@@ -1,0 +1,45 @@
+---
+import type { Project } from "../content/schemas"
+import type { Locale } from "../i18n/locales"
+import { UI } from "../i18n/ui"
+import type { RelatedAchievement } from "../lib/related-achievements"
+import ProjectMedia from "./ProjectMedia.astro"
+
+type Props = {
+  readonly locale: Locale
+  readonly number: number
+  readonly project: Project
+  readonly relatedAchievements: readonly RelatedAchievement[]
+}
+
+const { locale, number, project, relatedAchievements } = Astro.props
+const labels = UI[locale]
+const ordinal = String(number).padStart(2, "0")
+---
+
+<a
+  class="project-card"
+  href={`#${project.id}`}
+  data-project-card
+  data-project-id={project.id}
+  data-project-category={project.category.en}
+  aria-controls="project-detail-dialog"
+  aria-haspopup="dialog"
+  hidden
+>
+  {project.image === null ? (
+    <div class="project-media project-media--card project-media--unavailable" data-project-media data-project-media-context="card" data-project-media-kind="unavailable" role="img" aria-label={labels.projectExplorer.imagePendingAlt}>
+      <div class="project-media-well"><p class="project-media-pending">{labels.projectExplorer.imagePending}</p></div>
+    </div>
+  ) : <ProjectMedia context="card" locale={locale} project={project} loading="lazy" />}
+  <div class="project-card-body">
+    <p class="project-card-meta"><span>{ordinal} / {project.year}</span><span>{project.category[locale]}</span></p>
+    <h2>{project.title[locale]}</h2>
+    <p class="project-card-claim">{project.claim[locale]}</p>
+    <p class="project-card-achievements">
+      <span>{labels.sections.projects.achievements}</span>
+      <span>{relatedAchievements.length > 0 ? relatedAchievements.map((achievement) => achievement.record.title[locale]).join(" / ") : labels.projectExplorer.pending}</span>
+    </p>
+    <span class="project-card-open">{labels.projectExplorer.open}</span>
+  </div>
+</a>

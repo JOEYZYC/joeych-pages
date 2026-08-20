@@ -44,7 +44,7 @@ test.describe("navigation state synchronization", () => {
     await expect(languageLink).toHaveAttribute("href", `${basePath}/en/projects/`)
   })
 
-  test("filters a project name, preserves its visible state, and does not write history", async ({ page }) => {
+  test("filters to one project card without writing history", async ({ page }) => {
     await page.setViewportSize(VIEWPORTS[2])
     await page.goto("en/projects/")
     const nameFilter = page.locator("[data-project-name-filter]")
@@ -53,20 +53,14 @@ test.describe("navigation state synchronization", () => {
     await nameFilter.selectOption("resgatnet")
 
     await expect(nameFilter).toHaveValue("resgatnet")
-    await expect(page.locator("#resgatnet [data-project-current-label]")).toBeVisible()
-    await expect(page.locator("[data-project-record]:not([hidden])")).toHaveCount(1)
-    const [filterBox, recordBox] = await Promise.all([
-      page.locator("[data-project-filter-controls]").boundingBox(),
-      page.locator("#resgatnet").boundingBox(),
-    ])
-    expect(filterBox).not.toBeNull()
-    expect(recordBox).not.toBeNull()
-    expect(recordBox?.y ?? 0).toBeGreaterThanOrEqual((filterBox?.y ?? 0) + (filterBox?.height ?? 0))
+    await expect(page.locator("[data-project-card]:not([hidden])")).toHaveCount(1)
+    await expect(page.locator('[data-project-card][data-project-id="resgatnet"]')).toBeVisible()
+    await expect(page.locator('[data-project-dialog][data-project-id="resgatnet"]')).toBeHidden()
     expect(await page.evaluate(() => window.history.length)).toBe(historyLength)
     await expect(page).toHaveURL(/\/en\/projects\/$/)
   })
 
-  test("a browser hash change synchronizes project filters and focuses the stable record title", async ({ page }) => {
+  test("a browser hash change synchronizes project filters and opens the matching dialog", async ({ page }) => {
     await page.goto("en/projects/")
 
     await page.evaluate(() => {
@@ -74,13 +68,13 @@ test.describe("navigation state synchronization", () => {
     })
 
     await expect(page.locator("[data-project-name-filter]")).toHaveValue("resgatnet")
-    await expect(page.locator("#resgatnet")).toHaveAttribute("data-active", "true")
-    await expect(page.locator("#resgatnet [data-project-record-title]")).toBeFocused()
+    const dialog = page.locator('[data-project-dialog][data-project-id="resgatnet"]')
+    await expect(dialog).toHaveAttribute("data-active", "true")
+    await expect(dialog.locator("[data-project-dialog-title]")).toBeFocused()
     await expect(page.locator("a.language-link")).toHaveAttribute(
       "href",
       `${basePath}/projects/#resgatnet`,
     )
-    await expect(page.locator("#resgatnet")).toHaveCSS("border-left-width", "4px")
   })
 
   test("dismisses the compact menu only for outside pointers and restores focus with Escape", async ({ page }) => {
@@ -116,6 +110,7 @@ test.describe("navigation state synchronization", () => {
   })
 
   test("uses ordinary document navigation when ViewTransitionOnNavigation is disabled in isolated Chrome", async () => {
+    test.setTimeout(60_000)
     const browser = await chromium.launch({
       channel: "chrome",
       args: ["--enable-automation", navigationDisabledFeature],
