@@ -16,6 +16,7 @@ const packageManifestSchema = z.object({ dependencies: z.record(z.string(), z.st
 
 const requiredPackages = {
   "@free-fonts/jigmo-sc": "1.0.1",
+  "@fontsource-variable/dm-sans": "5.3.0",
   "@fontsource-variable/google-sans-code": "5.3.0",
   "@fortawesome/fontawesome-svg-core": "7.3.1",
   "@fortawesome/free-solid-svg-icons": "7.3.1",
@@ -70,13 +71,13 @@ describe("local typography and icon asset contract", () => {
       readFile(jigmoCssUrl, "utf8"),
       readFile(fontAttributionUrl, "utf8"),
     ])
-    const emittedFamilies = [...getFontFamilies(jigmoCss), "Google Sans Code"].sort()
+    const emittedFamilies = [...getFontFamilies(jigmoCss), "DM Sans", "Google Sans Code"].sort()
 
     // When: declared faces are compared with provenance records
     const documentedFamilies = getDocumentedFamilies(fontAttribution)
 
     // Then: each emitted family has one attributable provenance section
-    expect(emittedFamilies).toEqual(["Google Sans Code", "Jigmo SC", "Source Han Serif SC", "Source Serif 4"])
+    expect(emittedFamilies).toEqual(["DM Sans", "Google Sans Code", "Jigmo SC", "Source Han Serif SC", "Source Serif 4"])
     expect(documentedFamilies).toEqual(emittedFamilies)
   })
 
@@ -94,7 +95,7 @@ describe("local typography and icon asset contract", () => {
     }
   })
 
-  it("uses local font sources and a single preloaded Google Sans Code face", async () => {
+  it("uses local font sources and preloads DM Sans only for English", async () => {
     // Given: checked-in style, layout, and Astro configuration sources
     const [fontStyles, baseLayout, jigmoCss] = await Promise.all([
       readFile(fontStylesUrl, "utf8"),
@@ -106,12 +107,29 @@ describe("local typography and icon asset contract", () => {
     const configuredSources = `${fontStyles}\n${baseLayout}`
     const localCssUrls = getCssUrls(jigmoCss)
 
-    // Then: no runtime source leaves the local build and only the approved Latin face is preloaded
+    // Then: no runtime source leaves the local build and only approved Latin faces are preloaded
     expect(fontStyles.trim()).toBe('@import "@free-fonts/jigmo-sc/jigmo-sc.css";')
     expect(localCssUrls).not.toHaveLength(0)
     expect(localCssUrls.every((url) => !/^https?:\/\//.test(url))).toBe(true)
+    expect(baseLayout).toContain('{locale === "en" && <Font cssVariable="--font-dm-sans" preload />}')
     expect(baseLayout).toContain('<Font cssVariable="--font-google-sans-code" preload />')
     expect(astroConfig.fonts).toEqual([
+      expect.objectContaining({
+        name: "DM Sans",
+        cssVariable: "--font-dm-sans",
+        weights: ["400 700"],
+        styles: ["normal"],
+        display: "swap",
+        options: {
+          variants: [
+            {
+              src: ["@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2"],
+              weight: "400 700",
+              style: "normal",
+            },
+          ],
+        },
+      }),
       expect.objectContaining({
         name: "Google Sans Code",
         cssVariable: "--font-google-sans-code",

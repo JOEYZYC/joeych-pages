@@ -47,6 +47,7 @@ const description = `${pageTitle}: ${profile.summary[locale]}`
         root.style.colorScheme = theme
       })()
     </script>
+    {locale === "en" && <Font cssVariable="--font-dm-sans" preload />}
     <Font cssVariable="--font-google-sans-code" preload />
     <SeoHead routeId={routeId} locale={locale} profile={profile} title={title} description={description} />
   </head>

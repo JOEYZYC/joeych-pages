@@ -13,6 +13,23 @@ export default defineConfig({
   fonts: [
     {
       provider: fontProviders.local(),
+      name: "DM Sans",
+      cssVariable: "--font-dm-sans",
+      weights: ["400 700"],
+      styles: ["normal"],
+      display: "swap",
+      options: {
+        variants: [
+          {
+            src: ["@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2"],
+            weight: "400 700",
+            style: "normal",
+          },
+        ],
+      },
+    },
+    {
+      provider: fontProviders.local(),
       name: "Google Sans Code",
       cssVariable: "--font-google-sans-code",
       weights: ["300 800"],

@@ -34,6 +34,13 @@ This static Astro site bundles all font bytes locally. It makes no runtime reque
 - Underlying font license: SIL Open Font License 1.1 (OFL-1.1), as supplied in the package's [`LICENSE`](https://unpkg.com/@fontsource-variable/google-sans-code@5.3.0/LICENSE).
 - Upstream provenance: Google Sans Code immutable commit [`f9e36cea20d34ecc9b61c09609fe02e1438364fc`](https://github.com/googlefonts/googlesans-code/commit/f9e36cea20d34ecc9b61c09609fe02e1438364fc). Fontsource is third-party self-hosting packaging, not the font author.
 
+## Family: DM Sans
+
+- Package: `@fontsource-variable/dm-sans@5.3.0`.
+- Emitted role: Astro's local provider emits only `dm-sans-latin-wght-normal.woff2`, a normal-style variable face restricted to the `400 700` weight range. English documents preload it for display, body, and UI text; Chinese documents do not request it.
+- Underlying font license: SIL Open Font License 1.1 (OFL-1.1), as supplied in the package's `LICENSE`.
+- Upstream provenance: [Google Fonts DM Sans](https://github.com/googlefonts/dm-fonts). The package record does not identify an immutable upstream font commit, so this document does not invent one. Fontsource is third-party self-hosting packaging, not the font author.
+
 ## Regeneration and Updates
 
 Do not copy fonts into `publicDir`, `Profile/`, or source control. To update a font package, select an explicit version, reread every applicable package license and underlying-asset record, update this document and `pnpm-lock.yaml` together, run `pnpm install --frozen-lockfile`, then rebuild and verify that each emitted family remains mapped to an accurate provenance section and all font URLs remain local and base-aware. Do not introduce italic variants, a full single-file CJK WOFF2, or a runtime font CDN.

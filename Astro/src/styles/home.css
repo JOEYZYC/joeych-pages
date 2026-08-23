@@ -15,7 +15,6 @@
 }
 
 .home-hero {
-  background: var(--gradient-hero);
   border-radius: var(--radius-hero);
 }
 
@@ -34,7 +33,7 @@
 
 .home-role {
   font-size: var(--type-h3);
-  font-weight: 650;
+  font-weight: 700;
   margin-block-start: var(--space-4);
 }
 
@@ -63,8 +62,9 @@
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-control);
   display: inline-flex;
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: var(--type-small);
+  font-weight: 500;
   gap: var(--space-2);
   justify-content: center;
   padding: var(--space-2) var(--space-4);
@@ -99,6 +99,7 @@
 
 .home-portrait {
   align-self: start;
+  background: var(--color-surface-muted);
   display: grid;
   margin: 0;
   padding: 0;

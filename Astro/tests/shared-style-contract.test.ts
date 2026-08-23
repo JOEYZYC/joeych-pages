@@ -7,6 +7,7 @@ const componentsUrl = new URL("../src/styles/components.css", import.meta.url)
 const designUrl = new URL("../DESIGN.md", import.meta.url)
 const footerUrl = new URL("../src/components/SiteFooter.astro", import.meta.url)
 const layoutUrl = new URL("../src/styles/layout.css", import.meta.url)
+const homeUrl = new URL("../src/styles/home.css", import.meta.url)
 const tokensUrl = new URL("../src/styles/tokens.css", import.meta.url)
 
 function contrastRatio(foreground: string, background: string): number {
@@ -43,6 +44,16 @@ describe("shared visual system contract", () => {
     expect(styles).toMatch(/\.intro h1\s*\{[\s\S]*font-family: var\(--font-display\)/)
     expect(styles).toMatch(/\.section-title\s*\{[\s\S]*font-family: var\(--font-display\)/)
     expect(styles).toMatch(/\.eyebrow\s*\{[\s\S]*font-family: var\(--font-mono\)/)
+    expect(tokens).toContain('html[lang="en"]')
+    expect(tokens).toContain('var(--font-dm-sans), "DM Sans", system-ui, sans-serif')
+    expect(base).toMatch(/html\[lang="en"\] h1,[\s\S]*font-weight: 700/)
+  })
+
+  it("uses the approved neutral home surfaces without a dedicated hero gradient", async () => {
+    const [home, tokens] = await Promise.all([readFile(homeUrl, "utf8"), readFile(tokensUrl, "utf8")])
+
+    expect(`${home}\n${tokens}`).not.toContain("--gradient-hero")
+    expect(home).toMatch(/\.home-portrait\s*\{[\s\S]*background: var\(--color-surface-muted\)/)
   })
 
   it("uses semantic state cues for shared controls without a color-only disabled state", async () => {

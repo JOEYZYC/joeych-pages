@@ -11,6 +11,9 @@ importers:
       '@astrojs/sitemap':
         specifier: 3.7.3
         version: 3.7.3
+      '@fontsource-variable/dm-sans':
+        specifier: 5.3.0
+        version: 5.3.0
       '@fontsource-variable/google-sans-code':
         specifier: 5.3.0
         version: 5.3.0
@@ -527,6 +530,9 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@fontsource-variable/dm-sans@5.3.0':
+    resolution: {integrity: sha512-BpUG5bqePiDFMBM4ZtLSlPdAIOM990uB1dlXzIf4aw21yQR7BmykedLXXXMqGWsR18aMLOsbWccwJNh3ztTQaA==}
 
   '@fontsource-variable/google-sans-code@5.3.0':
     resolution: {integrity: sha512-etsB8s2nyLqWlBrASPpT9LvPtxNxrLjrys4RZzW0mQnt8qYoNL7m1SLzCqY5Pp1g/6LWoVOI/6jPqiwO2l5xgA==}
@@ -2547,6 +2553,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.1':
     optional: true
+
+  '@fontsource-variable/dm-sans@5.3.0': {}
 
   '@fontsource-variable/google-sans-code@5.3.0': {}
 

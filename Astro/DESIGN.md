@@ -4,17 +4,18 @@ This is the implementation contract for the approved static Astro portfolio. Fut
 
 ## 0. Research Log
 
-- Existing-design extraction: `../Jeklly/DESIGN.md` supplies the approved five-route gunmetal/cyan/ice-silver editorial identity, mobile geometry, evidence-first records, and interaction/accessibility baseline.
+- Existing-design extraction: `../Jeklly/DESIGN.md` supplies the approved five-route hierarchy, mobile geometry, evidence-first records, and interaction/accessibility baseline. Its retired gunmetal/cyan/ice-silver palette is historical input rather than the target color system.
 - Public-content audit: `../Profile/README.md`, `../Profile/AGENTS.md`, and `../Profile/data/*.yml` establish `Profile/data/` and `Profile/media/` as the sole public content and media source. Astro owns presentation only; it must not create transformed or duplicate authored content.
 - Local reference audit: `Demo/README.md` and audited local snapshots were used as mechanism references only. Refined-X contributes external-content discipline and editorial framing; as-folio contributes academic information organization; astropages-bilingual contributes static Chinese-root and English-prefix locale routing; astro-starter-portfolio contributes minimal static primitives and centralized SEO; mirsazzathossain-me contributes selective publication-record density.
 - Adopt / adapt / reject: adopt static, data-led Astro primitives, bilingual route pairing, and source-backed evidence; adapt the Jekyll technical-editorial identity into explicit light/dark semantic themes and a responsive visual Bento system; reject copied Demo source or copy, search, CMS, React islands, SSR, analytics, AI/Ask/MCP surfaces, deployment configuration outside the root GitHub Pages exception, generic dashboard decoration, and unsupported academic metadata.
 - Lazyweb: skipped. This is an extraction/redesign from an approved existing design and audited local references, not visual greenfield work.
 - Imagegen: skipped. The approved identity, public media, and evidence hierarchy already define the visual contract; generated artwork would weaken source-backed presentation.
 - Online standards check: [MDN Grid accessibility](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout/Accessibility), [W3C Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html), and [web.dev responsive design basics](https://web.dev/articles/responsive-web-design-basics) reinforce source-ordered DOM, content-led breakpoints, ordinary row-major grids, and reflow over dense visual packing.
+- Online visual reference: [AI Hero](https://www.aihero.dev/) supplies the black/white/warm-neutral foundation, orange emphasis hierarchy, bold sans-serif English display treatment, quiet one-pixel structure, and low-shadow editorial surfaces. The portfolio adapts those mechanisms to its existing bilingual academic evidence hierarchy without copying layout, artwork, copy, components, or source code.
 
 ## 1. Atmosphere & Identity
 
-The portfolio is a modern academic-engineering dossier: calm blue-gray canvases, clear typographic hierarchy, rounded evidence panels, and cyan-blue accents used for orientation and action. Visual Bento composition makes identity, experience, projects, and evidence easier to scan without turning source records into decoration. Home and project discovery use the strongest spatial composition; long evidence records remain text-first.
+The portfolio is a modern academic-engineering dossier: warm white and near-black canvases, clear typographic hierarchy, restrained evidence panels, and orange accents used for orientation and action. Black, white, and warm neutrals carry almost all page area; orange remains a scarce emphasis color rather than a decorative wash. Visual Bento composition makes identity, experience, projects, and evidence easier to scan without turning source records into decoration. Home and project discovery use the strongest spatial composition; long evidence records remain text-first.
 
 The signature interaction is a **2px horizontal signal rail** in the site header. Project state is communicated independently through a logical-start accent inset plus visible localized status text, never through color or motion alone.
 
@@ -38,56 +39,78 @@ The signature interaction is a **2px horizontal signal rail** in the site header
 | astropages-bilingual | Static Chinese root and `/en/` mirror | Exactly five route concepts and ten documents with locale-pair lookup | First-visit redirect, Pagefind, CMS, blog/gallery, and hosting assumptions |
 | astro-starter-portfolio | Small shared primitives and centralized metadata | Tokenized CSS, concise SEO, and native cross-document transitions | Client router, generic work-card data, and non-contract theme code |
 | mirsazzathossain-me | Selective publication density | Text-first `ResearchArchive` records from Profile YAML | React islands, Tailwind, citation counts, comments, and dense chrome |
+| AI Hero | Black/white/warm-neutral foundation, orange primary emphasis, bold sans-serif English headings, one-pixel section structure | Apply the palette and surface restraint to the existing bilingual Bento and evidence system | Copied layout, artwork, portrait treatment, animation, copy, components, analytics, search, course/product structure, and source code |
 
 ## 2. Color
 
 ### Semantic palette
 
-All visible colors are semantic CSS custom properties defined once in `tokens.css`. Raw colors may appear only in the light/dark token declarations and the single `--gradient-hero`; components, SVG consumers, and route CSS use semantic tokens only.
+All visible colors are semantic CSS custom properties defined once in `tokens.css`. Raw colors may appear only in the light/dark token declarations; components, SVG consumers, and route CSS use semantic tokens only.
 
 | Token | Light | Dark | Purpose |
 | --- | --- | --- | --- |
-| `--color-canvas` | `#f4f7fb` | `#0d1520` | Page canvas |
-| `--color-surface` | `#fdfefe` | `#142131` | Primary panel/dialog surface |
-| `--color-surface-muted` | `#eaf0f6` | `#1b2b3d` | Secondary field and media well |
-| `--color-surface-strong` | `#172c42` | `#09131e` | Footer and strong inverted surface |
-| `--color-text` | `#182434` | `#f2f6fa` | Primary text |
-| `--color-text-muted` | `#52677d` | `#c0cedd` | Supporting text |
-| `--color-text-subtle` | `#5c6e82` | `#a6b7c9` | Metadata and unavailable context |
-| `--color-border` | `#d1dce8` | `#34475c` | Quiet panel separation |
-| `--color-border-strong` | `#8194a8` | `#5b7591` | Control boundaries requiring 3:1 contrast |
-| `--color-accent` | `#086b8b` | `#63d8f5` | Links, states, and restrained signals |
-| `--color-accent-hover` | `#05556f` | `#a2eafa` | Hover/pressed foreground |
-| `--color-control-hover` | `#004861` | `#a2eafa` | Hover foreground on standard and muted controls |
-| `--color-accent-soft` | `#d8f3fb` | `#103c4d` | Selected-state field |
-| `--color-accent-on` | `#f9fcff` | `#08202c` | Text on accent |
-| `--color-on-strong` | `#f8fbff` | `#f3f8fc` | Text on strong surfaces |
-| `--color-on-strong-hover` | `#e1f7ff` | `#d5f7ff` | Hover foreground on strong surfaces |
-| `--color-focus` | `#005f82` | `#78dff8` | Focus outline |
+| `--color-canvas` | `#f5f3ef` | `#0f0e0d` | Page canvas |
+| `--color-surface` | `#fffdfa` | `#171614` | Primary panel/dialog surface |
+| `--color-surface-muted` | `#ece8e1` | `#24211e` | Secondary field and media well |
+| `--color-surface-strong` | `#171512` | `#050505` | Footer and strong inverted surface |
+| `--color-text` | `#181613` | `#f7f4ef` | Primary text |
+| `--color-text-muted` | `#5f5a52` | `#c5beb4` | Supporting text |
+| `--color-text-subtle` | `#706a61` | `#a69d92` | Metadata and unavailable context |
+| `--color-border` | `#d8d2c9` | `#38332e` | Quiet panel separation |
+| `--color-border-strong` | `#8a8176` | `#756b61` | Control boundaries requiring 3:1 contrast |
+| `--color-accent` | `#b43a0b` | `#fb923c` | Links, states, primary action, and restrained signals |
+| `--color-accent-hover` | `#9a3412` | `#fdba74` | Hover/pressed foreground or fill |
+| `--color-control-hover` | `#9a3412` | `#fdba74` | Hover foreground on standard and muted controls |
+| `--color-accent-soft` | `#ffeadb` | `#3a2115` | Selected-state field |
+| `--color-accent-on` | `#fffaf5` | `#18100a` | Text on accent |
+| `--color-on-strong` | `#fffaf5` | `#fffaf5` | Text on strong surfaces |
+| `--color-on-strong-hover` | `#ffd5b5` | `#ffccaa` | Hover foreground on strong surfaces |
+| `--color-focus` | `#b43a0b` | `#fdba74` | Focus outline |
 | `--color-success` | `#166447` | `#7de0b5` | Success state |
-| `--color-warning` | `#7a4b00` | `#ffcc70` | Unavailable/source-pending state |
+| `--color-warning` | `#7a4b00` | `#facc15` | Unavailable/source-pending state |
 | `--color-error` | `#a32d2d` | `#ff9f9f` | Error state |
-| `--color-backdrop` | `rgb(13 29 45 / .48)` | `rgb(2 9 18 / .68)` | Modal backdrop |
+| `--color-backdrop` | `rgb(24 22 19 / .52)` | `rgb(0 0 0 / .72)` | Modal backdrop |
 
-Light shadows are `--shadow-panel: 0 1px 2px rgb(20 36 52 / .06), 0 12px 32px rgb(20 36 52 / .08)` and `--shadow-dialog: 0 24px 64px rgb(20 36 52 / .28)`. Dark shadows keep the same geometry with black alpha `.20/.22` and `.52` respectively.
+Light shadows are `--shadow-panel: 0 1px 2px rgb(24 22 19 / .06)` and `--shadow-dialog: 0 24px 64px rgb(24 22 19 / .28)`. Dark shadows are `--shadow-panel: 0 1px 2px rgb(0 0 0 / .28)` and `--shadow-dialog: 0 24px 64px rgb(0 0 0 / .60)`. Ordinary panels use the shadow only as subtle edge reinforcement; borders and tonal contrast carry the structure.
 
-`--gradient-hero` is `linear-gradient(135deg, #eef9fc 0%, #f7f8fc 54%, #d8f1f7 100%)` in light and `linear-gradient(135deg, #142e43 0%, #103f52 54%, #1d6072 100%)` in dark. It is used only on the Home identity panel.
+The Home identity panel uses the ordinary `--color-surface` rather than a dedicated gradient. Its hierarchy comes from typography, spacing, border contrast, and one orange primary action. The portrait panel uses `--color-surface-muted` so the two halves remain distinct without introducing another hue.
 
 ### Color rules
 
 - Use `--color-border-strong` or the focus outline for control boundaries that require 3:1 contrast; quiet `--color-border` is not a control boundary.
-- Do not use gradient text or buttons, glass blur, colored shadows, neon framing, purple hues, or a gradient on any route other than the Home identity panel.
+- Orange is reserved for interaction, current state, focus, and a small number of orientation signals. It never becomes a page-sized background, decorative glow, or substitute for hierarchy.
+- Keep one filled orange primary action per view. Peer actions remain neutral with a visible border.
+- Do not use gradients, gradient text or buttons, glass blur, colored shadows, neon framing, or purple hues.
 - Theme changes affect tokens only. They never hide evidence, alter source order, change routes, or create theme-specific content.
+
+### Component color application
+
+| Context | Background | Foreground / structure | Rule |
+| --- | --- | --- | --- |
+| Page canvas | `--color-canvas` | `--color-text` | Owns the document background and space between panels. |
+| Sticky header | `--color-surface` | `--color-text`, `--color-border` | Uses a solid background with no blur or transparency. |
+| Standard panel, card, and filter bar | `--color-surface` | `--color-text`, `--color-border` | Neutral by default; hover may strengthen the border but never adds orange fill. |
+| Muted field, media well, and tag | `--color-surface-muted` | `--color-text-muted` | Provides secondary grouping without introducing another hue. |
+| Primary action | `--color-accent` | `--color-accent-on` | The only filled orange peer action in its view; hover uses `--color-accent-hover`. |
+| Secondary action and ordinary control | `--color-surface` | `--color-text`, `--color-border-strong` | Remains neutral and visibly bounded. |
+| Text link | Transparent | `--color-accent` | Hover uses `--color-accent-hover`; surrounding prose remains neutral. |
+| Current navigation and signal rail | Transparent | `--color-accent` | `aria-current` and the rail share orange, while the visible route label preserves meaning without the rail. |
+| Section orientation icon | `--color-accent-soft` when enclosed | `--color-accent` | Used sparingly for section recognition, not repeated on every metadata row. |
+| Selected, target, or evidence-origin state | Existing surface or `--color-accent-soft` | `--color-accent` inset/label | Always includes visible localized state text; color is supplementary. |
+| Success, pending, and error state | Existing surface | `--color-success`, `--color-warning`, or `--color-error` | Status colors retain their own meanings and are never replaced by brand orange. |
+| Footer | `--color-surface-strong` | `--color-on-strong` | Footer links use `--color-on-strong-hover`; the footer does not become an orange band. |
+| Focus indicator | Existing surface | `--color-focus` outline | Focus never relies on a shadow, fill change, or color alone. |
 
 ## 3. Typography
 
 ### Families, provenance, and transfer budgets
 
-- Display and editorial headings: `--font-display: "Source Han Serif SC", "Source Serif 4", "Songti SC", Georgia, serif`. Installed local Source Han Serif assets remain within the existing 42 MiB emitted budget.
-- Body and UI: `--font-body: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif` with no runtime external dependency.
+- Chinese display and editorial headings: `--font-display: "Source Han Serif SC", "Source Serif 4", "Songti SC", Georgia, serif`. Chinese headings remain at weight `400`; installed local Source Han Serif assets remain within the existing 42 MiB emitted budget.
+- Chinese body and UI: `--font-body: system-ui, "PingFang SC", "Microsoft YaHei", sans-serif` with no runtime external dependency.
+- English display, body, and UI: under `html[lang="en"]`, both `--font-display` and `--font-body` use `var(--font-dm-sans), "DM Sans", system-ui, sans-serif`. English headings use weight `700`; body and UI use `400` or `500`. Only the Latin normal variable face and the used `400–700` range are emitted, with `font-display: swap` and no runtime font host.
 - Technical metadata: `--font-mono: var(--font-google-sans-code), "SFMono-Regular", Consolas, monospace`, using only the local Google Sans Code normal variable face and limited to dates, route labels, IDs, counts, and source-link types. Its emitted WOFF2 face is at most 256 KiB.
 
-All font assets are local, version-pinned, licensed, base-aware, and available before visual QA captures. The uncached first-load transfer budget is 6 MiB. Never request an external font host.
+All font assets are local, version-pinned, licensed, base-aware, and available before visual QA captures. DM Sans is loaded only by English documents; Chinese documents do not pay its transfer cost. The uncached first-load transfer budget is 6 MiB. Never request an external font host.
 
 ### Scale
 
@@ -107,6 +130,10 @@ All font assets are local, version-pinned, licensed, base-aware, and available b
 
 - Keep prose between 45ch and 68ch. Long source-backed text wraps naturally and is never truncated.
 - Chinese uses normal line breaking. Preserve meaningful compounds and source punctuation.
+- English Display and H1 use weight `700` with negative letter spacing no tighter than `-.04em`; H2 uses weight `700` no tighter than `-.03em`; H3 uses weight `700` no tighter than `-.02em`. These English-only adjustments must not apply to Chinese headings.
+- English body copy uses weight `400`; navigation, buttons, compact labels, and the wordmark use weight `500` or `700` according to hierarchy. Do not use weights below `400` for text smaller than `1.125rem`.
+- DM Sans is requested and preloaded only on English documents. Chinese documents retain the existing Chinese display and body stacks and must not request the DM Sans asset.
+- Google Sans Code remains the technical metadata face in both locales. DM Sans does not replace dates, IDs, route labels, counts, or source-link types assigned to `--font-mono`.
 - Each page has one H1 and descending headings. Locale changes replace complete localized strings, including metadata, alt text, titles, and accessible names.
 
 ## 4. Spacing & Layout
@@ -212,11 +239,16 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 | Canvas | `--color-canvas` | Page background and header context |
 | Panel | `--color-surface`, `1px solid var(--color-border)`, `--radius-panel`, `--shadow-panel` | Home, project, experience, award, and research panels |
 | Muted field | `--color-surface-muted` | Media wells, secondary facts, selected context |
-| Hero | `--gradient-hero`, `--radius-hero`, controlled panel shadow | Home identity panel only |
+| Hero | `--color-surface`, `1px solid var(--color-border)`, `--radius-hero`, minimal panel shadow | Home identity panel only |
 | Strong surface | `--color-surface-strong`, `--color-on-strong` | Footer only |
 | Dialog | `--color-surface`, `--radius-panel`, `--shadow-dialog` | Contact and certificate dialogs |
 
-No gradient appears outside the Home identity panel. No colored shadow, backdrop blur, image hover zoom, or shadow-dependent state is permitted. Evidence images use stable media wells and visible captions rather than decorative frames.
+- Standard cards and panels retain their position on hover. A stronger border may communicate hover, but hover never adds elevation, zoom, or an orange surface.
+- `--shadow-panel` is the maximum ordinary-panel shadow and remains visually subordinate to the border. Do not create route-specific card shadows.
+- `--shadow-dialog` is the only prominent elevation shadow because a modal must separate from its backdrop. Tooltips use the strong surface rather than dialog-level elevation.
+- Header, footer, hero, filter bars, and media wells use the exact surface roles in the table; they do not invent intermediate surface colors.
+- Evidence images use stable muted media wells, visible neutral borders, and captions rather than decorative frames.
+- No gradient, colored shadow, backdrop blur, image hover zoom, or shadow-dependent state is permitted.
 
 ## 8. Accessibility Constraints, Visual QA & Accepted Debt
 
@@ -228,7 +260,7 @@ No gradient appears outside the Home identity panel. No colored shadow, backdrop
 | Engineering recruiter using keyboard | Compare projects, follow source links, and contact the owner | Logical landmarks and heading order; visible focus; route/hash navigation; no nested interactive controls; dialog focus restoration. |
 | Chinese-first mobile visitor | Read identity and awards, change language, inspect a certificate | Chinese root is complete without JS; reachable locale link and controls; 44px touch targets; concise labels; one-column reflow. |
 | English-reading international collaborator | Navigate the corresponding English portfolio and assess terminology | Exact `/en/` route pair, localized metadata and image text, natural English wrapping, no mixed-language control labels. |
-| Low-vision visitor at 200% zoom | Read evidence and open/close dialogs | Reflow without horizontal loss, contrast-compliant text/rules/focus, no information encoded only by cyan or gold, stable sticky header behavior. |
+| Low-vision visitor at 200% zoom | Read evidence and open/close dialogs | Reflow without horizontal loss, contrast-compliant text/rules/focus, no information encoded only by orange or status color, stable sticky header behavior. |
 | Motion-sensitive or cognitively fatigued visitor | Orient, browse records, and open evidence without distraction | No decorative animation or auto-changing content; reduced-motion instantaneous state changes; predictable route labels; plain-language unavailable states. |
 
 ### Non-negotiable constraints
@@ -241,6 +273,15 @@ No gradient appears outside the Home identity panel. No colored shadow, backdrop
 - The exact theme matrix is `data-theme="light"` and `data-theme="dark"`, plus no-JS system light/dark fallback. Stored light-over-dark-system, stored dark-over-light-system, invalid `joeych-theme`, and denied storage are required state cases.
 - The exact viewport matrix is `375x812`, `768x1024`, and `1280x900`, plus 200% browser zoom at every route/theme combination. Capture after local fonts are ready; test no horizontal overflow, one H1, 44px targets, readable evidence, and stable base-aware URLs.
 - The exact visual/behavior matrix exercises default, fine-pointer hover, keyboard focus, active, `:target`, dialogs, certificate boundaries, locale counterpart, no-JS, native View Transition support and ordinary unsupported fallback, reduced motion, and page-error-free font/icon loading. Run it in both themes where a JS surface exists. Screenshots disable caret and nonessential animation only after testing the live interaction state; do not mask real content or mid-transition defects.
+
+### Redesign acceptance
+
+- `tokens.css` matches the approved light and dark palette in this document, including the no-JavaScript dark mapping. Components continue to consume semantic tokens rather than raw colors.
+- The active styles contain no retired blue-gray/cyan palette values and no `--gradient-hero` declaration or use. The Home identity and portrait panels use their documented neutral surface roles.
+- Shared and route styles follow the component color application table: one filled orange primary action per view, neutral peer controls, semantic status colors, and no orange page bands or card fills.
+- Standard panels use the documented border-led surface treatment; only dialogs receive prominent elevation. Hover, focus, target, and selected states remain visible without adding layout movement or decorative effects.
+- English documents render display and body text with the local DM Sans variable face and the documented weights and tracking. Chinese documents preserve the existing Chinese stacks and do not request DM Sans; both locales retain Google Sans Code for technical metadata.
+- The redesign preserves all ten canonical routes, both themes, no-JavaScript fallback, base-aware assets, keyboard operation, reduced motion, 200% reflow, and existing content order. `pnpm run verify` and `pnpm run test:e2e` pass before the redesign is complete.
 
 ### Accepted debt
 
