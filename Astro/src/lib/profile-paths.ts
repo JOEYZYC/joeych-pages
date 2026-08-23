@@ -13,15 +13,6 @@ export const PROFILE_DATA_FILES = {
   thesis: "thesis.yml",
 } as const
 
-export const PROFILE_CONTENT_PATHS = {
-  profile: "../Profile/data/profile.yml",
-  projects: "../Profile/data/projects.yml",
-  awards: "../Profile/data/awards.yml",
-  publications: "../Profile/data/publications.yml",
-  patents: "../Profile/data/patents.yml",
-  thesis: "../Profile/data/thesis.yml",
-} as const
-
 function resolveProfileRoot(): URL {
   const candidates = [
     fileURLToPath(new URL("../../../Profile/", import.meta.url)),

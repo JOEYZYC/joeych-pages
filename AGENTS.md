@@ -13,7 +13,7 @@ The site is published to GitHub Pages only by `.github/workflows/deploy-pages.ym
 ## Architecture & Data Flow
 
 1. Public facts are authored in six files under `Profile/data/`: `profile.yml`, `projects.yml`, `awards.yml`, `publications.yml`, `patents.yml`, and `thesis.yml`. Referenced public files live in `Profile/media/`.
-2. `Astro/src/content.config.ts` registers those YAML files as content collections. `Astro/src/lib/profile-data.ts` reads them concurrently, parses YAML, validates Zod schemas, checks cross-record references, and confirms referenced media exists.
+2. `Astro/src/lib/profile-data.ts` reads those YAML files concurrently, parses them, validates Zod schemas, checks cross-record references, and confirms referenced media exists.
 3. Thin route files in `Astro/src/pages/` select `zh` or `en` and delegate to shared page components in `Astro/src/components/pages/`.
 4. Page components await `getProfileData()`, select localized `{ zh, en }` values, and render through `Astro/src/layouts/BaseLayout.astro` plus reusable presentational components.
 5. Astro emits a fully static site to `Astro/dist/`. `Astro/astro.config.ts` serves `Profile/media/` directly as the public directory and applies the `/joeych-pages` deployment base.
@@ -82,7 +82,6 @@ Run package commands from `Astro/`:
 - `Profile/AGENTS.md`: detailed public-data schema and editing rules.
 - `Astro/package.json`: authoritative scripts, runtime engine, package-manager pin, and dependencies.
 - `Astro/astro.config.ts`: static output, canonical site, base path, trailing slashes, sitemap, fonts, and public media directory.
-- `Astro/src/content.config.ts`: six Profile-backed Astro collections.
 - `Astro/src/lib/profile-data.ts`: end-to-end data parsing and validation.
 - `Astro/src/lib/routes.ts` and `Astro/src/lib/urls.ts`: base-aware routing and URL generation.
 - `Astro/src/layouts/BaseLayout.astro`: document shell, SEO, navigation, footer, and shared client behavior.

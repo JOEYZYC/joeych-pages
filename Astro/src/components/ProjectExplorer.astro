@@ -3,9 +3,9 @@ import type { Award, Profile, Project, Publication } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import { resolveRelatedAchievements } from "../lib/related-achievements"
+import Icon from "./Icon.astro"
 import ProjectCard from "./ProjectCard.astro"
 import ProjectDetail from "./ProjectDetail.astro"
-import ProjectDialog from "./ProjectDialog.astro"
 import ProjectRecord from "./ProjectRecord.astro"
 import PublicationProjectCard from "./PublicationProjectCard.astro"
 import PublicationProjectDetail from "./PublicationProjectDetail.astro"
@@ -122,7 +122,10 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
         : <PublicationProjectCard locale={locale} publication={item.publication} />)}
     </div>
 
-    <ProjectDialog locale={locale} />
+    <dialog id="project-detail-dialog" class="dialog-surface project-dialog" data-project-dialog aria-label={labels.projectExplorer.open} hidden>
+      <button class="dialog-close" type="button" data-project-dialog-close aria-label={labels.projectExplorer.close} title={labels.projectExplorer.close}><Icon name="xmark" /></button>
+      <div data-project-dialog-content></div>
+    </dialog>
     {explorerItems.map((item) => item.kind === "project"
       ? <template data-project-dialog-template data-project-id={item.project.id}>
           <ProjectDetail idPrefix={`project-dialog-${item.project.id}`} locale={locale} mode="dialog" project={item.project} relatedAchievements={item.relatedAchievements} />
@@ -142,18 +145,9 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
 )}
 
 <script>
-  type Evidence = { readonly label: string; readonly projectIds: readonly string[] }
-  type EvidenceMap = Record<string, Evidence>
+  import { attachDialogDismissal } from "../lib/dialog-dismissal"
 
-  const isEvidenceMap = (value: unknown): value is EvidenceMap => {
-    if (value === null || typeof value !== "object" || Array.isArray(value)) return false
-    return Object.values(value).every((entry) => (
-      entry !== null && typeof entry === "object" && !Array.isArray(entry) &&
-      "label" in entry && typeof entry.label === "string" &&
-      "projectIds" in entry && Array.isArray(entry.projectIds) &&
-      entry.projectIds.every((projectId) => typeof projectId === "string")
-    ))
-  }
+  type EvidenceMap = Record<string, { readonly label: string; readonly projectIds: readonly string[] }>
 
   for (const explorer of document.querySelectorAll<HTMLElement>("[data-project-explorer]")) {
     if (explorer.dataset.explorerReady === "true") continue
@@ -171,15 +165,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const evidenceSource = explorer.querySelector<HTMLScriptElement>("[data-project-skill-evidence]")
     if (!controls || !cardGrid || !categoryFilter || !nameFilter || !honorFilter || cards.length === 0 || records.length === 0 || !dialog || !dialogContent || dialogTemplates.size !== cards.length || !recordsSection || !evidenceSource) continue
 
-    let evidenceMap: EvidenceMap
-    try {
-      const parsed: unknown = JSON.parse(evidenceSource.textContent ?? "")
-      if (!isEvidenceMap(parsed)) continue
-      evidenceMap = parsed
-    } catch (error) {
-      if (error instanceof SyntaxError) continue
-      throw error
-    }
+    const evidenceMap = JSON.parse(evidenceSource.textContent ?? "") as EvidenceMap
 
     const cardById = new Map(cards.map((card) => [card.dataset.projectId ?? "", card]))
     const recordById = new Map(records.map((record) => [record.id, record]))
@@ -374,13 +360,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     }
     const close = dialog.querySelector<HTMLButtonElement>("[data-project-dialog-close]")
     close?.addEventListener("click", () => dialog.close())
-    dialog.addEventListener("click", (event) => {
-      if (event.target !== dialog) return
-      const bounds = dialog.getBoundingClientRect()
-      const outside = event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom
-      if (outside) dialog.close()
-    })
-    dialog.addEventListener("close", () => trigger?.focus())
+    attachDialogDismissal(dialog, () => trigger?.focus())
     dialog.hidden = false
     const updateFilters = (changed: FilterKey) => {
       normalizeSelections(changed)

@@ -4,7 +4,6 @@ import type { Locale } from "../i18n/locales"
 import type { RouteId } from "../lib/routes"
 import type { Profile } from "../content/schemas"
 import { UI } from "../i18n/ui"
-import { getPageMeta } from "../lib/page-meta"
 import "../styles/fonts.css"
 import "../styles/base.css"
 import "../styles/layout.css"
@@ -17,11 +16,12 @@ type Props = {
   readonly locale: Locale
   readonly profile: Profile
   readonly routeId: RouteId
-  readonly noindex?: boolean
 }
-const { locale, profile, routeId, noindex = false } = Astro.props
-const { title, description } = getPageMeta({ locale, profile, routeId })
+const { locale, profile, routeId } = Astro.props
 const labels = UI[locale]
+const pageTitle = labels.routeIntros[routeId].title
+const title = `${pageTitle} | ${profile.name[locale]}`
+const description = `${pageTitle}: ${profile.summary[locale]}`
 ---
 
 <!doctype html>
@@ -48,7 +48,7 @@ const labels = UI[locale]
       })()
     </script>
     <Font cssVariable="--font-google-sans-code" preload />
-    <SeoHead routeId={routeId} locale={locale} profile={profile} title={title} description={description} noindex={noindex} />
+    <SeoHead routeId={routeId} locale={locale} profile={profile} title={title} description={description} />
   </head>
   <body>
     <a class="skip-link" href="#main-content">{labels.skipToContent}</a>

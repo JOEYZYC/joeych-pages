@@ -1,5 +1,6 @@
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+$PSNativeCommandUseErrorActionPreference = $true
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
 $astroRoot = Join-Path $repoRoot 'Astro'
@@ -19,22 +20,13 @@ $null = Get-Command pnpm -ErrorAction Stop
 Push-Location -LiteralPath $astroRoot
 try {
     & pnpm install --frozen-lockfile
-    if ($LASTEXITCODE -ne 0) {
-        throw "Frozen pnpm install failed (exit code $LASTEXITCODE)."
-    }
 
     & pnpm run build
-    if ($LASTEXITCODE -ne 0) {
-        throw "Astro production build failed (exit code $LASTEXITCODE)."
-    }
 
     Write-Host 'Astro production preview: http://127.0.0.1:4321/joeych-pages/'
     Write-Host 'Press Ctrl+C to stop the preview.'
 
     & pnpm run preview
-    if ($LASTEXITCODE -ne 0) {
-        throw "Astro preview failed (exit code $LASTEXITCODE)."
-    }
 }
 finally {
     Pop-Location

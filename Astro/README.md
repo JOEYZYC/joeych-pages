@@ -37,8 +37,7 @@
 
 ## 架构
 
-- `src/content.config.ts` 将六份 YAML 注册为 `profile`、`projects`、`awards`、`publications`、`patents`、`thesis` 集合。
-- `src/content/` 的 Zod schema 与加载器校验记录形状、项目关联、技能证据和公开媒体路径。`src/lib/profile-data.ts` 在构建和页面渲染时加载并校验全部资料。
+- `src/content/` 的 Zod schema 校验记录形状、项目关联、技能证据和公开媒体路径。`src/lib/profile-data.ts` 在构建和页面渲染时并行加载并校验六份 YAML。
 - `src/pages/` 只定义十个路由入口，中文与英文入口共享 `src/components/pages/` 中的页面组件。
 - `src/layouts/BaseLayout.astro` 提供文档壳、SEO、页眉、页脚、语言切换和导航交互。`src/components/` 存放页面区块、记录展示与对话框。
 - `src/styles/` 以 `tokens.css`、`base.css`、`layout.css`、`components.css` 为共享层，并按首页、经历、荣誉、项目、技术栈拆分页面样式。

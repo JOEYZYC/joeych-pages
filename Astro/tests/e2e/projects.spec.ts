@@ -36,20 +36,6 @@ async function visibleCardIds(page: Page): Promise<string[]> {
     .map((card) => card.getAttribute("data-project-id") ?? ""))
 }
 
-async function replaceEvidencePayloadBeforeEnhancement(page: Page, payload: string): Promise<void> {
-  await page.addInitScript((replacement) => {
-    const replacePayload = (node: Node) => {
-      if (node instanceof HTMLScriptElement && node.matches("[data-project-skill-evidence]")) node.textContent = replacement
-      if (node instanceof Element) {
-        for (const script of node.querySelectorAll<HTMLScriptElement>("[data-project-skill-evidence]")) script.textContent = replacement
-      }
-    }
-    new MutationObserver((mutations) => {
-      for (const mutation of mutations) for (const node of mutation.addedNodes) replacePayload(node)
-    }).observe(document, { childList: true, subtree: true })
-  }, payload)
-}
-
 test.describe("projects archive", () => {
   for (const locale of locales) {
     test(`renders the ${locale.path} year-ordered project and publication cards with static detail fallback`, async ({ page }) => {
@@ -248,21 +234,6 @@ test.describe("projects archive", () => {
     await expect(page).toHaveURL(/\/en\/projects\/#resgatnet$/)
     await expect(page.locator('[data-evidence-origin="true"]')).toHaveCount(0)
   })
-
-  for (const scenario of [
-    { name: "malformed JSON", payload: "{" },
-    { name: "a mixed valid and malformed evidence entry", payload: '{"vision-halcon-opencv":{"label":"Vision","projectIds":["intelligent-reconnaissance-2024"]},"broken":{"label":7,"projectIds":[]}}' },
-  ] as const) {
-    test(`keeps static detail fallback usable when evidence payload contains ${scenario.name}`, async ({ page }) => {
-      await replaceEvidencePayloadBeforeEnhancement(page, scenario.payload)
-      await page.goto("en/projects/?skill=vision-halcon-opencv#intelligent-reconnaissance-2024")
-
-      await expect(page.locator("[data-project-filter-controls]")).toBeHidden()
-      await expect(page.locator("[data-project-card-grid]")).toBeHidden()
-      await expect(page.locator("[data-project-records]")).toBeVisible()
-      await expect(page.locator("[data-project-record]")).toHaveCount(19)
-    })
-  }
 
   test("JavaScript-disabled projects keep static detail fallback and ordinary hash navigation", async ({ browser }) => {
     const context = await browser.newContext({ baseURL: "http://127.0.0.1:4321/joeych-pages/", javaScriptEnabled: false })

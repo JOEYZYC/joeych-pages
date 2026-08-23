@@ -11,10 +11,9 @@ type Props = {
   readonly profile: Profile
   readonly title: string
   readonly description: string
-  readonly noindex?: boolean
 }
 
-const { routeId, locale, profile, title, description, noindex = false } = Astro.props
+const { routeId, locale, profile, title, description } = Astro.props
 const origin = Astro.site?.toString() ?? Astro.url.origin
 const { canonical, alternates, xDefault } = getSeoUrls({ locale, routeId, siteOrigin: origin })
 const personJsonLd = serializeJsonLd(buildPersonJsonLd({ locale, profile }))
@@ -22,7 +21,6 @@ const personJsonLd = serializeJsonLd(buildPersonJsonLd({ locale, profile }))
 
 <title>{title}</title>
 <meta name="description" content={description} />
-{noindex && <meta name="robots" content="noindex, nofollow" />}
 <link rel="canonical" href={canonical} />
 <link rel="alternate" hreflang="zh-CN" href={alternates.zh} />
 <link rel="alternate" hreflang="en" href={alternates.en} />

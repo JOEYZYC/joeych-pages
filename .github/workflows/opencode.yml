@@ -45,15 +45,6 @@ jobs:
                   "apiKey": "${OPENAI_API_KEY}"
                 },
                 "models": {
-                  "gpt-5.4": {
-                    "name": "gpt-5.4",
-                    "cost": {
-                      "input": 0.425,
-                      "output": 2.55,
-                      "cache_read": 0.0425,
-                      "reasoning": 2.55
-                    }
-                  },
                   "gpt-5.5": {
                     "name": "gpt-5.5",
                     "cost": {
@@ -61,15 +52,6 @@ jobs:
                       "output": 5.1,
                       "cache_read": 0.085,
                       "reasoning": 5.1
-                    }
-                  },
-                  "gpt-5.4-mini": {
-                    "name": "gpt-5.4-mini",
-                    "cost": {
-                      "input": 0.1275,
-                      "output": 0.765,
-                      "cache_read": 0.01275,
-                      "reasoning": 0.765
                     }
                   }
                 }

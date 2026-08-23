@@ -9,7 +9,6 @@ import { UI } from "../src/i18n/ui"
 import { ICONS, type IconName } from "../src/lib/icons"
 
 const APPROVED_ICON_NAMES = [
-  "house",
   "bars",
   "language",
   "envelope",

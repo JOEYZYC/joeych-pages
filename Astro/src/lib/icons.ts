@@ -11,7 +11,6 @@ import {
   faExternalLink,
   faFileLines,
   faGraduationCap,
-  faHouse,
   faLanguage,
   faLightbulb,
   faLink,
@@ -23,7 +22,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 
 export const ICONS = {
-  house: faHouse,
   bars: faBars,
   language: faLanguage,
   envelope: faEnvelope,

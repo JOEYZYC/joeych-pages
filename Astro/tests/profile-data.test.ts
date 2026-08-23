@@ -113,8 +113,6 @@ describe("Profile content boundary", () => {
     ])
     expect(content.projects.find(({ id }) => id === "flexible-bifunctional-metasurface")?.related_achievements).toEqual([])
     expect(content.publications.every(({ image }) => image === null)).toBe(true)
-    expect(content.certificates).toHaveLength(18)
-    expect(content.certificates.every(({ src }) => /^\/(awards|publications|patents)\//.test(src))).toBe(true)
     expect(fileURLToPath(DATA_ROOT)).not.toContain("private")
   })
 

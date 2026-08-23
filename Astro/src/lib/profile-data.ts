@@ -6,7 +6,6 @@ import { parseYamlValue } from "../content/loaders"
 import {
   type Award,
   awardsSchema,
-  type Certificate,
   type Patent,
   type Profile,
   type Project,
@@ -47,7 +46,6 @@ export type ProfileData = {
   readonly publications: readonly Publication[]
   readonly patents: readonly Patent[]
   readonly thesis: Thesis
-  readonly certificates: readonly Certificate[]
 }
 
 type ProfileContentIssue = {
@@ -209,7 +207,7 @@ export async function parseProfileDocuments(documents: ProfileDocuments): Promis
     throw error
   }
 
-  return { profile, projects, awards, publications, patents, thesis, certificates }
+  return { profile, projects, awards, publications, patents, thesis }
 }
 
 export async function loadProfileData(): Promise<ProfileData> {

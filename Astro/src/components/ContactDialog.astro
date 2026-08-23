@@ -55,6 +55,8 @@ const contacts = [
 </div>
 
 <script>
+  import { attachDialogDismissal } from "../lib/dialog-dismissal"
+
   const contactRoots = document.querySelectorAll<HTMLElement>("[data-contact-dialog-root]")
   for (const root of contactRoots) {
     if (root.dataset.contactReady === "true") continue
@@ -70,16 +72,7 @@ const contacts = [
       title.focus({ preventScroll: true })
     })
     close.addEventListener("click", () => dialog.close())
-    dialog.addEventListener("click", (event) => {
-      if (event.target !== dialog) return
-      const bounds = dialog.getBoundingClientRect()
-      const outside = event.clientX < bounds.left ||
-        event.clientX > bounds.right ||
-        event.clientY < bounds.top ||
-        event.clientY > bounds.bottom
-      if (outside) dialog.close()
-    })
-    dialog.addEventListener("close", () => trigger.focus())
+    attachDialogDismissal(dialog, () => trigger.focus())
 
     root.dataset.contactReady = "true"
     dialog.hidden = false

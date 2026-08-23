@@ -86,6 +86,8 @@ const first = certificates[0]
 )}
 
 <script>
+  import { attachDialogDismissal } from "../lib/dialog-dismissal"
+
   const certificateRoots = document.querySelectorAll<HTMLElement>("[data-certificate-dialog-root]")
   for (const root of certificateRoots) {
     if (root.dataset.certificateReady === "true") continue
@@ -158,16 +160,7 @@ const first = certificates[0]
     })
     image.addEventListener("load", showLoaded)
     image.addEventListener("error", showUnavailable)
-    dialog.addEventListener("click", (event) => {
-      if (event.target !== dialog) return
-      const bounds = dialog.getBoundingClientRect()
-      const outside = event.clientX < bounds.left ||
-        event.clientX > bounds.right ||
-        event.clientY < bounds.top ||
-        event.clientY > bounds.bottom
-      if (outside) dialog.close()
-    })
-    dialog.addEventListener("close", () => trigger.focus())
+    attachDialogDismissal(dialog, () => trigger.focus())
 
     root.dataset.certificateReady = "true"
     update()
