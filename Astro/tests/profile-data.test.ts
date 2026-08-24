@@ -87,7 +87,12 @@ describe("Profile content boundary", () => {
       "string",
     ])
     expect(content.profile.contact.hometown.en).toBe("Suzhou, Jiangsu")
-    expect(content.profile.portrait).toBe("/profile/portrait-b1-cutout.png")
+    expect(content.profile.home_heading).toEqual({ zh: "你好，我叫张易成", en: "Hi, I'm Joey." })
+    expect(content.profile.portrait).toBe("/profile/portrait-b1-cutout-workshirt-upright-transparent.png")
+    expect(content.profile.hero_background).toEqual({
+      light: "/profile/hero-circuit-background-light.png",
+      dark: "/profile/hero-circuit-background.png",
+    })
     expect(content.profile.favicon).toBe("/profile/favicon.svg")
     expect(PROJECT_PLACEHOLDER_MEDIA_PATH).toBe("/projects/project-placeholder.png")
     expect(publicMediaFilePath(PROJECT_PLACEHOLDER_MEDIA_PATH)).toBe(
@@ -289,7 +294,7 @@ describe("Profile content boundary", () => {
     const documents = documentsFrom({
       ...texts,
       profile: texts.profile.replace(
-        "portrait: profile/portrait-b1-cutout.png",
+        "portrait: profile/portrait-b1-cutout-workshirt-upright-transparent.png",
         "portrait: profile/missing-profile-portrait.png",
       ),
     })
@@ -298,6 +303,21 @@ describe("Profile content boundary", () => {
     const result = parseProfileDocuments(documents)
 
     // Then: missing portrait media fails the boundary
+    await expect(result).rejects.toThrow(/missing public media/i)
+  })
+
+  it("rejects a Home hero background association whose public media file does not exist", async () => {
+    const texts = await readCanonicalTexts()
+    const documents = documentsFrom({
+      ...texts,
+      profile: texts.profile.replace(
+        "light: profile/hero-circuit-background-light.png",
+        "light: profile/missing-hero-background.png",
+      ),
+    })
+
+    const result = parseProfileDocuments(documents)
+
     await expect(result).rejects.toThrow(/missing public media/i)
   })
 

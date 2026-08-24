@@ -6,15 +6,31 @@ import { VIEWPORTS } from "./support/site-matrix"
 const viewports = VIEWPORTS
 
 const pages = [
-  { path: "", locale: "zh", heading: "张易成", counterpart: /\/en\/$/ },
-  { path: "en/", locale: "en", heading: "JOEYCH", counterpart: /\/joeych-pages\/$/ },
+  { path: "", locale: "zh", heading: "你好，我叫张易成", counterpart: /\/en\/$/ },
+  { path: "en/", locale: "en", heading: "Hi, I'm Joey.", counterpart: /\/joeych-pages\/$/ },
   { path: "experience/", locale: "zh", heading: "个人经历", counterpart: /\/en\/experience\/$/ },
   { path: "en/experience/", locale: "en", heading: "Experience", counterpart: /\/experience\/$/ },
 ] as const
 
 const homeRoutes = [
-  { path: "", locale: "zh", name: "张易成", experienceAction: "查看经历", projectsAction: "探索项目" },
-  { path: "en/", locale: "en", name: "JOEYCH", experienceAction: "View experience", projectsAction: "Explore projects" },
+  {
+    path: "",
+    locale: "zh",
+    heading: "你好，我叫张易成",
+    portraitName: "张易成",
+    summary: "我是一名电子信息工程专业学生，关注嵌入式系统、无线感知与智能硬件。我喜欢把想法落实为可以运行、可以验证的软硬件作品。",
+    experienceAction: "查看经历",
+    projectsAction: "探索项目",
+  },
+  {
+    path: "en/",
+    locale: "en",
+    heading: "Hi, I'm Joey.",
+    portraitName: "JOEYCH",
+    summary: "I study Electronic & Information Engineering, with interests in embedded systems, wireless perception, and intelligent hardware. I enjoy turning ideas into practical hardware-software projects.",
+    experienceAction: "View experience",
+    projectsAction: "Explore projects",
+  },
 ] as const
 
 const experienceRoutes = [
@@ -69,44 +85,61 @@ test.describe("home and experience routes", () => {
       await expect(home.locator("[data-home-facts], [data-home-education], .home-featured")).toHaveCount(0)
     })
 
-    test(`keeps ${route.locale} Home source order and responsive Bento geometry`, async ({ page }) => {
+    test(`switches ${route.locale} Home artwork with the explicit theme`, async ({ page }) => {
+      await page.goto(route.path)
+      const root = page.locator("html")
+      const background = page.locator(".home-background")
+
+      await root.evaluate((element) => element.setAttribute("data-theme", "light"))
+      await expect(background).toHaveCSS("background-image", /hero-circuit-background-light\.png/)
+
+      await root.evaluate((element) => element.setAttribute("data-theme", "dark"))
+      await expect(background).toHaveCSS("background-image", /hero-circuit-background\.png/)
+    })
+
+    test(`keeps ${route.locale} Home source order and responsive layered hero geometry`, async ({ page }) => {
       for (const viewport of viewports) {
         await page.setViewportSize(viewport)
         await page.goto(route.path)
         await page.evaluate(async () => document.fonts.ready)
 
-        const grid = page.locator("[data-home-grid]")
-        const hero = grid.locator("[data-home-hero]")
-        const portrait = grid.locator("[data-home-portrait]")
+        const hero = page.locator("[data-home-grid][data-home-hero]")
+        const copy = hero.locator("[data-home-copy]")
+        const portrait = hero.locator("[data-home-portrait]")
+        const portraitImage = portrait.getByRole("img", { name: route.portraitName })
+        const background = hero.locator(".home-background")
 
-        expect(await grid.evaluate((element) => [...element.children].map((child) => {
-          if (child.matches("[data-home-hero]")) return "hero"
+        expect(await hero.evaluate((element) => [...element.children].map((child) => {
+          if (child.matches("[data-home-copy]")) return "copy"
           if (child.matches("[data-home-portrait]")) return "portrait"
+          if (child.matches(".home-background")) return "background"
           return child.className
-        }))).toEqual(["hero", "portrait"])
-        await expect(hero.getByRole("heading", { level: 1, name: route.name })).toBeVisible()
-        await expect(hero.getByRole("link", { name: route.experienceAction })).toHaveAttribute(
+        }))).toEqual(["copy", "portrait", "background"])
+        await expect(copy.getByRole("heading", { level: 1, name: route.heading })).toBeVisible()
+        await expect(copy.locator(".home-summary")).toHaveText(route.summary)
+        await expect(copy.getByRole("link", { name: route.experienceAction })).toHaveAttribute(
           "href",
           `/joeych-pages/${route.locale === "en" ? "en/" : ""}experience/`,
         )
-        await expect(hero.getByRole("link", { name: route.projectsAction })).toHaveAttribute(
+        await expect(copy.getByRole("link", { name: route.projectsAction })).toHaveAttribute(
           "href",
           `/joeych-pages/${route.locale === "en" ? "en/" : ""}projects/`,
         )
-        await expect(portrait.getByRole("img", { name: route.name })).toHaveCSS("object-fit", "contain")
+        await expect(portraitImage).toHaveCSS("object-fit", "contain")
+        await expect(background).toHaveAttribute("aria-hidden", "true")
+        await expect(background).toHaveCSS("background-size", "cover")
 
         const heroBox = await box(hero)
+        const copyBox = await box(copy)
         const portraitBox = await box(portrait)
+        const portraitImageBox = await box(portraitImage)
 
         if (viewport.name === "mobile") {
-          expectAligned(heroBox.x, portraitBox.x)
-          expectAligned(heroBox.width, portraitBox.width)
-          expect(heroBox.y).toBeLessThan(portraitBox.y)
+          expect(copyBox.y).toBeLessThan(portraitBox.y)
         } else {
-          expectAligned(heroBox.y, portraitBox.y)
-          expect(heroBox.x).toBeLessThan(portraitBox.x)
-          expect(heroBox.width).toBeGreaterThan(portraitBox.width)
+          expect(copyBox.x).toBeLessThan(portraitBox.x)
         }
+        expectAligned(portraitImageBox.y + portraitImageBox.height, heroBox.y + heroBox.height)
 
         await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width)
       }

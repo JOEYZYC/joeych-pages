@@ -42,6 +42,13 @@ const skillEvidenceSchema = z.discriminatedUnion("type", [
   credentialEvidenceSchema,
   generalAbilityEvidenceSchema,
 ])
+const themeMediaSchema = z
+  .object({
+    light: publicMediaPathSchema,
+    dark: publicMediaPathSchema,
+  })
+  .strict()
+  .readonly()
 const skillTagSchema = z
   .object({
     id: recordIdSchema,
@@ -76,7 +83,9 @@ const skillTagSchema = z
 export const profileSchema = z
   .object({
     name: localizedSchema,
+    home_heading: localizedSchema,
     portrait: publicMediaPathSchema,
+    hero_background: themeMediaSchema,
     favicon: publicMediaPathSchema,
     role: localizedSchema,
     tagline: localizedSchema,

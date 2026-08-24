@@ -49,11 +49,15 @@ describe("shared visual system contract", () => {
     expect(base).toMatch(/html\[lang="en"\] h1,[\s\S]*font-weight: 700/)
   })
 
-  it("uses the approved neutral home surfaces without a dedicated hero gradient", async () => {
+  it("uses a single layered Home hero without a dedicated gradient", async () => {
     const [home, tokens] = await Promise.all([readFile(homeUrl, "utf8"), readFile(tokensUrl, "utf8")])
 
     expect(`${home}\n${tokens}`).not.toContain("--gradient-hero")
-    expect(home).toMatch(/\.home-portrait\s*\{[\s\S]*background: var\(--color-surface-muted\)/)
+    expect(home).toMatch(/\.home-hero\s*\{[\s\S]*background: var\(--color-surface\)/)
+    expect(home).toMatch(/\.home-background\s*\{[\s\S]*background-image: var\(--home-background-light\)/)
+    expect(home).toMatch(/html\[data-theme="dark"\] \.home-background\s*\{[\s\S]*background-image: var\(--home-background-dark\)/)
+    expect(home).toMatch(/\.home-background\s*\{[\s\S]*background-size: cover/)
+    expect(home).toMatch(/\.home-portrait img\s*\{[\s\S]*object-fit: contain/)
   })
 
   it("uses semantic state cues for shared controls without a color-only disabled state", async () => {

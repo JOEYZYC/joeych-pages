@@ -1,7 +1,13 @@
 name:
   zh: 张易成
   en: JOEYCH
-portrait: profile/portrait-b1-cutout.png
+home_heading:
+  zh: 你好，我叫张易成
+  en: Hi, I'm Joey.
+portrait: profile/portrait-b1-cutout-workshirt-upright-transparent.png
+hero_background:
+  light: profile/hero-circuit-background-light.png
+  dark: profile/hero-circuit-background.png
 favicon: profile/favicon.svg
 role:
   zh: 电子信息工程
@@ -10,8 +16,8 @@ tagline:
   zh: 嵌入式系统 / 无线感知 / 超表面与太赫兹
   en: Embedded Systems / Wireless Perception / Metasurfaces & Terahertz
 summary:
-  zh: "苏州工学院电子信息工程专业本科生，综测专业排名 5\u2060/\u206071。研究兴趣涵盖嵌入式系统、无线感知与深度学习、超表面\u2060/\u2060太赫兹器件与天线设计。已发表学术论文 6\u00a0篇，申请发明专利 4\u00a0项，斩获国家级与省级学科竞赛奖项十余项。热爱动手实践，擅长从电路设计、嵌入式开发到算法部署的软硬件全栈工程。"
-  en: Undergraduate in Electronic & Information Engineering at Suzhou Institute of Technology, ranked 5/71. Research interests span embedded systems, wireless perception with deep learning, and metasurface / terahertz devices and antenna design. Contributor to 6 publications and 4 patent applications, and recipient of 10+ national or provincial competition awards. A hands-on hardware-software engineer with experience spanning circuit design, embedded development, and algorithm deployment.
+  zh: 我是一名电子信息工程专业学生，关注嵌入式系统、无线感知与智能硬件。我喜欢把想法落实为可以运行、可以验证的软硬件作品。
+  en: I study Electronic & Information Engineering, with interests in embedded systems, wireless perception, and intelligent hardware. I enjoy turning ideas into practical hardware-software projects.
 statistics:
   - { id: academic-rank, label: { zh: 综测专业排名, en: Academic rank }, value: 5/71 }
   - { id: publications, label: { zh: 学术论文, en: Publications }, value: 6 }

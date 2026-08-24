@@ -187,6 +187,8 @@ export async function parseProfileDocuments(documents: ProfileDocuments): Promis
   ]
   const associatedMedia = [
     profile.portrait,
+    profile.hero_background.light,
+    profile.hero_background.dark,
     profile.favicon,
     PROJECT_PLACEHOLDER_MEDIA_PATH,
     ...validateProjectMedia(projects),

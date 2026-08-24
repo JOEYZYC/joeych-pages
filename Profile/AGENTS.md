@@ -23,6 +23,7 @@
 - Add or revise authored content in its owning YAML file, not in a template.
 - Bilingual values generally use `{ zh, en }`. Supply both non-empty strings where the schema expects localized copy.
 - `profile.yml` requires a `portrait` path relative to `Profile/media/`; it associates the public identity portrait without prescribing its presentation.
+- `profile.yml` requires `hero_background.light` and `hero_background.dark` paths relative to `Profile/media/`; they associate decorative Home hero backgrounds without prescribing their presentation.
 - `profile.yml` requires a `favicon` path relative to `Profile/media/`; it associates the public site icon without prescribing its presentation.
 - Preserve each record's stable `id`. Project IDs are HTML anchors.
 - Preserve project ordering. `tech-stack.html` links to projects by fixed array position and ID.

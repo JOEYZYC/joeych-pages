@@ -9,13 +9,13 @@ This is the implementation contract for the approved static Astro portfolio. Fut
 - Local reference audit: `Demo/README.md` and audited local snapshots were used as mechanism references only. Refined-X contributes external-content discipline and editorial framing; as-folio contributes academic information organization; astropages-bilingual contributes static Chinese-root and English-prefix locale routing; astro-starter-portfolio contributes minimal static primitives and centralized SEO; mirsazzathossain-me contributes selective publication-record density.
 - Adopt / adapt / reject: adopt static, data-led Astro primitives, bilingual route pairing, and source-backed evidence; adapt the Jekyll technical-editorial identity into explicit light/dark semantic themes and a responsive visual Bento system; reject copied Demo source or copy, search, CMS, React islands, SSR, analytics, AI/Ask/MCP surfaces, deployment configuration outside the root GitHub Pages exception, generic dashboard decoration, and unsupported academic metadata.
 - Lazyweb: skipped. This is an extraction/redesign from an approved existing design and audited local references, not visual greenfield work.
-- Imagegen: skipped. The approved identity, public media, and evidence hierarchy already define the visual contract; generated artwork would weaken source-backed presentation.
+- Imagegen: used for the source-associated Home hero backgrounds `Profile/media/profile/hero-circuit-background-light.png` and `Profile/media/profile/hero-circuit-background.png`. The paired rasters share one crop-safe circuit-board composition and contain no text, logo, person, claim, or evidence; the real Profile portrait remains a separate transparent source image.
 - Online standards check: [MDN Grid accessibility](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout/Accessibility), [W3C Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html), and [web.dev responsive design basics](https://web.dev/articles/responsive-web-design-basics) reinforce source-ordered DOM, content-led breakpoints, ordinary row-major grids, and reflow over dense visual packing.
 - Online visual reference: [AI Hero](https://www.aihero.dev/) supplies the black/white/warm-neutral foundation, strong emphasis hierarchy, bold sans-serif English display treatment, quiet one-pixel structure, and low-shadow editorial surfaces. The portfolio adapts those mechanisms with deep-green emphasis for its existing bilingual academic evidence hierarchy without copying layout, artwork, copy, components, or source code.
 
 ## 1. Atmosphere & Identity
 
-The portfolio is a modern academic-engineering dossier: warm white and near-black canvases, clear typographic hierarchy, restrained evidence panels, and deep-green accents used for orientation and action. Black, white, and warm neutrals carry almost all page area; green remains a scarce emphasis color rather than a decorative wash. Visual Bento composition makes identity, experience, projects, and evidence easier to scan without turning source records into decoration. Home and project discovery use the strongest spatial composition; long evidence records remain text-first.
+The portfolio is a modern academic-engineering dossier: warm white and near-black canvases, clear typographic hierarchy, restrained evidence panels, and deep-green accents used for orientation and action. Black, white, and warm neutrals carry almost all page area; green remains a scarce emphasis color rather than a decorative wash. The Home route uses one theme-aware identity canvas with paired circuit backgrounds, a transparent portrait, a direct greeting, and a short two-sentence introduction. The remaining routes use restrained visual Bento composition to keep experience, projects, and evidence easy to scan. Long evidence records remain text-first.
 
 The signature interaction is a **2px horizontal signal rail** in the site header. Project state is communicated independently through a logical-start accent inset plus visible localized status text, never through color or motion alone.
 
@@ -39,13 +39,13 @@ The signature interaction is a **2px horizontal signal rail** in the site header
 | astropages-bilingual | Static Chinese root and `/en/` mirror | Exactly five route concepts and ten documents with locale-pair lookup | First-visit redirect, Pagefind, CMS, blog/gallery, and hosting assumptions |
 | astro-starter-portfolio | Small shared primitives and centralized metadata | Tokenized CSS, concise SEO, and native cross-document transitions | Client router, generic work-card data, and non-contract theme code |
 | mirsazzathossain-me | Selective publication density | Text-first `ResearchArchive` records from Profile YAML | React islands, Tailwind, citation counts, comments, and dense chrome |
-| AI Hero | Black/white/warm-neutral foundation, strong primary emphasis, bold sans-serif English headings, one-pixel section structure | Apply the surface restraint and translate the emphasis role to deep green within the existing bilingual Bento and evidence system | Copied layout, artwork, portrait treatment, animation, copy, components, analytics, search, course/product structure, and source code |
+| AI Hero | Black/white/warm-neutral foundation, strong primary emphasis, bold sans-serif English headings, one-pixel section structure | Adapt the single-canvas text/portrait layering with original Profile media and deep-green circuit artwork | Copied logo, artwork, exact portrait treatment, animation, copy, components, analytics, search, course/product structure, and source code |
 
 ## 2. Color
 
 ### Semantic palette
 
-All visible colors are semantic CSS custom properties defined once in `tokens.css`. Raw colors may appear only in the light/dark token declarations; components, SVG consumers, and route CSS use semantic tokens only.
+All CSS and SVG colors are semantic custom properties defined once in `tokens.css`. Raw CSS colors may appear only in the light/dark token declarations; components, SVG consumers, and route CSS use semantic tokens only. Source-associated raster media retains its authored pixels.
 
 | Token | Light | Dark | Purpose |
 | --- | --- | --- | --- |
@@ -58,14 +58,14 @@ All visible colors are semantic CSS custom properties defined once in `tokens.cs
 | `--color-text-subtle` | `#706a61` | `#a69d92` | Metadata and unavailable context |
 | `--color-border` | `#d8d2c9` | `#38332e` | Quiet panel separation |
 | `--color-border-strong` | `#8a8176` | `#756b61` | Control boundaries requiring 3:1 contrast |
-| `--color-accent` | `#176b45` | `#86d5a8` | Links, states, primary action, and restrained signals |
-| `--color-accent-hover` | `#145c3a` | `#a7e2be` | Hover/pressed foreground or fill |
-| `--color-control-hover` | `#145c3a` | `#a7e2be` | Hover foreground on standard and muted controls |
-| `--color-accent-soft` | `#e0f0e6` | `#173526` | Selected-state field |
-| `--color-accent-on` | `#fffaf5` | `#101a14` | Text on accent |
+| `--color-accent` | `#176b45` | `#176b45` | Links, states, primary action, and restrained signals |
+| `--color-accent-hover` | `#145c3a` | `#145c3a` | Hover/pressed foreground or fill |
+| `--color-control-hover` | `#145c3a` | `#145c3a` | Hover foreground on standard and muted controls |
+| `--color-accent-soft` | `#e0f0e6` | `#e0f0e6` | Selected-state field |
+| `--color-accent-on` | `#fffaf5` | `#fffaf5` | Text on accent |
 | `--color-on-strong` | `#fffaf5` | `#fffaf5` | Text on strong surfaces |
 | `--color-on-strong-hover` | `#a7e2be` | `#a7e2be` | Hover foreground on strong surfaces |
-| `--color-focus` | `#176b45` | `#a7e2be` | Focus outline |
+| `--color-focus` | `#176b45` | `#176b45` | Focus outline |
 | `--color-success` | `#166447` | `#7de0b5` | Success state |
 | `--color-warning` | `#7a4b00` | `#facc15` | Unavailable/source-pending state |
 | `--color-error` | `#a32d2d` | `#ff9f9f` | Error state |
@@ -73,13 +73,13 @@ All visible colors are semantic CSS custom properties defined once in `tokens.cs
 
 Light shadows are `--shadow-panel: 0 1px 2px rgb(24 22 19 / .06)` and `--shadow-dialog: 0 24px 64px rgb(24 22 19 / .28)`. Dark shadows are `--shadow-panel: 0 1px 2px rgb(0 0 0 / .28)` and `--shadow-dialog: 0 24px 64px rgb(0 0 0 / .60)`. Ordinary panels use the shadow only as subtle edge reinforcement; borders and tonal contrast carry the structure.
 
-The Home identity panel uses the ordinary `--color-surface` rather than a dedicated gradient. Its hierarchy comes from typography, spacing, border contrast, and one deep-green primary action. The portrait panel uses `--color-surface-muted` so the two halves remain distinct without introducing another hue.
+The Home identity is one theme-aware hero: light mode uses `--color-surface`, dark mode uses `--color-surface-strong`, and each selects its matching source-associated circuit background through a CSS background image with `cover` cropping. Its hierarchy comes from a direct localized greeting, a short sourced introduction, two equal deep-green route actions, and the transparent portrait layered independently with `object-fit: contain`; no CSS gradient or generated text is used. The copy has no separate fill and sits directly on the low-detail area authored into each background.
 
 ### Color rules
 
 - Use `--color-border-strong` or the focus outline for control boundaries that require 3:1 contrast; quiet `--color-border` is not a control boundary.
 - Deep green is reserved for interaction, current state, focus, and a small number of orientation signals. It never becomes a page-sized background, decorative glow, or substitute for hierarchy.
-- Keep one filled deep-green primary action per view. Peer actions remain neutral with a visible border.
+- Keep one filled deep-green primary action per view, except the Home hero's two equal route actions. Other peer actions remain neutral with a visible border.
 - Do not use gradients, gradient text or buttons, glass blur, colored shadows, neon framing, or purple hues.
 - Theme changes affect tokens only. They never hide evidence, alter source order, change routes, or create theme-specific content.
 
@@ -91,7 +91,7 @@ The Home identity panel uses the ordinary `--color-surface` rather than a dedica
 | Sticky header | `--color-surface` | `--color-text`, `--color-border` | Uses a solid background with no blur or transparency. |
 | Standard panel, card, and filter bar | `--color-surface` | `--color-text`, `--color-border` | Neutral by default; hover may strengthen the border but never adds green fill. |
 | Muted field, media well, and tag | `--color-surface-muted` | `--color-text-muted` | Provides secondary grouping without introducing another hue. |
-| Primary action | `--color-accent` | `--color-accent-on` | The only filled deep-green peer action in its view; hover uses `--color-accent-hover`. |
+| Primary action | `--color-accent` | `--color-accent-on` | Filled route action; hover uses `--color-accent-hover`. The Home hero intentionally presents two equal peers. |
 | Secondary action and ordinary control | `--color-surface` | `--color-text`, `--color-border-strong` | Remains neutral and visibly bounded. |
 | Text link | Transparent | `--color-accent` | Hover uses `--color-accent-hover`; surrounding prose remains neutral. |
 | Current navigation and signal rail | Transparent | `--color-accent` | `aria-current` and the rail share deep green, while the visible route label preserves meaning without the rail. |
@@ -116,7 +116,7 @@ All font assets are local, version-pinned, licensed, base-aware, and available b
 
 | Level | Token | Size | Line height | Usage |
 | --- | --- | --- | --- | --- |
-| Display | `--type-display` | `clamp(3rem, 7vw, 5.25rem)` | `1.02` | Home identity only |
+| Display | `--type-display` | `clamp(2.5rem, 4.5vw, 3.5rem)` | `1.02` | Home greeting only |
 | H1 | `--type-h1` | `clamp(2.375rem, 5vw, 4rem)` | `1.08` | Route title |
 | H2 | `--type-h2` | `clamp(1.75rem, 2.75vw, 2.5rem)` | `1.16` | Major section title |
 | H3 | `--type-h3` | `clamp(1.25rem, 1.5vw, 1.5rem)` | `1.28` | Panel/record title |
@@ -153,7 +153,7 @@ Retain `--space-1` through `--space-20` at `.25rem`, `.5rem`, `.75rem`, `1rem`, 
 - Inline primary navigation appears at `>=1024px`.
 - The document owns vertical scrolling. Only viewport-safe modal bodies may create an internal scroll area.
 - Shared route content is centered within `--content-max`. Panels use semantic `section`/`article`/`figure` structure and source order remains DOM order.
-- Home is one focused Bento pair: desktop hero `1–7` and portrait `8–12`; tablet hero `1–5` and portrait `6–8`; mobile follows hero then portrait. Detailed experience and project evidence remain on their dedicated routes.
+- Home is one layered hero. Desktop uses twelve internal columns with copy `1–6` and portrait `7–12`; tablet uses eight columns with copy `1–4` and portrait `5–8`; mobile keeps copy before portrait in normal flow. The active theme background covers and crops independently while the portrait remains contained and bottom-aligned. Theme changes do not move either layer. Detailed experience and project evidence remain on their dedicated routes.
 - Projects use a year-descending card grid: desktop and tablet use two columns, mobile uses one. Same-year projects retain their source order and unpaired publications follow them in publication source order. A compact sticky facet control links category, project name, and explicitly linked honor; each choice narrows the other choices to compatible records. Cards retain the sourced primary image or the explicit Profile placeholder; publication cards use sourced bibliographic facts. A native dialog exposes complete project detail and its explicitly linked achievements, or compact publication detail.
 - Experience uses one wide education panel, then four source-ordered campus panels with desktop spans `5,7,7,5`, tablet spans `3,5,5,3`, and full-width mobile panels. Panel padding follows the shared `1rem`/`1.5rem`/`2rem` responsive scale on every edge.
 - Awards use two equal source-ordered columns at tablet and desktop widths; an odd final record spans the row instead of leaving a grid hole. Publications and patents use 6 desktop/4 tablet columns, and the singleton thesis is full width.
@@ -206,7 +206,7 @@ The build remains static Astro, emits exactly these ten documents, and publishes
 
 ### Evidence presentation
 
-- Home uses the specified identity/portrait Bento composition and two localized action links. Detailed profile statistics, education records, and featured projects remain on their dedicated routes.
+- Home uses the specified single-canvas identity composition, paired source-associated circuit backgrounds, transparent portrait, direct localized greeting, short introduction, and two localized action links. The background is a non-semantic layer with `aria-hidden="true"`; the portrait retains the localized identity name. Role, tagline, statistics, education records, and featured projects remain out of the Home hero.
 - Experience, awards, publications, patents, and thesis render as native semantic Bento articles in source order. Award prize labels are uniform literals; no rank is inferred.
 - `SkillGroup` keeps credential, project, working, and exposure evidence visually distinct. Project evidence links use localized project titles and the exact base-aware `?skill=<tag-id>#<project-id>` destination.
 - `SeoHead` remains the centralized static metadata primitive. No analytics, tracking, machine endpoints, dynamic remote images, or generated content pipeline is introduced.
@@ -239,7 +239,7 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 | Canvas | `--color-canvas` | Page background and header context |
 | Panel | `--color-surface`, `1px solid var(--color-border)`, `--radius-panel`, `--shadow-panel` | Home, project, experience, award, and research panels |
 | Muted field | `--color-surface-muted` | Media wells, secondary facts, selected context |
-| Hero | `--color-surface`, `1px solid var(--color-border)`, `--radius-hero`, minimal panel shadow | Home identity panel only |
+| Hero | Theme surface, matching source-associated cover background, `1px solid var(--color-border)`, `--radius-hero`, minimal panel shadow | Home identity canvas only |
 | Strong surface | `--color-surface-strong`, `--color-on-strong` | Footer only |
 | Dialog | `--color-surface`, `--radius-panel`, `--shadow-dialog` | Contact and certificate dialogs |
 
@@ -260,12 +260,12 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 | Engineering recruiter using keyboard | Compare projects, follow source links, and contact the owner | Logical landmarks and heading order; visible focus; route/hash navigation; no nested interactive controls; dialog focus restoration. |
 | Chinese-first mobile visitor | Read identity and awards, change language, inspect a certificate | Chinese root is complete without JS; reachable locale link and controls; 44px touch targets; concise labels; one-column reflow. |
 | English-reading international collaborator | Navigate the corresponding English portfolio and assess terminology | Exact `/en/` route pair, localized metadata and image text, natural English wrapping, no mixed-language control labels. |
-| Low-vision visitor at 200% zoom | Read evidence and open/close dialogs | Reflow without horizontal loss, contrast-compliant text/rules/focus, no information encoded only by green or status color, stable sticky header behavior. |
+| Low-vision visitor at 200% zoom | Read evidence and open/close dialogs | Reflow without horizontal loss, contrast-compliant neutral text and rules, no information encoded only by green or status color, stable sticky header behavior; the accepted dark-accent contrast debt below remains visible. |
 | Motion-sensitive or cognitively fatigued visitor | Orient, browse records, and open evidence without distraction | No decorative animation or auto-changing content; reduced-motion instantaneous state changes; predictable route labels; plain-language unavailable states. |
 
 ### Non-negotiable constraints
 
-- Meet WCAG 2.2 AA with full keyboard operation, visible focus, semantic landmarks, one H1 per route, meaningful alt text, captions for every displayed project/certificate figure, and no keyboard trap outside native modal dialogs.
+- Meet WCAG 2.2 AA with full keyboard operation, visible focus, semantic landmarks, one H1 per route, meaningful alt text, captions for every displayed project/certificate figure, and no keyboard trap outside native modal dialogs, except for the explicitly accepted dark-accent contrast debt below.
 - Respect `prefers-reduced-motion`; do not remove controls or context when motion is disabled.
 - Use clear source-backed labels such as unavailable/coming soon only when Profile provides a null or pending link. Do not imply failure, acceptance, ownership, rank, status, or metric beyond source data.
 - Keep dialog opening, certificate browsing, route selection, language selection, and external links usable by keyboard, screen reader, touch, and at 200% zoom.
@@ -277,19 +277,19 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 ### Redesign acceptance
 
 - `tokens.css` matches the approved light and dark palette in this document, including the no-JavaScript dark mapping. Components continue to consume semantic tokens rather than raw colors.
-- The active styles contain no retired blue-gray/cyan palette values and no `--gradient-hero` declaration or use. The Home identity and portrait panels use their documented neutral surface roles.
-- Shared and route styles follow the component color application table: one filled deep-green primary action per view, neutral peer controls, semantic status colors, and no green page bands or card fills.
+- The active styles contain no retired blue-gray/cyan palette values and no `--gradient-hero` declaration or use. The Home identity switches between its documented light and dark canvases and matching cover backgrounds while keeping the portrait independently contained.
+- Shared and route styles follow the component color application table: one filled deep-green primary action per view except the Home hero's two equal route actions, neutral peer controls elsewhere, semantic status colors, and no green page bands or card fills.
 - Standard panels use the documented border-led surface treatment; only dialogs receive prominent elevation. Hover, focus, target, and selected states remain visible without adding layout movement or decorative effects.
 - English documents render display and body text with the local DM Sans variable face and the documented weights and tracking. Chinese documents preserve the existing Chinese stacks and do not request DM Sans; both locales retain Google Sans Code for technical metadata.
-- The redesign preserves all ten canonical routes, both themes, no-JavaScript fallback, base-aware assets, keyboard operation, reduced motion, 200% reflow, and existing content order. `pnpm run verify` and `pnpm run test:e2e` pass before the redesign is complete.
+- The redesign preserves all ten canonical routes, both themes, no-JavaScript fallback, base-aware assets, keyboard operation, reduced motion, 200% reflow, and existing content order. `pnpm run verify` passes; `pnpm run test:e2e` retains its dark-theme contrast assertion and reports the accepted debt while it remains.
 
 ### Accepted debt
 
-No accepted design, accessibility, content, or implementation debt exists initially. Future debt may be accepted only with a concrete location, affected persona, severity, rationale, owner, exit condition, and explicit user acknowledgement for accessibility debt.
+Accepted debt requires a concrete location, affected persona, severity, rationale, owner, exit condition, and explicit user acknowledgement for accessibility debt.
 
 | Item | Location | Why accepted | Owner / exit |
 | --- | --- | --- | --- |
-| None | N/A | N/A | N/A |
+| Dark-theme accent contrast | `tokens.css` dark and no-JavaScript dark accent mappings; dark-theme accent text and focus indicators | The site owner explicitly requires the light-theme deep green `#176b45` in every theme. On `#171614` it measures `2.77:1`, below WCAG 1.4.3's `4.5:1` text threshold and WCAG 1.4.11's `3:1` non-text threshold. This is serious for low-vision visitors. | Site owner; restore a contrast-safe dark accent or place every dark accent consumer on a compliant surface |
 
 ### Must-not constraints
 
