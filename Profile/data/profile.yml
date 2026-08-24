@@ -10,14 +10,14 @@ hero_background:
   dark: profile/hero-circuit-background.png
 favicon: profile/favicon.svg
 role:
-  zh: 电子信息工程
-  en: Electronic & Information Engineering
+  zh: 电子信息工程本科毕业生
+  en: Electronic & Information Engineering Graduate
 tagline:
   zh: 嵌入式系统 / 无线感知 / 超表面与太赫兹
-  en: Embedded Systems / Wireless Perception / Metasurfaces & Terahertz
+  en: Embedded Systems / Wireless Sensing / Metasurfaces & Terahertz
 summary:
-  zh: 我是一名电子信息工程专业学生，关注嵌入式系统、无线感知与智能硬件。我喜欢把想法落实为可以运行、可以验证的软硬件作品。
-  en: I study Electronic & Information Engineering, with interests in embedded systems, wireless perception, and intelligent hardware. I enjoy turning ideas into practical hardware-software projects.
+  zh: 我是一名电子信息工程本科毕业生，关注嵌入式系统、无线感知与智能硬件。我喜欢把想法落实为可以运行、可以验证的软硬件作品。
+  en: I am an Electronic & Information Engineering graduate, with interests in embedded systems, wireless sensing, and intelligent hardware. I enjoy turning ideas into practical hardware-software projects.
 statistics:
   - { id: academic-rank, label: { zh: 综测专业排名, en: Academic rank }, value: 5/71 }
   - { id: publications, label: { zh: 学术论文, en: Publications }, value: 6 }

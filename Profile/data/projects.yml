@@ -276,18 +276,18 @@
   featured: false
   image: null
   title: { zh: 张易成个人学术作品集网站, en: JOEYCH Personal Academic Portfolio Website }
-  claim: { zh: '面向个人学术与工程经历展示的中英双语响应式作品集网站。', en: 'A bilingual, responsive portfolio website for presenting personal academic and engineering work.' }
-  category: { zh: '个人网站 / 前端开发', en: 'Personal Website / Front-End Development' }
+  claim: { zh: '由统一公开数据源驱动的中英双语静态学术与工程作品集网站。', en: 'A bilingual static academic and engineering portfolio driven by a single public data source.' }
+  category: { zh: '个人网站 / 静态站点开发', en: 'Personal Website / Static Site Development' }
   summary:
-    zh: 基于 Jekyll 与 GitHub Pages 构建的个人学术作品集，使用 YAML 数据组织个人资料、项目、论文、专利和获奖记录，并通过原生 JavaScript 实现中英双语切换、移动端导航、滚动揭示与证书浏览；仓库还包含 Playwright 端到端测试和本地预览脚本。
-    en: A Jekyll and GitHub Pages portfolio that organizes profile, project, publication, patent, and award records with YAML data. Vanilla JavaScript provides bilingual switching, mobile navigation, scroll reveal, and certificate browsing, while Playwright end-to-end tests and local preview scripts support maintenance.
-  contribution: { zh: '负责网站内容组织、页面实现、视觉设计系统、双语交互与持续维护。', en: 'Maintained and implemented the site content structure, page layouts, visual design system, bilingual interaction, and ongoing updates.' }
+    zh: 基于 Astro 构建，通过 Profile YAML 统一管理个人资料、项目与成果，并生成中英双语静态页面。网站包含数据校验、基础路径感知链接、原生交互与 Playwright 端到端测试，通过 GitHub Pages 自动部署。
+    en: Built with Astro, the site uses Profile YAML as the single source for profile, project, and achievement data and generates bilingual static pages. It includes data validation, base-aware links, native interactions, and Playwright end-to-end tests, with automated deployment to GitHub Pages.
+  contribution: { zh: '负责公开数据结构、Astro 页面实现、视觉设计系统、双语路由、交互与自动化测试维护。', en: 'Designed the public data structure and maintained the Astro pages, visual system, bilingual routes, interactions, and automated tests.' }
   tags:
-    - { zh: Jekyll, en: Jekyll }
-    - { zh: GitHub Pages, en: GitHub Pages }
-    - { zh: JavaScript, en: JavaScript }
-    - { zh: 响应式网页, en: Responsive Web Design }
-    - { zh: 中英双语交互, en: Bilingual Interaction }
+    - { zh: Astro, en: Astro }
+    - { zh: TypeScript, en: TypeScript }
+    - { zh: YAML, en: YAML }
+    - { zh: 静态站点生成, en: Static Site Generation }
+    - { zh: 中英双语静态路由, en: Bilingual Static Routes }
     - { zh: Playwright E2E 测试, en: Playwright E2E Testing }
   figures: []
   links:

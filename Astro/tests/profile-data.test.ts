@@ -87,6 +87,10 @@ describe("Profile content boundary", () => {
       "string",
     ])
     expect(content.profile.contact.hometown.en).toBe("Suzhou, Jiangsu")
+    expect(content.profile.role).toEqual({
+      zh: "电子信息工程本科毕业生",
+      en: "Electronic & Information Engineering Graduate",
+    })
     expect(content.profile.home_heading).toEqual({ zh: "你好，我叫张易成", en: "Hi, I'm Joey." })
     expect(content.profile.portrait).toBe("/profile/portrait-b1-cutout-workshirt-upright-transparent.png")
     expect(content.profile.hero_background).toEqual({
@@ -117,6 +121,19 @@ describe("Profile content boundary", () => {
       { kind: "award", id: "renesas-east-first-national-third-2024" },
     ])
     expect(content.projects.find(({ id }) => id === "flexible-bifunctional-metasurface")?.related_achievements).toEqual([])
+    const websiteProject = content.projects.find(({ id }) => id === "joeych-pages")
+    expect(websiteProject?.claim).toEqual({
+      zh: "由统一公开数据源驱动的中英双语静态学术与工程作品集网站。",
+      en: "A bilingual static academic and engineering portfolio driven by a single public data source.",
+    })
+    expect(websiteProject?.tags.map(({ en }) => en)).toEqual([
+      "Astro",
+      "TypeScript",
+      "YAML",
+      "Static Site Generation",
+      "Bilingual Static Routes",
+      "Playwright E2E Testing",
+    ])
     expect(content.publications.every(({ image }) => image === null)).toBe(true)
     expect(fileURLToPath(DATA_ROOT)).not.toContain("private")
   })
