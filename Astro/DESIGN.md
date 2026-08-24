@@ -11,11 +11,11 @@ This is the implementation contract for the approved static Astro portfolio. Fut
 - Lazyweb: skipped. This is an extraction/redesign from an approved existing design and audited local references, not visual greenfield work.
 - Imagegen: skipped. The approved identity, public media, and evidence hierarchy already define the visual contract; generated artwork would weaken source-backed presentation.
 - Online standards check: [MDN Grid accessibility](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout/Accessibility), [W3C Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html), and [web.dev responsive design basics](https://web.dev/articles/responsive-web-design-basics) reinforce source-ordered DOM, content-led breakpoints, ordinary row-major grids, and reflow over dense visual packing.
-- Online visual reference: [AI Hero](https://www.aihero.dev/) supplies the black/white/warm-neutral foundation, orange emphasis hierarchy, bold sans-serif English display treatment, quiet one-pixel structure, and low-shadow editorial surfaces. The portfolio adapts those mechanisms to its existing bilingual academic evidence hierarchy without copying layout, artwork, copy, components, or source code.
+- Online visual reference: [AI Hero](https://www.aihero.dev/) supplies the black/white/warm-neutral foundation, strong emphasis hierarchy, bold sans-serif English display treatment, quiet one-pixel structure, and low-shadow editorial surfaces. The portfolio adapts those mechanisms with deep-green emphasis for its existing bilingual academic evidence hierarchy without copying layout, artwork, copy, components, or source code.
 
 ## 1. Atmosphere & Identity
 
-The portfolio is a modern academic-engineering dossier: warm white and near-black canvases, clear typographic hierarchy, restrained evidence panels, and orange accents used for orientation and action. Black, white, and warm neutrals carry almost all page area; orange remains a scarce emphasis color rather than a decorative wash. Visual Bento composition makes identity, experience, projects, and evidence easier to scan without turning source records into decoration. Home and project discovery use the strongest spatial composition; long evidence records remain text-first.
+The portfolio is a modern academic-engineering dossier: warm white and near-black canvases, clear typographic hierarchy, restrained evidence panels, and deep-green accents used for orientation and action. Black, white, and warm neutrals carry almost all page area; green remains a scarce emphasis color rather than a decorative wash. Visual Bento composition makes identity, experience, projects, and evidence easier to scan without turning source records into decoration. Home and project discovery use the strongest spatial composition; long evidence records remain text-first.
 
 The signature interaction is a **2px horizontal signal rail** in the site header. Project state is communicated independently through a logical-start accent inset plus visible localized status text, never through color or motion alone.
 
@@ -39,7 +39,7 @@ The signature interaction is a **2px horizontal signal rail** in the site header
 | astropages-bilingual | Static Chinese root and `/en/` mirror | Exactly five route concepts and ten documents with locale-pair lookup | First-visit redirect, Pagefind, CMS, blog/gallery, and hosting assumptions |
 | astro-starter-portfolio | Small shared primitives and centralized metadata | Tokenized CSS, concise SEO, and native cross-document transitions | Client router, generic work-card data, and non-contract theme code |
 | mirsazzathossain-me | Selective publication density | Text-first `ResearchArchive` records from Profile YAML | React islands, Tailwind, citation counts, comments, and dense chrome |
-| AI Hero | Black/white/warm-neutral foundation, orange primary emphasis, bold sans-serif English headings, one-pixel section structure | Apply the palette and surface restraint to the existing bilingual Bento and evidence system | Copied layout, artwork, portrait treatment, animation, copy, components, analytics, search, course/product structure, and source code |
+| AI Hero | Black/white/warm-neutral foundation, strong primary emphasis, bold sans-serif English headings, one-pixel section structure | Apply the surface restraint and translate the emphasis role to deep green within the existing bilingual Bento and evidence system | Copied layout, artwork, portrait treatment, animation, copy, components, analytics, search, course/product structure, and source code |
 
 ## 2. Color
 
@@ -58,14 +58,14 @@ All visible colors are semantic CSS custom properties defined once in `tokens.cs
 | `--color-text-subtle` | `#706a61` | `#a69d92` | Metadata and unavailable context |
 | `--color-border` | `#d8d2c9` | `#38332e` | Quiet panel separation |
 | `--color-border-strong` | `#8a8176` | `#756b61` | Control boundaries requiring 3:1 contrast |
-| `--color-accent` | `#b43a0b` | `#fb923c` | Links, states, primary action, and restrained signals |
-| `--color-accent-hover` | `#9a3412` | `#fdba74` | Hover/pressed foreground or fill |
-| `--color-control-hover` | `#9a3412` | `#fdba74` | Hover foreground on standard and muted controls |
-| `--color-accent-soft` | `#ffeadb` | `#3a2115` | Selected-state field |
-| `--color-accent-on` | `#fffaf5` | `#18100a` | Text on accent |
+| `--color-accent` | `#176b45` | `#86d5a8` | Links, states, primary action, and restrained signals |
+| `--color-accent-hover` | `#145c3a` | `#a7e2be` | Hover/pressed foreground or fill |
+| `--color-control-hover` | `#145c3a` | `#a7e2be` | Hover foreground on standard and muted controls |
+| `--color-accent-soft` | `#e0f0e6` | `#173526` | Selected-state field |
+| `--color-accent-on` | `#fffaf5` | `#101a14` | Text on accent |
 | `--color-on-strong` | `#fffaf5` | `#fffaf5` | Text on strong surfaces |
-| `--color-on-strong-hover` | `#ffd5b5` | `#ffccaa` | Hover foreground on strong surfaces |
-| `--color-focus` | `#b43a0b` | `#fdba74` | Focus outline |
+| `--color-on-strong-hover` | `#a7e2be` | `#a7e2be` | Hover foreground on strong surfaces |
+| `--color-focus` | `#176b45` | `#a7e2be` | Focus outline |
 | `--color-success` | `#166447` | `#7de0b5` | Success state |
 | `--color-warning` | `#7a4b00` | `#facc15` | Unavailable/source-pending state |
 | `--color-error` | `#a32d2d` | `#ff9f9f` | Error state |
@@ -73,13 +73,13 @@ All visible colors are semantic CSS custom properties defined once in `tokens.cs
 
 Light shadows are `--shadow-panel: 0 1px 2px rgb(24 22 19 / .06)` and `--shadow-dialog: 0 24px 64px rgb(24 22 19 / .28)`. Dark shadows are `--shadow-panel: 0 1px 2px rgb(0 0 0 / .28)` and `--shadow-dialog: 0 24px 64px rgb(0 0 0 / .60)`. Ordinary panels use the shadow only as subtle edge reinforcement; borders and tonal contrast carry the structure.
 
-The Home identity panel uses the ordinary `--color-surface` rather than a dedicated gradient. Its hierarchy comes from typography, spacing, border contrast, and one orange primary action. The portrait panel uses `--color-surface-muted` so the two halves remain distinct without introducing another hue.
+The Home identity panel uses the ordinary `--color-surface` rather than a dedicated gradient. Its hierarchy comes from typography, spacing, border contrast, and one deep-green primary action. The portrait panel uses `--color-surface-muted` so the two halves remain distinct without introducing another hue.
 
 ### Color rules
 
 - Use `--color-border-strong` or the focus outline for control boundaries that require 3:1 contrast; quiet `--color-border` is not a control boundary.
-- Orange is reserved for interaction, current state, focus, and a small number of orientation signals. It never becomes a page-sized background, decorative glow, or substitute for hierarchy.
-- Keep one filled orange primary action per view. Peer actions remain neutral with a visible border.
+- Deep green is reserved for interaction, current state, focus, and a small number of orientation signals. It never becomes a page-sized background, decorative glow, or substitute for hierarchy.
+- Keep one filled deep-green primary action per view. Peer actions remain neutral with a visible border.
 - Do not use gradients, gradient text or buttons, glass blur, colored shadows, neon framing, or purple hues.
 - Theme changes affect tokens only. They never hide evidence, alter source order, change routes, or create theme-specific content.
 
@@ -89,16 +89,16 @@ The Home identity panel uses the ordinary `--color-surface` rather than a dedica
 | --- | --- | --- | --- |
 | Page canvas | `--color-canvas` | `--color-text` | Owns the document background and space between panels. |
 | Sticky header | `--color-surface` | `--color-text`, `--color-border` | Uses a solid background with no blur or transparency. |
-| Standard panel, card, and filter bar | `--color-surface` | `--color-text`, `--color-border` | Neutral by default; hover may strengthen the border but never adds orange fill. |
+| Standard panel, card, and filter bar | `--color-surface` | `--color-text`, `--color-border` | Neutral by default; hover may strengthen the border but never adds green fill. |
 | Muted field, media well, and tag | `--color-surface-muted` | `--color-text-muted` | Provides secondary grouping without introducing another hue. |
-| Primary action | `--color-accent` | `--color-accent-on` | The only filled orange peer action in its view; hover uses `--color-accent-hover`. |
+| Primary action | `--color-accent` | `--color-accent-on` | The only filled deep-green peer action in its view; hover uses `--color-accent-hover`. |
 | Secondary action and ordinary control | `--color-surface` | `--color-text`, `--color-border-strong` | Remains neutral and visibly bounded. |
 | Text link | Transparent | `--color-accent` | Hover uses `--color-accent-hover`; surrounding prose remains neutral. |
-| Current navigation and signal rail | Transparent | `--color-accent` | `aria-current` and the rail share orange, while the visible route label preserves meaning without the rail. |
+| Current navigation and signal rail | Transparent | `--color-accent` | `aria-current` and the rail share deep green, while the visible route label preserves meaning without the rail. |
 | Section orientation icon | `--color-accent-soft` when enclosed | `--color-accent` | Used sparingly for section recognition, not repeated on every metadata row. |
 | Selected, target, or evidence-origin state | Existing surface or `--color-accent-soft` | `--color-accent` inset/label | Always includes visible localized state text; color is supplementary. |
-| Success, pending, and error state | Existing surface | `--color-success`, `--color-warning`, or `--color-error` | Status colors retain their own meanings and are never replaced by brand orange. |
-| Footer | `--color-surface-strong` | `--color-on-strong` | Footer links use `--color-on-strong-hover`; the footer does not become an orange band. |
+| Success, pending, and error state | Existing surface | `--color-success`, `--color-warning`, or `--color-error` | Status colors retain their own meanings and are never replaced by the accent token. |
+| Footer | `--color-surface-strong` | `--color-on-strong` | Footer links use `--color-on-strong-hover`; the footer does not become a green band. |
 | Focus indicator | Existing surface | `--color-focus` outline | Focus never relies on a shadow, fill change, or color alone. |
 
 ## 3. Typography
@@ -243,7 +243,7 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 | Strong surface | `--color-surface-strong`, `--color-on-strong` | Footer only |
 | Dialog | `--color-surface`, `--radius-panel`, `--shadow-dialog` | Contact and certificate dialogs |
 
-- Standard cards and panels retain their position on hover. A stronger border may communicate hover, but hover never adds elevation, zoom, or an orange surface.
+- Standard cards and panels retain their position on hover. A stronger border may communicate hover, but hover never adds elevation, zoom, or a green surface.
 - `--shadow-panel` is the maximum ordinary-panel shadow and remains visually subordinate to the border. Do not create route-specific card shadows.
 - `--shadow-dialog` is the only prominent elevation shadow because a modal must separate from its backdrop. Tooltips use the strong surface rather than dialog-level elevation.
 - Header, footer, hero, filter bars, and media wells use the exact surface roles in the table; they do not invent intermediate surface colors.
@@ -260,7 +260,7 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 | Engineering recruiter using keyboard | Compare projects, follow source links, and contact the owner | Logical landmarks and heading order; visible focus; route/hash navigation; no nested interactive controls; dialog focus restoration. |
 | Chinese-first mobile visitor | Read identity and awards, change language, inspect a certificate | Chinese root is complete without JS; reachable locale link and controls; 44px touch targets; concise labels; one-column reflow. |
 | English-reading international collaborator | Navigate the corresponding English portfolio and assess terminology | Exact `/en/` route pair, localized metadata and image text, natural English wrapping, no mixed-language control labels. |
-| Low-vision visitor at 200% zoom | Read evidence and open/close dialogs | Reflow without horizontal loss, contrast-compliant text/rules/focus, no information encoded only by orange or status color, stable sticky header behavior. |
+| Low-vision visitor at 200% zoom | Read evidence and open/close dialogs | Reflow without horizontal loss, contrast-compliant text/rules/focus, no information encoded only by green or status color, stable sticky header behavior. |
 | Motion-sensitive or cognitively fatigued visitor | Orient, browse records, and open evidence without distraction | No decorative animation or auto-changing content; reduced-motion instantaneous state changes; predictable route labels; plain-language unavailable states. |
 
 ### Non-negotiable constraints
@@ -278,7 +278,7 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 
 - `tokens.css` matches the approved light and dark palette in this document, including the no-JavaScript dark mapping. Components continue to consume semantic tokens rather than raw colors.
 - The active styles contain no retired blue-gray/cyan palette values and no `--gradient-hero` declaration or use. The Home identity and portrait panels use their documented neutral surface roles.
-- Shared and route styles follow the component color application table: one filled orange primary action per view, neutral peer controls, semantic status colors, and no orange page bands or card fills.
+- Shared and route styles follow the component color application table: one filled deep-green primary action per view, neutral peer controls, semantic status colors, and no green page bands or card fills.
 - Standard panels use the documented border-led surface treatment; only dialogs receive prominent elevation. Hover, focus, target, and selected states remain visible without adding layout movement or decorative effects.
 - English documents render display and body text with the local DM Sans variable face and the documented weights and tracking. Chinese documents preserve the existing Chinese stacks and do not request DM Sans; both locales retain Google Sans Code for technical metadata.
 - The redesign preserves all ten canonical routes, both themes, no-JavaScript fallback, base-aware assets, keyboard operation, reduced motion, 200% reflow, and existing content order. `pnpm run verify` and `pnpm run test:e2e` pass before the redesign is complete.
