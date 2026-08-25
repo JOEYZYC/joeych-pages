@@ -1,14 +1,23 @@
+import { existsSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 
 import sitemap from "@astrojs/sitemap"
 import { defineConfig, fontProviders } from "astro/config"
+
+const profileDirectory = fileURLToPath(new URL("../Profile/", import.meta.url))
+if (existsSync(fileURLToPath(new URL("../Profile/private/", import.meta.url)))) {
+  throw new Error("Profile/private must not exist because Profile is published directly")
+}
+if (existsSync(fileURLToPath(new URL("../Profile/profile/", import.meta.url)))) {
+  throw new Error("Profile/profile is retired; use the page-owned Profile bundles")
+}
 
 export default defineConfig({
   output: "static",
   site: "https://joeyzyc.github.io",
   base: "/joeych-pages",
   trailingSlash: "always",
-  publicDir: fileURLToPath(new URL("../Profile/media/", import.meta.url)),
+  publicDir: profileDirectory,
   integrations: [sitemap()],
   fonts: [
     {

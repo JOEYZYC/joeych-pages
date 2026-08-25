@@ -4,7 +4,7 @@ This repository is one Git control plane for three ordinary directories:
 
 | Directory | Ownership |
 | --- | --- |
-| [`Profile/`](Profile/README.md) | Shared public profile data and media. `Profile/private/` is ignored local-only material. |
+| [`Profile/`](Profile/README.md) | Fully public, framework-neutral profile bundles with colocated YAML and media. |
 | [`Jeklly/`](Jeklly/README.md) | Non-runnable, non-deployed Jekyll source archive. |
 | [`Astro/`](Astro/README.md) | Separately approved static implementation consuming public `Profile/` sources. `Astro/Demo/` and `Astro/research/` are ignored local-only material. |
 

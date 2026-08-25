@@ -4,12 +4,12 @@ This is the implementation contract for the approved static Astro portfolio. Fut
 
 ## 0. Research Log
 
-- Existing-design extraction: `../Jeklly/DESIGN.md` supplies the approved five-route hierarchy, mobile geometry, evidence-first records, and interaction/accessibility baseline. Its retired gunmetal/cyan/ice-silver palette is historical input rather than the target color system.
-- Public-content audit: `../Profile/README.md`, `../Profile/AGENTS.md`, and `../Profile/data/*.yml` establish `Profile/data/` and `Profile/media/` as the sole public content and media source. Astro owns presentation only; it must not create transformed or duplicate authored content.
+- Existing-design extraction: `../Jeklly/DESIGN.md` supplies the approved route hierarchy, mobile geometry, evidence-first records, and interaction/accessibility baseline. Its retired gunmetal/cyan/ice-silver palette is historical input rather than the target color system.
+- Public-content audit: `../Profile/README.md`, `../Profile/AGENTS.md`, and the page-owned `site/`, `home/`, `about/`, `projects/`, and `tech-stack/` bundles establish Profile as the sole public content source. Astro owns presentation only; it must not create transformed or duplicate authored content.
 - Local reference audit: `Demo/README.md` and audited local snapshots were used as mechanism references only. Refined-X contributes external-content discipline and editorial framing; as-folio contributes academic information organization; astropages-bilingual contributes static Chinese-root and English-prefix locale routing; astro-starter-portfolio contributes minimal static primitives and centralized SEO; mirsazzathossain-me contributes selective publication-record density.
 - Adopt / adapt / reject: adopt static, data-led Astro primitives, bilingual route pairing, and source-backed evidence; adapt the Jekyll technical-editorial identity into explicit light/dark semantic themes and a responsive visual Bento system; reject copied Demo source or copy, search, CMS, React islands, SSR, analytics, AI/Ask/MCP surfaces, deployment configuration outside the root GitHub Pages exception, generic dashboard decoration, and unsupported academic metadata.
 - Lazyweb: skipped. This is an extraction/redesign from an approved existing design and audited local references, not visual greenfield work.
-- Imagegen: used for the source-associated Home hero backgrounds `Profile/media/profile/hero-circuit-background-light.png` and `Profile/media/profile/hero-circuit-background.png`. The paired rasters share one crop-safe circuit-board composition and contain no text, logo, person, claim, or evidence; the real Profile portrait remains a separate transparent source image.
+- Imagegen: used for the source-associated Home hero backgrounds `Profile/home/hero-circuit-background-light.png` and `Profile/home/hero-circuit-background.png`. The paired rasters share one crop-safe circuit-board composition and contain no text, logo, person, claim, or evidence; the real Home portrait remains a separate transparent source image.
 - Online standards check: [MDN Grid accessibility](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout/Accessibility), [W3C Meaningful Sequence](https://www.w3.org/WAI/WCAG22/Understanding/meaningful-sequence.html), and [web.dev responsive design basics](https://web.dev/articles/responsive-web-design-basics) reinforce source-ordered DOM, content-led breakpoints, ordinary row-major grids, and reflow over dense visual packing.
 - Online visual reference: [AI Hero](https://www.aihero.dev/) supplies the black/white/warm-neutral foundation, strong emphasis hierarchy, bold sans-serif English display treatment, quiet one-pixel structure, and low-shadow editorial surfaces. The portfolio adapts those mechanisms with deep-green emphasis for its existing bilingual academic evidence hierarchy without copying layout, artwork, copy, components, or source code.
 
@@ -22,8 +22,8 @@ The signature interaction is a **2px horizontal signal rail** in the site header
 ### Content and implementation boundary
 
 - Target architecture is a static Astro 6 site with minimal vanilla CSS and vanilla TypeScript. Do not add React, client islands, SSR, a CMS, analytics, search, AI/Ask/MCP features, or deployment automation outside the root GitHub Pages exception.
-- `Profile/` is external to the site implementation and is the sole public content source. Read its YAML and referenced public media at build time; retain record IDs, ordering, localized values, nullability, source associations, and literal certificate paths.
-- Never read, enumerate, transform, copy, or publish `Profile/private/`. Do not make Astro-owned data aliases, content collections that duplicate Profile facts, or fixture content that can diverge from Profile.
+- `Profile/` is external to the site implementation and is the sole public content source. Read the site, Home, About, Projects, and Tech Stack bundles at build time; retain IDs, index order, localized values, nullability, and same-directory media associations.
+- `Profile/private/` must not exist because Astro serves the whole Profile package. Do not make Astro-owned data aliases, content collections that duplicate Profile facts, or fixture content that can diverge from Profile.
 - `Astro/Demo/` is an audited local mechanism reference only. Do not import its source, assets, packages, visual theme, copy, theme implementation, logos, deployments, or optional integrations.
 - The site has exactly two explicit semantic themes: `<html data-theme="light">` and `<html data-theme="dark">`. The smallest initializer runs immediately after the viewport meta and before visible paint. It changes `<html data-js="false">` to `data-js="true"`, accepts only `light` or `dark` from `localStorage["joeych-theme"]`, otherwise follows `matchMedia("(prefers-color-scheme: dark)")`, and writes both `data-theme` and `style.colorScheme`.
 - A valid stored choice wins over the system. Storage access is always guarded. If a theme write is denied, the current document keeps an in-memory override so later system changes cannot undo the user's choice; a reload safely returns to stored or system state. System changes are followed only when neither valid storage nor an in-memory override exists.
@@ -36,9 +36,9 @@ The signature interaction is a **2px horizontal signal rail** in the site header
 | `Jeklly/DESIGN.md` | Five-route hierarchy, evidence-first records, contact and certificate behavior | Recompose presentation with base-aware Astro routes, visual Bento panels, and explicit themes | Archive-only DOM, Jekyll/Liquid implementation, scroll reveal |
 | Refined-X | External content-root discipline, compact editorial framing, metadata-first reading surface | Static local Profile reads and `SeoHead` | Ask, agent, API, MCP, OpenAPI, and deployment paths |
 | as-folio | Academic grouping for projects, publications, and chronology | Render only Profile-supported records in source order | Search, live metrics, BibTeX pipeline, comments, analytics, and deployment config |
-| astropages-bilingual | Static Chinese root and `/en/` mirror | Exactly five route concepts and ten documents with locale-pair lookup | First-visit redirect, Pagefind, CMS, blog/gallery, and hosting assumptions |
+| astropages-bilingual | Static Chinese root and `/en/` mirror | Exactly four route concepts and eight documents with locale-pair lookup | First-visit redirect, Pagefind, CMS, blog/gallery, and hosting assumptions |
 | astro-starter-portfolio | Small shared primitives and centralized metadata | Tokenized CSS, concise SEO, and native cross-document transitions | Client router, generic work-card data, and non-contract theme code |
-| mirsazzathossain-me | Selective publication density | Text-first `ResearchArchive` records from Profile YAML | React islands, Tailwind, citation counts, comments, and dense chrome |
+| mirsazzathossain-me | Selective publication density | Text-first publication outcomes inside project records | React islands, Tailwind, citation counts, comments, and dense chrome |
 | AI Hero | Black/white/warm-neutral foundation, strong primary emphasis, bold sans-serif English headings, one-pixel section structure | Adapt the single-canvas text/portrait layering with original Profile media and deep-green circuit artwork | Copied logo, artwork, exact portrait treatment, animation, copy, components, analytics, search, course/product structure, and source code |
 
 ## 2. Color
@@ -153,10 +153,10 @@ Retain `--space-1` through `--space-20` at `.25rem`, `.5rem`, `.75rem`, `1rem`, 
 - Inline primary navigation appears at `>=1024px`.
 - The document owns vertical scrolling. Only viewport-safe modal bodies may create an internal scroll area.
 - Shared route content is centered within `--content-max`. Panels use semantic `section`/`article`/`figure` structure and source order remains DOM order.
-- Home is one layered hero. Desktop uses twelve internal columns with copy `1–6` and portrait `7–12`; tablet uses eight columns with copy `1–4` and portrait `5–8`; mobile keeps copy before portrait in normal flow. The active theme background covers and crops independently while the portrait remains contained and bottom-aligned. Theme changes do not move either layer. Detailed experience and project evidence remain on their dedicated routes.
-- Projects use a year-descending card grid: desktop and tablet use two columns, mobile uses one. Same-year projects retain their source order and unpaired publications follow them in publication source order. A compact sticky facet control links category, project name, and explicitly linked honor; each choice narrows the other choices to compatible records. Cards retain the sourced primary image or the explicit Profile placeholder; publication cards use sourced bibliographic facts. A native dialog exposes complete project detail and its explicitly linked achievements, or compact publication detail.
+- Home is one layered hero. Desktop uses twelve internal columns with copy `1–6` and portrait `7–12`; tablet uses eight columns with copy `1–4` and portrait `5–8`; mobile keeps copy before portrait in normal flow. The active theme background covers and crops independently while the portrait remains contained and bottom-aligned. Theme changes do not move either layer. Detailed About and project evidence remain on their dedicated routes.
+- Projects use the exact `projects/index.yml` order in a two-column desktop/tablet and one-column mobile grid. Publications and the thesis are ordinary projects. A compact sticky facet control links category, project name, and embedded honor. Cards use sourced primary images or a text-only pending state; native dialogs expose project detail and embedded outcomes.
 - Experience uses one wide education panel, then four source-ordered campus panels with desktop spans `5,7,7,5`, tablet spans `3,5,5,3`, and full-width mobile panels. Panel padding follows the shared `1rem`/`1.5rem`/`2rem` responsive scale on every edge.
-- Awards use two equal source-ordered columns at tablet and desktop widths; an odd final record spans the row instead of leaving a grid hole. Publications and patents use 6 desktop/4 tablet columns, and the singleton thesis is full width.
+- Awards, publications, patents, and certificates render only inside their owning project detail.
 - Portraits and evidence figures remain uncropped where specified. Never hide source text behind media or hover state.
 - At 200% zoom, reflow rather than clip; preserve navigation, captions, controls, status labels, and 44px targets without horizontal page overflow.
 
@@ -167,18 +167,17 @@ Chinese is the default locale at the base-aware root. English is a mirror under 
 | Canonical Chinese route | English mirror | Purpose |
 | --- | --- | --- |
 | `/` | `/en/` | Identity, summary, and routes to detailed evidence |
-| `/experience/` | `/en/experience/` | Education and campus experience |
-| `/awards/` | `/en/awards/` | Awards, publications, patents, and thesis |
-| `/projects/` | `/en/projects/` | Sticky project filtering, cards, and complete detail dialogs |
+| `/about/` | `/en/about/` | Detailed profile, interests, education, and campus experience |
+| `/projects/` | `/en/projects/` | Project and outcome filtering, cards, and complete detail dialogs |
 | `/tech-stack/` | `/en/tech-stack/` | Evidence-backed skill groups |
 
-The build remains static Astro, emits exactly these ten documents, and publishes only `Astro/dist` through the unchanged root GitHub Pages workflow.
+The build remains static Astro, emits exactly these eight documents, and publishes only `Astro/dist` through the unchanged root GitHub Pages workflow.
 
 ## 5. Components & Primitives
 
 ### Shared component rules
 
-- All labels, records, links, figures, certificates, and media derive from Profile data and media only. Null source values render the localized unavailable state rather than guessed content.
+- Page titles, summaries, records, links, figures, certificates, and media derive from their corresponding Profile bundles. Interface controls and accessibility labels remain in the UI manifest.
 - Every control has default, hover, active, focus-visible, disabled/unavailable where applicable, and touch-reachable behavior. Focus is a 2px `--color-focus` outline with 2px offset.
 - Icons use Font Awesome Free 7.3.1 direct named imports only, rendered at Astro build time through SVG Core. Every emitted SVG uses `currentColor`, stable `data-icon`, `focusable="false"`, and `aria-hidden="true"`. Callers own visible localized text or an accessible name plus title. Never import a whole icon pack or add runtime icon code.
 - No generic `Card`/`Bento` abstraction is permitted. Route-specific semantic panels keep their meaning and source structure explicit.
@@ -186,7 +185,7 @@ The build remains static Astro, emits exactly these ten documents, and publishes
 ### `SiteHeader`, `ThemeToggle`, and `LanguageLink`
 
 - The sticky header is a solid canvas/surface with a bottom border and 2px horizontal signal rail; no backdrop blur.
-- Retain wordmark, five base-aware routes, `aria-current="page"`, language counterpart, contact, and theme controls. Inline primary navigation appears at `>=1024px`.
+- Retain wordmark, four base-aware routes, `aria-current="page"`, language counterpart, contact, and theme controls. Inline primary navigation appears at `>=1024px`.
 - Compact navigation opens from a labelled icon button, focuses its first route, and closes on Escape, outside pointer, or route activation. Escape restores the toggle. With no JavaScript, the menu button is hidden and route anchors remain expanded in normal flow.
 - `ThemeToggle` is hidden until listeners attach. `aria-pressed="true"` means dark; visible and accessible text describe the destination theme.
 - `LanguageLink` preserves the route and project hash while intentionally dropping ephemeral project filter/provenance query state.
@@ -200,14 +199,14 @@ The build remains static Astro, emits exactly these ten documents, and publishes
 
 ### Project presentation
 
-- `ProjectMedia` is the only primary project visual primitive, shared by projects and standalone publications. Real images remain contained and use matching sourced figure text in detailed project context. Null images use the dedicated Profile placeholder with contained positioning, a localized pending label, and explicit placeholder alt text. Failed real images never switch to the placeholder.
-- `ProjectExplorer` progressively enhances static year-descending project and unpaired-publication details into compact sticky category, project-name, and honor facet filtering, cards, and native dialogs. Linked publications remain evidence within their owning project rather than becoming duplicate cards. Every selected facet narrows the other controls to compatible records; an incompatible prior value is cleared rather than yielding an empty card set. Cards and dialogs appear only after every listener attaches; without JavaScript complete details remain available. Generated ordinal prefixes are never shown with names.
-- `ProjectRecord` is the no-JavaScript full-width evidence fallback with a stable ID, disclosed primary visual, visible state labels, contribution, remaining source-order figures, links, and explicitly related achievements. Standalone publication records instead show their sourced venue, author position, tags, certificates, and links. Dialog detail uses the same sourced content. Primary-image figures are not duplicated in the later figure grid; missing figure sources become text-only evidence rows; incomplete contribution or achievement data visibly uses the localized pending literal; null URLs retain their source label plus unavailable text.
+- `ProjectMedia` is the only primary project visual primitive. Real images remain contained and use matching sourced figure text; null images use a localized text-only pending state. Failed real images do not substitute another asset.
+- `ProjectExplorer` progressively enhances static index-ordered project details into sticky category, project-name, and honor filtering, cards, and native dialogs. Every selected facet narrows the others to compatible records. Cards and dialogs appear only after listeners attach; without JavaScript complete details remain available.
+- `ProjectRecord` is the no-JavaScript full-width fallback with a stable ID, primary visual, state labels, contribution, figures, links, and embedded awards/publications/patents. Dialog detail uses the same content. Primary-image figures are not duplicated; missing sources and pending copy stay explicit.
 
 ### Evidence presentation
 
 - Home uses the specified single-canvas identity composition, paired source-associated circuit backgrounds, transparent portrait, direct localized greeting, short introduction, and two localized action links. The background is a non-semantic layer with `aria-hidden="true"`; the portrait retains the localized identity name. Role, tagline, statistics, education records, and featured projects remain out of the Home hero.
-- Experience, awards, publications, patents, and thesis render as native semantic Bento articles in source order. Award prize labels are uniform literals; no rank is inferred.
+- Experience records render in source order. Project outcomes render as semantic articles in their owning project order; award prize labels remain literal and no rank is inferred.
 - `SkillGroup` keeps credential, project, working, and exposure evidence visually distinct. Project evidence links use localized project titles and the exact base-aware `?skill=<tag-id>#<project-id>` destination.
 - `SeoHead` remains the centralized static metadata primitive. No analytics, tracking, machine endpoints, dynamic remote images, or generated content pipeline is introduced.
 
@@ -237,7 +236,7 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 | Surface | Treatment | Use |
 | --- | --- | --- |
 | Canvas | `--color-canvas` | Page background and header context |
-| Panel | `--color-surface`, `1px solid var(--color-border)`, `--radius-panel`, `--shadow-panel` | Home, project, experience, award, and research panels |
+| Panel | `--color-surface`, `1px solid var(--color-border)`, `--radius-panel`, `--shadow-panel` | Home, About, project, and skill panels |
 | Muted field | `--color-surface-muted` | Media wells, secondary facts, selected context |
 | Hero | Theme surface, matching source-associated cover background, `1px solid var(--color-border)`, `--radius-hero`, minimal panel shadow | Home identity canvas only |
 | Strong surface | `--color-surface-strong`, `--color-on-strong` | Footer only |
@@ -269,7 +268,7 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 - Respect `prefers-reduced-motion`; do not remove controls or context when motion is disabled.
 - Use clear source-backed labels such as unavailable/coming soon only when Profile provides a null or pending link. Do not imply failure, acceptance, ownership, rank, status, or metric beyond source data.
 - Keep dialog opening, certificate browsing, route selection, language selection, and external links usable by keyboard, screen reader, touch, and at 200% zoom.
-- The exact route matrix is the ten canonical paths only: `/`, `/experience/`, `/awards/`, `/projects/`, `/tech-stack/`, `/en/`, `/en/experience/`, `/en/awards/`, `/en/projects/`, and `/en/tech-stack/`, each under base `/joeych-pages` with trailing slashes.
+- The exact route matrix is the eight canonical paths only: `/`, `/about/`, `/projects/`, `/tech-stack/`, `/en/`, `/en/about/`, `/en/projects/`, and `/en/tech-stack/`, each under base `/joeych-pages` with trailing slashes.
 - The exact theme matrix is `data-theme="light"` and `data-theme="dark"`, plus no-JS system light/dark fallback. Stored light-over-dark-system, stored dark-over-light-system, invalid `joeych-theme`, and denied storage are required state cases.
 - The exact viewport matrix is `375x812`, `768x1024`, and `1280x900`, plus 200% browser zoom at every route/theme combination. Capture after local fonts are ready; test no horizontal overflow, one H1, 44px targets, readable evidence, and stable base-aware URLs.
 - The exact visual/behavior matrix exercises default, fine-pointer hover, keyboard focus, active, `:target`, dialogs, certificate boundaries, locale counterpart, no-JS, native View Transition support and ordinary unsupported fallback, reduced motion, and page-error-free font/icon loading. Run it in both themes where a JS surface exists. Screenshots disable caret and nonessential animation only after testing the live interaction state; do not mask real content or mid-transition defects.
@@ -281,7 +280,7 @@ Depth comes from semantic tonal layers, visible borders, rounded geometry, and r
 - Shared and route styles follow the component color application table: one filled deep-green primary action per view except the Home hero's two equal route actions, neutral peer controls elsewhere, semantic status colors, and no green page bands or card fills.
 - Standard panels use the documented border-led surface treatment; only dialogs receive prominent elevation. Hover, focus, target, and selected states remain visible without adding layout movement or decorative effects.
 - English documents render display and body text with the local DM Sans variable face and the documented weights and tracking. Chinese documents preserve the existing Chinese stacks and do not request DM Sans; both locales retain Google Sans Code for technical metadata.
-- The redesign preserves all ten canonical routes, both themes, no-JavaScript fallback, base-aware assets, keyboard operation, reduced motion, 200% reflow, and existing content order. `pnpm run verify` passes; `pnpm run test:e2e` retains its dark-theme contrast assertion and reports the accepted debt while it remains.
+- The redesign preserves all eight canonical routes, both themes, no-JavaScript fallback, base-aware assets, keyboard operation, reduced motion, 200% reflow, and project-index order. `pnpm run verify` passes; `pnpm run test:e2e` retains its expected-failure dark-theme contrast assertions and reports the accepted debt while it remains.
 
 ### Accepted debt
 

@@ -1,10 +1,9 @@
 import { z } from "astro/zod"
 
-import { publicMediaPathSchema } from "../lib/profile-paths"
-
 export const textSchema = z.string().trim().min(1)
-export const recordIdSchema = textSchema.brand("RecordId")
-export const projectIdSchema = textSchema.brand("ProjectId")
+const idSchema = textSchema.regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "ID must use lowercase letters, numbers, and hyphens")
+export const recordIdSchema = idSchema.brand("RecordId")
+export const projectIdSchema = idSchema.brand("ProjectId")
 export const componentIdSchema = textSchema.brand("ComponentId")
 export const localizedSchema = z.object({ zh: textSchema, en: textSchema }).strict().readonly()
 export const httpsUrlSchema = z.url().refine(
@@ -17,6 +16,16 @@ export const httpsUrlSchema = z.url().refine(
   },
   "URL must use HTTPS",
 )
+export const localMediaFileSchema = textSchema.refine(
+  (value) => {
+    try {
+      return value === decodeURIComponent(value) && !value.includes("/") && !value.includes("\\") && value !== "." && value !== ".."
+    } catch {
+      return false
+    }
+  },
+  "media reference must be a local filename",
+)
 export const linkSchema = z
   .object({
     type: textSchema,
@@ -27,7 +36,7 @@ export const linkSchema = z
   .readonly()
 export const certificateSchema = z
   .object({
-    src: publicMediaPathSchema,
+    src: localMediaFileSchema,
     zh: textSchema,
     en: textSchema,
   })

@@ -1,13 +1,7 @@
 import type { RouteId } from "../lib/routes"
 import type { Locale } from "./locales"
 
-type RouteIntro = {
-  readonly overline: string
-  readonly title: string
-} & (
-  | { readonly summary?: never }
-  | { readonly summary: string }
-)
+type SectionId = RouteId | "awards"
 
 type UiLabels = {
   readonly skipToContent: string
@@ -28,12 +22,8 @@ type UiLabels = {
     readonly contact: string
     readonly theme: string
   }
-  readonly archive: {
-    readonly ledgerOverline: string
-    readonly researchOverline: string
-  }
   readonly actions: {
-    readonly experience: string
+    readonly about: string
     readonly projects: string
   }
   readonly projectExplorer: {
@@ -90,7 +80,7 @@ type UiLabels = {
     readonly orcid: string
     readonly related: string
   }
-  readonly sections: Readonly<Record<RouteId, Readonly<Record<string, string>>>>
+  readonly sections: Readonly<Record<SectionId, Readonly<Record<string, string>>>>
   readonly evidence: {
     readonly project: string
     readonly credential: string
@@ -100,17 +90,15 @@ type UiLabels = {
       readonly exposure: string
     }
   }
-  readonly routeIntros: Readonly<Record<RouteId, RouteIntro>>
 }
 
 export const UI = {
   zh: {
     skipToContent: "跳到主要内容",
     navigation: {
-      home: "自我介绍",
-      experience: "个人经历",
-      awards: "成果与获奖",
-      projects: "项目介绍",
+      home: "首页",
+      about: "自我介绍",
+      projects: "项目与成果",
       "tech-stack": "技术栈",
     },
     menu: "菜单",
@@ -129,10 +117,9 @@ export const UI = {
       contact: "打开联系方式",
       theme: "切换主题",
     },
-    archive: { ledgerOverline: "获奖档案", researchOverline: "研究档案" },
     actions: {
-      experience: "查看经历",
-      projects: "探索项目",
+      about: "查看自我介绍",
+      projects: "探索项目与成果",
     },
     projectExplorer: {
       category: "项目类别",
@@ -184,16 +171,26 @@ export const UI = {
     links: { external: "外部链接", github: "GitHub", scholar: "Google Scholar", orcid: "ORCID", related: "相关链接" },
     sections: {
       home: {},
-      experience: { education: "教育经历", campus: "校园经历" },
+      about: {
+        overview: "个人概述",
+        basic: "基本信息",
+        name: "姓名",
+        role: "身份",
+        hometown: "家乡",
+        political: "政治面貌",
+        direction: "关注方向",
+        statistics: "公开统计",
+        interests: "兴趣方向",
+        goal: "个人目标",
+        education: "教育经历",
+        campus: "校园经历",
+      },
       awards: {
         awards: "获奖记录",
         publications: "学术论文",
         patents: "发明专利",
-        thesis: "毕业设计",
-        ledgerOverline: "获奖档案",
-        researchOverline: "研究档案",
       },
-      projects: { contribution: "个人贡献", links: "相关链接", figures: "项目图示", achievements: "关联成果", archive: "查看完整成果档案" },
+      projects: { contribution: "个人贡献", links: "相关链接", figures: "项目图示" },
       "tech-stack": { skills: "技能证据", evidence: "证据依据" },
     },
     evidence: {
@@ -202,21 +199,13 @@ export const UI = {
       generalAbility: "自述能力",
       levels: { working: "工作使用", exposure: "接触了解" },
     },
-    routeIntros: {
-      home: { overline: "个人档案", title: "自我介绍" },
-      experience: { overline: "经历", title: "个人经历", summary: "按时间查看教育经历与校园实践。" },
-      awards: { overline: "成果", title: "成果与获奖", summary: "按年份查阅竞赛荣誉、出版成果、专利与毕业论文。" },
-      projects: { overline: "工程实践", title: "项目介绍", summary: "按项目类别、项目名称与荣誉筛选，查看工程实践、论文与图文证据。" },
-      "tech-stack": { overline: "专业能力", title: "技术栈", summary: "按技能领域查看对应组件、能力语境与项目证据。" },
-    },
   },
   en: {
     skipToContent: "Skip to main content",
     navigation: {
-      home: "About",
-      experience: "Experience",
-      awards: "Achievements",
-      projects: "Projects",
+      home: "Home",
+      about: "About",
+      projects: "Projects & Achievements",
       "tech-stack": "Tech Stack",
     },
     menu: "Menu",
@@ -235,10 +224,9 @@ export const UI = {
       contact: "Open contact details",
       theme: "Change theme",
     },
-    archive: { ledgerOverline: "Achievement ledger", researchOverline: "Research archive" },
     actions: {
-      experience: "View experience",
-      projects: "Explore projects",
+      about: "Read about me",
+      projects: "Explore projects & achievements",
     },
     projectExplorer: {
       category: "Project category",
@@ -290,16 +278,26 @@ export const UI = {
     links: { external: "External link", github: "GitHub", scholar: "Google Scholar", orcid: "ORCID", related: "Related links" },
     sections: {
       home: {},
-      experience: { education: "Education", campus: "Campus experience" },
+      about: {
+        overview: "Overview",
+        basic: "Basic information",
+        name: "Name",
+        role: "Role",
+        hometown: "Hometown",
+        political: "Political affiliation",
+        direction: "Focus",
+        statistics: "Public statistics",
+        interests: "Interests",
+        goal: "Goal",
+        education: "Education",
+        campus: "Campus experience",
+      },
       awards: {
         awards: "Awards",
         publications: "Publications",
         patents: "Patent applications",
-        thesis: "Thesis",
-        ledgerOverline: "Achievement ledger",
-        researchOverline: "Research archive",
       },
-      projects: { contribution: "Contribution", links: "Related links", figures: "Figures", achievements: "Related achievements", archive: "View full achievement archive" },
+      projects: { contribution: "Contribution", links: "Related links", figures: "Figures" },
       "tech-stack": { skills: "Skill evidence", evidence: "Evidence" },
     },
     evidence: {
@@ -307,13 +305,6 @@ export const UI = {
       credential: "Credential",
       generalAbility: "Self-reported skill",
       levels: { working: "Working knowledge", exposure: "Exposure" },
-    },
-    routeIntros: {
-      home: { overline: "Profile", title: "About" },
-      experience: { overline: "Background", title: "Experience", summary: "Review education and campus experience in chronological order." },
-      awards: { overline: "Achievements", title: "Achievements", summary: "Review awards, publications, patents, and thesis evidence by year." },
-      projects: { overline: "Engineering Work", title: "Projects", summary: "Filter by project category, name, and honor to inspect engineering work, publications, and supporting figures." },
-      "tech-stack": { overline: "Capabilities", title: "Tech Stack", summary: "Browse technical capabilities by domain with their components, context, and project evidence." },
     },
   },
 } as const satisfies Readonly<Record<Locale, UiLabels>>

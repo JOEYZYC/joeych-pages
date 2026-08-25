@@ -13,10 +13,8 @@ export type CanonicalRoute = {
 export const CANONICAL_ROUTES = [
   { path: "", locale: "zh", counterpart: "/en/", canonical: "https://joeyzyc.github.io/joeych-pages/" },
   { path: "en/", locale: "en", counterpart: "/", canonical: "https://joeyzyc.github.io/joeych-pages/en/" },
-  { path: "experience/", locale: "zh", counterpart: "/en/experience/", canonical: "https://joeyzyc.github.io/joeych-pages/experience/" },
-  { path: "en/experience/", locale: "en", counterpart: "/experience/", canonical: "https://joeyzyc.github.io/joeych-pages/en/experience/" },
-  { path: "awards/", locale: "zh", counterpart: "/en/awards/", canonical: "https://joeyzyc.github.io/joeych-pages/awards/" },
-  { path: "en/awards/", locale: "en", counterpart: "/awards/", canonical: "https://joeyzyc.github.io/joeych-pages/en/awards/" },
+  { path: "about/", locale: "zh", counterpart: "/en/about/", canonical: "https://joeyzyc.github.io/joeych-pages/about/" },
+  { path: "en/about/", locale: "en", counterpart: "/about/", canonical: "https://joeyzyc.github.io/joeych-pages/en/about/" },
   { path: "projects/", locale: "zh", counterpart: "/en/projects/", canonical: "https://joeyzyc.github.io/joeych-pages/projects/" },
   { path: "en/projects/", locale: "en", counterpart: "/projects/", canonical: "https://joeyzyc.github.io/joeych-pages/en/projects/" },
   { path: "tech-stack/", locale: "zh", counterpart: "/en/tech-stack/", canonical: "https://joeyzyc.github.io/joeych-pages/tech-stack/" },

@@ -7,7 +7,7 @@ import astroConfig from "../astro.config"
 describe("Astro configuration", () => {
   it("uses the approved static publication contract", () => {
     // Given: the checked-in Astro configuration
-    const expectedPublicDir = fileURLToPath(new URL("../../Profile/media/", import.meta.url))
+    const expectedPublicDir = fileURLToPath(new URL("../../Profile/", import.meta.url))
 
     // When: Vitest loads the configuration module
     const config = astroConfig

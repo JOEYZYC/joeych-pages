@@ -101,8 +101,8 @@ test.describe("header interactions", () => {
     }))
     expect(hasViewTransitionRule).toBe(true)
 
-    await page.locator("#primary-navigation").getByRole("link", { name: "个人经历" }).click()
-    await expect(page).toHaveURL(/\/experience\/$/)
+    await page.locator("#primary-navigation").getByRole("link", { name: "自我介绍" }).click()
+    await expect(page).toHaveURL(/\/about\/$/)
 
     await page.addInitScript(() => {
       Object.defineProperty(Document.prototype, "startViewTransition", {
@@ -111,8 +111,8 @@ test.describe("header interactions", () => {
       })
     })
     await page.goto("")
-    await page.locator("#primary-navigation").getByRole("link", { name: "成果与获奖" }).click()
-    await expect(page).toHaveURL(/\/awards\/$/)
+    await page.locator("#primary-navigation").getByRole("link", { name: "项目与成果" }).click()
+    await expect(page).toHaveURL(/\/projects\/$/)
   })
 
   test("reduced motion makes view-transition durations instantaneous", async ({ page }) => {
@@ -131,14 +131,17 @@ test.describe("header interactions", () => {
   })
 
   test("dialog opening states animate normally and become instantaneous with reduced motion", async ({ page }) => {
-    await page.goto("en/awards/")
-    await page.locator("#awards-award-renesas-east-first-national-third-2024-trigger").click()
-    const dialog = page.locator("#awards-award-renesas-east-first-national-third-2024-dialog")
+    await page.goto("en/projects/")
+    await page.locator('[data-project-card][data-project-id="power-print-recognition"]').click()
+    const projectDialog = page.locator('[data-project-dialog][data-project-id="power-print-recognition"]')
+    await projectDialog.locator("[data-certificate-trigger]").click()
+    const dialog = projectDialog.locator("[data-certificate-dialog]")
     expect(await dialog.evaluate((element) => getComputedStyle(element).animationName)).toBe("dialog-open")
 
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.reload()
-    await page.locator("#awards-award-renesas-east-first-national-third-2024-trigger").click()
+    await page.locator('[data-project-card][data-project-id="power-print-recognition"]').click()
+    await page.locator('[data-project-dialog][data-project-id="power-print-recognition"] [data-certificate-trigger]').click()
     expect(await dialog.evaluate((element) => {
       const style = getComputedStyle(element)
       return style.animationName === "none" && style.animationDuration.split(", ").every((value) => value === "0s")
@@ -179,7 +182,7 @@ test.describe("header interactions", () => {
 
         await expect(page.locator("[data-menu-toggle]")).toBeHidden()
         await expect(page.locator("#primary-navigation")).toBeVisible()
-        await expect(page.locator("[data-header-route]")).toHaveCount(5)
+        await expect(page.locator("[data-header-route]")).toHaveCount(4)
         for (const route of await page.locator("[data-header-route]").all()) {
           await expect(route).toBeVisible()
         }

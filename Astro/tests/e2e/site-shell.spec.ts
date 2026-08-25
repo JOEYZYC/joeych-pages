@@ -51,7 +51,7 @@ test.describe("formal site shell", () => {
       )
       await expect(page.locator('link[rel="icon"][type="image/svg+xml"]')).toHaveAttribute(
         "href",
-        `${basePath}/profile/favicon.svg`,
+        `${basePath}/site/favicon.svg`,
       )
       expect(personJsonLd).not.toBeNull()
       expect(() => JSON.parse(personJsonLd ?? "")).not.toThrow()
@@ -61,7 +61,7 @@ test.describe("formal site shell", () => {
   }
 
   test("serves the Profile-backed SVG favicon", async ({ page }) => {
-    const favicon = await page.request.get(`${basePath}/profile/favicon.svg`)
+    const favicon = await page.request.get(`${basePath}/site/favicon.svg`)
     expect(favicon.status()).toBe(200)
   })
 
@@ -77,7 +77,7 @@ test.describe("formal site shell", () => {
     await expect(page.locator("html")).toHaveAttribute("data-js", "false")
     await expect(page.locator("[data-menu-toggle]")).toBeHidden()
     await expect(page.locator("[data-noscript-header-fallback]")).toBeVisible()
-    await expect(page.locator("[data-noscript-header-routes] a")).toHaveCount(5)
+    await expect(page.locator("[data-noscript-header-routes] a")).toHaveCount(4)
     await expect(page.locator("[data-noscript-language-counterpart]")).toHaveAttribute("href", `${basePath}/`)
     await expect(page.locator("[data-noscript-contact-links] a")).toHaveCount(4)
     for (const link of await page.locator("[data-noscript-contact-links] a").all()) {

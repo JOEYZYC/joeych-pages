@@ -1,5 +1,5 @@
 ---
-import type { Profile } from "../content/schemas"
+import type { Site } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import type { RouteId } from "../lib/routes"
@@ -10,14 +10,14 @@ import LanguageLink from "./LanguageLink.astro"
 import NoScriptHeaderFallback from "./NoScriptHeaderFallback.astro"
 import ThemeToggle from "./ThemeToggle.astro"
 
-type Props = { readonly locale: Locale; readonly profile: Profile; readonly routeId: RouteId }
-const { locale, profile, routeId } = Astro.props
+type Props = { readonly locale: Locale; readonly site: Site; readonly routeId: RouteId }
+const { locale, site, routeId } = Astro.props
 const labels = UI[locale]
 ---
 
 <header class="site-header" data-site-header>
   <div class="header-inner">
-    <a class="wordmark" href={getRoutePath("home", locale)}>{profile.name[locale]}</a>
+    <a class="wordmark" href={getRoutePath("home", locale)}>{site.name[locale]}</a>
     <button
       class="header-button menu-button"
       type="button"
@@ -60,12 +60,12 @@ const labels = UI[locale]
         <span class="control-tooltip" data-control-tooltip aria-hidden="true">{labels.tooltips.theme}</span>
       </span>
       <span class="header-control-group">
-        <ContactDialog id="site-contact" locale={locale} profile={profile} />
+        <ContactDialog id="site-contact" locale={locale} site={site} />
         <span class="control-tooltip" data-control-tooltip aria-hidden="true">{labels.tooltips.contact}</span>
       </span>
     </div>
   </div>
-  <noscript><NoScriptHeaderFallback locale={locale} profile={profile} routeId={routeId} /></noscript>
+  <noscript><NoScriptHeaderFallback locale={locale} site={site} routeId={routeId} /></noscript>
 </header>
 
 <script>

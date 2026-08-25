@@ -48,7 +48,7 @@ test.describe("JavaScript-disabled canonical routes", () => {
           ),
         ).toBe(true)
         await expect(page.locator("[data-noscript-header-fallback]")).toBeVisible()
-        await expect(noScriptRoutes).toHaveCount(5)
+        await expect(noScriptRoutes).toHaveCount(4)
         expect(await noScriptRoutes.evaluateAll((links) => links.map((link) => link.getAttribute("href")))).toEqual(
           expectedRouteHrefs,
         )
@@ -63,13 +63,13 @@ test.describe("JavaScript-disabled canonical routes", () => {
           expect.stringMatching(/^https:/),
         ])
 
-        if (route.path.includes("awards/")) {
+        if (route.path.includes("projects/")) {
           const firstCertificate = page.locator("[data-certificate-fallback]").first()
 
           await expect(firstCertificate).toBeVisible()
-          await expect(firstCertificate).toHaveAttribute("href", new RegExp(`^${BASE_PATH}/(awards|publications|patents)/`))
+          await expect(firstCertificate).toHaveAttribute("href", new RegExp(`^${BASE_PATH}/projects/`))
           await firstCertificate.click()
-          await expect(page).toHaveURL(new RegExp(`${BASE_PATH}/(awards|publications|patents)/`))
+          await expect(page).toHaveURL(new RegExp(`${BASE_PATH}/projects/`))
         }
       }
 

@@ -1,15 +1,15 @@
 ---
-import type { Profile } from "../content/schemas"
+import type { Site } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import Icon from "./Icon.astro"
 
-type Props = { readonly locale: Locale; readonly profile: Profile }
-const { locale, profile } = Astro.props
+type Props = { readonly locale: Locale; readonly site: Site }
+const { locale, site } = Astro.props
 const links = [
-  { icon: "github", label: UI[locale].links.github, href: profile.contact.github },
-  { icon: "google-scholar", label: UI[locale].links.scholar, href: profile.contact.scholar },
-  { icon: "orcid", label: UI[locale].links.orcid, href: profile.contact.orcid },
+  { icon: "github", label: UI[locale].links.github, href: site.contact.github },
+  { icon: "google-scholar", label: UI[locale].links.scholar, href: site.contact.scholar },
+  { icon: "orcid", label: UI[locale].links.orcid, href: site.contact.orcid },
 ] as const
 ---
 
@@ -17,7 +17,7 @@ const links = [
   <div class="footer-inner">
     <div class="footer-contact">
       <p class="footer-label">{UI[locale].contact.email}</p>
-      <a class="footer-link" href={`mailto:${profile.contact.email}`}><Icon name="envelope" /><span>{profile.contact.email}</span></a>
+      <a class="footer-link" href={`mailto:${site.contact.email}`}><Icon name="envelope" /><span>{site.contact.email}</span></a>
     </div>
     <nav class="footer-destinations" aria-label={UI[locale].links.related}>
       <p class="footer-label">{UI[locale].links.related}</p>

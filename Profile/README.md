@@ -1,10 +1,13 @@
 # Portable Profile Package
 
-`Profile/` owns the framework-neutral public profile package shared by the workspace.
+`Profile/` is the complete public content package consumed directly by Astro. Its directories correspond to the site's content surfaces:
 
-- `data/` contains the canonical public YAML records.
-- `projects.yml` owns explicit project-to-achievement references; award and publication facts remain in their own YAML records.
-- `media/` contains the published media bytes, organized to mirror `data/` ownership: `profile/` for the portrait, light/dark Home hero backgrounds, and favicon, `projects/<project-id>/` for project media, and `awards/`, `publications/`, and `patents/` for certificate files and publication project images under their owning record's `id` folder.
-- `private/` contains ignored local-only contact material and raw originals. It is never part of the distributable package.
+- `site/site.yml` owns shared name, role, contact links, and favicon.
+- `home/home.yml` owns Home title, greeting, summary, portrait, backgrounds, and colocated Home media.
+- `about/about.yml` owns the detailed About copy, facts, statistics, interests, goal, education, and campus experience.
+- `projects/page.yml` owns Projects page copy; `projects/index.yml` owns order; `projects/<id>/project.yml` owns each project, embedded outcomes, and colocated files.
+- `tech-stack/tech-stack.yml` owns Tech Stack page copy and skill evidence.
 
-`Profile/` without `private/` is the complete public package. Do not create site-specific variants, aliases, overrides, or transformed authored copies. This directory provides data and media ownership only; it has no deployment, compilation, testing, or runtime support.
+Page titles, summaries, and substantive copy belong in these YAML files. Navigation, controls, dialogs, and accessibility labels remain Astro UI copy.
+
+The whole directory is public. `Profile/private/`, `Profile/profile/`, `data/`, and `media/` must not exist. Do not create mirrors or site-specific copies.

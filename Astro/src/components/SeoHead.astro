@@ -1,22 +1,22 @@
 ---
 import type { Locale } from "../i18n/locales"
 import type { RouteId } from "../lib/routes"
-import type { Profile } from "../content/schemas"
+import type { Site } from "../content/schemas"
 import { buildPersonJsonLd, getSeoUrls, serializeJsonLd } from "../lib/seo"
 import { publicMediaUrl } from "../lib/urls"
 
 type Props = {
   readonly routeId: RouteId
   readonly locale: Locale
-  readonly profile: Profile
+  readonly site: Site
   readonly title: string
   readonly description: string
 }
 
-const { routeId, locale, profile, title, description } = Astro.props
+const { routeId, locale, site, title, description } = Astro.props
 const origin = Astro.site?.toString() ?? Astro.url.origin
 const { canonical, alternates, xDefault } = getSeoUrls({ locale, routeId, siteOrigin: origin })
-const personJsonLd = serializeJsonLd(buildPersonJsonLd({ locale, profile }))
+const personJsonLd = serializeJsonLd(buildPersonJsonLd({ locale, site }))
 ---
 
 <title>{title}</title>
@@ -25,7 +25,7 @@ const personJsonLd = serializeJsonLd(buildPersonJsonLd({ locale, profile }))
 <link rel="alternate" hreflang="zh-CN" href={alternates.zh} />
 <link rel="alternate" hreflang="en" href={alternates.en} />
 <link rel="alternate" hreflang="x-default" href={xDefault} />
-<link rel="icon" type="image/svg+xml" href={publicMediaUrl(profile.favicon)} />
+<link rel="icon" type="image/svg+xml" href={publicMediaUrl(site.favicon)} />
 <meta property="og:type" content="profile" />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />

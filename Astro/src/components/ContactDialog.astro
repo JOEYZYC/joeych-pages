@@ -1,24 +1,24 @@
 ---
-import type { Profile } from "../content/schemas"
+import type { Site } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import { getDialogIds } from "../lib/dialog-ids"
 import Icon from "./Icon.astro"
 
-type Props = { readonly id: string; readonly locale: Locale; readonly profile: Profile }
-const { id, locale, profile } = Astro.props
+type Props = { readonly id: string; readonly locale: Locale; readonly site: Site }
+const { id, locale, site } = Astro.props
 const labels = UI[locale].contact
 const ids = getDialogIds(id)
 const contacts = [
-  { label: labels.email, href: `mailto:${profile.contact.email}`, value: profile.contact.email },
-  { label: labels.github, href: profile.contact.github, value: profile.contact.github },
-  { label: labels.scholar, href: profile.contact.scholar, value: profile.contact.scholar },
-  { label: labels.orcid, href: profile.contact.orcid, value: profile.contact.orcid },
+  { label: labels.email, href: `mailto:${site.contact.email}`, value: site.contact.email },
+  { label: labels.github, href: site.contact.github, value: site.contact.github },
+  { label: labels.scholar, href: site.contact.scholar, value: site.contact.scholar },
+  { label: labels.orcid, href: site.contact.orcid, value: site.contact.orcid },
 ] as const
 ---
 
 <div data-contact-dialog-root>
-  <a class="header-button contact-fallback" data-contact-fallback href={`mailto:${profile.contact.email}`}>
+  <a class="header-button contact-fallback" data-contact-fallback href={`mailto:${site.contact.email}`}>
     {labels.open}
   </a>
   <button

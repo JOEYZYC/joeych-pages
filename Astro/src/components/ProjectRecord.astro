@@ -1,16 +1,14 @@
 ---
 import type { Project } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
-import type { RelatedAchievement } from "../lib/related-achievements"
 import ProjectDetail from "./ProjectDetail.astro"
 
 type Props = {
   readonly locale: Locale
   readonly project: Project
-  readonly relatedAchievements: readonly RelatedAchievement[]
 }
 
-const { locale, project, relatedAchievements } = Astro.props
+const { locale, project } = Astro.props
 ---
 
 <article
@@ -23,5 +21,5 @@ const { locale, project, relatedAchievements } = Astro.props
   data-project-title={project.title[locale]}
   data-active="false"
 >
-  <ProjectDetail idPrefix={project.id} locale={locale} mode="record" project={project} relatedAchievements={relatedAchievements} />
+  <ProjectDetail idPrefix={project.id} locale={locale} mode="record" project={project} />
 </article>

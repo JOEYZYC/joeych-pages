@@ -4,104 +4,74 @@ import { fileURLToPath, pathToFileURL } from "node:url"
 
 import { z } from "astro/zod"
 
-export const PROFILE_DATA_FILES = {
-  profile: "profile.yml",
-  projects: "projects.yml",
-  awards: "awards.yml",
-  publications: "publications.yml",
-  patents: "patents.yml",
-  thesis: "thesis.yml",
-} as const
-
-function resolveProfileRoot(): URL {
+function resolveProfileRoot(): string {
   const candidates = [
     fileURLToPath(new URL("../../../Profile/", import.meta.url)),
     fileURLToPath(new URL("../../../../Profile/", import.meta.url)),
     path.resolve(process.cwd(), "../Profile"),
     path.resolve(process.cwd(), "Profile"),
   ]
-  const root = candidates.find(
-    (candidate) => existsSync(path.join(candidate, "data")) && existsSync(path.join(candidate, "media")),
-  )
-  if (root === undefined) {
-    throw new Error("Unable to locate the public Profile package")
-  }
-  return pathToFileURL(`${root}${path.sep}`)
+  const root = candidates.find((candidate) =>
+    existsSync(path.join(candidate, "site", "site.yml")) &&
+    existsSync(path.join(candidate, "home", "home.yml")) &&
+    existsSync(path.join(candidate, "about", "about.yml")) &&
+    existsSync(path.join(candidate, "projects", "index.yml")) &&
+    existsSync(path.join(candidate, "projects", "page.yml")) &&
+    existsSync(path.join(candidate, "tech-stack", "tech-stack.yml")))
+  if (root === undefined) throw new Error("Unable to locate the public Profile package")
+  return root
 }
 
-const PROFILE_ROOT = resolveProfileRoot()
-const PROFILE_DATA_ROOT = new URL("data/", PROFILE_ROOT)
-const PROFILE_MEDIA_ROOT = new URL("media/", PROFILE_ROOT)
-export const PROFILE_MEDIA_DIRECTORY = fileURLToPath(PROFILE_MEDIA_ROOT)
-
-export const PROFILE_DATA_URLS = {
-  profile: new URL(PROFILE_DATA_FILES.profile, PROFILE_DATA_ROOT),
-  projects: new URL(PROFILE_DATA_FILES.projects, PROFILE_DATA_ROOT),
-  awards: new URL(PROFILE_DATA_FILES.awards, PROFILE_DATA_ROOT),
-  publications: new URL(PROFILE_DATA_FILES.publications, PROFILE_DATA_ROOT),
-  patents: new URL(PROFILE_DATA_FILES.patents, PROFILE_DATA_ROOT),
-  thesis: new URL(PROFILE_DATA_FILES.thesis, PROFILE_DATA_ROOT),
-} as const
+export const PROFILE_DIRECTORY = resolveProfileRoot()
+export const PROFILE_URL = pathToFileURL(`${PROFILE_DIRECTORY}${path.sep}`)
+export const SITE_DOCUMENT_URL = new URL("site/site.yml", PROFILE_URL)
+export const HOME_DOCUMENT_URL = new URL("home/home.yml", PROFILE_URL)
+export const ABOUT_DOCUMENT_URL = new URL("about/about.yml", PROFILE_URL)
+export const PROJECT_PAGE_DOCUMENT_URL = new URL("projects/page.yml", PROFILE_URL)
+export const PROJECTS_INDEX_URL = new URL("projects/index.yml", PROFILE_URL)
+export const TECH_STACK_DOCUMENT_URL = new URL("tech-stack/tech-stack.yml", PROFILE_URL)
+export const PROJECTS_DIRECTORY = path.join(PROFILE_DIRECTORY, "projects")
 
 export class ProfilePathError extends Error {
   override readonly name = "ProfilePathError"
 
-  constructor(
-    readonly sourcePath: string,
-    readonly pathKind: "media",
-  ) {
-    super(`Invalid ${pathKind} path: ${sourcePath}`)
+  constructor(readonly sourcePath: string) {
+    super(`Invalid public path: ${sourcePath}`)
   }
 }
 
-function normalizeRelativePath(sourcePath: string, pathKind: "media"): string {
-  let decodedPath: string
-  try {
-    decodedPath = decodeURIComponent(sourcePath)
-  } catch {
-    throw new ProfilePathError(sourcePath, pathKind)
+function publicPath(...segments: readonly string[]): PublicMediaPath {
+  const value = `/${segments.join("/")}`
+  if (segments.some((segment) => segment.length === 0 || segment.includes("/") || segment.includes("\\"))) {
+    throw new ProfilePathError(value)
   }
-  const normalized = path.posix.normalize(sourcePath)
-  const segments = sourcePath.split("/")
-  const hasUnsafeSegment = segments.some(
-    (segment) => segment === "" || segment === "." || segment === "..",
-  )
-
-  if (
-    sourcePath.includes("\\") ||
-    decodedPath !== sourcePath ||
-    path.posix.isAbsolute(sourcePath) ||
-    normalized !== sourcePath ||
-    hasUnsafeSegment
-  ) {
-    throw new ProfilePathError(sourcePath, pathKind)
-  }
-
-  return sourcePath
+  return value
 }
 
-export function normalizeMediaPath(sourcePath: string): string {
-  return `/${normalizeRelativePath(sourcePath, "media")}`
-}
-
-export const publicMediaPathSchema = z
-  .string()
-  .min(1)
-  .transform(normalizeMediaPath)
-  .brand("PublicMediaPath")
-export const PROJECT_PLACEHOLDER_MEDIA_PATH = publicMediaPathSchema.parse("projects/project-placeholder.png")
-
+export const publicMediaPathSchema = z.string().startsWith("/")
 export type PublicMediaPath = z.infer<typeof publicMediaPathSchema>
 
-export function publicMediaFilePath(publicPath: PublicMediaPath): string {
-  const filePath = path.resolve(PROFILE_MEDIA_DIRECTORY, publicPath.slice(1))
-  const relativePath = path.relative(PROFILE_MEDIA_DIRECTORY, filePath)
-  if (
-    relativePath === ".." ||
-    relativePath.startsWith(`..${path.sep}`) ||
-    path.isAbsolute(relativePath)
-  ) {
-    throw new ProfilePathError(publicPath, "media")
+export function siteMediaPath(filename: string): PublicMediaPath {
+  return publicPath("site", filename)
+}
+
+export function homeMediaPath(filename: string): PublicMediaPath {
+  return publicPath("home", filename)
+}
+
+export function projectMediaPath(projectId: string, filename: string): PublicMediaPath {
+  return publicPath("projects", projectId, filename)
+}
+
+export function projectDocumentUrl(projectId: string): URL {
+  return new URL(`projects/${projectId}/project.yml`, PROFILE_URL)
+}
+
+export function publicMediaFilePath(publicPathValue: PublicMediaPath): string {
+  const filePath = path.resolve(PROFILE_DIRECTORY, publicPathValue.slice(1))
+  const relativePath = path.relative(PROFILE_DIRECTORY, filePath)
+  if (relativePath === ".." || relativePath.startsWith(`..${path.sep}`) || path.isAbsolute(relativePath)) {
+    throw new ProfilePathError(publicPathValue)
   }
   return filePath
 }

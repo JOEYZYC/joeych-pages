@@ -58,15 +58,15 @@ test.describe("tech stack", () => {
 
       await expect(page.locator("html")).toHaveAttribute("lang", route.language)
       await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1)
-      await expect(page.locator(".intro > p:not(.eyebrow)")).toHaveText(UI[route.locale].routeIntros["tech-stack"].summary)
+      await expect(page.locator(".intro > p:not(.eyebrow)")).toHaveText(data.techStack.page.summary[route.locale])
       await expect(page.locator('[aria-current="page"]')).toHaveText(
         route.locale === "zh" ? "技术栈" : "Tech Stack",
       )
       expect(await page.locator("[data-skill-group]").evaluateAll(
         (groups) => groups.map((group) => group.getAttribute("data-skill-group")),
-      )).toEqual(data.profile.skills.map((group) => group.id))
+      )).toEqual(data.techStack.skills.map((group) => group.id))
 
-      for (const group of data.profile.skills) {
+      for (const group of data.techStack.skills) {
         const groupLocator = page.locator(`[data-skill-group="${group.id}"]`)
         await expect(groupLocator.getByRole("heading", { level: 2 })).toHaveText(group.title[route.locale])
         await expect(groupLocator.locator(".skill-group-heading > svg[data-icon=\"microchip\"]")).toHaveCount(1)
@@ -163,10 +163,11 @@ test.describe("tech stack", () => {
         window.localStorage.setItem("joeych-theme", selectedTheme)
       }, theme)
       await page.goto("tech-stack/")
+      const data = await getProfileData()
 
       await expect(page.locator("html")).toHaveAttribute("data-theme", theme)
       await expect(page.locator(".intro > p:not(.eyebrow)")).toHaveText(
-        UI.zh.routeIntros["tech-stack"].summary,
+        data.techStack.page.summary.zh,
       )
       await expect(page.getByRole("heading", { level: 3, name: /焊接调试/ })).toHaveCount(1)
       expect(await phraseLineCount(page.locator(".intro > p:not(.eyebrow)"), "项目证据")).toBe(1)

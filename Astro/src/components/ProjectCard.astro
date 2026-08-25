@@ -2,17 +2,20 @@
 import type { Project } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
-import type { RelatedAchievement } from "../lib/related-achievements"
 import ProjectMedia from "./ProjectMedia.astro"
 
 type Props = {
   readonly locale: Locale
   readonly project: Project
-  readonly relatedAchievements: readonly RelatedAchievement[]
 }
 
-const { locale, project, relatedAchievements } = Astro.props
+const { locale, project } = Astro.props
 const labels = UI[locale]
+const outcomeLabels = [
+  project.awards.length > 0 ? `${labels.sections.awards.awards} ${project.awards.length}` : "",
+  project.publications.length > 0 ? `${labels.sections.awards.publications} ${project.publications.length}` : "",
+  project.patents.length > 0 ? `${labels.sections.awards.patents} ${project.patents.length}` : "",
+].filter(Boolean)
 ---
 
 <a
@@ -21,7 +24,7 @@ const labels = UI[locale]
   data-project-card
   data-project-id={project.id}
   data-project-category={project.category.en}
-  data-project-honors={relatedAchievements.filter((achievement) => achievement.kind === "award").map((achievement) => achievement.record.id).join(" ")}
+  data-project-honors={project.awards.map(({ id }) => id).join(" ")}
   aria-controls="project-detail-dialog"
   aria-haspopup="dialog"
   hidden
@@ -35,10 +38,7 @@ const labels = UI[locale]
     <p class="project-card-meta"><span>{project.year}</span><span>{project.category[locale]}</span></p>
     <h2>{project.title[locale]}</h2>
     <p class="project-card-claim">{project.claim[locale]}</p>
-    <p class="project-card-achievements">
-      <span>{labels.sections.projects.achievements}</span>
-      <span>{relatedAchievements.length > 0 ? relatedAchievements.map((achievement) => achievement.record.title[locale]).join(" / ") : labels.projectExplorer.pending}</span>
-    </p>
+    {outcomeLabels.length > 0 && <p class="project-card-achievements">{outcomeLabels.join(" · ")}</p>}
     <span class="project-card-open">{labels.projectExplorer.open}</span>
   </div>
 </a>

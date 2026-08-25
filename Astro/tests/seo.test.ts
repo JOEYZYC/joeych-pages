@@ -6,19 +6,19 @@ import { buildPersonJsonLd, getSeoUrls, serializeJsonLd } from "../src/lib/seo"
 describe("SEO helpers", () => {
   it("builds a truthful Person graph from public Profile identity and contact fields", async () => {
     // Given: the public canonical Profile record
-    const { profile } = await getProfileData()
+    const { site } = await getProfileData()
 
     // When: the English Person graph is built
-    const actual = buildPersonJsonLd({ locale: "en", profile })
+    const actual = buildPersonJsonLd({ locale: "en", site })
 
     // Then: it carries only public name, role, email, and approved identity links
     expect(actual).toEqual({
       "@context": "https://schema.org",
       "@type": "Person",
-      name: profile.name.en,
-      jobTitle: profile.role.en,
-      email: profile.contact.email,
-      sameAs: [profile.contact.github, profile.contact.scholar, profile.contact.orcid],
+      name: site.name.en,
+      jobTitle: site.role.en,
+      email: site.contact.email,
+      sameAs: [site.contact.github, site.contact.scholar, site.contact.orcid],
     })
   })
 

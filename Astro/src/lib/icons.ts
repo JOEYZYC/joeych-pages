@@ -3,7 +3,6 @@ import { faGithub, faGoogleScholar, faOrcid } from "@fortawesome/free-brands-svg
 import {
   faArrowRight,
   faBars,
-  faBookOpen,
   faCertificate,
   faChevronLeft,
   faChevronRight,
@@ -12,12 +11,10 @@ import {
   faFileLines,
   faGraduationCap,
   faLanguage,
-  faLightbulb,
   faLink,
   faMicrochip,
   faMoon,
   faSun,
-  faTrophy,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons"
 
@@ -31,10 +28,7 @@ export const ICONS = {
   "chevron-left": faChevronLeft,
   "chevron-right": faChevronRight,
   certificate: faCertificate,
-  trophy: faTrophy,
   "graduation-cap": faGraduationCap,
-  "book-open": faBookOpen,
-  lightbulb: faLightbulb,
   "file-lines": faFileLines,
   microchip: faMicrochip,
   link: faLink,

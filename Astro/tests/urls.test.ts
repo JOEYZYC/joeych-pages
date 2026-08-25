@@ -6,7 +6,7 @@ describe("base-aware URL helpers", () => {
   it.each([
     ["/", "/joeych-pages/"],
     ["", "/joeych-pages/"],
-    ["experience/", "/joeych-pages/experience/"],
+    ["about/", "/joeych-pages/about/"],
     ["/joeych-pages/projects/", "/joeych-pages/projects/"],
     ["/projects/?filter=featured#project-1", "/joeych-pages/projects/?filter=featured#project-1"],
     ["/projects///archive/", "/joeych-pages/projects/archive/"],

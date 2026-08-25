@@ -1,0 +1,80 @@
+id: full-model-smart-car
+year: 2024
+featured: false
+image: 完全模型车.jpg
+title:
+  zh: 智能车模型组团队开发归档
+  en: Smart Car Model-Group Team Development Archive
+claim:
+  zh: 2024 年全国大学生智能汽车竞赛模型组的团队开发归档，记录控制、感知和硬件分支的探索。
+  en: A team development archive for the model group of the 2024 National College
+    Student Intelligent Car Competition, documenting explorations in control,
+    sensing, and hardware.
+category:
+  zh: 嵌入式控制 / 智能车
+  en: Embedded Control / Smart Car
+summary:
+  zh: 面向 TC264/TC264D 的团队开发归档涉及嵌入式 C、DRV8701E
+    电机驱动、PWM、编码器反馈、PID、舵机转向、相机图像实验、IMU、UART/显示及定制 PCB。记录仅描述开发分支。
+  en: This team development archive for the TC264/TC264D covers embedded C, a
+    DRV8701E motor driver, PWM, encoder feedback, PID, servo steering, camera
+    and image experiments, IMU, UART/display, and a custom PCB. It describes
+    development branches only.
+contribution:
+  zh: 请补充
+  en: To be completed
+tags:
+  - zh: TC264 / TC264D
+    en: TC264 / TC264D
+  - zh: 嵌入式 C
+    en: Embedded C
+  - zh: PWM / PID
+    en: PWM / PID
+  - zh: 编码器反馈
+    en: Encoder Feedback
+  - zh: IMU / UART
+    en: IMU / UART
+  - zh: DRV8701E 电机驱动
+    en: DRV8701E Motor Driver
+  - zh: 舵机控制
+    en: Servo Control
+  - zh: 相机图像实验
+    en: Camera / Image Experiments
+  - zh: 定制 PCB
+    en: Custom PCB
+figures:
+  - id: full-model-smart-car-track
+    src: 完全模型车.jpg
+    zh: 完全模型组智能车赛道测试
+    en: Full-model smart car during track testing
+  - id: full-model-smart-car-driver-board
+    src: 驱动板.jpg
+    zh: 智能车电机驱动板实物
+    en: Motor-driver board used by the smart car
+links: []
+awards:
+  - id: smart-car-east-third-2024
+    year: 2024
+    featured: false
+    title:
+      zh: 全国大学生智能汽车竞赛（完全模型组）
+      en: National Collegiate Smart Car Competition (Full-Model Group)
+    prizes:
+      - level: regional
+        zh: 华东 三等
+        en: East-China Third
+      - level: regional
+        zh: 三等奖
+        en: Third Prize
+    tags:
+      - smart-car
+    links: []
+    certificates:
+      - src: 24智能车省三个人.png
+        zh: 全国大学生智能汽车竞赛省三（个人）
+        en: Smart Car Competition — Provincial Third (Individual)
+      - src: 24智能车省三团队.png
+        zh: 全国大学生智能汽车竞赛省三（团队）
+        en: Smart Car Competition — Provincial Third (Team)
+publications: []
+patents: []

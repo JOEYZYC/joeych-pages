@@ -1,8 +1,8 @@
 ---
 import { Font } from "astro:assets"
+import type { PageMeta, Site } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import type { RouteId } from "../lib/routes"
-import type { Profile } from "../content/schemas"
 import { UI } from "../i18n/ui"
 import "../styles/fonts.css"
 import "../styles/base.css"
@@ -14,14 +14,14 @@ import SiteFooter from "../components/SiteFooter.astro"
 
 type Props = {
   readonly locale: Locale
-  readonly profile: Profile
+  readonly page: PageMeta
   readonly routeId: RouteId
+  readonly site: Site
 }
-const { locale, profile, routeId } = Astro.props
+const { locale, page, routeId, site } = Astro.props
 const labels = UI[locale]
-const pageTitle = labels.routeIntros[routeId].title
-const title = `${pageTitle} | ${profile.name[locale]}`
-const description = `${pageTitle}: ${profile.summary[locale]}`
+const title = `${page.title[locale]} | ${site.name[locale]}`
+const description = page.summary[locale]
 ---
 
 <!doctype html>
@@ -49,12 +49,12 @@ const description = `${pageTitle}: ${profile.summary[locale]}`
     </script>
     {locale === "en" && <Font cssVariable="--font-dm-sans" preload />}
     <Font cssVariable="--font-google-sans-code" preload />
-    <SeoHead routeId={routeId} locale={locale} profile={profile} title={title} description={description} />
+    <SeoHead routeId={routeId} locale={locale} site={site} title={title} description={description} />
   </head>
   <body>
     <a class="skip-link" href="#main-content">{labels.skipToContent}</a>
-    <SiteHeader locale={locale} profile={profile} routeId={routeId} />
+    <SiteHeader locale={locale} site={site} routeId={routeId} />
     <main id="main-content" class="site-main" tabindex="-1"><slot /></main>
-    <SiteFooter locale={locale} profile={profile} />
+    <SiteFooter locale={locale} site={site} />
   </body>
 </html>

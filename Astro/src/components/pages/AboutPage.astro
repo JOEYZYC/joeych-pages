@@ -1,0 +1,112 @@
+---
+import type { Locale } from "../../i18n/locales"
+import { UI } from "../../i18n/ui"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import { getProfileData } from "../../lib/profile-data"
+import "../../styles/about.css"
+import EditorialIntro from "../EditorialIntro.astro"
+import Icon from "../Icon.astro"
+
+type Props = { readonly locale: Locale }
+
+const { locale } = Astro.props
+const { about, site } = await getProfileData()
+const labels = UI[locale].sections.about
+const facts = [
+  { label: labels.name, value: site.name[locale] },
+  { label: labels.role, value: site.role[locale] },
+  { label: labels.hometown, value: about.hometown[locale] },
+  { label: labels.political, value: about.political[locale] },
+  { label: labels.direction, value: about.tagline[locale] },
+]
+---
+
+<BaseLayout locale={locale} page={about.page} site={site} routeId="about">
+  <EditorialIntro
+    overline={about.page.overline[locale]}
+    title={about.page.title[locale]}
+    summary={about.page.summary[locale]}
+  />
+
+  <section class="about-lead" aria-label={about.page.title[locale]}>
+    <article class="about-panel about-overview" aria-labelledby="about-overview-title">
+      <p class="eyebrow">{about.page.overline[locale]}</p>
+      <h2 id="about-overview-title">{labels.overview}</h2>
+      {about.overview.map((paragraph) => <p>{paragraph[locale]}</p>)}
+    </article>
+
+    <aside class="about-panel about-facts" aria-labelledby="about-facts-title">
+      <h2 id="about-facts-title">{labels.basic}</h2>
+      <dl>
+        {facts.map((fact) => <div><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
+      </dl>
+    </aside>
+  </section>
+
+  <section class="about-section" aria-labelledby="about-statistics-title">
+    <header class="about-section-heading">
+      <h2 id="about-statistics-title">{labels.statistics}</h2>
+    </header>
+    <div class="about-statistics">
+      {about.statistics.map((statistic) => <article data-about-statistic={statistic.id}>
+        <strong>{statistic.value}</strong>
+        <span>{statistic.label[locale]}</span>
+      </article>)}
+    </div>
+  </section>
+
+  <section class="about-direction-grid" aria-label={`${labels.interests} / ${labels.goal}`}>
+    <article class="about-panel" aria-labelledby="about-interests-title">
+      <h2 id="about-interests-title">{labels.interests}</h2>
+      <ul class="about-interest-list">
+        {about.interests.map((interest) => <li>{interest[locale]}</li>)}
+      </ul>
+    </article>
+    <article class="about-panel about-goal" aria-labelledby="about-goal-title">
+      <h2 id="about-goal-title">{labels.goal}</h2>
+      <p>{about.goal[locale]}</p>
+    </article>
+  </section>
+
+  <section class="about-section about-chronology" aria-labelledby="about-education-title">
+    <header class="about-section-heading">
+      <h2 id="about-education-title">
+        <span class="about-heading-icon" aria-hidden="true"><Icon name="graduation-cap" /></span>
+        {labels.education}
+      </h2>
+    </header>
+    <div class="about-grid">
+      {about.education.map((education) => <article
+        id={`education-${education.id}`}
+        class="about-record about-record--education"
+        data-about-record
+        data-about-kind="education"
+      >
+        <p class="about-period">{education.period}</p>
+        <h3>{education.school[locale]}</h3>
+        <p class="about-role">{education.degree[locale]}</p>
+        <ul>{education.highlights.map((highlight) => <li>{highlight[locale]}</li>)}</ul>
+      </article>)}
+    </div>
+  </section>
+
+  <section class="about-section about-chronology" aria-labelledby="about-campus-title">
+    <header class="about-section-heading">
+      <h2 id="about-campus-title">{labels.campus}</h2>
+    </header>
+    <div class="about-grid">
+      {about.campus_experience.map((experience, index) => <article
+        id={`campus-${experience.id}`}
+        class="about-record about-record--campus"
+        data-about-record
+        data-about-kind="campus"
+        data-about-position={index + 1}
+      >
+        <p class="about-period">{experience.period}</p>
+        <h3>{experience.organization[locale]}</h3>
+        <p class="about-role">{experience.role[locale]}</p>
+        <ul>{experience.details.map((detail) => <li>{detail[locale]}</li>)}</ul>
+      </article>)}
+    </div>
+  </section>
+</BaseLayout>

@@ -8,8 +8,7 @@ on:
       - Astro/**
       - "!Astro/Demo/**"
       - "!Astro/research/**"
-      - Profile/data/**
-      - Profile/media/**
+      - Profile/**
       - .github/workflows/deploy-pages.yml
   workflow_dispatch: {}
 

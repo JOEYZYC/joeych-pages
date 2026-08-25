@@ -2,7 +2,7 @@ import { getCorrespondingLocale, type Locale } from "../i18n/locales"
 
 const UNPREFIXED_REFERENCE = /^(?:https?:\/\/|mailto:|\/\/|#|\?)/i
 
-export const ROUTE_IDS = ["home", "experience", "awards", "projects", "tech-stack"] as const
+export const ROUTE_IDS = ["home", "about", "projects", "tech-stack"] as const
 
 export type RouteId = (typeof ROUTE_IDS)[number]
 
@@ -10,8 +10,7 @@ type LocalePaths = Readonly<Record<Locale, string>>
 
 export const ROUTES = {
   home: { zh: "/", en: "/en/" },
-  experience: { zh: "/experience/", en: "/en/experience/" },
-  awards: { zh: "/awards/", en: "/en/awards/" },
+  about: { zh: "/about/", en: "/en/about/" },
   projects: { zh: "/projects/", en: "/en/projects/" },
   "tech-stack": { zh: "/tech-stack/", en: "/en/tech-stack/" },
 } as const satisfies Readonly<Record<RouteId, LocalePaths>>

@@ -1,6 +1,6 @@
 # Third-Party Fonts
 
-This static Astro site bundles all font bytes locally. It makes no runtime request to Google Fonts, Typekit, or another remote font host. Font files are emitted as base-aware build assets; `Profile/media/` remains content-only and does not contain fonts.
+This static Astro site bundles all font bytes locally. It makes no runtime request to Google Fonts, Typekit, or another remote font host. Font files are emitted as base-aware build assets; the page-owned public `Profile/` bundles do not contain fonts.
 
 ## Package Wrapper and Source Records
 

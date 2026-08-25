@@ -1,0 +1,240 @@
+page:
+  overline:
+    zh: 专业能力
+    en: Capabilities
+  title:
+    zh: 技术栈
+    en: Tech Stack
+  summary:
+    zh: 按技能领域查看对应组件、能力语境与项目证据。
+    en: Browse technical capabilities by domain with their components, context, and
+      project evidence.
+skills:
+  - id: hardware
+    title:
+      zh: 硬件
+      en: Hardware
+    tags:
+      - id: hardware-design-pcb
+        zh: 电子电路设计 · 多层 PCB 布板 · 焊接调试
+        en: Circuit design · multilayer PCB layout · soldering & debugging
+        components:
+          - id: circuit-design
+          - id: pcb-layout
+          - id: multilayer-pcb-layout
+          - id: soldering-debugging
+        evidence:
+          - type: project
+            project_id: single-phase-power-analyzer
+            scope: project-record
+            supports:
+              - circuit-design
+          - type: project
+            project_id: full-model-smart-car
+            scope: project-record
+            supports:
+              - pcb-layout
+          - type: general-ability
+            verification: self-described
+            level: working
+            supports:
+              - multilayer-pcb-layout
+              - soldering-debugging
+      - id: hardware-platforms
+        zh: ST / Renesas / TI / Infineon
+        en: ST / Renesas / TI / Infineon
+        components:
+          - id: st
+          - id: renesas
+          - id: ti
+          - id: infineon
+        evidence:
+          - type: project
+            project_id: dual-light-fusion
+            scope: project-record
+            supports:
+              - st
+          - type: project
+            project_id: power-print-recognition
+            scope: project-record
+            supports:
+              - renesas
+          - type: project
+            project_id: single-phase-power-analyzer
+            scope: project-record
+            supports:
+              - ti
+          - type: general-ability
+            verification: self-described
+            level: exposure
+            supports:
+              - infineon
+      - id: uav-pilot-level-5
+        zh: 无人机驾驶员 五级/初级工
+        en: UAV Pilot
+        components:
+          - id: uav-pilot-level-5
+        evidence:
+          - type: credential
+            verification: public-profile-claim
+            supports:
+              - uav-pilot-level-5
+      - id: electrician-senior
+        zh: 电工 三级/高级工
+        en: Electrician
+        components:
+          - id: electrician-senior
+        evidence:
+          - type: credential
+            verification: public-profile-claim
+            supports:
+              - electrician-senior
+  - id: software
+    title:
+      zh: 软件
+      en: Software
+    tags:
+      - id: languages-c-csharp-python
+        zh: C / C# / Python
+        en: C / C# / Python
+        components:
+          - id: c
+          - id: csharp
+          - id: python
+        evidence:
+          - type: project
+            project_id: full-model-smart-car
+            scope: project-record
+            supports:
+              - c
+          - type: project
+            project_id: power-print-recognition
+            scope: project-record
+            supports:
+              - csharp
+          - type: project
+            project_id: intelligent-reconnaissance-2024
+            scope: project-record
+            supports:
+              - python
+      - id: linux-docker-deployment
+        zh: Linux & Docker 容器部署
+        en: Linux & Docker deployment
+        components:
+          - id: linux
+          - id: docker-deployment
+        evidence:
+          - type: general-ability
+            verification: self-described
+            level: working
+            supports:
+              - linux
+              - docker-deployment
+      - id: git-team-collaboration
+        zh: Git 版本管理与团队协作
+        en: Git version control & team collaboration
+        components:
+          - id: git
+          - id: team-collaboration
+        evidence:
+          - type: general-ability
+            verification: self-described
+            level: working
+            supports:
+              - git
+          - type: project
+            project_id: full-model-smart-car
+            scope: project-record
+            supports:
+              - team-collaboration
+  - id: algorithms-simulation
+    title:
+      zh: 算法与仿真
+      en: Algorithms & Simulation
+    tags:
+      - id: vision-halcon-opencv
+        zh: Halcon / OpenCV 图像处理与视觉算法
+        en: Halcon / OpenCV image processing & vision
+        components:
+          - id: halcon
+          - id: opencv
+        evidence:
+          - type: general-ability
+            verification: self-described
+            level: exposure
+            supports:
+              - halcon
+          - type: project
+            project_id: intelligent-reconnaissance-2023
+            scope: project-record
+            supports:
+              - opencv
+          - type: project
+            project_id: intelligent-reconnaissance-2024
+            scope: project-record
+            supports:
+              - opencv
+          - type: project
+            project_id: smart-harvesting-robot
+            scope: project-record
+            supports:
+              - opencv
+      - id: matlab-simulink
+        zh: MATLAB / Simulink 建模仿真
+        en: MATLAB / Simulink modeling & simulation
+        components:
+          - id: matlab
+          - id: simulink
+        evidence:
+          - type: general-ability
+            verification: self-described
+            level: working
+            supports:
+              - matlab
+              - simulink
+      - id: cst-microwave-antenna
+        zh: CST Studio Suite 微波仿真与天线设计
+        en: CST Studio Suite microwave simulation & antenna design
+        components:
+          - id: cst-studio-suite
+          - id: microwave-simulation
+          - id: antenna-design
+        evidence:
+          - type: project
+            project_id: rigid-dual-polarization-metasurface
+            scope: project-record
+            supports:
+              - cst-studio-suite
+              - microwave-simulation
+          - type: general-ability
+            verification: self-described
+            level: working
+            supports:
+              - antenna-design
+  - id: general
+    title:
+      zh: 通用
+      en: General
+    tags:
+      - id: ai-assisted-development
+        zh: 善用 AI 工具提升开发效率
+        en: AI-assisted development
+        components:
+          - id: ai-assisted-development
+        evidence:
+          - type: general-ability
+            verification: self-described
+            level: working
+            supports:
+              - ai-assisted-development
+      - id: english-technical-reading
+        zh: 良好英语能力，能阅读英文技术文档
+        en: Strong English
+        components:
+          - id: english-technical-reading
+        evidence:
+          - type: general-ability
+            verification: self-described
+            level: working
+            supports:
+              - english-technical-reading

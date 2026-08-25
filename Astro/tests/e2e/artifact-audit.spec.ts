@@ -11,7 +11,7 @@ const emittedFontLimit = 42 * 1024 * 1024
 const protectedMarkers = [["Profile", "private"], ["Astro", "Demo"], ["Astro", "research"], ["Jeklly"], ["TOOLS"]]
   .map((segments) => `${segments.join("/")}/`)
 const forbiddenRuntimeMarkers = ["ClientRouter", "astro:transitions", "transition:persist", "serviceWorker", "navigator.serviceWorker"]
-const expectedHtml = ["awards/index.html", "en/awards/index.html", "en/experience/index.html", "en/index.html", "en/projects/index.html", "en/tech-stack/index.html", "experience/index.html", "index.html", "projects/index.html", "tech-stack/index.html"]
+const expectedHtml = ["about/index.html", "en/about/index.html", "en/index.html", "en/projects/index.html", "en/tech-stack/index.html", "index.html", "projects/index.html", "tech-stack/index.html"]
 const textExtensions = new Set([".css", ".html", ".js", ".json", ".mjs", ".svg", ".text", ".xml"])
 
 async function files(directory: string): Promise<readonly string[]> {
@@ -65,7 +65,7 @@ test.describe("fresh static artifact audit", () => {
     const fontFiles = artifactFiles.filter((path) => path.endsWith(".woff2"))
     const fontBytes = (await Promise.all(fontFiles.map(async (path) => (await stat(path)).size))).reduce((total, bytes) => total + bytes, 0)
 
-    // Then: exactly ten base-aware static documents remain free of alternate runtimes and protected inputs
+    // Then: exactly eight base-aware static documents remain free of alternate runtimes and protected inputs
     expect(relativeHtml).toHaveLength(CANONICAL_ROUTES.length)
     expect(relativeHtml).toContain("index.html")
     expect(relativeHtml).toEqual(expectedHtml)

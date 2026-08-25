@@ -2,7 +2,7 @@
 
 ## Overview
 
-This directory retains the archived global presentation and shared browser-behavior source. The [design contract](../DESIGN.md) records the associated design contract. Semantic records are owned by [Profile data](../../Profile/data/), and published media is owned by [Profile media](../../Profile/media/).
+This directory retains the archived global presentation and shared browser-behavior source. The [design contract](../DESIGN.md) records the associated design contract. Semantic records and their colocated public files are owned by the [Profile bundles](../../Profile/).
 
 ## Retained Structure
 

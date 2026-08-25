@@ -2,9 +2,8 @@
 import type { Project } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
-import type { RelatedAchievement } from "../lib/related-achievements"
-import { getRoutePath } from "../lib/routes"
 import { publicMediaUrl } from "../lib/urls"
+import CertificateDialog from "./CertificateDialog.astro"
 import ProjectMedia from "./ProjectMedia.astro"
 
 type Props = {
@@ -12,10 +11,9 @@ type Props = {
   readonly locale: Locale
   readonly mode: "dialog" | "record"
   readonly project: Project
-  readonly relatedAchievements: readonly RelatedAchievement[]
 }
 
-const { idPrefix, locale, mode, project, relatedAchievements } = Astro.props
+const { idPrefix, locale, mode, project } = Astro.props
 const labels = UI[locale]
 const remainingFigures = project.figures.filter((figure) => figure.src !== project.image)
 const titleId = `${idPrefix}-title`
@@ -40,17 +38,8 @@ const titleId = `${idPrefix}-title`
 </header>
 
 {project.image === null ? (
-  <div
-    class="project-media project-media--record project-media--unavailable"
-    data-project-media
-    data-project-media-context="record"
-    data-project-media-kind="unavailable"
-    role="img"
-    aria-label={labels.projectExplorer.imagePendingAlt}
-  >
-    <div class="project-media-well">
-      <p class="project-media-pending">{labels.projectExplorer.imagePending}</p>
-    </div>
+  <div class="project-media project-media--record project-media--unavailable" data-project-media data-project-media-context="record" data-project-media-kind="unavailable" role="img" aria-label={labels.projectExplorer.imagePendingAlt}>
+    <div class="project-media-well"><p class="project-media-pending">{labels.projectExplorer.imagePending}</p></div>
   </div>
 ) : <ProjectMedia context="record" locale={locale} record={project} loading="lazy" />}
 
@@ -60,42 +49,44 @@ const titleId = `${idPrefix}-title`
     {project.tags.map((tag) => <li>{tag[locale]}</li>)}
   </ul>
 
-  <section class="project-record-section project-related-achievements" aria-labelledby={`${idPrefix}-achievements`}>
-    <h3 id={`${idPrefix}-achievements`}>{labels.sections.projects.achievements}</h3>
-    {relatedAchievements.length > 0 ? (
-      <div class="project-related-achievement-grid">
-        {relatedAchievements.map((achievement) => {
-          const record = achievement.record
-          const archiveId = `${achievement.kind}-${record.id}`
-          const certificates = record.certificates
-          return <article class="project-related-achievement" data-related-achievement-id={record.id} data-related-achievement-kind={achievement.kind}>
-            <p class="project-related-achievement-kind">
-              {achievement.kind === "award" ? labels.sections.awards.awards : labels.sections.awards.publications}
-            </p>
-            <h4>{record.title[locale]}</h4>
-            {achievement.kind === "award"
-              ? <p class="project-related-achievement-detail">{record.prizes.map((prize) => prize[locale]).join(" / ")}</p>
-              : <p class="project-related-achievement-detail">{record.venue[locale]} · {record.authors[locale]}</p>}
-            <a class="project-related-achievement-link" href={`${getRoutePath("awards", locale)}#${archiveId}`}>
-              {labels.sections.projects.archive}
-            </a>
-            {certificates.length > 0 && (
-              <div class="project-related-certificate-grid">
-                {certificates.map((certificate) => (
-                  <figure>
-                    <a href={publicMediaUrl(certificate.src)} target="_blank" rel="noopener noreferrer">
-                      <img src={publicMediaUrl(certificate.src)} alt={certificate[locale]} loading="lazy" />
-                    </a>
-                    <figcaption>{certificate[locale]}</figcaption>
-                  </figure>
-                ))}
-              </div>
-            )}
-          </article>
-        })}
+  {project.awards.length > 0 && (
+    <section class="project-record-section project-outcomes" aria-labelledby={`${idPrefix}-awards`}>
+      <h3 id={`${idPrefix}-awards`}>{labels.sections.awards.awards}</h3>
+      <div class="project-outcome-grid">
+        {project.awards.map((award) => <article class="project-outcome" data-project-outcome-kind="award" data-project-outcome-id={award.id}>
+          <h4>{award.title[locale]}</h4>
+          <p>{award.prizes.map((prize) => prize[locale]).join(" / ")}</p>
+          {award.certificates.length > 0 && <CertificateDialog certificates={award.certificates} id={`${idPrefix}-award-${award.id}`} locale={locale} />}
+        </article>)}
       </div>
-    ) : <p class="project-template-unavailable">{labels.projectExplorer.pending}</p>}
-  </section>
+    </section>
+  )}
+
+  {project.publications.length > 0 && (
+    <section class="project-record-section project-outcomes" aria-labelledby={`${idPrefix}-publications`}>
+      <h3 id={`${idPrefix}-publications`}>{labels.sections.awards.publications}</h3>
+      <div class="project-outcome-grid">
+        {project.publications.map((publication) => <article class="project-outcome" data-project-outcome-kind="publication" data-project-outcome-id={publication.id}>
+          <h4>{publication.title[locale]}</h4>
+          <p>{publication.venue[locale]} · {publication.authors[locale]}</p>
+          {publication.certificates.length > 0 && <CertificateDialog certificates={publication.certificates} id={`${idPrefix}-publication-${publication.id}`} locale={locale} />}
+        </article>)}
+      </div>
+    </section>
+  )}
+
+  {project.patents.length > 0 && (
+    <section class="project-record-section project-outcomes" aria-labelledby={`${idPrefix}-patents`}>
+      <h3 id={`${idPrefix}-patents`}>{labels.sections.awards.patents}</h3>
+      <div class="project-outcome-grid">
+        {project.patents.map((patent) => <article class="project-outcome" data-project-outcome-kind="patent" data-project-outcome-id={patent.id}>
+          <h4>{patent.title[locale]}</h4>
+          <p>{patent.authors[locale]}</p>
+          {patent.certificates.length > 0 && <CertificateDialog certificates={patent.certificates} id={`${idPrefix}-patent-${patent.id}`} locale={locale} />}
+        </article>)}
+      </div>
+    </section>
+  )}
 
   <section class="project-record-section project-record-contribution" aria-labelledby={`${idPrefix}-contribution`}>
     <h3 id={`${idPrefix}-contribution`}>{labels.sections.projects.contribution}</h3>
@@ -106,15 +97,9 @@ const titleId = `${idPrefix}-title`
     <section class="project-record-section project-figures" aria-labelledby={`${idPrefix}-figures`}>
       <h3 id={`${idPrefix}-figures`}>{labels.sections.projects.figures}</h3>
       <div class="project-figure-grid">
-        {remainingFigures.map((figure) => {
-          if (figure.src === undefined) {
-            return <figure class="project-figure-unavailable"><figcaption>{figure[locale]}</figcaption><p>{labels.unavailable.media}</p></figure>
-          }
-          return <figure>
-            <img src={publicMediaUrl(figure.src)} alt={figure[locale]} loading="lazy" decoding="async" />
-            <figcaption>{figure[locale]}</figcaption>
-          </figure>
-        })}
+        {remainingFigures.map((figure) => figure.src === undefined
+          ? <figure class="project-figure-unavailable"><figcaption>{figure[locale]}</figcaption><p>{labels.unavailable.media}</p></figure>
+          : <figure><img src={publicMediaUrl(figure.src)} alt={figure[locale]} loading="lazy" decoding="async" /><figcaption>{figure[locale]}</figcaption></figure>)}
       </div>
     </section>
   )}
@@ -122,11 +107,9 @@ const titleId = `${idPrefix}-title`
   {project.links.length > 0 && (
     <section class="project-record-section project-links" aria-labelledby={`${idPrefix}-links`}>
       <h3 id={`${idPrefix}-links`}>{labels.sections.projects.links}</h3>
-      <ul>
-        {project.links.map((link) => <li>{link.url === null
-          ? <span class="project-link-unavailable" data-project-link-unavailable>{link.label[locale]} — {labels.unavailable.link}</span>
-          : <a href={link.url} target="_blank" rel="noopener noreferrer"><span data-project-link-marker aria-hidden="true">{labels.links.external}</span>{link.label[locale]}</a>}</li>)}
-      </ul>
+      <ul>{project.links.map((link) => <li>{link.url === null
+        ? <span class="project-link-unavailable" data-project-link-unavailable>{link.label[locale]} — {labels.unavailable.link}</span>
+        : <a href={link.url} target="_blank" rel="noopener noreferrer"><span data-project-link-marker aria-hidden="true">{labels.links.external}</span>{link.label[locale]}</a>}</li>)}</ul>
     </section>
   )}
 </div>

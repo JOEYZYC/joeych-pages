@@ -1,32 +1,45 @@
 import type { z } from "astro/zod"
-import type { profileSchema } from "./profile-schema"
+import type {
+  aboutSchema,
+  homeSchema,
+  pageMetaSchema,
+  projectPageSchema,
+  siteSchema,
+  techStackSchema,
+} from "./page-schemas"
 import type {
   awardSchema,
   patentSchema,
   projectSchema,
   publicationSchema,
-  thesisSchema,
 } from "./record-schemas"
 import type { certificateSchema } from "./schema-fields"
 
-export { profileSchema } from "./profile-schema"
+export {
+  aboutSchema,
+  homeSchema,
+  pageMetaSchema,
+  projectPageSchema,
+  siteSchema,
+  techStackSchema,
+} from "./page-schemas"
 export {
   awardSchema,
-  awardsSchema,
   patentSchema,
-  patentsSchema,
   projectSchema,
-  projectsSchema,
+  projectsIndexSchema,
   publicationSchema,
-  publicationsSchema,
-  thesisSchema,
 } from "./record-schemas"
 export { projectIdSchema } from "./schema-fields"
 
-export type Profile = z.infer<typeof profileSchema>
+export type Site = z.infer<typeof siteSchema>
+export type Home = z.infer<typeof homeSchema>
+export type About = z.infer<typeof aboutSchema>
+export type PageMeta = z.infer<typeof pageMetaSchema>
+export type ProjectPage = z.infer<typeof projectPageSchema>
+export type TechStack = z.infer<typeof techStackSchema>
 export type Project = z.infer<typeof projectSchema>
 export type Award = z.infer<typeof awardSchema>
 export type Publication = z.infer<typeof publicationSchema>
 export type Patent = z.infer<typeof patentSchema>
-export type Thesis = z.infer<typeof thesisSchema>
 export type Certificate = z.infer<typeof certificateSchema>

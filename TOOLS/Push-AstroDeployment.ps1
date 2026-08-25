@@ -99,8 +99,7 @@ try {
             if (($path -imatch '^Astro/' -and
                     $path -inotmatch '^Astro/Demo(?:/|$)' -and
                     $path -inotmatch '^Astro/research(?:/|$)') -or
-                $path -imatch '^Profile/data/' -or
-                $path -imatch '^Profile/media/' -or
+                $path -imatch '^Profile/' -or
                 $path -ceq '.github/workflows/deploy-pages.yml') {
                 $hasWorkflowTriggerPath = $true
             }

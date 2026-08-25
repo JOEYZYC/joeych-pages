@@ -11,16 +11,15 @@ import SkillGroup from "../SkillGroup.astro"
 type Props = { readonly locale: Locale }
 const { locale } = Astro.props
 const data = await getProfileData()
-const intro = UI[locale].routeIntros["tech-stack"]
 const projectTitles: ReadonlyMap<Project["id"], string> = new Map(
   data.projects.map((project) => [project.id, project.title[locale]]),
 )
 ---
 
-<BaseLayout locale={locale} profile={data.profile} routeId="tech-stack">
-  <EditorialIntro overline={intro.overline} title={intro.title} summary={intro.summary} />
+<BaseLayout locale={locale} page={data.techStack.page} site={data.site} routeId="tech-stack">
+  <EditorialIntro overline={data.techStack.page.overline[locale]} title={data.techStack.page.title[locale]} summary={data.techStack.page.summary[locale]} />
   <div class="tech-stack-ledger" aria-label={UI[locale].sections["tech-stack"].skills}>
-    {data.profile.skills.map((group) => (
+    {data.techStack.skills.map((group) => (
       <SkillGroup group={group} locale={locale} projectTitles={projectTitles} />
     ))}
   </div>

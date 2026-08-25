@@ -1,4 +1,5 @@
 import { execFileSync } from "node:child_process"
+import { existsSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 
 import { describe, expect, it } from "vitest"
@@ -34,6 +35,10 @@ describe("publication firewall", () => {
     }).trim().split(/\r?\n/)
 
     expect(ignoredPaths).toEqual(localOnlyPaths)
+  })
+
+  it("keeps the directly published Profile package free of a private tree", () => {
+    expect(existsSync(fileURLToPath(new URL("../../Profile/private/", import.meta.url)))).toBe(false)
   })
 
   it("rejects protected tracked paths", () => {

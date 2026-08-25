@@ -12,19 +12,19 @@ type Props = { readonly locale: Locale }
 
 const { locale } = Astro.props
 const data = await getProfileData()
-const { profile } = data
+const { home, site } = data
 const labels = UI[locale]
-const heroBackgroundStyle = `--home-background-light: url("${publicMediaUrl(profile.hero_background.light)}"); --home-background-dark: url("${publicMediaUrl(profile.hero_background.dark)}")`
+const heroBackgroundStyle = `--home-background-light: url("${publicMediaUrl(home.hero_background.light)}"); --home-background-dark: url("${publicMediaUrl(home.hero_background.dark)}")`
 ---
 
-<BaseLayout locale={locale} profile={profile} routeId="home">
+<BaseLayout locale={locale} page={home.page} site={site} routeId="home">
   <section class="home-hero" data-home-grid data-home-hero aria-labelledby="page-title">
     <div class="home-copy" data-home-copy>
-      <h1 id="page-title">{profile.home_heading[locale]}</h1>
-      <p class="home-summary">{profile.summary[locale]}</p>
+      <h1 id="page-title">{home.heading[locale]}</h1>
+      <p class="home-summary">{home.page.summary[locale]}</p>
       <div class="home-actions">
-        <a class="home-action home-action--primary" href={getRoutePath("experience", locale)}>
-          <span>{labels.actions.experience}</span>
+        <a class="home-action home-action--primary" href={getRoutePath("about", locale)}>
+          <span>{labels.actions.about}</span>
           <span class="home-action-icon" aria-hidden="true"><Icon name="arrow-right" /></span>
         </a>
         <a class="home-action home-action--primary" href={getRoutePath("projects", locale)}>
@@ -36,8 +36,8 @@ const heroBackgroundStyle = `--home-background-light: url("${publicMediaUrl(prof
 
     <figure class="home-portrait" data-home-portrait>
       <img
-        src={publicMediaUrl(profile.portrait)}
-        alt={profile.name[locale]}
+        src={publicMediaUrl(home.portrait)}
+        alt={site.name[locale]}
         width="1051"
         height="1497"
       />

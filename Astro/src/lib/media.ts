@@ -2,7 +2,7 @@ import { lstat } from "node:fs/promises"
 import path from "node:path"
 
 import {
-  PROFILE_MEDIA_DIRECTORY,
+  PROFILE_DIRECTORY,
   type PublicMediaPath,
   publicMediaFilePath,
 } from "./profile-paths"
@@ -29,8 +29,8 @@ export class UnsafePublicMediaError extends Error {
 async function assertPublicMediaFile(publicPath: PublicMediaPath): Promise<void> {
   try {
     const filePath = publicMediaFilePath(publicPath)
-    const relativePath = path.relative(PROFILE_MEDIA_DIRECTORY, filePath)
-    let currentPath = PROFILE_MEDIA_DIRECTORY
+    const relativePath = path.relative(PROFILE_DIRECTORY, filePath)
+    let currentPath = PROFILE_DIRECTORY
     let mediaStat = await lstat(currentPath)
     if (mediaStat.isSymbolicLink()) {
       throw new UnsafePublicMediaError(publicPath)

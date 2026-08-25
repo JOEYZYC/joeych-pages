@@ -1,0 +1,86 @@
+id: bifunctional-flexible-metasurface
+year: 2024
+featured: true
+image: modlepic.jpg
+title:
+  zh: 基于石墨烯和二氧化钒的双功能柔性超表面
+  en: Bifunctional flexible metasurface based on graphene and vanadium dioxide for
+    polarization conversion and absorption
+claim:
+  zh: 2023 年大学生创新创业训练计划项目 · Diamond and Related Materials 作者位次 3/9
+  en: 2023 Innovation Training Project · Diamond and Related Materials, 3rd author
+    of 9
+category:
+  zh: 创新训练项目 / 学术论文
+  en: Innovation Training Project / Publication
+summary:
+  zh: 该研究始于 2023 年大学生创新创业训练计划项目，并形成发表于 Diamond and Related Materials 的论文。结构由金属谐振器、二氧化钒薄膜、石墨烯电阻膜、聚酰亚胺介质层和铜接地板组成；利用二氧化钒的绝缘体-金属相变在偏振转换器与吸收器之间切换，并通过石墨烯方阻动态调控性能。室温下，结构在 6.97–17.62 GHz 范围内实现超过 90% 的偏振转换率；二氧化钒处于金属态时，在 13.33–19.47 GHz 范围内实现超过 90% 的吸收率。
+  en: The research began as a 2023 university innovation training project and led
+    to a paper in Diamond and Related Materials. Its flexible microwave structure
+    combines a metallic resonator, vanadium-dioxide films, a graphene resistive
+    layer, polyimide dielectrics, and a copper ground plane. The VO2
+    insulator-to-metal transition switches between polarization-conversion and
+    absorption modes, while graphene sheet resistance tunes the response. The
+    design exceeds 90% polarization conversion from 6.97 to 17.62 GHz at room
+    temperature and 90% absorptivity from 13.33 to 19.47 GHz when VO2 is metallic.
+contribution:
+  zh: 担任大创项目负责人，负责研究规划与协调。
+  en: Led the innovation-training project and coordinated its research plan.
+tags:
+  - zh: 柔性超表面
+    en: Flexible Metasurface
+  - zh: 微波
+    en: Microwave
+  - zh: 石墨烯
+    en: Graphene
+  - zh: 二氧化钒
+    en: Vanadium Dioxide
+  - zh: 偏振转换与吸收
+    en: Polarization Conversion and Absorption
+  - zh: 大学生创新创业训练计划
+    en: Innovation Training Project
+figures:
+  - id: bifunctional-flexible-metasurface-structure
+    src: modlepic.jpg
+    zh: 双功能柔性超表面的结构与单元几何示意图
+    en: Structure and unit-cell geometry of the bifunctional flexible metasurface
+links:
+  - type: paper
+    url: https://doi.org/10.1016/j.diamond.2024.110862
+    label:
+      zh: 论文 DOI
+      en: Paper DOI
+awards: []
+publications:
+  - id: bifunctional-flexible-metasurface
+    year: 2024
+    featured: true
+    image: modlepic.jpg
+    title:
+      zh: 基于石墨烯和二氧化钒的双功能柔性超表面
+      en: Bifunctional flexible metasurface based on graphene and vanadium dioxide for
+        polarization conversion and absorption
+    venue:
+      zh: Diamond and Related Materials
+      en: Diamond and Related Materials
+    authors:
+      zh: 作者位次 3/9
+      en: 3rd author of 9
+    tags:
+      - metasurface
+      - microwave
+      - graphene
+      - vanadium-dioxide
+    links:
+      - type: paper
+        url: https://doi.org/10.1016/j.diamond.2024.110862
+        label:
+          zh: 论文 DOI
+          en: Paper DOI
+    certificates:
+      - src: BifunctionalFlexibleMetasurfaceBasedOnGrapheneAndVanadiumDioxideForPolarizationConversionAndAbsorption.png
+        zh: 论文：Bifunctional flexible metasurface based on graphene and vanadium dioxide
+          for polarization conversion and absorption
+        en: "Paper: Bifunctional flexible metasurface based on graphene and vanadium
+          dioxide for polarization conversion and absorption"
+patents: []

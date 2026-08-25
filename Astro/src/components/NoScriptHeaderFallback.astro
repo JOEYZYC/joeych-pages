@@ -1,20 +1,20 @@
 ---
-import type { Profile } from "../content/schemas"
+import type { Site } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import type { RouteId } from "../lib/routes"
 import { getCorrespondingLocalePath, getRoutePath, ROUTE_IDS } from "../lib/routes"
 
-type Props = { readonly locale: Locale; readonly profile: Profile; readonly routeId: RouteId }
-const { locale, profile, routeId } = Astro.props
+type Props = { readonly locale: Locale; readonly site: Site; readonly routeId: RouteId }
+const { locale, site, routeId } = Astro.props
 const labels = UI[locale]
 const counterpart = getCorrespondingLocalePath(routeId, locale)
 const targetLanguage = locale === "zh" ? labels.language.switchToEnglish : labels.language.switchToChinese
 const contacts = [
-  { label: labels.contact.email, href: `mailto:${profile.contact.email}`, value: profile.contact.email },
-  { label: labels.contact.github, href: profile.contact.github, value: profile.contact.github },
-  { label: labels.contact.scholar, href: profile.contact.scholar, value: profile.contact.scholar },
-  { label: labels.contact.orcid, href: profile.contact.orcid, value: profile.contact.orcid },
+  { label: labels.contact.email, href: `mailto:${site.contact.email}`, value: site.contact.email },
+  { label: labels.contact.github, href: site.contact.github, value: site.contact.github },
+  { label: labels.contact.scholar, href: site.contact.scholar, value: site.contact.scholar },
+  { label: labels.contact.orcid, href: site.contact.orcid, value: site.contact.orcid },
 ] as const
 ---
 

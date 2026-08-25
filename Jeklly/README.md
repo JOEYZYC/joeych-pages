@@ -9,4 +9,4 @@ Retained archive groups are:
 - Jekyll configuration and the design contract.
 - CSS and JavaScript source under `assets/`.
 
-Shared public profile [data](../Profile/data/) and [media](../Profile/media/) are owned by `Profile/`. Local archive material and generated mirrors remain ignored under the workspace firewall.
+Shared public [page and project bundles](../Profile/) are owned by `Profile/`. Local archive material and generated mirrors remain ignored under the workspace firewall.

@@ -18,10 +18,7 @@ const APPROVED_ICON_NAMES = [
   "chevron-left",
   "chevron-right",
   "certificate",
-  "trophy",
   "graduation-cap",
-  "book-open",
-  "lightbulb",
   "file-lines",
   "microchip",
   "link",
@@ -48,43 +45,13 @@ const forbiddenPatterns = [
 ] as const
 
 describe("localized route and build-time icon contract", () => {
-  it("provides exact UI-owned route summaries without duplicating the Profile-backed home summary", () => {
-    // Given: the route copy approved for the shared UI manifest
-    const expected = {
-      zh: {
-        experience: "按时间查看教育经历与校园实践。",
-        awards: "按年份查阅竞赛荣誉、出版成果、专利与毕业论文。",
-        projects: "按项目类别、项目名称与荣誉筛选，查看工程实践、论文与图文证据。",
-        "tech-stack": "按技能领域查看对应组件、能力语境与项目证据。",
-      },
-      en: {
-        experience: "Review education and campus experience in chronological order.",
-        awards: "Review awards, publications, patents, and thesis evidence by year.",
-        projects: "Filter by project category, name, and honor to inspect engineering work, publications, and supporting figures.",
-        "tech-stack": "Browse technical capabilities by domain with their components, context, and project evidence.",
-      },
-    } as const
-
-    // When: route summaries are selected for each locale
-    const actual = {
-      zh: {
-        experience: UI.zh.routeIntros.experience.summary,
-        awards: UI.zh.routeIntros.awards.summary,
-        projects: UI.zh.routeIntros.projects.summary,
-        "tech-stack": UI.zh.routeIntros["tech-stack"].summary,
-      },
-      en: {
-        experience: UI.en.routeIntros.experience.summary,
-        awards: UI.en.routeIntros.awards.summary,
-        projects: UI.en.routeIntros.projects.summary,
-        "tech-stack": UI.en.routeIntros["tech-stack"].summary,
-      },
-    }
-
-    // Then: exact copy remains localized and Home remains source-backed
-    expect(actual).toEqual(expected)
-    expect("summary" in UI.zh.routeIntros.home).toBe(false)
-    expect("summary" in UI.en.routeIntros.home).toBe(false)
+  it("keeps page content out of the UI-owned interface labels", () => {
+    expect(UI.zh.navigation).toMatchObject({ home: "首页", about: "自我介绍" })
+    expect(UI.en.navigation).toMatchObject({ home: "Home", about: "About" })
+    expect(UI.zh.actions.about).toBe("查看自我介绍")
+    expect(UI.en.actions.about).toBe("Read about me")
+    expect("routeIntros" in UI.zh).toBe(false)
+    expect("routeIntros" in UI.en).toBe(false)
   })
 
   it("defines the closed Font Awesome vocabulary as local decorative SVG", async () => {

@@ -1,42 +1,36 @@
 ---
-import type { Project, Publication } from "../content/schemas"
+import type { Project } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import { PROJECT_MEDIA_DIMENSIONS } from "../lib/project-media"
-import { PROJECT_PLACEHOLDER_MEDIA_PATH } from "../lib/profile-paths"
 import { publicMediaUrl } from "../lib/urls"
 
 type Props = {
   readonly context: "card" | "record"
   readonly locale: Locale
-  readonly record: Project | Publication
+  readonly record: Project
   readonly loading: "eager" | "lazy"
 }
 
 const { context, locale, record, loading } = Astro.props
 const labels = UI[locale]
-const isPlaceholder = record.image === null
-const mediaPath = record.image ?? PROJECT_PLACEHOLDER_MEDIA_PATH
-const matchingFigure = record.image === null || !("figures" in record)
-  ? undefined
-  : record.figures.find((figure) => figure.src === record.image)
-const alt = isPlaceholder
-  ? labels.projectExplorer.imagePendingAlt
-  : matchingFigure?.[locale] ?? record.title[locale]
-const caption = context === "record" && !isPlaceholder ? matchingFigure?.[locale] : undefined
-const dimensions = PROJECT_MEDIA_DIMENSIONS[mediaPath]
+const mediaPath = record.image
+const matchingFigure = mediaPath === null ? undefined : record.figures.find((figure) => figure.src === mediaPath)
+const alt = matchingFigure?.[locale] ?? record.title[locale]
+const caption = context === "record" ? matchingFigure?.[locale] : undefined
+const dimensions = mediaPath === null ? undefined : PROJECT_MEDIA_DIMENSIONS[mediaPath]
 ---
 
-<figure
-  class:list={["project-media", `project-media--${context}`, { "project-media--placeholder": isPlaceholder }]}
+{mediaPath !== null && <figure
+  class:list={["project-media", `project-media--${context}`]}
   data-project-media
   data-project-media-context={context}
-  data-project-media-kind={isPlaceholder ? "placeholder" : "real"}
+  data-project-media-kind="real"
   data-project-media-source={mediaPath}
 >
   <div class="project-media-well">
     <img
-      class:list={["project-media-image", { "project-media-image--placeholder": isPlaceholder }]}
+      class="project-media-image"
       data-project-media-image
       src={publicMediaUrl(mediaPath)}
       alt={alt}
@@ -47,9 +41,8 @@ const dimensions = PROJECT_MEDIA_DIMENSIONS[mediaPath]
     />
     <p class="project-media-unavailable" data-project-media-unavailable hidden>{labels.unavailable.media}</p>
   </div>
-  {isPlaceholder && <figcaption class="project-media-pending">{labels.projectExplorer.imagePending}</figcaption>}
   {caption !== undefined && <figcaption>{caption}</figcaption>}
-</figure>
+</figure>}
 
 <script>
   const projectMedia = document.querySelectorAll<HTMLElement>("[data-project-media]")

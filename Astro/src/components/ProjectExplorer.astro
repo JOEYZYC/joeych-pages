@@ -1,75 +1,28 @@
 ---
-import type { Award, Profile, Project, Publication } from "../content/schemas"
+import type { Project, TechStack } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
-import { resolveRelatedAchievements } from "../lib/related-achievements"
 import Icon from "./Icon.astro"
 import ProjectCard from "./ProjectCard.astro"
 import ProjectDetail from "./ProjectDetail.astro"
 import ProjectRecord from "./ProjectRecord.astro"
-import PublicationProjectCard from "./PublicationProjectCard.astro"
-import PublicationProjectDetail from "./PublicationProjectDetail.astro"
-import PublicationProjectRecord from "./PublicationProjectRecord.astro"
 
 type Props = {
-  readonly awards: readonly Award[]
   readonly locale: Locale
   readonly projects: readonly Project[]
-  readonly publications: readonly Publication[]
-  readonly skills: Profile["skills"]
+  readonly skills: TechStack["skills"]
 }
 
-const { awards, locale, projects, publications, skills } = Astro.props
+const { locale, projects, skills } = Astro.props
 const labels = UI[locale]
-type ExplorerItem =
-  | {
-    readonly kind: "project"
-    readonly project: Project
-    readonly relatedAchievements: readonly ReturnType<typeof resolveRelatedAchievements>[number][]
-    readonly sourceIndex: number
-  }
-  | {
-    readonly kind: "publication"
-    readonly publication: Publication
-    readonly sourceIndex: number
-  }
-
 const categories: { value: string; label: string }[] = []
 const seenCategories = new Set<string>()
-const relatedByProject = new Map(projects.map((project) => [
-  project.id,
-  resolveRelatedAchievements(project, awards, publications),
-]))
 const honors = [...new Map(
-  projects.flatMap((project) => (relatedByProject.get(project.id) ?? [])
-    .filter((achievement) => achievement.kind === "award")
-    .map((achievement) => [achievement.record.id, achievement.record.title[locale]]),
-  ),
+  projects.flatMap((project) => project.awards.map((award) => [award.id, award.title[locale]])),
 ).entries()].map(([value, label]) => ({ value, label }))
-const linkedPublicationIds = new Set(projects.flatMap((project) => project.related_achievements
-  .filter((achievement) => achievement.kind === "publication")
-  .map((achievement) => achievement.id)))
-const explorerItems: readonly ExplorerItem[] = [
-  ...projects.map((project, sourceIndex) => ({
-    kind: "project" as const,
-    project,
-    relatedAchievements: relatedByProject.get(project.id) ?? [],
-    sourceIndex,
-  })),
-  ...publications
-    .filter((publication) => !linkedPublicationIds.has(publication.id))
-    .map((publication, sourceIndex) => ({ kind: "publication" as const, publication, sourceIndex })),
-].sort((left, right) => {
-  const year = (left.kind === "project" ? left.project.year : left.publication.year) - (right.kind === "project" ? right.project.year : right.publication.year)
-  if (year !== 0) return -year
-  if (left.kind !== right.kind) return left.kind === "project" ? -1 : 1
-  return left.sourceIndex - right.sourceIndex
-})
 
-for (const item of explorerItems) {
-  const category = item.kind === "project"
-    ? { value: item.project.category.en, label: item.project.category[locale] }
-    : { value: "publication", label: labels.sections.awards.publications }
+for (const project of projects) {
+  const category = { value: project.category.en, label: project.category[locale] }
   if (seenCategories.has(category.value)) continue
   seenCategories.add(category.value)
   categories.push(category)
@@ -89,7 +42,7 @@ const skillEvidence = Object.fromEntries(
 const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\\u003c")
 ---
 
-{explorerItems.length === 0 ? (
+{projects.length === 0 ? (
   <p class="project-empty-source" data-project-source-empty>{labels.projectExplorer.emptySource}</p>
 ) : (
   <div class="project-explorer" data-project-explorer>
@@ -117,29 +70,21 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     </div>
 
     <div class="project-card-grid" data-project-card-grid hidden>
-      {explorerItems.map((item) => item.kind === "project"
-        ? <ProjectCard locale={locale} project={item.project} relatedAchievements={item.relatedAchievements} />
-        : <PublicationProjectCard locale={locale} publication={item.publication} />)}
+      {projects.map((project) => <ProjectCard locale={locale} project={project} />)}
     </div>
 
     <dialog id="project-detail-dialog" class="dialog-surface project-dialog" data-project-dialog aria-label={labels.projectExplorer.open} hidden>
       <button class="dialog-close" type="button" data-project-dialog-close aria-label={labels.projectExplorer.close} title={labels.projectExplorer.close}><Icon name="xmark" /></button>
       <div data-project-dialog-content></div>
     </dialog>
-    {explorerItems.map((item) => item.kind === "project"
-      ? <template data-project-dialog-template data-project-id={item.project.id}>
-          <ProjectDetail idPrefix={`project-dialog-${item.project.id}`} locale={locale} mode="dialog" project={item.project} relatedAchievements={item.relatedAchievements} />
-        </template>
-      : <template data-project-dialog-template data-project-id={`publication-${item.publication.id}`}>
-          <PublicationProjectDetail idPrefix={`project-dialog-publication-${item.publication.id}`} locale={locale} mode="dialog" publication={item.publication} />
-        </template>)}
+    {projects.map((project) => <template data-project-dialog-template data-project-id={project.id}>
+      <ProjectDetail idPrefix={`project-dialog-${project.id}`} locale={locale} mode="dialog" project={project} />
+    </template>)}
 
     <script type="application/json" data-project-skill-evidence set:html={serializedSkillEvidence}></script>
 
     <section class="project-records" data-project-records>
-      {explorerItems.map((item) => item.kind === "project"
-        ? <ProjectRecord locale={locale} project={item.project} relatedAchievements={item.relatedAchievements} />
-        : <PublicationProjectRecord locale={locale} publication={item.publication} />)}
+      {projects.map((project) => <ProjectRecord locale={locale} project={project} />)}
     </section>
   </div>
 )}
@@ -325,6 +270,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       dialog.dataset.projectId = id
       const title = dialogContent.querySelector<HTMLElement>("[data-project-dialog-title]")
       if (!title) return
+      document.dispatchEvent(new Event("profile:content-mounted"))
       dialog.setAttribute("aria-labelledby", title.id)
       if (nextTrigger) trigger = nextTrigger
       if (!dialog.open) dialog.showModal()

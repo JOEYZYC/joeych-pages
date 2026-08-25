@@ -1,0 +1,19 @@
+page:
+  overline:
+    zh: 首页
+    en: Home
+  title:
+    zh: 首页
+    en: Home
+  summary:
+    zh: 我是一名电子信息工程本科毕业生，关注嵌入式系统、无线感知与智能硬件。我喜欢把想法落实为可以运行、可以验证的软硬件作品。
+    en: I am an Electronic & Information Engineering graduate, with interests in
+      embedded systems, wireless sensing, and intelligent hardware. I enjoy
+      turning ideas into practical hardware-software projects.
+heading:
+  zh: 你好，我叫张易成
+  en: Hi, I'm Joey.
+portrait: portrait-b1-cutout-workshirt-upright-transparent.png
+hero_background:
+  light: hero-circuit-background-light.png
+  dark: hero-circuit-background.png

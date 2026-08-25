@@ -1,0 +1,65 @@
+id: smart-harvesting-robot
+year: 2023
+featured: false
+image: 实物车.jpg
+title:
+  zh: 智能采摘机器人
+  en: Smart Harvesting Robot
+claim:
+  zh: 2023 年 iCAN 未来农业机器人挑战赛项目，结合自主导航、果实视觉识别与机械臂执行。
+  en: A 2023 iCAN Future Agriculture Robot Challenge project combining autonomous
+    navigation, visual fruit recognition, and robotic-arm operation.
+category:
+  zh: 机器人 / 农业视觉
+  en: Robotics / Agricultural Vision
+summary:
+  zh: 基于 ROS 的自主采摘机器人，采用 GMapping/SLAM 与导航进行环境移动，以 PaddleDetection 和 OpenCV
+    进行果实视觉识别。机械臂配备眼在手上相机，并使用 3D 打印收集器完成采摘流程。
+  en: A ROS-based autonomous harvesting robot using GMapping/SLAM and navigation
+    for movement, with PaddleDetection and OpenCV for visual fruit recognition.
+    Its robotic arm uses an eye-in-hand camera and a 3D-printed collector in the
+    harvesting workflow.
+contribution:
+  zh: 请补充
+  en: To be completed
+tags:
+  - zh: ROS
+    en: ROS
+  - zh: GMapping / SLAM
+    en: GMapping / SLAM
+  - zh: PaddleDetection
+    en: PaddleDetection
+  - zh: OpenCV
+    en: OpenCV
+  - zh: 眼在手上相机
+    en: Eye-in-Hand Camera
+figures:
+  - id: smart-harvesting-robot-prototype
+    src: 实物车.jpg
+    zh: 智能采摘机器人实物
+    en: Smart harvesting robot prototype
+links: []
+awards:
+  - id: ican-national-first-2023
+    year: 2023
+    featured: true
+    title:
+      zh: iCAN大学生创新创业赛（未来农业机器人挑战赛）
+      en: iCAN Innovation & Entrepreneurship Contest (Future Agricultural Robot
+        Challenge)
+    prizes:
+      - level: provincial
+        zh: 省级 一等
+        en: Jiangsu First
+      - level: national
+        zh: 全国 一等
+        en: National First
+    tags:
+      - robotics
+    links: []
+    certificates:
+      - src: 23ican国一.jpg
+        zh: iCAN 大学生创新创业赛国一
+        en: iCAN Innovation Contest — National First
+publications: []
+patents: []

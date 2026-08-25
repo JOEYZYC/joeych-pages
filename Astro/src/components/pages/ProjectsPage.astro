@@ -1,6 +1,5 @@
 ---
 import type { Locale } from "../../i18n/locales"
-import { UI } from "../../i18n/ui"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import { getProfileData } from "../../lib/profile-data"
 import "../../styles/projects.css"
@@ -11,23 +10,20 @@ type Props = { readonly locale: Locale }
 
 const { locale } = Astro.props
 const data = await getProfileData()
-const labels = UI[locale]
 ---
 
-<BaseLayout locale={locale} profile={data.profile} routeId="projects">
+<BaseLayout locale={locale} page={data.projectPage.page} site={data.site} routeId="projects">
   <div data-projects-page>
     <EditorialIntro
-      overline={labels.routeIntros.projects.overline}
-      title={labels.routeIntros.projects.title}
-      summary={labels.routeIntros.projects.summary}
+      overline={data.projectPage.page.overline[locale]}
+      title={data.projectPage.page.title[locale]}
+      summary={data.projectPage.page.summary[locale]}
     />
 
     <ProjectExplorer
-      awards={data.awards}
       locale={locale}
       projects={data.projects}
-      publications={data.publications}
-      skills={data.profile.skills}
+      skills={data.techStack.skills}
     />
   </div>
 </BaseLayout>

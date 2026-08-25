@@ -1,4 +1,4 @@
-import type { Profile } from "../content/schemas"
+import type { Site } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import type { RouteId } from "./routes"
 import { type AbsoluteUrlOptions, getAlternateUrls, getCanonicalUrl } from "./urls"
@@ -14,7 +14,7 @@ export type PersonJsonLd = {
 
 type PersonJsonLdOptions = {
   readonly locale: Locale
-  readonly profile: Profile
+  readonly site: Site
 }
 
 type SeoUrlOptions = AbsoluteUrlOptions & {
@@ -22,14 +22,14 @@ type SeoUrlOptions = AbsoluteUrlOptions & {
   readonly routeId: RouteId
 }
 
-export function buildPersonJsonLd({ locale, profile }: PersonJsonLdOptions): PersonJsonLd {
+export function buildPersonJsonLd({ locale, site }: PersonJsonLdOptions): PersonJsonLd {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: profile.name[locale],
-    jobTitle: profile.role[locale],
-    email: profile.contact.email,
-    sameAs: [profile.contact.github, profile.contact.scholar, profile.contact.orcid],
+    name: site.name[locale],
+    jobTitle: site.role[locale],
+    email: site.contact.email,
+    sameAs: [site.contact.github, site.contact.scholar, site.contact.orcid],
   }
 }
 

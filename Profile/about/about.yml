@@ -1,0 +1,140 @@
+page:
+  overline:
+    zh: 个人档案
+    en: Profile
+  title:
+    zh: 自我介绍
+    en: About
+  summary:
+    zh: 从个人背景、学习方向、教育经历与校园实践了解我的成长经历。
+    en: Learn about my background, academic interests, education, and campus
+      experience.
+overview:
+  - zh: 我叫张易成，来自江苏苏州，是一名电子信息工程本科毕业生，也是一名中共党员。我的学习和实践主要围绕嵌入式系统、无线感知、智能硬件、超表面与太赫兹展开。
+    en: I'm Joey, from Suzhou, Jiangsu. I am an Electronic & Information Engineering
+      graduate and a CPC member. My studies and practice focus on embedded
+      systems, wireless sensing, intelligent hardware, metasurfaces, and
+      terahertz technologies.
+  - zh: 在校期间，我参与了电子设计、机器人、计算机视觉与科研论文等实践，也在航模社、融媒体中心、学生党支部和班级承担组织与协作工作。我希望继续把技术想法落实为可以运行、可以验证的软硬件作品。
+    en: During university, I worked on electronic design, robotics, computer vision,
+      and research publications, while taking organizational and collaborative
+      responsibilities in the aeromodelling club, university media center,
+      student Party branch, and class. I aim to keep turning technical ideas
+      into hardware-software work that can run and be verified.
+hometown:
+  zh: 江苏苏州
+  en: Suzhou, Jiangsu
+political:
+  zh: 中共党员
+  en: CPC Member
+tagline:
+  zh: 嵌入式系统 / 无线感知 / 超表面与太赫兹
+  en: Embedded Systems / Wireless Sensing / Metasurfaces & Terahertz
+statistics:
+  - id: academic-rank
+    label:
+      zh: 综测专业排名
+      en: Academic rank
+    value: 5/71
+  - id: publications
+    label:
+      zh: 学术论文
+      en: Publications
+    value: 6
+  - id: patents
+    label:
+      zh: 发明专利
+      en: Patents
+    value: 4
+  - id: competition-records
+    label:
+      zh: 竞赛获奖
+      en: Competition records
+    value: 10+
+interests:
+  - zh: 嵌入式系统与智能硬件
+    en: Embedded systems and intelligent hardware
+  - zh: 无线感知与深度学习
+    en: Wireless sensing and deep learning
+  - zh: 超表面与太赫兹技术
+    en: Metasurfaces and terahertz technologies
+  - zh: 机器人与计算机视觉
+    en: Robotics and computer vision
+goal:
+  zh: 将技术想法落实为可以运行、可以验证的软硬件作品。
+  en: Turn technical ideas into hardware-software work that can run and be
+    verified.
+education:
+  - id: suzhou-institute-of-technology
+    period: 2022-09–2026-06
+    school:
+      zh: 苏州工学院
+      en: Suzhou Institute of Technology
+    degree:
+      zh: 电子信息工程 · 工学学士
+      en: B.Eng. in Electronic & Information Engineering
+    highlights:
+      - zh: 综测专业排名 5/71
+        en: Comprehensive rank 5/71
+      - zh: 校三好学生 (2022·2023·2024·2025)
+        en: '"Three-Good" Merit Student (2022·2023·2024·2025)'
+      - zh: 奖学金：校二等 (2022·2023) → 校一等 (2024) → 校特等 (2025)
+        en: "Scholarships: 2nd-class (2022·2023) → 1st-class (2024) → Special-class
+          (2025)"
+      - zh: 校优秀班干 (2023·2024)
+        en: Outstanding Student Cadre (2023·2024)
+      - zh: 五四青年奖章 (2024)
+        en: May Fourth Youth Medal (2024)
+      - zh: 校优秀毕业生
+        en: Outstanding Graduate
+campus_experience:
+  - id: aeromodelling-club
+    period: 2024-06–2025-06
+    organization:
+      zh: 天际线航模社
+      en: Skyline Aeromodelling Club
+    role:
+      zh: 副社长
+      en: Vice President
+    details:
+      - zh: 航模制作、社团招新、比赛组织、设备管理、志愿服务。
+        en: Model-aircraft building, recruitment, competition organization, equipment
+          management, volunteering.
+  - id: media-center
+    period: 2022-09–2025-06
+    organization:
+      zh: 学校融媒体中心
+      en: University Media Center
+    role:
+      zh: 首席记者
+      en: Chief Reporter
+    details:
+      - zh: 负责公众号推文摄影，累计超 20 篇；主讲新生摄影后期培训，授课 60 人次；2023「理工秋」校级摄影比赛二等奖；2023
+          江苏省大学生网络文化节三等奖。
+        en: Lead photographer for 20+ official-account features; led photo
+          post-production training for 60 attendees; 2nd prize, campus
+          photography contest (2023); 3rd prize, Jiangsu Provincial Collegiate
+          Online Culture Festival (2023).
+  - id: party-branch
+    period: 2024-07–2025-06
+    organization:
+      zh: 电子学院学生第二党支部
+      en: 2nd Student Party Branch, School of Electronics
+    role:
+      zh: 负责人
+      en: Head
+    details:
+      - zh: 负责党的组织生活相关工作；支部获评校先进优秀党组织。
+        en: Organized Party activities; branch awarded Advanced Party Organization of
+          the university.
+  - id: class-officer
+    period: 2023-09–2026-06
+    organization:
+      zh: 班级
+      en: Class
+    role:
+      zh: 组织委员 / 就业委员
+      en: Organization & Employment Officer
+    details:
+      - zh: 负责班级活动组织与就业活动通知。
+        en: Organized class activities and employment notices.
