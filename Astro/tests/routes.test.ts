@@ -32,8 +32,8 @@ describe("locale and route manifests", () => {
   })
 
   it("preserves fragments when switching locale", () => {
-    expect(getCorrespondingLocalePath("projects", "zh", "#resgatnet", "/joeych-pages/")).toBe(
-      "/joeych-pages/en/projects/#resgatnet",
+    expect(getCorrespondingLocalePath("projects", "zh", "#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception", "/joeych-pages/")).toBe(
+      "/joeych-pages/en/projects/#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception",
     )
   })
 

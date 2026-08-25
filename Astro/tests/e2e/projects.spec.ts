@@ -4,24 +4,25 @@ import { expect, test } from "@playwright/test"
 import { VIEWPORTS } from "./support/site-matrix"
 
 const projectIds = [
-  "eflydrone-boards",
-  "graphene-terahertz-polarization-metasurface",
-  "joeych-pages",
-  "power-print-recognition",
-  "dual-light-fusion",
-  "resgatnet",
-  "rigid-dual-polarization-metasurface",
-  "single-phase-power-analyzer",
-  "traffic-sign-recognition",
-  "intelligent-reconnaissance-2024",
-  "full-model-smart-car",
-  "bifunctional-flexible-metasurface",
-  "tunable-bifunctional-metasurface-absorber",
-  "dual-broadband-flexible-metasurface",
-  "dual-band-polarization-conversion",
-  "tri-band-metasurface-absorber",
-  "smart-harvesting-robot",
-  "intelligent-reconnaissance-2023",
+  "2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform",
+  "2026-Project-DesignOfAGrapheneBasedTerahertzLinearToCircularPolarizationConversionMetasurface",
+  "2025-Paper-DesignOfADualBandPolarizationConverterBasedOnAChiralMetasurface",
+  "2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite",
+  "2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign",
+  "2024-Competition-DualLightFusionSmartThermalImager",
+  "2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception",
+  "2024-Project-PerformanceStudyOfARigidLinearCircularDualPolarizationConversionMetasurface",
+  "2024-Competition-SinglePhasePowerAnalyzer",
+  "2024-Competition-IntelligentConnectedTrafficSignRecognitionSystemBasedOnLightweightTensorFlow",
+  "2024-Competition-IntelligentReconnaissanceSystem",
+  "2024-Competition-SmartCarModelGroupTeamDevelopmentArchive",
+  "2024-Paper-BifunctionalFlexibleMetasurfaceBasedOnGrapheneAndVanadiumDioxideForPolarizationConversionAndAbsorption",
+  "2024-Paper-DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon",
+  "2024-Paper-DualBroadbandFlexibleMetasurfaceBasedOnTheStaggeredTriangularCheckerboardLayoutForRCSReduction",
+  "2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface",
+  "2024-Paper-ATriBandMetasurfaceAbsorber",
+  "2023-Competition-SmartHarvestingRobot",
+  "2023-Competition-IntelligentReconnaissanceCompetitionProject",
 ] as const
 
 const locales = [
@@ -58,20 +59,38 @@ test.describe("projects archive", () => {
       expect(await visibleCardIds(page)).toEqual(projectIds)
       await expect(page.locator("[data-project-records]")).toBeHidden()
       await expect(cards.locator('[data-project-media-kind="real"]')).toHaveCount(13)
-      await expect(cards.locator('[data-project-media-kind="unavailable"]')).toHaveCount(5)
-      await expect(cards.locator('[data-project-media-kind="unavailable"] .project-media-pending')).toHaveText(Array.from({ length: 5 }, () => locale.pending))
+      await expect(cards.locator('[data-project-media-kind="unavailable"]')).toHaveCount(6)
+      await expect(cards.locator('[data-project-media-kind="unavailable"] .project-media-pending')).toHaveText(Array.from({ length: 6 }, () => locale.pending))
     })
   }
 
   test("opens a complete project dialog with its related award and certificates", async ({ page }) => {
     await page.goto("en/projects/")
-    const card = page.locator('[data-project-card][data-project-id="power-print-recognition"]')
-    const dialog = page.locator('[data-project-dialog][data-project-id="power-print-recognition"]')
+    const card = page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]')
+    const dialog = page.locator('[data-project-dialog][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]')
 
     await card.click()
 
     await expect(dialog).toBeVisible()
     await expect(dialog.locator("[data-project-dialog-title]")).toBeFocused()
+    const media = dialog.locator('[data-project-media-context="record"]')
+    const figureControls = dialog.locator("[data-project-figure-select]")
+    await expect(figureControls).toHaveCount(3)
+    await expect(figureControls.nth(0)).toHaveAttribute("aria-pressed", "true")
+    await expect(figureControls.nth(1)).toHaveAttribute("aria-pressed", "false")
+    await expect(dialog.locator(".project-figures")).toHaveCount(0)
+    await expect(media.locator("[data-project-media-caption]")).toHaveCount(0)
+
+    await figureControls.nth(1).press("Enter")
+    await expect(figureControls.nth(1)).toHaveAttribute("aria-pressed", "true")
+    await expect(media).toHaveAttribute("data-project-media-source", "/projects/2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign/power-print-hardware.png")
+    await expect(media.locator("[data-project-media-image]")).toHaveAttribute("alt", "Hardware Device")
+
+    await figureControls.nth(0).click()
+    await expect(figureControls.nth(0)).toHaveAttribute("aria-pressed", "true")
+    await media.locator("[data-project-media-image]").dispatchEvent("error")
+    await expect(media).toHaveAttribute("data-media-error", "true")
+    await expect(media.locator("[data-project-media-unavailable]")).toBeVisible()
     const outcome = dialog.locator('[data-project-outcome-id="renesas-east-first-national-third-2024"]')
     await expect(outcome).toContainText("National Third")
     await expect(outcome.locator("[data-certificate-dialog]")).toHaveCount(1)
@@ -80,19 +99,57 @@ test.describe("projects archive", () => {
     await expect(card).toBeFocused()
   })
 
+  test("keeps the project dialog rounded close control visible while its content scrolls", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.emulateMedia({ reducedMotion: "reduce" })
+    await page.goto("en/projects/")
+    const card = page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]')
+    const dialog = page.locator('[data-project-dialog][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]')
+    const content = dialog.locator("[data-project-dialog-content]")
+    const close = dialog.locator("[data-project-dialog-close]")
+
+    await card.click()
+    await expect(dialog).toHaveCSS("overflow", "hidden")
+    await expect(content).toHaveCSS("overflow-y", "auto")
+    const initialPosition = await close.evaluate((element) => {
+      const bounds = element.getBoundingClientRect()
+      return { top: bounds.top, right: bounds.right }
+    })
+
+    await content.evaluate((element) => { element.scrollTop = element.scrollHeight })
+    await expect.poll(() => content.evaluate((element) => element.scrollTop)).toBeGreaterThan(0)
+    const scrolledPosition = await close.evaluate((element) => {
+      const bounds = element.getBoundingClientRect()
+      return { top: bounds.top, right: bounds.right }
+    })
+    expect(scrolledPosition.top).toBeCloseTo(initialPosition.top, 0)
+    expect(scrolledPosition.right).toBeCloseTo(initialPosition.right, 0)
+    await expect(close).toBeVisible()
+    await close.click()
+    await expect(card).toBeFocused()
+
+    await card.click()
+    await expect(content).toHaveJSProperty("scrollTop", 0)
+    await page.keyboard.press("Escape")
+    await expect(card).toBeFocused()
+  })
+
   test("opens a complete project dialog with related publication evidence", async ({ page }) => {
-    await page.goto("en/projects/#resgatnet")
-    const dialog = page.locator('[data-project-dialog][data-project-id="resgatnet"]')
+    await page.goto("en/projects/#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
+    const dialog = page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')
 
     await expect(dialog).toBeVisible()
-    await expect(dialog.locator('[data-project-outcome-id="resgatnet"]')).toContainText("IEEE Access · 2nd author of 6")
+    await expect(dialog.locator('[data-project-outcome-id="resgatnet"]')).toContainText("IEEE Access · 3rd author of 6")
+    await expect(dialog.locator("[data-project-figure-select]")).toHaveCount(1)
+    await expect(dialog.locator("[data-project-figure-select]")).toHaveAttribute("aria-pressed", "true")
+    await expect(dialog.locator("[data-project-media-caption]")).toHaveCount(0)
     await expect(dialog.locator(".project-figure-unavailable")).toHaveCount(0)
-    await expect(dialog.locator(".project-link-unavailable")).toHaveCount(2)
+    await expect(dialog.locator(".project-link-unavailable")).toHaveCount(1)
   })
 
   test("renders a publication in its owning innovation project without duplicating ResGatNet", async ({ page }) => {
     await page.goto("en/projects/")
-    const publicationId = "bifunctional-flexible-metasurface"
+    const publicationId = "2024-Paper-BifunctionalFlexibleMetasurfaceBasedOnGrapheneAndVanadiumDioxideForPolarizationConversionAndAbsorption"
     const card = page.locator(`[data-project-card][data-project-id="${publicationId}"]`)
 
     await expect(page.locator('[data-project-card][data-project-id="publication-resgatnet"]')).toHaveCount(0)
@@ -108,8 +165,8 @@ test.describe("projects archive", () => {
 
   test("shows the 2023 reconnaissance image and award while contribution remains pending", async ({ page }) => {
     await page.goto("en/projects/")
-    await page.locator('[data-project-card][data-project-id="intelligent-reconnaissance-2023"]').click()
-    const dialog = page.locator('[data-project-dialog][data-project-id="intelligent-reconnaissance-2023"]')
+    await page.locator('[data-project-card][data-project-id="2023-Competition-IntelligentReconnaissanceCompetitionProject"]').click()
+    const dialog = page.locator('[data-project-dialog][data-project-id="2023-Competition-IntelligentReconnaissanceCompetitionProject"]')
 
     await expect(dialog.locator('[data-project-outcome-id="raicom-jiangsu-third-2023"]')).toContainText("Jiangsu Division Third Prize")
     await expect(dialog.locator(".project-record-contribution")).toContainText("To be completed")
@@ -118,15 +175,15 @@ test.describe("projects archive", () => {
 
   test("localizes the visible external-link marker in project dialog", async ({ page }) => {
     await page.goto("projects/")
-    await page.locator('[data-project-card][data-project-id="joeych-pages"]').click()
-    const dialog = page.locator('[data-project-dialog][data-project-id="joeych-pages"]')
+    await page.locator('[data-project-card][data-project-id="2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite"]').click()
+    const dialog = page.locator('[data-project-dialog][data-project-id="2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite"]')
 
     await expect(dialog.locator("[data-project-link-marker]")).toHaveText("外部链接")
   })
 
   test("shows unavailable media without substituting the placeholder after a real card image fails", async ({ page }) => {
     await page.goto("en/projects/")
-    const media = page.locator('[data-project-card][data-project-id="power-print-recognition"] [data-project-media-kind="real"]')
+    const media = page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"] [data-project-media-kind="real"]')
     const source = await media.getAttribute("data-project-media-source")
 
     await media.locator("[data-project-media-image]").dispatchEvent("error")
@@ -134,13 +191,13 @@ test.describe("projects archive", () => {
     await expect(media).toHaveAttribute("data-media-error", "true")
     await expect(media.locator("[data-project-media-image]")).toBeHidden()
     await expect(media.locator("[data-project-media-unavailable]")).toBeVisible()
-    expect(source).toBe("/projects/power-print-recognition/拓扑图.png")
+    expect(source).toBe("/projects/2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign/拓扑图.png")
   })
 
   test("settles a card image failure that occurs before enhancement", async ({ page }) => {
-    await page.route("**/projects/power-print-recognition/%E6%8B%93%E6%89%91%E5%9B%BE.png", (route) => route.abort())
+    await page.route("**/projects/2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign/%E6%8B%93%E6%89%91%E5%9B%BE.png", (route) => route.abort())
     await page.goto("en/projects/")
-    const media = page.locator('[data-project-card][data-project-id="power-print-recognition"] [data-project-media]')
+    const media = page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"] [data-project-media]')
 
     await expect(media).toHaveAttribute("data-media-error", "true")
     await expect(media.locator("[data-project-media-unavailable]")).toBeVisible()
@@ -150,17 +207,17 @@ test.describe("projects archive", () => {
     await page.goto("en/projects/")
     const category = page.locator("[data-project-category-filter]")
     const name = page.locator("[data-project-name-filter]")
-    const websiteCategory = await page.locator('[data-project-card][data-project-id="joeych-pages"]').getAttribute("data-project-category")
+    const websiteCategory = await page.locator('[data-project-card][data-project-id="2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite"]').getAttribute("data-project-category")
 
-    await name.selectOption("resgatnet")
-    expect(await visibleCardIds(page)).toEqual(["resgatnet"])
-    await expect(page.locator('[data-project-dialog][data-project-id="resgatnet"]')).toBeHidden()
+    await name.selectOption("2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
+    expect(await visibleCardIds(page)).toEqual(["2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"])
+    await expect(page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')).toBeHidden()
 
     await name.selectOption("")
     await category.selectOption(websiteCategory ?? "")
     await expect(name).toHaveValue("")
-    expect(await name.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual(["", "joeych-pages"])
-    expect(await visibleCardIds(page)).toEqual(["joeych-pages"])
+    expect(await name.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual(["", "2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite"])
+    expect(await visibleCardIds(page)).toEqual(["2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite"])
   })
 
   test("uses pure titles in project-name options and filters standalone publications", async ({ page }) => {
@@ -169,11 +226,11 @@ test.describe("projects archive", () => {
     const name = page.locator("[data-project-name-filter]")
 
     await category.selectOption("Publication")
-    await expect(name.locator("option").nth(1)).toHaveText("Design and theoretical analysis of a tunable bifunctional metasurface absorber based on vanadium dioxide and photoconductive silicon")
+    await expect(name.locator("option").nth(1)).toHaveText("Design of a Dual-Band Polarization Converter Based on a Chiral Metasurface")
     expect((await name.locator("option").allTextContents()).some((title) => /^\d{2}\s+—/.test(title))).toBe(false)
 
-    await name.selectOption("dual-band-polarization-conversion")
-    expect(await visibleCardIds(page)).toEqual(["dual-band-polarization-conversion"])
+    await name.selectOption("2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface")
+    expect(await visibleCardIds(page)).toEqual(["2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface"])
   })
 
   test("filters cards by explicitly linked honor", async ({ page }) => {
@@ -184,7 +241,7 @@ test.describe("projects archive", () => {
 
     await expect(page.locator("[data-project-category-filter]")).toHaveValue("")
     await expect(page.locator("[data-project-name-filter]")).toHaveValue("")
-    expect(await visibleCardIds(page)).toEqual(["power-print-recognition"])
+    expect(await visibleCardIds(page)).toEqual(["2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"])
   })
 
   test("links category, project name, and honor choices", async ({ page }) => {
@@ -192,7 +249,7 @@ test.describe("projects archive", () => {
     const category = page.locator("[data-project-category-filter]")
     const name = page.locator("[data-project-name-filter]")
     const honor = page.locator("[data-project-honor-filter]")
-    const powerCategory = await page.locator('[data-project-card][data-project-id="power-print-recognition"]').getAttribute("data-project-category")
+    const powerCategory = await page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]').getAttribute("data-project-category")
 
     await category.selectOption(powerCategory ?? "")
     expect(await honor.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual([
@@ -203,51 +260,55 @@ test.describe("projects archive", () => {
     await honor.selectOption("renesas-east-first-national-third-2024")
     await expect(category).toHaveValue(powerCategory ?? "")
     await expect(name).toHaveValue("")
-    expect(await name.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual(["", "power-print-recognition"])
-    expect(await visibleCardIds(page)).toEqual(["power-print-recognition"])
+    expect(await name.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual(["", "2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"])
+    expect(await visibleCardIds(page)).toEqual(["2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"])
 
     await honor.selectOption("")
     await expect(category).toHaveValue(powerCategory ?? "")
     await expect(name).toHaveValue("")
-    expect(await visibleCardIds(page)).toEqual(["power-print-recognition"])
+    expect(await visibleCardIds(page)).toEqual(["2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"])
   })
 
   test("a hash opens the matching dialog and synchronizes both filters", async ({ page }) => {
     await page.goto("en/projects/")
-    const card = page.locator('[data-project-card][data-project-id="resgatnet"]')
+    const card = page.locator('[data-project-card][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')
     const category = await card.getAttribute("data-project-category")
 
-    await page.evaluate(() => { window.location.hash = "#resgatnet" })
+    await page.evaluate(() => { window.location.hash = "#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception" })
 
     await expect(page.locator("[data-project-category-filter]")).toHaveValue(category ?? "")
-    await expect(page.locator("[data-project-name-filter]")).toHaveValue("resgatnet")
-    expect(await visibleCardIds(page)).toEqual(["resgatnet"])
-    await expect(page.locator('[data-project-dialog][data-project-id="resgatnet"]')).toBeVisible()
-    await expect(page.locator('[data-project-dialog][data-project-id="resgatnet"] [data-project-dialog-title]')).toBeFocused()
+    await expect(page.locator("[data-project-name-filter]")).toHaveValue("2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
+    expect(await visibleCardIds(page)).toEqual(["2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"])
+    await expect(page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')).toBeVisible()
+    await expect(page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"] [data-project-dialog-title]')).toBeFocused()
   })
 
   test("valid skill provenance opens the linked dialog while invalid pairs are removed", async ({ page }) => {
-    await page.goto("en/projects/?skill=vision-halcon-opencv#intelligent-reconnaissance-2024")
-    const dialog = page.locator('[data-project-dialog][data-project-id="intelligent-reconnaissance-2024"]')
+    await page.goto("en/projects/?skill=vision-halcon-opencv#2024-Competition-IntelligentReconnaissanceSystem")
+    const dialog = page.locator('[data-project-dialog][data-project-id="2024-Competition-IntelligentReconnaissanceSystem"]')
 
     await expect(dialog).toBeVisible()
     await expect(dialog).toHaveAttribute("data-evidence-origin", "true")
     await expect(dialog.locator("[data-project-origin-label]")).toHaveText("From skill evidence: Halcon / OpenCV image processing & vision")
-    await page.goto("en/projects/?skill=vision-halcon-opencv#resgatnet")
-    await expect(page).toHaveURL(/\/en\/projects\/#resgatnet$/)
+    await page.goto("en/projects/?skill=vision-halcon-opencv#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
+    await expect(page).toHaveURL(/\/en\/projects\/#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception$/)
     await expect(page.locator('[data-evidence-origin="true"]')).toHaveCount(0)
   })
 
   test("JavaScript-disabled projects keep static detail fallback and ordinary hash navigation", async ({ browser }) => {
     const context = await browser.newContext({ baseURL: "http://127.0.0.1:4321/joeych-pages/", javaScriptEnabled: false })
     const page = await context.newPage()
-    await page.goto("en/projects/?skill=vision-halcon-opencv#resgatnet")
+    await page.goto("en/projects/#2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign")
 
     await expect(page.locator("[data-project-filter-controls]")).toBeHidden()
     await expect(page.locator("[data-project-card-grid]")).toBeHidden()
     await expect(page.locator("[data-project-records]")).toBeVisible()
     await expect(page.locator("[data-project-record]")).toHaveCount(projectIds.length)
-    await expect(page.locator("#resgatnet [data-project-current-label]")).toBeVisible()
+    const record = page.locator('[id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]')
+    await expect(record.locator("[data-project-current-label]")).toBeVisible()
+    await expect(record.locator("[data-project-figure-select]")).toHaveCount(0)
+    await expect(record.locator("[data-project-media-image]")).toHaveCount(1)
+    await expect(record.locator(".project-figure-grid img")).toHaveCount(2)
     await context.close()
   })
 

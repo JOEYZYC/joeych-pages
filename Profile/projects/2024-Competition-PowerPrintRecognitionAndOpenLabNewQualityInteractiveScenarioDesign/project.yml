@@ -1,0 +1,85 @@
+id: 2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign
+year: 2024
+featured: true
+image: 拓扑图.png
+title:
+  zh: “电纹识别”与 OpenLab“新质”交互场景设计
+  en: '"Power-Print Recognition" and OpenLab "New Quality" Interactive Scenario
+    Design'
+claim:
+  zh: 在同一瑞萨赛事项目中，从用电电流识别发展至实验室能耗、安全、门禁与热监测的综合管理场景。
+  en: A single Renesas competition project progressed from appliance-current
+    recognition to an integrated laboratory scenario for energy use, safety,
+    access, and thermal monitoring.
+category:
+  zh: 嵌入式系统 / 信号处理
+  en: Embedded Systems / Signal Processing
+summary:
+  zh: 初赛“电纹识别”装置基于瑞萨 RA6M5 采集电流与电压波形，通过 ADC、DMA、FFT 和斯皮尔曼匹配识别设备状态与能耗模式。终赛 OpenLab“新质”管理系统将其扩展为多层级实验室监控平台，结合电力线载波通信、人脸门禁、热成像、W800 Wi-Fi、TCP 与 C# 上位机，统一管理设备运行、能耗、人员进出和过热风险。
+  en: The preliminary "Power-Print Recognition" device used a Renesas RA6M5 to
+    acquire current and voltage waveforms, applying ADC, DMA, FFT, and Spearman
+    matching to identify equipment states and energy-use patterns. The final
+    OpenLab "New Quality" management system expanded it into a multilevel
+    laboratory-monitoring platform combining power-line communication, facial
+    access control, thermal imaging, W800 Wi-Fi, TCP, and a C# host application
+    for equipment, energy, access, and overheating supervision.
+contribution:
+  zh: 请补充
+  en: To be completed
+tags:
+  - zh: 瑞萨 RA6M5
+    en: Renesas RA6M5
+  - zh: ADC / DMA
+    en: ADC / DMA
+  - zh: FFT
+    en: FFT
+  - zh: 斯皮尔曼匹配
+    en: Spearman Matching
+  - zh: W800 Wi-Fi
+    en: W800 Wi-Fi
+  - zh: TCP / C# 上位机
+    en: TCP / C# Host App
+  - zh: 电流波形采集
+    en: Current-Waveform Acquisition
+  - zh: 非侵入式设备识别
+    en: Non-Intrusive Device Recognition
+figures:
+  - id: power-print-topology
+    src: 拓扑图.png
+    zh: OpenLab 监控终端模块拓扑图
+    en: OpenLab monitoring-terminal module topology
+  - id: power-print-hardware
+    src: power-print-hardware.png
+    zh: 硬件装置
+    en: Hardware Device
+  - id: power-print-display
+    src: power-print-display.png
+    zh: 管理界面
+    en: Management Interface
+links: []
+awards:
+  - id: renesas-east-first-national-third-2024
+    year: 2024
+    featured: true
+    title:
+      zh: 全国大学生电子设计竞赛（瑞萨杯）
+      en: National Undergraduate Electronic Design Contest (Renesas Cup)
+    prizes:
+      - level: regional
+        zh: 东部 第一名
+        en: Eastern-China 1st
+      - level: national
+        zh: 全国 三等奖
+        en: National Third
+    tags:
+      - electronic-design
+    links: []
+    certificates:
+      - src: 瑞萨省一.jpg
+        zh: 全国大学生电子设计竞赛（瑞萨杯）东部第一名
+        en: Electronic Design Contest (Renesas) — Eastern-China First
+      - src: 瑞萨国三.jpg
+        zh: 全国大学生电子设计竞赛（瑞萨杯）国三
+        en: Electronic Design Contest (Renesas) — National Third
+publications: []
+patents: []

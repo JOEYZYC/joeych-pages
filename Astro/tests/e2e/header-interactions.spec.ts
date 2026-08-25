@@ -132,16 +132,16 @@ test.describe("header interactions", () => {
 
   test("dialog opening states animate normally and become instantaneous with reduced motion", async ({ page }) => {
     await page.goto("en/projects/")
-    await page.locator('[data-project-card][data-project-id="power-print-recognition"]').click()
-    const projectDialog = page.locator('[data-project-dialog][data-project-id="power-print-recognition"]')
+    await page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]').click()
+    const projectDialog = page.locator('[data-project-dialog][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]')
     await projectDialog.locator("[data-certificate-trigger]").click()
     const dialog = projectDialog.locator("[data-certificate-dialog]")
     expect(await dialog.evaluate((element) => getComputedStyle(element).animationName)).toBe("dialog-open")
 
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.reload()
-    await page.locator('[data-project-card][data-project-id="power-print-recognition"]').click()
-    await page.locator('[data-project-dialog][data-project-id="power-print-recognition"] [data-certificate-trigger]').click()
+    await page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]').click()
+    await page.locator('[data-project-dialog][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"] [data-certificate-trigger]').click()
     expect(await dialog.evaluate((element) => {
       const style = getComputedStyle(element)
       return style.animationName === "none" && style.animationDuration.split(", ").every((value) => value === "0s")

@@ -1,0 +1,64 @@
+id: 2024-Paper-DualBroadbandFlexibleMetasurfaceBasedOnTheStaggeredTriangularCheckerboardLayoutForRCSReduction
+year: 2024
+featured: true
+image: null
+title:
+  zh: 基于交错三角棋盘布局的双宽带柔性超表面用于 RCS 缩减
+  en: Dual-broadband flexible metasurface based on the staggered triangular
+    checkerboard layout for RCS reduction
+claim:
+  zh: Optics Communications · 作者位次 5/8
+  en: Optics Communications · 5th author of 8
+category:
+  zh: 学术论文
+  en: Publication
+summary:
+  zh: 请补充
+  en: To be completed
+contribution:
+  zh: 请补充
+  en: To be completed
+tags:
+  - zh: metasurface
+    en: metasurface
+  - zh: rcs
+    en: rcs
+figures: []
+links:
+  - type: paper
+    url: https://doi.org/10.1016/j.optcom.2024.130351
+    label:
+      zh: 论文 DOI
+      en: Paper DOI
+awards: []
+publications:
+  - id: dual-broadband-flexible-metasurface
+    year: 2024
+    featured: true
+    image: null
+    title:
+      zh: 基于交错三角棋盘布局的双宽带柔性超表面用于 RCS 缩减
+      en: Dual-broadband flexible metasurface based on the staggered triangular
+        checkerboard layout for RCS reduction
+    venue:
+      zh: Optics Communications
+      en: Optics Communications
+    authors:
+      zh: 作者位次 5/8
+      en: 5th author of 8
+    tags:
+      - metasurface
+      - rcs
+    links:
+      - type: paper
+        url: https://doi.org/10.1016/j.optcom.2024.130351
+        label:
+          zh: 论文 DOI
+          en: Paper DOI
+    certificates:
+      - src: DualBroadbandFlexibleMetasurfaceBasedOnTheStaggeredTriangularCheckerboardLayoutForRCSReduction.png
+        zh: 论文：Dual-broadband flexible metasurface based on the staggered triangular
+          checkerboard layout for RCS reduction
+        en: "Paper: Dual-broadband flexible metasurface based on the staggered
+          triangular checkerboard layout for RCS reduction"
+patents: []

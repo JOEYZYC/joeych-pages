@@ -10,14 +10,15 @@ type Props = {
   readonly locale: Locale
   readonly record: Project
   readonly loading: "eager" | "lazy"
+  readonly showCaption?: boolean
 }
 
-const { context, locale, record, loading } = Astro.props
+const { context, locale, record, loading, showCaption = true } = Astro.props
 const labels = UI[locale]
 const mediaPath = record.image
 const matchingFigure = mediaPath === null ? undefined : record.figures.find((figure) => figure.src === mediaPath)
 const alt = matchingFigure?.[locale] ?? record.title[locale]
-const caption = context === "record" ? matchingFigure?.[locale] : undefined
+const caption = context === "record" && showCaption ? matchingFigure?.[locale] : undefined
 const dimensions = mediaPath === null ? undefined : PROJECT_MEDIA_DIMENSIONS[mediaPath]
 ---
 
@@ -41,23 +42,27 @@ const dimensions = mediaPath === null ? undefined : PROJECT_MEDIA_DIMENSIONS[med
     />
     <p class="project-media-unavailable" data-project-media-unavailable hidden>{labels.unavailable.media}</p>
   </div>
-  {caption !== undefined && <figcaption>{caption}</figcaption>}
+  {caption !== undefined && <figcaption data-project-media-caption>{caption}</figcaption>}
 </figure>}
 
 <script>
-  const projectMedia = document.querySelectorAll<HTMLElement>("[data-project-media]")
-  for (const media of projectMedia) {
-    if (media.dataset.mediaReady === "true") continue
-    const image = media.querySelector<HTMLImageElement>("[data-project-media-image]")
-    const unavailable = media.querySelector<HTMLElement>("[data-project-media-unavailable]")
-    if (!image || !unavailable) continue
-    const showUnavailable = () => {
-      image.hidden = true
-      unavailable.hidden = false
-      media.dataset.mediaError = "true"
+  const initializeProjectMedia = () => {
+    for (const media of document.querySelectorAll<HTMLElement>("[data-project-media]")) {
+      if (media.dataset.mediaReady === "true") continue
+      const image = media.querySelector<HTMLImageElement>("[data-project-media-image]")
+      const unavailable = media.querySelector<HTMLElement>("[data-project-media-unavailable]")
+      if (!image || !unavailable) continue
+      const showUnavailable = () => {
+        image.hidden = true
+        unavailable.hidden = false
+        media.dataset.mediaError = "true"
+      }
+      image.addEventListener("error", showUnavailable)
+      if (image.complete && image.naturalWidth === 0) showUnavailable()
+      media.dataset.mediaReady = "true"
     }
-    image.addEventListener("error", showUnavailable)
-    if (image.complete && image.naturalWidth === 0) showUnavailable()
-    media.dataset.mediaReady = "true"
   }
+
+  initializeProjectMedia()
+  document.addEventListener("profile:content-mounted", initializeProjectMedia)
 </script>

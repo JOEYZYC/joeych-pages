@@ -1,0 +1,70 @@
+id: 2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform
+year: 2026
+featured: false
+image: 飞控核心正面.png
+title:
+  zh: eFlyDrone 低成本模块化无人机硬件平台
+  en: eFlyDrone Low-Cost Modular Drone Hardware Platform
+claim:
+  zh: 面向个人制作与模块化扩展的低成本无人机硬件平台，涵盖飞控核心板、ELRS 接收机、M10S GPS 接收机与电调参考设计。
+  en: A low-cost, modular drone hardware platform for personal fabrication,
+    covering a flight-controller core board, ELRS receiver, M10S GPS receiver,
+    and ESC reference design.
+category:
+  zh: 无人机硬件 / 嵌入式系统
+  en: Drone Hardware / Embedded Systems
+summary:
+  zh: 项目基于 PX4 规范，使用 STM32H743VIT6 设计飞控核心板，并整合 ELRS 接收机、M10S GPS
+    接收机和电调参考设计的硬件资料。仓库包含原理图、PCB、BOM、元器件数据手册、PDF 文档和实物照片；相关模块明确参考 NxtPX4、SuperD
+    与立创开源项目，飞控底板仍在规划中，实物尚未完成测试。
+  en: Based on the PX4 specification, the project uses an STM32H743VIT6
+    flight-controller core board and integrates hardware materials for an ELRS
+    receiver, M10S GPS receiver, and ESC reference design. The repository
+    contains schematics, PCB and BOM materials, component datasheets, PDFs, and
+    build photos. Its modules explicitly reference NxtPX4, SuperD, and LCSC
+    open-source projects; the expansion baseboard remains planned, and physical
+    testing is not yet complete.
+contribution:
+  zh: 负责低成本无人机平台的硬件方案整合与资料整理，覆盖飞控核心板、ELRS 接收机、M10S GPS 接收机和电调参考设计。
+  en: Integrated and documented the hardware architecture of a low-cost drone
+    platform, covering the flight-controller core board, ELRS receiver, M10S GPS
+    receiver, and ESC reference design.
+tags:
+  - zh: STM32H743VIT6
+    en: STM32H743VIT6
+  - zh: PX4
+    en: PX4
+  - zh: PCB / 原理图 / BOM
+    en: PCB / Schematics / BOM
+  - zh: ELRS
+    en: ELRS
+  - zh: M10S GPS
+    en: M10S GPS
+  - zh: PWM / PPM / DShot
+    en: PWM / PPM / DShot
+  - zh: 模块化无人机硬件
+    en: Modular Drone Hardware
+  - zh: 立创 EDA
+    en: EasyEDA
+figures:
+  - id: eflydrone-flight-controller-render
+    src: 飞控核心正面.png
+    zh: 飞控核心板正面 3D 仿真图
+    en: Front 3D render of the flight-controller core board
+  - id: eflydrone-elrs-receiver-render
+    src: 接收机正面.png
+    zh: ELRS 接收机正面 3D 仿真图
+    en: Front 3D render of the ELRS receiver
+  - id: eflydrone-m10s-render
+    src: M10S.png
+    zh: M10S GPS 接收机 3D 仿真图
+    en: 3D render of the M10S GPS receiver
+links:
+  - type: source
+    url: https://github.com/JOEYZYC/eFlyDrone-Boards
+    label:
+      zh: GitHub 硬件资料
+      en: GitHub Hardware Repository
+awards: []
+publications: []
+patents: []

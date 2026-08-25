@@ -1,0 +1,68 @@
+id: 2025-Paper-DesignOfADualBandPolarizationConverterBasedOnAChiralMetasurface
+year: 2025
+featured: true
+image: null
+title:
+  zh: 基于手性超构表面的双频带极化转换器设计
+  en: Design of a Dual-Band Polarization Converter Based on a Chiral Metasurface
+claim:
+  zh: 光电子·激光 · 作者位次 3/6
+  en: Journal of Optoelectronics·Laser · 3rd author of 6
+category:
+  zh: 学术论文
+  en: Publication
+summary:
+  zh: 设计一种由顶层与底层开口环和中间介质基板组成的透射型手性超构表面。在 6.21–7.05 GHz 和 8.74–9.73 GHz 两个频段内，线极化转换率均超过 90%，相对带宽分别为 12.70% 和 10.72%。研究通过谐振频率处的表面电流分析双频带高效转换机理，并考察几何参数、介质层厚度、入射波极化方式和极化角度的影响。该结构具有简单、双频带和极化不敏感等特点。
+  en: A transmissive chiral metasurface composed of split rings on its top and
+    bottom layers with a dielectric substrate between them. It achieves a
+    polarization conversion ratio above 90% across 6.21–7.05 GHz and
+    8.74–9.73 GHz, with relative bandwidths of 12.70% and 10.72%. Surface-current
+    analysis at the resonant frequencies explains the dual-band conversion
+    mechanism, while geometric parameters, substrate thickness, incident
+    polarization, and polarization angle are evaluated. The design combines a
+    simple structure with dual-band and polarization-insensitive operation.
+contribution:
+  zh: 请补充
+  en: To be completed
+tags:
+  - zh: 手性超构表面
+    en: Chiral Metasurface
+  - zh: 双频带极化转换
+    en: Dual-Band Polarization Conversion
+  - zh: 透射型超表面
+    en: Transmissive Metasurface
+  - zh: 表面电流分析
+    en: Surface-Current Analysis
+figures: []
+links:
+  - type: paper
+    url: https://www.researching.cn/ArticlePdf/m00028/2025/36/7/3.pdf
+    label:
+      zh: 论文 PDF
+      en: Paper PDF
+awards: []
+publications:
+  - id: chiral-dual-band-polarization-converter
+    year: 2025
+    featured: true
+    image: null
+    title:
+      zh: 基于手性超构表面的双频带极化转换器设计
+      en: Design of a Dual-Band Polarization Converter Based on a Chiral Metasurface
+    venue:
+      zh: 光电子·激光 36(7)
+      en: Journal of Optoelectronics·Laser 36(7)
+    authors:
+      zh: 作者位次 3/6
+      en: 3rd author of 6
+    tags:
+      - metasurface
+      - polarization-conversion
+    links:
+      - type: paper
+        url: https://www.researching.cn/ArticlePdf/m00028/2025/36/7/3.pdf
+        label:
+          zh: 论文 PDF
+          en: Paper PDF
+    certificates: []
+patents: []

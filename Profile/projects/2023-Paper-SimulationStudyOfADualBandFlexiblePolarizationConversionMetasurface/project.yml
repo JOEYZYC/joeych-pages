@@ -1,0 +1,61 @@
+id: 2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface
+year: 2023
+featured: false
+image: null
+title:
+  zh: 双频带柔性极化转换超表面的仿真研究
+  en: Simulation Study of a Dual-band Flexible Polarization-Conversion Metasurface
+claim:
+  zh: 光电子·激光 · 作者位次 3/6
+  en: Journal of Optoelectronics·Laser · 3rd author of 6
+category:
+  zh: 学术论文
+  en: Publication
+summary:
+  zh: 提出一种由金属图案层、柔性介质层和金属接地板组成的双宽频带柔性极化转换超表面。在 8.52–13.35 GHz 和 15.12–19.54 GHz 频段内，结构可将线极化方向旋转 90°，极化转换率分别达到 96.50% 和 98.43%，相对带宽分别为 44.21% 和 25.51%。研究通过柔性介质层厚度调控双频带性能，并结合表面电流分析转换机理；在 0°–30° 入射角范围内保持较好的双频带转换性能和极化不敏感性。
+  en: A dual-wideband flexible polarization-conversion metasurface composed of a
+    patterned metal layer, flexible dielectric, and metal ground plane. It
+    rotates linear polarization by 90° across 8.52–13.35 GHz and
+    15.12–19.54 GHz, reaching polarization conversion ratios of 96.50% and
+    98.43% with relative bandwidths of 44.21% and 25.51%. The flexible-layer
+    thickness tunes the dual-band response, while surface-current analysis
+    explains the mechanism. Performance remains stable and polarization
+    insensitive for incidence angles from 0° to 30°.
+contribution:
+  zh: 请补充
+  en: To be completed
+tags:
+  - zh: metasurface
+    en: metasurface
+figures: []
+links:
+  - type: paper
+    url: https://www.researching.cn/ArticlePdf/m00028/2023/34/7/3.pdf
+    label:
+      zh: 论文 PDF
+      en: Paper PDF
+awards: []
+publications:
+  - id: dual-band-polarization-conversion
+    year: 2023
+    featured: false
+    image: null
+    title:
+      zh: 双频带柔性极化转换超表面的仿真研究
+      en: Simulation Study of a Dual-band Flexible Polarization-Conversion Metasurface
+    venue:
+      zh: 光电子·激光 34(7), 690–697
+      en: Journal of Optoelectronics·Laser 34(7), 690–697
+    authors:
+      zh: 作者位次 3/6
+      en: 3rd author of 6
+    tags:
+      - metasurface
+    links:
+      - type: paper
+        url: https://www.researching.cn/ArticlePdf/m00028/2023/34/7/3.pdf
+        label:
+          zh: 论文 PDF
+          en: Paper PDF
+    certificates: []
+patents: []

@@ -274,6 +274,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       dialog.setAttribute("aria-labelledby", title.id)
       if (nextTrigger) trigger = nextTrigger
       if (!dialog.open) dialog.showModal()
+      dialogContent.scrollTop = 0
       if (focusTitle) title.focus({ preventScroll: true })
     }
 
@@ -306,6 +307,30 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     }
     const close = dialog.querySelector<HTMLButtonElement>("[data-project-dialog-close]")
     close?.addEventListener("click", () => dialog.close())
+    dialogContent.addEventListener("click", (event) => {
+      if (!(event.target instanceof Element)) return
+      const button = event.target.closest<HTMLButtonElement>("[data-project-figure-select]")
+      if (!button || button.getAttribute("aria-pressed") === "true") return
+      const src = button.dataset.projectFigureSrc
+      const source = button.dataset.projectFigureSource
+      const captionText = button.dataset.projectFigureCaption
+      const media = dialogContent.querySelector<HTMLElement>('[data-project-media-context="record"]')
+      const image = media?.querySelector<HTMLImageElement>("[data-project-media-image]")
+      const caption = media?.querySelector<HTMLElement>("[data-project-media-caption]")
+      const unavailable = media?.querySelector<HTMLElement>("[data-project-media-unavailable]")
+      if (!src || !source || !captionText || !media || !image || !unavailable) return
+
+      for (const control of dialogContent.querySelectorAll<HTMLButtonElement>("[data-project-figure-select]")) {
+        control.setAttribute("aria-pressed", String(control === button))
+      }
+      delete media.dataset.mediaError
+      media.dataset.projectMediaSource = source
+      image.hidden = false
+      unavailable.hidden = true
+      image.src = src
+      image.alt = captionText
+      if (caption) caption.textContent = captionText
+    })
     attachDialogDismissal(dialog, () => trigger?.focus())
     dialog.hidden = false
     const updateFilters = (changed: FilterKey) => {

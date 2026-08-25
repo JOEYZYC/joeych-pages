@@ -25,12 +25,12 @@ skills:
           - id: soldering-debugging
         evidence:
           - type: project
-            project_id: single-phase-power-analyzer
+            project_id: 2024-Competition-SinglePhasePowerAnalyzer
             scope: project-record
             supports:
               - circuit-design
           - type: project
-            project_id: full-model-smart-car
+            project_id: 2024-Competition-SmartCarModelGroupTeamDevelopmentArchive
             scope: project-record
             supports:
               - pcb-layout
@@ -50,17 +50,17 @@ skills:
           - id: infineon
         evidence:
           - type: project
-            project_id: dual-light-fusion
+            project_id: 2024-Competition-DualLightFusionSmartThermalImager
             scope: project-record
             supports:
               - st
           - type: project
-            project_id: power-print-recognition
+            project_id: 2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign
             scope: project-record
             supports:
               - renesas
           - type: project
-            project_id: single-phase-power-analyzer
+            project_id: 2024-Competition-SinglePhasePowerAnalyzer
             scope: project-record
             supports:
               - ti
@@ -103,17 +103,17 @@ skills:
           - id: python
         evidence:
           - type: project
-            project_id: full-model-smart-car
+            project_id: 2024-Competition-SmartCarModelGroupTeamDevelopmentArchive
             scope: project-record
             supports:
               - c
           - type: project
-            project_id: power-print-recognition
+            project_id: 2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign
             scope: project-record
             supports:
               - csharp
           - type: project
-            project_id: intelligent-reconnaissance-2024
+            project_id: 2024-Competition-IntelligentReconnaissanceSystem
             scope: project-record
             supports:
               - python
@@ -143,7 +143,7 @@ skills:
             supports:
               - git
           - type: project
-            project_id: full-model-smart-car
+            project_id: 2024-Competition-SmartCarModelGroupTeamDevelopmentArchive
             scope: project-record
             supports:
               - team-collaboration
@@ -165,17 +165,17 @@ skills:
             supports:
               - halcon
           - type: project
-            project_id: intelligent-reconnaissance-2023
+            project_id: 2023-Competition-IntelligentReconnaissanceCompetitionProject
             scope: project-record
             supports:
               - opencv
           - type: project
-            project_id: intelligent-reconnaissance-2024
+            project_id: 2024-Competition-IntelligentReconnaissanceSystem
             scope: project-record
             supports:
               - opencv
           - type: project
-            project_id: smart-harvesting-robot
+            project_id: 2023-Competition-SmartHarvestingRobot
             scope: project-record
             supports:
               - opencv
@@ -201,7 +201,7 @@ skills:
           - id: antenna-design
         evidence:
           - type: project
-            project_id: rigid-dual-polarization-metasurface
+            project_id: 2024-Project-PerformanceStudyOfARigidLinearCircularDualPolarizationConversionMetasurface
             scope: project-record
             supports:
               - cst-studio-suite

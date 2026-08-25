@@ -119,20 +119,20 @@ test.describe("tech stack", () => {
 
   test("following a project evidence link reaches the record with visible provenance", async ({ page }) => {
     await page.goto("en/tech-stack/")
-    const evidence = page.locator('[data-skill-tag="vision-halcon-opencv"] [data-project-id="intelligent-reconnaissance-2024"]')
+    const evidence = page.locator('[data-skill-tag="vision-halcon-opencv"] [data-project-id="2024-Competition-IntelligentReconnaissanceSystem"]')
 
     await evidence.getByRole("link").click()
 
     await expect(page).toHaveURL(
-      /\/en\/projects\/\?skill=vision-halcon-opencv#intelligent-reconnaissance-2024$/,
+      /\/en\/projects\/\?skill=vision-halcon-opencv#2024-Competition-IntelligentReconnaissanceSystem$/,
     )
-    const dialog = page.locator('[data-project-dialog][data-project-id="intelligent-reconnaissance-2024"]')
+    const dialog = page.locator('[data-project-dialog][data-project-id="2024-Competition-IntelligentReconnaissanceSystem"]')
     await expect(dialog).toBeVisible()
     await expect(dialog).toHaveAttribute(
       "data-evidence-origin",
       "true",
     )
-    await expect(page.locator("[data-project-name-filter]")).toHaveValue("intelligent-reconnaissance-2024")
+    await expect(page.locator("[data-project-name-filter]")).toHaveValue("2024-Competition-IntelligentReconnaissanceSystem")
     await expect(dialog.locator("[data-project-origin-label]")).toHaveText(
       "From skill evidence: Halcon / OpenCV image processing & vision",
     )
@@ -148,10 +148,11 @@ test.describe("tech stack", () => {
 
     await page.locator('[data-skill-evidence="project"] a').first().click()
 
-    await expect(page).toHaveURL(/\/en\/projects\/\?skill=[^#]+#[a-z0-9-]+$/)
+    await expect(page).toHaveURL(/\/en\/projects\/\?skill=[^#]+#[A-Za-z0-9-]+$/)
     const hash = await page.evaluate(() => window.location.hash)
-    await expect(page.locator(hash)).toBeVisible()
-    await expect(page.locator(`${hash} [data-project-current-label]`)).toBeVisible()
+    const projectId = decodeURIComponent(hash.slice(1))
+    await expect(page.locator(`[id="${projectId}"]`)).toBeVisible()
+    await expect(page.locator(`[id="${projectId}"] [data-project-current-label]`)).toBeVisible()
 
     await context.close()
   })

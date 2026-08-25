@@ -1,0 +1,47 @@
+id: 2024-Competition-IntelligentConnectedTrafficSignRecognitionSystemBasedOnLightweightTensorFlow
+year: 2024
+featured: false
+image: traffic-sign-device.jpg
+title:
+  zh: 基于轻量化TensorFlow的智联交通标识识别系统
+  en: Intelligent Connected Traffic-Sign Recognition System Based on Lightweight
+    TensorFlow
+claim:
+  zh: 2024 年计算机设计竞赛物联网应用 / RTT 专项赛题，结合图像采集、轻量模型与嵌入式物联网架构进行交通标识识别。
+  en: A 2024 computer design contest entry in IoT Applications / RTT Special
+    Topic, combining image capture, a lightweight model, and an embedded IoT
+    architecture for traffic-sign recognition.
+category:
+  zh: 物联网应用 / RTT专项赛题
+  en: IoT Applications / RTT Special Topic
+summary:
+  zh: 系统基于 RT-Thread 与 Vision Board，使用 OpenMV 完成图像采集和预处理，并部署轻量化
+    TensorFlow/TensorFlow Lite 模型。工作包括项目协调、概念定义、技术分析、系统设计和实现。
+  en: The system is based on RT-Thread and a Vision Board, using OpenMV for image
+    capture and preprocessing with a lightweight TensorFlow/TensorFlow Lite
+    model. Work covered project coordination, concept definition, technical
+    analysis, system design, and implementation.
+contribution:
+  zh: 负责项目协调、概念定义与技术分析，并参与系统设计和实现。
+  en: Responsible for project coordination, concept definition, and technical
+    analysis, and participated in system design and implementation.
+tags:
+  - zh: RT-Thread
+    en: RT-Thread
+  - zh: Vision Board
+    en: Vision Board
+  - zh: OpenMV
+    en: OpenMV
+  - zh: TensorFlow Lite
+    en: TensorFlow Lite
+  - zh: 嵌入式物联网
+    en: Embedded IoT
+figures:
+  - id: traffic-sign-device
+    src: traffic-sign-device.jpg
+    zh: 交通标识识别装置
+    en: Traffic-Sign Recognition Device
+links: []
+awards: []
+publications: []
+patents: []

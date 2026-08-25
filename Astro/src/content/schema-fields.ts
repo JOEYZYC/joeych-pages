@@ -1,9 +1,15 @@
 import { z } from "astro/zod"
 
 export const textSchema = z.string().trim().min(1)
-const idSchema = textSchema.regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "ID must use lowercase letters, numbers, and hyphens")
-export const recordIdSchema = idSchema.brand("RecordId")
-export const projectIdSchema = idSchema.brand("ProjectId")
+export const recordIdSchema = textSchema
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Record ID must use lowercase letters, numbers, and hyphens")
+  .brand("RecordId")
+export const projectIdSchema = textSchema
+  .regex(
+    /^\d{4}-(?:Paper|Patent|Competition|Project)-[A-Z][A-Za-z0-9]*$/,
+    "Project ID must use Year-Type-PascalCaseName",
+  )
+  .brand("ProjectId")
 export const componentIdSchema = textSchema.brand("ComponentId")
 export const localizedSchema = z.object({ zh: textSchema, en: textSchema }).strict().readonly()
 export const httpsUrlSchema = z.url().refine(

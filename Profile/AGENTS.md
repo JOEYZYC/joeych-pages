@@ -22,6 +22,7 @@
 ## Project Bundles
 
 - Preserve stable project IDs and `projects/index.yml` order.
+- Project IDs use `YYYY-Type-PascalCaseName`, where `Type` is `Paper`, `Patent`, `Competition`, or `Project`.
 - Directory name, index ID, YAML ID, skill evidence ID, and project anchor must agree.
 - Projects require bilingual title, claim, category, summary, and contribution plus `awards`, `publications`, and `patents` arrays.
 - Publications and the thesis are projects. Outcomes are embedded only in their owning project.

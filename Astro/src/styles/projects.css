@@ -27,6 +27,11 @@
   margin: var(--space-2) 0 0;
 }
 
+.project-media figcaption,
+.project-figure-grid figcaption {
+  text-align: center;
+}
+
 .project-media-pending {
   color: var(--color-warning);
   font-family: var(--font-mono);
@@ -202,8 +207,34 @@
   margin-block-start: var(--space-6);
 }
 
-.project-dialog {
-  inline-size: min(calc(100vw - var(--space-8)), var(--content-max));
+.dialog-surface.project-dialog {
+  inline-size: min(calc(100vw - var(--space-8)), var(--prose-max));
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+}
+
+.project-dialog > .dialog-close {
+  inset-block-start: var(--space-6);
+  inset-inline-end: var(--space-6);
+  position: absolute;
+  z-index: 2;
+}
+
+.project-dialog > [data-project-dialog-content] {
+  max-block-size: calc(100dvh - var(--space-8));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-6);
+  scrollbar-gutter: stable both-edges;
+}
+
+.project-dialog .project-record-header {
+  padding-inline-end: calc(var(--target-size) + var(--space-3));
+}
+
+.project-dialog .project-record-header h2 {
+  padding-inline-end: 0;
 }
 
 .project-record {
@@ -273,6 +304,48 @@
 
 .project-record > .project-media .project-media-well {
   aspect-ratio: 16 / 9;
+}
+
+.project-dialog .project-media figcaption {
+  inline-size: 100%;
+  text-align: center;
+}
+
+.project-figure-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: center;
+  margin-block-start: var(--space-3);
+}
+
+.project-figure-control {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-control);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--type-meta);
+  max-inline-size: 100%;
+  min-block-size: var(--target-size);
+  overflow-wrap: anywhere;
+  padding: var(--space-2) var(--space-3);
+}
+
+.project-figure-control[aria-pressed="true"] {
+  background: var(--color-surface-strong);
+  color: var(--color-on-strong);
+  font-weight: 700;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-figure-control:not([aria-pressed="true"]):hover {
+    color: var(--color-control-hover);
+  }
+}
+
+.project-figure-control:active {
+  transform: translateY(0.0625rem);
 }
 
 .project-record-body {

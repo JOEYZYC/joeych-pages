@@ -1,0 +1,90 @@
+id: 2024-Competition-DualLightFusionSmartThermalImager
+year: 2024
+featured: true
+image: dual-light-fusion.png
+title:
+  zh: “双光融合”智能热像仪
+  en: '"Dual-Light Fusion" Smart Thermal Imager'
+claim:
+  zh: 获全国大学生嵌入式芯片与系统设计竞赛东部赛区三等奖，并参加 2024 DigiKey 开源竞赛。
+  en: Eastern Division Third Prize in the National Collegiate Embedded Chip and
+    System Design Contest, and a 2024 DigiKey open-source contest entry.
+category:
+  zh: 计算机视觉 / 边缘 AI
+  en: Computer Vision / Edge AI
+summary:
+  zh: 项目基于 STM32H7 与 OpenMV，融合 OV5640 可见光图像和 MLX90640 红外热成像数据，并使用 MicroPython 与 TensorFlow Lite 训练和优化轻量化手势识别模型，通过不同手势切换工作模式。LCD 触摸屏实时显示融合图像、区域温度和分析结果，可用于体温筛查和电路板焊接热分布检测。便携式硬件支持摄像头更换和自主充电。同一作品参加全国大学生嵌入式芯片与系统设计竞赛和 2024 DigiKey 开源竞赛。
+  en: Built on STM32H7 and OpenMV, the device fuses OV5640 visible-light images
+    with MLX90640 infrared thermal data. MicroPython and TensorFlow Lite support
+    a lightweight gesture-recognition model that switches between operating
+    modes. An LCD touchscreen presents fused imagery, regional temperatures,
+    and analysis results in real time for uses including body-temperature
+    screening and circuit-board soldering inspection. The portable hardware
+    supports replaceable cameras and onboard charging. The same work entered
+    both the National Collegiate Embedded Chip and System Design Contest and the
+    2024 DigiKey open-source contest.
+contribution:
+  zh: 参与可见光与红外图像融合实现。
+  en: Participated in implementing visible-light and infrared image fusion.
+tags:
+  - zh: STM32H7 / OpenMV
+    en: STM32H7 / OpenMV
+  - zh: OV5640
+    en: OV5640
+  - zh: MLX90640
+    en: MLX90640
+  - zh: MicroPython
+    en: MicroPython
+  - zh: TensorFlow Lite
+    en: TensorFlow Lite
+  - zh: 双光融合
+    en: Dual-Light Fusion
+  - zh: 图像二值化
+    en: Image Binarization
+  - zh: 人脸区域定位
+    en: Face-Region Localization
+  - zh: 实时测温
+    en: Real-Time Temperature Measurement
+  - zh: 手势识别
+    en: Gesture Recognition
+  - zh: LCD 触摸屏
+    en: LCD Touchscreen
+  - zh: DigiKey
+    en: DigiKey
+figures:
+  - id: dual-light-fusion
+    src: dual-light-fusion.png
+    zh: 双光融合效果
+    en: Dual-Light Fusion
+  - id: dual-light-assembled
+    src: dual-light-assembled.png
+    zh: 装配展示
+    en: Assembled Device
+links:
+  - type: source
+    url: https://bbs.eeworld.com.cn/thread-1297762-1-1.html
+    label:
+      zh: EEWorld 开源项目帖
+      en: EEWorld Open-source Project Post
+awards:
+  - id: embedded-chip-third-2024
+    year: 2024
+    featured: false
+    title:
+      zh: 全国大学生嵌入式芯片与系统设计竞赛（芯片应用赛道）
+      en: National Collegiate Embedded Chip and System Design Contest (Chip
+        Application Track)
+    prizes:
+      - level: regional
+        zh: 东部赛区 三等奖
+        en: Eastern Division Third Prize
+    tags:
+      - embedded
+    links: []
+    certificates:
+      - src: 24嵌赛省三.png
+        zh: 全国大学生嵌入式芯片与系统设计竞赛芯片应用赛道东部赛区三等奖
+        en: Embedded Chip and System Design Contest, Chip Application Track — Eastern
+          Division Third Prize
+publications: []
+patents: []

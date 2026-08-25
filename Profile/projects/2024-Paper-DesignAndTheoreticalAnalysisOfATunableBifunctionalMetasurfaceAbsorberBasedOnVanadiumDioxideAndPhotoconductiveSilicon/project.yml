@@ -1,0 +1,72 @@
+id: 2024-Paper-DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon
+year: 2024
+featured: true
+image: null
+title:
+  zh: 基于二氧化钒和光导硅的可调谐双功能超表面吸收器设计与理论分析
+  en: Design and theoretical analysis of a tunable bifunctional metasurface
+    absorber based on vanadium dioxide and photoconductive silicon
+claim:
+  zh: Dalton Transactions · 作者位次 3/7
+  en: Dalton Transactions · 3rd author of 7
+category:
+  zh: 学术论文
+  en: Publication
+summary:
+  zh: 提出一种基于二氧化钒和光导硅的太赫兹可调谐双功能超表面吸收器。二氧化钒和光导硅处于特定电导率时，结构在 2.47–3.71 THz 和 8.90–10.62 THz 实现超过 90% 的双宽带吸收，相对带宽分别为 40.13% 和 17.62%；切换二氧化钒状态后，在 4.69–7.72 THz 实现超过 90% 的单宽带吸收，相对带宽为 48.83%。研究通过阻抗匹配、等效传输线模型和电场分布解释吸收机制，并验证其极化不敏感性与宽入射角性能。
+  en: A tunable bifunctional terahertz metasurface absorber based on vanadium
+    dioxide and photoconductive silicon. Under one conductivity state, it
+    exceeds 90% absorptivity across 2.47–3.71 THz and 8.90–10.62 THz, with
+    relative bandwidths of 40.13% and 17.62%. Switching the VO2 state produces
+    single-band absorption above 90% from 4.69 to 7.72 THz with a 48.83%
+    relative bandwidth. Impedance matching, an equivalent transmission-line
+    model, and electric-field distributions explain the mechanism, with the
+    design retaining polarization-insensitive and wide-angle performance.
+contribution:
+  zh: 请补充
+  en: To be completed
+tags:
+  - zh: metasurface
+    en: metasurface
+  - zh: terahertz
+    en: terahertz
+figures: []
+links:
+  - type: paper
+    url: https://doi.org/10.1039/d4dt02563f
+    label:
+      zh: 论文 DOI
+      en: Paper DOI
+awards: []
+publications:
+  - id: tunable-bifunctional-metasurface-absorber
+    year: 2024
+    featured: true
+    image: null
+    title:
+      zh: 基于二氧化钒和光导硅的可调谐双功能超表面吸收器设计与理论分析
+      en: Design and theoretical analysis of a tunable bifunctional metasurface
+        absorber based on vanadium dioxide and photoconductive silicon
+    venue:
+      zh: Dalton Transactions
+      en: Dalton Transactions
+    authors:
+      zh: 作者位次 3/7
+      en: 3rd author of 7
+    tags:
+      - metasurface
+      - terahertz
+    links:
+      - type: paper
+        url: https://doi.org/10.1039/d4dt02563f
+        label:
+          zh: 论文 DOI
+          en: Paper DOI
+    certificates:
+      - src: DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon.png
+        zh: 论文：Design and theoretical analysis of a tunable bifunctional metasurface
+          absorber based on vanadium dioxide and photoconductive silicon
+        en: "Paper: Design and theoretical analysis of a tunable bifunctional
+          metasurface absorber based on vanadium dioxide and photoconductive
+          silicon"
+patents: []

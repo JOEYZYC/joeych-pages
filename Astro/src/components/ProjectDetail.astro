@@ -16,6 +16,7 @@ type Props = {
 const { idPrefix, locale, mode, project } = Astro.props
 const labels = UI[locale]
 const remainingFigures = project.figures.filter((figure) => figure.src !== project.image)
+const availableFigures = project.figures.filter((figure) => figure.src !== undefined)
 const titleId = `${idPrefix}-title`
 ---
 
@@ -41,7 +42,21 @@ const titleId = `${idPrefix}-title`
   <div class="project-media project-media--record project-media--unavailable" data-project-media data-project-media-context="record" data-project-media-kind="unavailable" role="img" aria-label={labels.projectExplorer.imagePendingAlt}>
     <div class="project-media-well"><p class="project-media-pending">{labels.projectExplorer.imagePending}</p></div>
   </div>
-) : <ProjectMedia context="record" locale={locale} record={project} loading="lazy" />}
+) : <ProjectMedia context="record" locale={locale} record={project} loading="lazy" showCaption={mode === "record"} />}
+
+{mode === "dialog" && availableFigures.length > 0 && (
+  <div class="project-figure-controls" role="group" aria-label={labels.sections.projects.figures} data-project-figure-controls>
+    {availableFigures.map((figure) => <button
+      class="project-figure-control"
+      type="button"
+      data-project-figure-select
+      data-project-figure-src={publicMediaUrl(figure.src)}
+      data-project-figure-source={figure.src}
+      data-project-figure-caption={figure[locale]}
+      aria-pressed={figure.src === project.image ? "true" : "false"}
+    >{figure[locale]}</button>)}
+  </div>
+)}
 
 <div class="project-record-body">
   <p class="project-record-summary">{project.summary[locale]}</p>
@@ -93,7 +108,7 @@ const titleId = `${idPrefix}-title`
     <p class:list={{ "project-template-unavailable": project.contribution[locale] === labels.projectExplorer.pending }}>{project.contribution[locale]}</p>
   </section>
 
-  {remainingFigures.length > 0 && (
+  {mode === "record" && remainingFigures.length > 0 && (
     <section class="project-record-section project-figures" aria-labelledby={`${idPrefix}-figures`}>
       <h3 id={`${idPrefix}-figures`}>{labels.sections.projects.figures}</h3>
       <div class="project-figure-grid">

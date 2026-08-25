@@ -4,7 +4,7 @@ import { chromium, expect, test } from "@playwright/test"
 import { BASE_PATH, CANONICAL_ROUTES, VIEWPORTS } from "./support/site-matrix"
 
 const basePath = BASE_PATH
-const projectFragment = "#resgatnet"
+const projectFragment = "#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"
 const siteBaseUrl = "http://127.0.0.1:4321/joeych-pages/"
 const navigationDisabledFeature = "--disable-features=ViewTransitionOnNavigation"
 const unloadMarker = "navigation-e2e-beforeunload"
@@ -50,12 +50,12 @@ test.describe("navigation state synchronization", () => {
     const nameFilter = page.locator("[data-project-name-filter]")
     const historyLength = await page.evaluate(() => window.history.length)
 
-    await nameFilter.selectOption("resgatnet")
+    await nameFilter.selectOption("2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
 
-    await expect(nameFilter).toHaveValue("resgatnet")
+    await expect(nameFilter).toHaveValue("2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
     await expect(page.locator("[data-project-card]:not([hidden])")).toHaveCount(1)
-    await expect(page.locator('[data-project-card][data-project-id="resgatnet"]')).toBeVisible()
-    await expect(page.locator('[data-project-dialog][data-project-id="resgatnet"]')).toBeHidden()
+    await expect(page.locator('[data-project-card][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')).toBeVisible()
+    await expect(page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')).toBeHidden()
     expect(await page.evaluate(() => window.history.length)).toBe(historyLength)
     await expect(page).toHaveURL(/\/en\/projects\/$/)
   })
@@ -64,16 +64,16 @@ test.describe("navigation state synchronization", () => {
     await page.goto("en/projects/")
 
     await page.evaluate(() => {
-      window.location.hash = "#resgatnet"
+      window.location.hash = "#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"
     })
 
-    await expect(page.locator("[data-project-name-filter]")).toHaveValue("resgatnet")
-    const dialog = page.locator('[data-project-dialog][data-project-id="resgatnet"]')
+    await expect(page.locator("[data-project-name-filter]")).toHaveValue("2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
+    const dialog = page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')
     await expect(dialog).toHaveAttribute("data-active", "true")
     await expect(dialog.locator("[data-project-dialog-title]")).toBeFocused()
     await expect(page.locator("a.language-link")).toHaveAttribute(
       "href",
-      `${basePath}/projects/#resgatnet`,
+      `${basePath}/projects/#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception`,
     )
   })
 

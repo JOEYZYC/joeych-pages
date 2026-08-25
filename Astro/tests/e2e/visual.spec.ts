@@ -5,7 +5,7 @@ import { CANONICAL_ROUTES, THEMES, VIEWPORTS } from "./support/site-matrix"
 import { configureVisualEnvironment, waitForStableScreenshot } from "./support/test-helpers"
 
 const projectRoute = "en/projects/"
-const projectId = "resgatnet"
+const projectId = "2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"
 
 function routeSnapshotName(path: string, viewport: string, theme: string): string {
   const routeName = path === "" ? "home-zh" : path.replaceAll("/", "-").replace(/-$/, "")
@@ -56,7 +56,7 @@ test.describe("deterministic visual baselines", () => {
       }
     }
 
-    test(`captures the resgatnet dialog in ${theme}`, async ({ page }) => {
+    test(`captures the multi-figure project dialog in ${theme}`, async ({ page }) => {
       await openSettledProjectPage(page, theme, { hash: true })
       const dialog = page.locator(`[data-project-dialog][data-project-id="${projectId}"]`)
 
