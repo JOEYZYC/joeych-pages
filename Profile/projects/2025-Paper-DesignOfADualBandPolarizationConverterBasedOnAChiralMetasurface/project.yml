@@ -1,7 +1,7 @@
 id: 2025-Paper-DesignOfADualBandPolarizationConverterBasedOnAChiralMetasurface
 year: 2025
 featured: true
-image: null
+image: modelpic.png
 title:
   zh: 基于手性超构表面的双频带极化转换器设计
   en: Design of a Dual-Band Polarization Converter Based on a Chiral Metasurface
@@ -33,7 +33,11 @@ tags:
     en: Transmissive Metasurface
   - zh: 表面电流分析
     en: Surface-Current Analysis
-figures: []
+figures:
+  - id: chiral-dual-band-polarization-converter-model
+    src: modelpic.png
+    zh: 手性超构表面双频带极化转换器三维模型
+    en: 3D model of the chiral dual-band polarization converter
 links:
   - type: paper
     url: https://www.researching.cn/ArticlePdf/m00028/2025/36/7/3.pdf

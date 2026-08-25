@@ -111,9 +111,11 @@ test.describe("WCAG accessibility and 200% reflow", () => {
 
       await page.goto("projects/")
       await page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]').click()
-      await expectNoWcagViolations(page, { route: "/projects/", state: "project-dialog", theme, viewport: desktopViewport.width }, testInfo)
       const projectDialog = page.locator('[data-project-dialog][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]')
+      await expect(projectDialog).toHaveCSS("opacity", "1")
+      await expectNoWcagViolations(page, { route: "/projects/", state: "project-dialog", theme, viewport: desktopViewport.width }, testInfo)
       await projectDialog.locator("[data-certificate-trigger]").click()
+      await expect(projectDialog.locator("[data-certificate-dialog]")).toHaveCSS("opacity", "1")
       await expectNoWcagViolations(page, { route: "/projects/", state: "certificate-dialog", theme, viewport: desktopViewport.width }, testInfo)
     })
   }

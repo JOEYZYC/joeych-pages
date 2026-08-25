@@ -3,6 +3,12 @@ export const PROJECT_MEDIA_DIMENSIONS: Readonly<
 > = {
   "/projects/2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform/飞控核心正面.png": { width: 799, height: 944 },
   "/projects/2026-Project-DesignOfAGrapheneBasedTerahertzLinearToCircularPolarizationConversionMetasurface/modelpic.png": { width: 700, height: 431 },
+  "/projects/2025-Paper-DesignOfADualBandPolarizationConverterBasedOnAChiralMetasurface/modelpic.png": { width: 1154, height: 572 },
+  "/projects/2024-Paper-DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon/modelpic.png": {
+    width: 1414,
+    height: 1180,
+  },
+  "/projects/2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface/modelpic.png": { width: 394, height: 201 },
   "/projects/2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign/拓扑图.png": { width: 1200, height: 673 },
   "/projects/2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign/power-print-hardware.png": { width: 1017, height: 728 },
   "/projects/2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign/power-print-display.png": { width: 773, height: 507 },

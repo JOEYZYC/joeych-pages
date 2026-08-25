@@ -12,8 +12,10 @@ category:
   zh: 学术论文
   en: Publication
 summary:
-  zh: 请补充
-  en: To be completed
+  zh: >-
+    针对多频带和完美吸波器的应用需求，本文设计了一种基于超表面的三频带吸波器。所提出的吸波器由金属图案层、中间介质层和金属底板组成，在 5.16 GHz（C 波段）、7.27 GHz（C 波段）和 8.32 GHz（X 波段）3 个谐振频率处的吸波率分别达到 99.98%、99.94% 和 99.98%，可实现近乎完美吸收。本文利用阻抗匹配理论阐明产生 3 个谐振频率的原因，并通过仿真谐振频率处的表面电流、电场和磁场分布分析三频带吸波机理。通过改变顶层金属图案的数量，可实现单频带、双频带和三频带调控。对极化角和入射角依赖性的研究表明，该吸波器具有良好的极化不敏感性和 0°-60° 广角稳定性。该设计具有易于设计和轻薄等特点，在电磁吸波、隐身和传感等领域具有应用潜力。
+  en: >-
+    To meet the application demand for multiband and perfect absorbers, this paper presents a tri-band metasurface absorber composed of a patterned metal layer, an intermediate dielectric layer, and a metal ground plane. The absorber achieves absorption rates of 99.98%, 99.94%, and 99.98% at resonant frequencies of 5.16 GHz (C band), 7.27 GHz (C band), and 8.32 GHz (X band), respectively, enabling near-perfect absorption. Impedance-matching theory explains the formation of the three resonances, while simulated surface-current, electric-field, and magnetic-field distributions reveal the tri-band absorption mechanism. Changing the number of metal patterns on the top layer enables single-, dual-, and tri-band control. The dependence on polarization and incidence angles also demonstrates polarization insensitivity and wide-angle stability from 0 to 60 degrees. The proposed absorber is easy to design and lightweight, with potential applications in electromagnetic absorption, stealth, and sensing.
 contribution:
   zh: 请补充
   en: To be completed

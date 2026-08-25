@@ -1,7 +1,7 @@
 id: 2024-Paper-DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon
 year: 2024
 featured: true
-image: null
+image: modelpic.png
 title:
   zh: 基于二氧化钒和光导硅的可调谐双功能超表面吸收器设计与理论分析
   en: Design and theoretical analysis of a tunable bifunctional metasurface
@@ -30,7 +30,11 @@ tags:
     en: metasurface
   - zh: terahertz
     en: terahertz
-figures: []
+figures:
+  - id: tunable-bifunctional-metasurface-absorber-model
+    src: modelpic.png
+    zh: 可调谐双功能超表面吸收器三维模型
+    en: 3D model of the tunable bifunctional metasurface absorber
 links:
   - type: paper
     url: https://doi.org/10.1039/d4dt02563f

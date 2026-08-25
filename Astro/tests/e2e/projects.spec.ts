@@ -25,6 +25,12 @@ const projectIds = [
   "2023-Competition-IntelligentReconnaissanceCompetitionProject",
 ] as const
 
+const addedPaperImages = [
+  ["2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface", "/projects/2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface/modelpic.png"],
+  ["2024-Paper-DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon", "/projects/2024-Paper-DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon/modelpic.png"],
+  ["2025-Paper-DesignOfADualBandPolarizationConverterBasedOnAChiralMetasurface", "/projects/2025-Paper-DesignOfADualBandPolarizationConverterBasedOnAChiralMetasurface/modelpic.png"],
+] as const
+
 const locales = [
   { path: "projects/", htmlLanguage: "zh-CN", navigation: "项目与成果", title: "项目与成果", summary: "按项目浏览工程实践、论文、竞赛荣誉与图文证据。", pending: "项目图片待补充" },
   { path: "en/projects/", htmlLanguage: "en", navigation: "Projects & Achievements", title: "Projects & Achievements", summary: "Browse engineering work, publications, honors, and supporting evidence by project.", pending: "Project image pending" },
@@ -58,9 +64,12 @@ test.describe("projects archive", () => {
       expect(await records.evaluateAll((elements) => elements.map((element) => element.id))).toEqual(projectIds)
       expect(await visibleCardIds(page)).toEqual(projectIds)
       await expect(page.locator("[data-project-records]")).toBeHidden()
-      await expect(cards.locator('[data-project-media-kind="real"]')).toHaveCount(13)
-      await expect(cards.locator('[data-project-media-kind="unavailable"]')).toHaveCount(6)
-      await expect(cards.locator('[data-project-media-kind="unavailable"] .project-media-pending')).toHaveText(Array.from({ length: 6 }, () => locale.pending))
+      await expect(cards.locator('[data-project-media-kind="real"]')).toHaveCount(16)
+      await expect(cards.locator('[data-project-media-kind="unavailable"]')).toHaveCount(3)
+      await expect(cards.locator('[data-project-media-kind="unavailable"] .project-media-pending')).toHaveText(Array.from({ length: 3 }, () => locale.pending))
+      for (const [id, source] of addedPaperImages) {
+        await expect(page.locator(`[data-project-card][data-project-id="${id}"] [data-project-media]`)).toHaveAttribute("data-project-media-source", source)
+      }
     })
   }
 

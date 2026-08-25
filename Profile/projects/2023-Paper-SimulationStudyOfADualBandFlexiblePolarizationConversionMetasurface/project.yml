@@ -1,7 +1,7 @@
 id: 2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface
 year: 2023
 featured: false
-image: null
+image: modelpic.png
 title:
   zh: 双频带柔性极化转换超表面的仿真研究
   en: Simulation Study of a Dual-band Flexible Polarization-Conversion Metasurface
@@ -27,7 +27,11 @@ contribution:
 tags:
   - zh: metasurface
     en: metasurface
-figures: []
+figures:
+  - id: flexible-dual-band-metasurface-model
+    src: modelpic.png
+    zh: 双频带柔性极化转换超表面三维模型
+    en: 3D model of the dual-band flexible polarization-conversion metasurface
 links:
   - type: paper
     url: https://www.researching.cn/ArticlePdf/m00028/2023/34/7/3.pdf
