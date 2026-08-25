@@ -1,7 +1,7 @@
 id: 2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite
 year: 2025
 featured: false
-image: null
+image: pic.png
 title:
   zh: 张易成个人学术作品集网站
   en: JOEYCH Personal Academic Portfolio Website
@@ -37,7 +37,11 @@ tags:
     en: Bilingual Static Routes
   - zh: Playwright E2E 测试
     en: Playwright E2E Testing
-figures: []
+figures:
+  - id: portfolio-website-homepage
+    src: pic.png
+    zh: 个人学术作品集网站首页
+    en: Homepage of the personal academic portfolio website
 links:
   - type: source
     url: https://github.com/JOEYZYC/joeych-pages

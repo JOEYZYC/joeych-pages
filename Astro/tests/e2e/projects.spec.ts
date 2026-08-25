@@ -18,17 +18,18 @@ const projectIds = [
   "2024-Competition-SmartCarModelGroupTeamDevelopmentArchive",
   "2024-Paper-BifunctionalFlexibleMetasurfaceBasedOnGrapheneAndVanadiumDioxideForPolarizationConversionAndAbsorption",
   "2024-Paper-DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon",
-  "2024-Paper-DualBroadbandFlexibleMetasurfaceBasedOnTheStaggeredTriangularCheckerboardLayoutForRCSReduction",
   "2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface",
   "2024-Paper-ATriBandMetasurfaceAbsorber",
   "2023-Competition-SmartHarvestingRobot",
   "2023-Competition-IntelligentReconnaissanceCompetitionProject",
 ] as const
 
-const addedPaperImages = [
+const addedProjectImages = [
   ["2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface", "/projects/2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface/modelpic.png"],
+  ["2024-Paper-ATriBandMetasurfaceAbsorber", "/projects/2024-Paper-ATriBandMetasurfaceAbsorber/modelpic.png"],
   ["2024-Paper-DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon", "/projects/2024-Paper-DesignAndTheoreticalAnalysisOfATunableBifunctionalMetasurfaceAbsorberBasedOnVanadiumDioxideAndPhotoconductiveSilicon/modelpic.png"],
   ["2025-Paper-DesignOfADualBandPolarizationConverterBasedOnAChiralMetasurface", "/projects/2025-Paper-DesignOfADualBandPolarizationConverterBasedOnAChiralMetasurface/modelpic.png"],
+  ["2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite", "/projects/2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite/pic.png"],
 ] as const
 
 const locales = [
@@ -64,10 +65,9 @@ test.describe("projects archive", () => {
       expect(await records.evaluateAll((elements) => elements.map((element) => element.id))).toEqual(projectIds)
       expect(await visibleCardIds(page)).toEqual(projectIds)
       await expect(page.locator("[data-project-records]")).toBeHidden()
-      await expect(cards.locator('[data-project-media-kind="real"]')).toHaveCount(16)
-      await expect(cards.locator('[data-project-media-kind="unavailable"]')).toHaveCount(3)
-      await expect(cards.locator('[data-project-media-kind="unavailable"] .project-media-pending')).toHaveText(Array.from({ length: 3 }, () => locale.pending))
-      for (const [id, source] of addedPaperImages) {
+      await expect(cards.locator('[data-project-media-kind="real"]')).toHaveCount(18)
+      await expect(cards.locator('[data-project-media-kind="unavailable"]')).toHaveCount(0)
+      for (const [id, source] of addedProjectImages) {
         await expect(page.locator(`[data-project-card][data-project-id="${id}"] [data-project-media]`)).toHaveAttribute("data-project-media-source", source)
       }
     })

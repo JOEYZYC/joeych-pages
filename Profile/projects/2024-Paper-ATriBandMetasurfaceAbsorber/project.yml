@@ -1,7 +1,7 @@
 id: 2024-Paper-ATriBandMetasurfaceAbsorber
 year: 2024
 featured: false
-image: null
+image: modelpic.png
 title:
   zh: 基于超表面的三频带吸波器
   en: A Tri-band Metasurface Absorber
@@ -22,7 +22,15 @@ contribution:
 tags:
   - zh: metasurface
     en: metasurface
-figures: []
+figures:
+  - id: tri-band-metasurface-absorber-unit-cell
+    src: modelpic.png
+    zh: 三频带超表面吸波器单元结构与几何参数
+    en: Unit-cell structure and geometric parameters of the tri-band metasurface absorber
+  - id: tri-band-metasurface-absorber-resonators
+    src: modelpic2.png
+    zh: 三个谐振器的吸收谱与结构示意
+    en: Absorption spectra and structures of the three resonators
 links: []
 awards: []
 publications:
