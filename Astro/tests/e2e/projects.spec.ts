@@ -271,9 +271,17 @@ test.describe("projects archive", () => {
     await page.goto("en/projects/")
     const honor = page.locator("[data-project-honor-filter]")
 
+    await expect(honor.locator('option[value="publication:resgatnet"]')).toHaveText(
+      "Publications: ResGatNet: Bridging Efficiency and Precision in Low-SNR Wireless Perception · IEEE Access",
+    )
     await honor.selectOption("publication:resgatnet")
 
     expect(await visibleCardIds(page)).toEqual(["2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"])
+
+    await page.goto("projects/")
+    await expect(page.locator('[data-project-honor-filter] option[value="publication:dual-band-polarization-conversion"]')).toHaveText(
+      "学术论文: 双频带柔性极化转换超表面的仿真研究 · 光电子·激光 34(7), 690–697",
+    )
   })
 
   test("links category, project name, and honor choices", async ({ page }) => {

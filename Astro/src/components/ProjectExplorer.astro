@@ -25,7 +25,7 @@ const awardLabel = (award: Project["awards"][number]) => {
 const honors = [...new Map(
   projects.flatMap((project) => [
     ...project.awards.map((award) => [`award:${award.id}`, awardLabel(award)] as const),
-    ...project.publications.map((publication) => [`publication:${publication.id}`, `${labels.sections.awards.publications}: ${publication.title[locale]}`] as const),
+    ...project.publications.map((publication) => [`publication:${publication.id}`, `${labels.sections.awards.publications}: ${publication.title[locale]} · ${publication.venue[locale]}`] as const),
     ...project.patents.map((patent) => [`patent:${patent.id}`, `${labels.sections.awards.patents}: ${patent.title[locale]}`] as const),
   ]),
 ).entries()].map(([value, label]) => ({ value, label }))
