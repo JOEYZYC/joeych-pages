@@ -50,6 +50,11 @@ skills:
           - id: infineon
         evidence:
           - type: project
+            project_id: 2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform
+            scope: project-record
+            supports:
+              - st
+          - type: project
             project_id: 2024-Competition-DualLightFusionSmartThermalImager
             scope: project-record
             supports:
@@ -60,13 +65,18 @@ skills:
             supports:
               - renesas
           - type: project
+            project_id: 2024-Competition-IntelligentConnectedTrafficSignRecognitionSystemBasedOnLightweightTensorFlow
+            scope: project-record
+            supports:
+              - renesas
+          - type: project
             project_id: 2024-Competition-SinglePhasePowerAnalyzer
             scope: project-record
             supports:
               - ti
-          - type: general-ability
-            verification: self-described
-            level: exposure
+          - type: project
+            project_id: 2024-Competition-SmartCarModelGroupTeamDevelopmentArchive
+            scope: project-record
             supports:
               - infineon
       - id: uav-pilot-level-5

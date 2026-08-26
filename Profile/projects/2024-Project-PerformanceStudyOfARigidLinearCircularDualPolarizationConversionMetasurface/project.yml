@@ -26,16 +26,18 @@ contribution:
   zh: 请补充
   en: To be completed
 tags:
-  - zh: CST
-    en: CST
-  - zh: PCR / AR
-    en: PCR / AR
-  - zh: 反射型超构表面
-    en: Reflective Metasurface
+  - zh: CST Studio Suite
+    en: CST Studio Suite
+  - zh: 超表面
+    en: Metasurface
+  - zh: 电磁仿真
+    en: Electromagnetic Simulation
   - zh: 偏振转换
     en: Polarization Conversion
   - zh: 表面电流分析
     en: Surface-Current Analysis
+  - zh: FR-4
+    en: FR-4
 figures:
   - id: rigid-metasurface-sample
     src: rigid-metasurface-sample.jpg

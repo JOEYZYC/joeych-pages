@@ -15,18 +15,20 @@ type Props = {
 
 const { locale, projects, skills } = Astro.props
 const labels = UI[locale]
-const categories: { value: string; label: string }[] = []
-const seenCategories = new Set<string>()
-const honors = [...new Map(
-  projects.flatMap((project) => project.awards.map((award) => [award.id, award.title[locale]])),
+const categories = [...new Map(
+  projects.flatMap((project) => project.tags.map((tag) => [tag.en, tag[locale]] as const)),
 ).entries()].map(([value, label]) => ({ value, label }))
-
-for (const project of projects) {
-  const category = { value: project.category.en, label: project.category[locale] }
-  if (seenCategories.has(category.value)) continue
-  seenCategories.add(category.value)
-  categories.push(category)
+const awardLabel = (award: Project["awards"][number]) => {
+  const prizes = award.prizes.map((prize) => prize[locale]).join(locale === "zh" ? "、" : ", ")
+  return `${labels.sections.awards.awards}: ${award.title[locale]}${prizes ? ` · ${prizes}` : ""}`
 }
+const honors = [...new Map(
+  projects.flatMap((project) => [
+    ...project.awards.map((award) => [`award:${award.id}`, awardLabel(award)] as const),
+    ...project.publications.map((publication) => [`publication:${publication.id}`, `${labels.sections.awards.publications}: ${publication.title[locale]}`] as const),
+    ...project.patents.map((patent) => [`patent:${patent.id}`, `${labels.sections.awards.patents}: ${patent.title[locale]}`] as const),
+  ]),
+).entries()].map(([value, label]) => ({ value, label }))
 
 const skillEvidence = Object.fromEntries(
   skills.flatMap((group) => group.tags).map((tag) => [
@@ -156,11 +158,14 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       honor: honorFilter.value,
     })
 
+    const projectTags = (card: HTMLElement | undefined) => JSON.parse(card?.dataset.projectTags ?? "[]") as string[]
+    const projectHonors = (card: HTMLElement | undefined) => JSON.parse(card?.dataset.projectHonors ?? "[]") as string[]
+
     const matchingIds = (filters: Filters) => projectIds.filter((id) => {
       const card = cardById.get(id)
-      const matchesCategory = filters.category === "" || card?.dataset.projectCategory === filters.category
+      const matchesCategory = filters.category === "" || projectTags(card).includes(filters.category)
       const matchesName = filters.name === "" || id === filters.name
-      const matchesHonor = filters.honor === "" || card?.dataset.projectHonors?.split(" ").includes(filters.honor)
+      const matchesHonor = filters.honor === "" || projectHonors(card).includes(filters.honor)
       return matchesCategory && matchesName && matchesHonor
     })
 
@@ -173,8 +178,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       const filters = currentFilters()
       const categoryIds = matchingIds({ ...filters, category: "" })
       const categories = [...new Map(categoryIds.flatMap((id) => {
-        const category = cardById.get(id)?.dataset.projectCategory
-        return category === undefined ? [] : [[category, categoryLabels.get(category) ?? category] as const]
+        return projectTags(cardById.get(id)).map((tag) => [tag, categoryLabels.get(tag) ?? tag] as const)
       })).entries()]
       replaceOptions(categoryFilter, allCategoriesLabel, categories, filters.category)
 
@@ -186,9 +190,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       })
       replaceOptions(nameFilter, allProjectsLabel, names, filters.name)
 
-      const honorIds = matchingIds({ ...currentFilters(), honor: "" }).flatMap((id) =>
-        cardById.get(id)?.dataset.projectHonors?.split(" ").filter(Boolean) ?? [],
-      )
+      const honorIds = matchingIds({ ...currentFilters(), honor: "" }).flatMap((id) => projectHonors(cardById.get(id)))
       const honors = [...new Set(honorIds)].map((id) => [id, honorLabels.get(id) ?? id] as const)
       replaceOptions(honorFilter, allHonorsLabel, honors, filters.honor)
     }
@@ -281,13 +283,10 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const revealProject = (id: string, focusTitle: boolean) => {
       const card = cardById.get(id)
       if (!card) return
-      const category = card.dataset.projectCategory
       categoryFilter.value = ""
       nameFilter.value = ""
       nameFilter.value = id
       honorFilter.value = ""
-      syncFacetOptions()
-      if (category) categoryFilter.value = category
       syncFacetOptions()
       nameFilter.value = id
       applyFilters({ clearOrigin: false })

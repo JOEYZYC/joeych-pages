@@ -30,22 +30,18 @@ contribution:
     platform, covering the flight-controller core board, ELRS receiver, M10S GPS
     receiver, and ESC reference design.
 tags:
-  - zh: STM32H743VIT6
-    en: STM32H743VIT6
+  - zh: ST
+    en: ST
   - zh: PX4
     en: PX4
-  - zh: PCB / 原理图 / BOM
-    en: PCB / Schematics / BOM
+  - zh: PCB 设计
+    en: PCB Design
   - zh: ELRS
     en: ELRS
-  - zh: M10S GPS
-    en: M10S GPS
-  - zh: PWM / PPM / DShot
-    en: PWM / PPM / DShot
-  - zh: 模块化无人机硬件
-    en: Modular Drone Hardware
-  - zh: 立创 EDA
-    en: EasyEDA
+  - zh: PWM
+    en: PWM
+  - zh: DShot
+    en: DShot
 figures:
   - id: eflydrone-flight-controller-render
     src: 飞控核心正面.png

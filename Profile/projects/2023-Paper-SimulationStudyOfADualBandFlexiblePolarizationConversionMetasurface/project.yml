@@ -25,8 +25,18 @@ contribution:
   zh: 请补充
   en: To be completed
 tags:
-  - zh: metasurface
-    en: metasurface
+  - zh: 超表面
+    en: Metasurface
+  - zh: 电磁仿真
+    en: Electromagnetic Simulation
+  - zh: 偏振转换
+    en: Polarization Conversion
+  - zh: 表面电流分析
+    en: Surface-Current Analysis
+  - zh: 双频带
+    en: Dual-Band
+  - zh: 宽角稳定性
+    en: Wide-Angle Stability
 figures:
   - id: flexible-dual-band-metasurface-model
     src: modelpic.png

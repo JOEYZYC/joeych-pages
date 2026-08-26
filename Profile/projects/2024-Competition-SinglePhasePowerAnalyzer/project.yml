@@ -25,20 +25,18 @@ contribution:
   zh: 请补充
   en: To be completed
 tags:
-  - zh: TI MSP432E401Y
-    en: TI MSP432E401Y
-  - zh: ADC / FFT
-    en: ADC / FFT
-  - zh: 电参量分析
-    en: Power Analysis
-  - zh: THD / 谐波
-    en: THD / Harmonics
-  - zh: 串口触控屏
-    en: Serial Touch Display
-  - zh: 电压 / 电流互感器
-    en: Voltage / Current Transformers
-  - zh: RMS / 功率因数
-    en: RMS / Power Factor
+  - zh: TI
+    en: TI
+  - zh: ADC
+    en: ADC
+  - zh: FFT
+    en: FFT
+  - zh: RMS
+    en: RMS
+  - zh: 功率因数
+    en: Power Factor
+  - zh: 总谐波失真
+    en: THD
 figures:
   - id: single-phase-power-analyzer-flow
     src: 程序流程图.png
@@ -54,11 +52,8 @@ awards:
       en: National Undergraduate Electronic Design Contest (TI Cup)
     prizes:
       - level: provincial
-        zh: 省级 一等
-        en: Jiangsu First
-      - level: provincial
-        zh: 一等奖
-        en: First Prize
+        zh: 江苏省一等奖
+        en: Jiangsu First Prize
     tags:
       - electronic-design
     links: []

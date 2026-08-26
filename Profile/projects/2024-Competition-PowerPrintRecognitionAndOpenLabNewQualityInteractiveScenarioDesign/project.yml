@@ -27,22 +27,18 @@ contribution:
   zh: 请补充
   en: To be completed
 tags:
-  - zh: 瑞萨 RA6M5
-    en: Renesas RA6M5
-  - zh: ADC / DMA
-    en: ADC / DMA
+  - zh: Renesas
+    en: Renesas
+  - zh: ADC
+    en: ADC
+  - zh: DMA
+    en: DMA
   - zh: FFT
     en: FFT
-  - zh: 斯皮尔曼匹配
-    en: Spearman Matching
-  - zh: W800 Wi-Fi
-    en: W800 Wi-Fi
-  - zh: TCP / C# 上位机
-    en: TCP / C# Host App
-  - zh: 电流波形采集
-    en: Current-Waveform Acquisition
-  - zh: 非侵入式设备识别
-    en: Non-Intrusive Device Recognition
+  - zh: 斯皮尔曼相关
+    en: Spearman Correlation
+  - zh: C#
+    en: C#
 figures:
   - id: power-print-topology
     src: 拓扑图.png
@@ -66,11 +62,11 @@ awards:
       en: National Undergraduate Electronic Design Contest (Renesas Cup)
     prizes:
       - level: regional
-        zh: 东部 第一名
-        en: Eastern-China 1st
+        zh: 东部赛区第一名
+        en: Eastern China First Place
       - level: national
-        zh: 全国 三等奖
-        en: National Third
+        zh: 全国三等奖
+        en: National Third Prize
     tags:
       - electronic-design
     links: []

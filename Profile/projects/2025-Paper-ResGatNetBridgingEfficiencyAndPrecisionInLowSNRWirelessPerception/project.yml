@@ -3,8 +3,8 @@ year: 2025
 featured: true
 image: Stages.jpg
 title:
-  zh: ResGatNet
-  en: ResGatNet
+  zh: ResGatNet：兼顾低信噪比无线感知的效率与精度
+  en: "ResGatNet: Bridging Efficiency and Precision in Low-SNR Wireless Perception"
 claim:
   zh: IEEE Access · 作者位次 3/6
   en: IEEE Access · 3rd author of 6
@@ -25,20 +25,18 @@ contribution:
   zh: 主要负责数据处理与部分代码编写。
   en: Responsible for data processing and part of the codebase.
 tags:
-  - zh: 深度学习
-    en: Deep Learning
-  - zh: IQ / 星座图
-    en: IQ / Constellation
-  - zh: 大核卷积
-    en: Large-kernel Conv
   - zh: ResNet-50
     en: ResNet-50
   - zh: 门控 CNN
     en: Gated CNN
   - zh: KAN
     en: KAN
-  - zh: IEEE Access
-    en: IEEE Access
+  - zh: IQ 数据
+    en: IQ Data
+  - zh: 星座图
+    en: Constellation Diagram
+  - zh: 自动调制识别
+    en: Automatic Modulation Recognition
 figures:
   - id: resgatnet-architecture
     src: Stages.jpg
@@ -62,7 +60,7 @@ publications:
     featured: true
     image: Stages.jpg
     title:
-      zh: ResGatNet：低信噪比无线感知中的效率与精度协同
+      zh: ResGatNet：兼顾低信噪比无线感知的效率与精度
       en: "ResGatNet: Bridging Efficiency and Precision in Low-SNR Wireless
         Perception"
     venue:

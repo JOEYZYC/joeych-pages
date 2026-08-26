@@ -26,10 +26,18 @@ contribution:
   zh: 请补充
   en: To be completed
 tags:
-  - zh: metasurface
-    en: metasurface
-  - zh: terahertz
-    en: terahertz
+  - zh: 超表面
+    en: Metasurface
+  - zh: 太赫兹
+    en: Terahertz
+  - zh: 二氧化钒
+    en: Vanadium Dioxide
+  - zh: 光导硅
+    en: Photoconductive Silicon
+  - zh: 超表面吸收器
+    en: Metasurface Absorber
+  - zh: 阻抗匹配
+    en: Impedance Matching
 figures:
   - id: tunable-bifunctional-metasurface-absorber-model
     src: modelpic.png

@@ -3,8 +3,8 @@ year: 2023
 featured: false
 image: 实物车.jpg
 title:
-  zh: 智能采摘机器人
-  en: Smart Harvesting Robot
+  zh: 基于 ROS 导航、果实识别与机械臂的农业采摘机器人
+  en: Agricultural Harvesting Robot Based on ROS Navigation, Fruit Recognition, and a Robotic Arm
 claim:
   zh: 2023 年 iCAN 未来农业机器人挑战赛项目，结合自主导航、果实视觉识别与机械臂执行。
   en: A 2023 iCAN Future Agriculture Robot Challenge project combining autonomous
@@ -25,14 +25,16 @@ contribution:
 tags:
   - zh: ROS
     en: ROS
-  - zh: GMapping / SLAM
-    en: GMapping / SLAM
-  - zh: PaddleDetection
-    en: PaddleDetection
   - zh: OpenCV
     en: OpenCV
-  - zh: 眼在手上相机
-    en: Eye-in-Hand Camera
+  - zh: GMapping
+    en: GMapping
+  - zh: SLAM
+    en: SLAM
+  - zh: PaddleDetection
+    en: PaddleDetection
+  - zh: 眼在手上视觉
+    en: Eye-in-Hand Vision
 figures:
   - id: smart-harvesting-robot-prototype
     src: 实物车.jpg
@@ -49,11 +51,11 @@ awards:
         Challenge)
     prizes:
       - level: provincial
-        zh: 省级 一等
-        en: Jiangsu First
+        zh: 江苏省一等奖
+        en: Jiangsu First Prize
       - level: national
-        zh: 全国 一等
-        en: National First
+        zh: 全国一等奖
+        en: National First Prize
     tags:
       - robotics
     links: []

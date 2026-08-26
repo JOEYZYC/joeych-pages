@@ -3,7 +3,7 @@ year: 2024
 featured: false
 image: modelpic.png
 title:
-  zh: 基于超表面的三频带吸波器
+  zh: 一种三频带超表面吸波器
   en: A Tri-band Metasurface Absorber
 claim:
   zh: 光电子·激光 · 作者位次 3/6
@@ -20,8 +20,18 @@ contribution:
   zh: 请补充
   en: To be completed
 tags:
-  - zh: metasurface
-    en: metasurface
+  - zh: 超表面
+    en: Metasurface
+  - zh: 超表面吸收器
+    en: Metasurface Absorber
+  - zh: 电磁仿真
+    en: Electromagnetic Simulation
+  - zh: 阻抗匹配
+    en: Impedance Matching
+  - zh: 表面电流分析
+    en: Surface-Current Analysis
+  - zh: 三频带
+    en: Tri-Band
 figures:
   - id: tri-band-metasurface-absorber-unit-cell
     src: modelpic.png
@@ -39,7 +49,7 @@ publications:
     featured: false
     image: null
     title:
-      zh: 基于超表面的三频带吸波器
+      zh: 一种三频带超表面吸波器
       en: A Tri-band Metasurface Absorber
     venue:
       zh: 光电子·激光

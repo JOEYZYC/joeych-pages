@@ -3,8 +3,8 @@ year: 2024
 featured: false
 image: 智能侦察车.jpg
 title:
-  zh: 2024 智能侦察系统
-  en: 2024 Intelligent Reconnaissance System
+  zh: 基于视觉测距与 ROS 建图导航的智能侦察车
+  en: Intelligent Reconnaissance Vehicle Based on Visual Ranging and ROS Mapping and Navigation
 claim:
   zh: 2024 年睿抗智能侦察竞赛项目，整合嵌入式设计、目标识别与测距、ROS 服务及建图导航任务。
   en: A 2024 RAICOM intelligent reconnaissance competition project integrating
@@ -30,12 +30,10 @@ tags:
     en: ROS
   - zh: Python
     en: Python
+  - zh: 视觉测距
+    en: Visual Ranging
   - zh: 建图与导航
     en: Mapping and Navigation
-  - zh: 目标识别与测距
-    en: Object Recognition & Ranging
-  - zh: 嵌入式系统集成
-    en: Embedded System Integration
 figures:
   - id: intelligent-reconnaissance-2024-vehicle
     src: 智能侦察车.jpg
@@ -55,11 +53,11 @@ awards:
       en: RAICOM Robot Developer Contest (Intelligent Reconnaissance)
     prizes:
       - level: provincial
-        zh: 省级 一等
-        en: Jiangsu First
+        zh: 江苏省一等奖
+        en: Jiangsu First Prize
       - level: national
-        zh: 全国 二等
-        en: National Second
+        zh: 全国二等奖
+        en: National Second Prize
     tags:
       - robotics
     links: []

@@ -3,8 +3,8 @@ year: 2023
 featured: false
 image: 兵人识别.png
 title:
-  zh: 2023 智能侦察竞赛项目
-  en: 2023 Intelligent Reconnaissance Competition Project
+  zh: 基于定位、测距与目标识别的智能侦察视觉系统
+  en: Intelligent Reconnaissance Vision System Based on Localization, Ranging, and Object Recognition
 claim:
   zh: 2023 年睿抗智能侦察竞赛的综合竞赛级记录，涵盖两个内部团队归档。
   en: A consolidated competition-level record for the 2023 RAICOM intelligent
@@ -26,20 +26,18 @@ contribution:
   zh: 请补充
   en: To be completed
 tags:
-  - zh: 睿抗
-    en: RAICOM
-  - zh: 智能侦察
-    en: Intelligent Reconnaissance
   - zh: OpenCV
     en: OpenCV
   - zh: ROS
     en: ROS
-  - zh: 识别与测距
-    en: Recognition and Ranging
-  - zh: 地雷 / 人群识别
-    en: Mine / Crowd Recognition
-  - zh: ROS 控制
-    en: ROS Control
+  - zh: YOLOv5
+    en: YOLOv5
+  - zh: Canny 边缘检测
+    en: Canny Edge Detection
+  - zh: 透视变换
+    en: Perspective Transform
+  - zh: 霍夫圆检测
+    en: Hough Circle Detection
 figures:
   - id: intelligent-reconnaissance-2023-figure-recognition
     src: 兵人识别.png

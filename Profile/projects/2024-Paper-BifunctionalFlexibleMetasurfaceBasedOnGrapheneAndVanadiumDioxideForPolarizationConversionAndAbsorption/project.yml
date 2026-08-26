@@ -3,7 +3,7 @@ year: 2024
 featured: true
 image: modlepic.jpg
 title:
-  zh: 基于石墨烯和二氧化钒的双功能柔性超表面
+  zh: 基于石墨烯和二氧化钒的偏振转换与吸收双功能柔性超表面
   en: Bifunctional flexible metasurface based on graphene and vanadium dioxide for
     polarization conversion and absorption
 claim:
@@ -27,18 +27,18 @@ contribution:
   zh: 担任大创项目负责人，负责研究规划与协调。
   en: Led the innovation-training project and coordinated its research plan.
 tags:
-  - zh: 柔性超表面
-    en: Flexible Metasurface
-  - zh: 微波
-    en: Microwave
+  - zh: 超表面
+    en: Metasurface
   - zh: 石墨烯
     en: Graphene
   - zh: 二氧化钒
     en: Vanadium Dioxide
-  - zh: 偏振转换与吸收
-    en: Polarization Conversion and Absorption
-  - zh: 大学生创新创业训练计划
-    en: Innovation Training Project
+  - zh: 动态调谐
+    en: Dynamic Tuning
+  - zh: 偏振转换
+    en: Polarization Conversion
+  - zh: 超表面吸收器
+    en: Metasurface Absorber
 figures:
   - id: bifunctional-flexible-metasurface-structure
     src: modlepic.jpg
@@ -57,7 +57,7 @@ publications:
     featured: true
     image: modlepic.jpg
     title:
-      zh: 基于石墨烯和二氧化钒的双功能柔性超表面
+      zh: 基于石墨烯和二氧化钒的偏振转换与吸收双功能柔性超表面
       en: Bifunctional flexible metasurface based on graphene and vanadium dioxide for
         polarization conversion and absorption
     venue:

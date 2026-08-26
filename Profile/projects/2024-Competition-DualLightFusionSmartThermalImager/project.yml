@@ -27,30 +27,18 @@ contribution:
   zh: 参与可见光与红外图像融合实现。
   en: Participated in implementing visible-light and infrared image fusion.
 tags:
-  - zh: STM32H7 / OpenMV
-    en: STM32H7 / OpenMV
-  - zh: OV5640
-    en: OV5640
+  - zh: ST
+    en: ST
+  - zh: OpenMV
+    en: OpenMV
   - zh: MLX90640
     en: MLX90640
   - zh: MicroPython
     en: MicroPython
   - zh: TensorFlow Lite
     en: TensorFlow Lite
-  - zh: 双光融合
-    en: Dual-Light Fusion
-  - zh: 图像二值化
-    en: Image Binarization
-  - zh: 人脸区域定位
-    en: Face-Region Localization
-  - zh: 实时测温
-    en: Real-Time Temperature Measurement
-  - zh: 手势识别
-    en: Gesture Recognition
-  - zh: LCD 触摸屏
-    en: LCD Touchscreen
-  - zh: DigiKey
-    en: DigiKey
+  - zh: 热成像
+    en: Thermal Imaging
 figures:
   - id: dual-light-fusion
     src: dual-light-fusion.png

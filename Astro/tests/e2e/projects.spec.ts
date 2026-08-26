@@ -212,21 +212,31 @@ test.describe("projects archive", () => {
     await expect(media.locator("[data-project-media-unavailable]")).toBeVisible()
   })
 
-  test("filters cards by category and project name without opening the dialog", async ({ page }) => {
+  test("filters cards by technology and project name without opening the dialog", async ({ page }) => {
     await page.goto("en/projects/")
     const category = page.locator("[data-project-category-filter]")
     const name = page.locator("[data-project-name-filter]")
-    const websiteCategory = await page.locator('[data-project-card][data-project-id="2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite"]').getAttribute("data-project-category")
+
+    await expect(page.locator('label[for="project-category-filter"] > span')).toHaveText("Keyword")
+    await expect(category.locator("option").first()).toHaveText("All keywords")
 
     await name.selectOption("2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
     expect(await visibleCardIds(page)).toEqual(["2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"])
     await expect(page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')).toBeHidden()
 
     await name.selectOption("")
-    await category.selectOption(websiteCategory ?? "")
+    await category.selectOption("ST")
     await expect(name).toHaveValue("")
-    expect(await name.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual(["", "2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite"])
-    expect(await visibleCardIds(page)).toEqual(["2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite"])
+    expect(await name.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual([
+      "",
+      "2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform",
+      "2024-Competition-DualLightFusionSmartThermalImager",
+    ])
+    expect(await visibleCardIds(page)).toEqual([
+      "2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform",
+      "2024-Competition-DualLightFusionSmartThermalImager",
+    ])
+    await expect(page.locator('[data-project-card][data-project-id="2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform"] .project-card-tags')).toContainText("ST")
   })
 
   test("uses pure titles in project-name options and filters standalone publications", async ({ page }) => {
@@ -234,8 +244,8 @@ test.describe("projects archive", () => {
     const category = page.locator("[data-project-category-filter]")
     const name = page.locator("[data-project-name-filter]")
 
-    await category.selectOption("Publication")
-    await expect(name.locator("option").nth(1)).toHaveText("Design of a Dual-Band Polarization Converter Based on a Chiral Metasurface")
+    await category.selectOption("Metasurface")
+    await expect(name.locator("option").nth(1)).toHaveText("Design of a Graphene-based Terahertz Linear-to-Circular Polarization-Conversion Metasurface")
     expect((await name.locator("option").allTextContents()).some((title) => /^\d{2}\s+—/.test(title))).toBe(false)
 
     await name.selectOption("2023-Paper-SimulationStudyOfADualBandFlexiblePolarizationConversionMetasurface")
@@ -246,11 +256,24 @@ test.describe("projects archive", () => {
     await page.goto("en/projects/")
     const honor = page.locator("[data-project-honor-filter]")
 
-    await honor.selectOption("renesas-east-first-national-third-2024")
+    await expect(honor.locator('option[value="award:renesas-east-first-national-third-2024"]')).toHaveText(
+      "Awards: National Undergraduate Electronic Design Contest (Renesas Cup) · Eastern China First Place, National Third Prize",
+    )
+
+    await honor.selectOption("award:renesas-east-first-national-third-2024")
 
     await expect(page.locator("[data-project-category-filter]")).toHaveValue("")
     await expect(page.locator("[data-project-name-filter]")).toHaveValue("")
     expect(await visibleCardIds(page)).toEqual(["2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"])
+  })
+
+  test("filters cards by publication outcome", async ({ page }) => {
+    await page.goto("en/projects/")
+    const honor = page.locator("[data-project-honor-filter]")
+
+    await honor.selectOption("publication:resgatnet")
+
+    expect(await visibleCardIds(page)).toEqual(["2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"])
   })
 
   test("links category, project name, and honor choices", async ({ page }) => {
@@ -258,34 +281,34 @@ test.describe("projects archive", () => {
     const category = page.locator("[data-project-category-filter]")
     const name = page.locator("[data-project-name-filter]")
     const honor = page.locator("[data-project-honor-filter]")
-    const powerCategory = await page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]').getAttribute("data-project-category")
 
-    await category.selectOption(powerCategory ?? "")
+    await category.selectOption("Renesas")
     expect(await honor.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual([
       "",
-      "renesas-east-first-national-third-2024",
+      "award:renesas-east-first-national-third-2024",
     ])
 
-    await honor.selectOption("renesas-east-first-national-third-2024")
-    await expect(category).toHaveValue(powerCategory ?? "")
+    await honor.selectOption("award:renesas-east-first-national-third-2024")
+    await expect(category).toHaveValue("Renesas")
     await expect(name).toHaveValue("")
     expect(await name.locator("option").evaluateAll((options) => options.map((option) => (option as HTMLOptionElement).value))).toEqual(["", "2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"])
     expect(await visibleCardIds(page)).toEqual(["2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"])
 
     await honor.selectOption("")
-    await expect(category).toHaveValue(powerCategory ?? "")
+    await expect(category).toHaveValue("Renesas")
     await expect(name).toHaveValue("")
-    expect(await visibleCardIds(page)).toEqual(["2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"])
+    expect(await visibleCardIds(page)).toEqual([
+      "2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign",
+      "2024-Competition-IntelligentConnectedTrafficSignRecognitionSystemBasedOnLightweightTensorFlow",
+    ])
   })
 
-  test("a hash opens the matching dialog and synchronizes both filters", async ({ page }) => {
+  test("a hash opens the matching dialog and synchronizes the project-name filter", async ({ page }) => {
     await page.goto("en/projects/")
-    const card = page.locator('[data-project-card][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')
-    const category = await card.getAttribute("data-project-category")
 
     await page.evaluate(() => { window.location.hash = "#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception" })
 
-    await expect(page.locator("[data-project-category-filter]")).toHaveValue(category ?? "")
+    await expect(page.locator("[data-project-category-filter]")).toHaveValue("")
     await expect(page.locator("[data-project-name-filter]")).toHaveValue("2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
     expect(await visibleCardIds(page)).toEqual(["2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"])
     await expect(page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')).toBeVisible()

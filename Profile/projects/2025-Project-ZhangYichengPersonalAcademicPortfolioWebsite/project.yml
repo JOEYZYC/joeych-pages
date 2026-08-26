@@ -33,10 +33,10 @@ tags:
     en: YAML
   - zh: 静态站点生成
     en: Static Site Generation
-  - zh: 中英双语静态路由
-    en: Bilingual Static Routes
-  - zh: Playwright E2E 测试
-    en: Playwright E2E Testing
+  - zh: Playwright
+    en: Playwright
+  - zh: GitHub Pages
+    en: GitHub Pages
 figures:
   - id: portfolio-website-homepage
     src: pic.png

@@ -16,6 +16,11 @@ const outcomeLabels = [
   project.publications.length > 0 ? `${labels.sections.awards.publications} ${project.publications.length}` : "",
   project.patents.length > 0 ? `${labels.sections.awards.patents} ${project.patents.length}` : "",
 ].filter(Boolean)
+const honorKeys = [
+  ...project.awards.map(({ id }) => `award:${id}`),
+  ...project.publications.map(({ id }) => `publication:${id}`),
+  ...project.patents.map(({ id }) => `patent:${id}`),
+]
 ---
 
 <a
@@ -23,8 +28,8 @@ const outcomeLabels = [
   href={`#${project.id}`}
   data-project-card
   data-project-id={project.id}
-  data-project-category={project.category.en}
-  data-project-honors={project.awards.map(({ id }) => id).join(" ")}
+  data-project-tags={JSON.stringify(project.tags.map((tag) => tag.en))}
+  data-project-honors={JSON.stringify(honorKeys)}
   aria-controls="project-detail-dialog"
   aria-haspopup="dialog"
   hidden
@@ -35,9 +40,12 @@ const outcomeLabels = [
     </div>
   ) : <ProjectMedia context="card" locale={locale} record={project} loading="lazy" />}
   <div class="project-card-body">
-    <p class="project-card-meta"><span>{project.year}</span><span>{project.category[locale]}</span></p>
+    <p class="project-card-meta"><span>{project.year}</span></p>
     <h2>{project.title[locale]}</h2>
     <p class="project-card-claim">{project.claim[locale]}</p>
+    <ul class="project-tag-list project-card-tags">
+      {project.tags.map((tag) => <li>{tag[locale]}</li>)}
+    </ul>
     {outcomeLabels.length > 0 && <p class="project-card-achievements">{outcomeLabels.join(" · ")}</p>}
     <span class="project-card-open">{labels.projectExplorer.open}</span>
   </div>

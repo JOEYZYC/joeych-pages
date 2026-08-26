@@ -3,8 +3,8 @@ year: 2024
 featured: false
 image: 完全模型车.jpg
 title:
-  zh: 智能车模型组团队开发归档
-  en: Smart Car Model-Group Team Development Archive
+  zh: 涵盖控制、感知与硬件开发的完全模型智能车
+  en: Full-Model Smart Car Covering Control, Sensing, and Hardware Development
 claim:
   zh: 2024 年全国大学生智能汽车竞赛模型组的团队开发归档，记录控制、感知和硬件分支的探索。
   en: A team development archive for the model group of the 2024 National College
@@ -24,24 +24,18 @@ contribution:
   zh: 请补充
   en: To be completed
 tags:
-  - zh: TC264 / TC264D
-    en: TC264 / TC264D
+  - zh: Infineon
+    en: Infineon
   - zh: 嵌入式 C
     en: Embedded C
-  - zh: PWM / PID
-    en: PWM / PID
+  - zh: PWM
+    en: PWM
+  - zh: PID 控制
+    en: PID Control
   - zh: 编码器反馈
     en: Encoder Feedback
-  - zh: IMU / UART
-    en: IMU / UART
-  - zh: DRV8701E 电机驱动
-    en: DRV8701E Motor Driver
-  - zh: 舵机控制
-    en: Servo Control
-  - zh: 相机图像实验
-    en: Camera / Image Experiments
-  - zh: 定制 PCB
-    en: Custom PCB
+  - zh: PCB 设计
+    en: PCB Design
 figures:
   - id: full-model-smart-car-track
     src: 完全模型车.jpg
@@ -61,11 +55,8 @@ awards:
       en: National Collegiate Smart Car Competition (Full-Model Group)
     prizes:
       - level: regional
-        zh: 华东 三等
-        en: East-China Third
-      - level: regional
-        zh: 三等奖
-        en: Third Prize
+        zh: 华东赛区三等奖
+        en: East China Division Third Prize
     tags:
       - smart-car
     links: []

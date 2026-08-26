@@ -56,6 +56,33 @@ describe("Profile content bundles", () => {
     expect(techStack.skills).toHaveLength(4)
   })
 
+  it("uses normalized technologies and microcontroller brands as project tags", async () => {
+    const { projects, techStack } = await loadProfileData()
+    const projectTags = new Map<string, string[]>(projects.map((project) => [project.id, project.tags.map((tag) => tag.en)]))
+
+    expect(projectTags.get("2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform")).toContain("ST")
+    expect(projectTags.get("2024-Competition-DualLightFusionSmartThermalImager")).toContain("ST")
+    expect(projectTags.get("2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign")).toContain("Renesas")
+    expect(projectTags.get("2024-Competition-IntelligentConnectedTrafficSignRecognitionSystemBasedOnLightweightTensorFlow")).toContain("Renesas")
+    expect(projectTags.get("2024-Competition-SinglePhasePowerAnalyzer")).toContain("TI")
+    expect(projectTags.get("2024-Competition-SmartCarModelGroupTeamDevelopmentArchive")).toContain("Infineon")
+    expect(projects.every((project) => project.tags.length === 6)).toBe(true)
+
+    const platforms = techStack.skills.flatMap((group) => group.tags).find(({ id }) => id === "hardware-platforms")
+    expect(platforms?.evidence.filter((evidence) => evidence.type === "project")).toHaveLength(6)
+  })
+
+  it("uses each paper title as its bilingual project title", async () => {
+    const { projects } = await loadProfileData()
+    const papers = projects.filter(({ id }) => id.includes("-Paper-"))
+
+    expect(papers).toHaveLength(6)
+    for (const paper of papers) {
+      expect(paper.publications).toHaveLength(1)
+      expect(paper.publications[0]?.title).toEqual(paper.title)
+    }
+  })
+
   it.each(["../image.png", "other/image.png", "other\\image.png", "%2e%2e.png", "%ZZ.png"])(
     "rejects non-local media filename %s",
     (value) => expect(localMediaFileSchema.safeParse(value).success).toBe(false),

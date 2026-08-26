@@ -122,9 +122,9 @@ export const UI = {
       projects: "探索项目与成果",
     },
     projectExplorer: {
-      category: "项目类别",
+      category: "关键词",
       name: "项目名称",
-      allCategories: "全部类别",
+      allCategories: "全部关键词",
       allProjects: "全部项目",
       honor: "荣誉",
       allHonors: "全部荣誉",
@@ -229,9 +229,9 @@ export const UI = {
       projects: "Explore projects & achievements",
     },
     projectExplorer: {
-      category: "Project category",
+      category: "Keyword",
       name: "Project name",
-      allCategories: "All categories",
+      allCategories: "All keywords",
       allProjects: "All projects",
       honor: "Honor",
       allHonors: "All honors",

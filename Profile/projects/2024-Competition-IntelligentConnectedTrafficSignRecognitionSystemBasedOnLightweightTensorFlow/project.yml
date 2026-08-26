@@ -26,6 +26,8 @@ contribution:
   en: Responsible for project coordination, concept definition, and technical
     analysis, and participated in system design and implementation.
 tags:
+  - zh: Renesas
+    en: Renesas
   - zh: RT-Thread
     en: RT-Thread
   - zh: Vision Board
@@ -34,8 +36,8 @@ tags:
     en: OpenMV
   - zh: TensorFlow Lite
     en: TensorFlow Lite
-  - zh: 嵌入式物联网
-    en: Embedded IoT
+  - zh: 图像预处理
+    en: Image Preprocessing
 figures:
   - id: traffic-sign-device
     src: traffic-sign-device.jpg

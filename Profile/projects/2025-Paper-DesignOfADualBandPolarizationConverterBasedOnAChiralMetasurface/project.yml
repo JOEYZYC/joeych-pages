@@ -25,12 +25,16 @@ contribution:
   zh: 请补充
   en: To be completed
 tags:
+  - zh: 超表面
+    en: Metasurface
   - zh: 手性超构表面
     en: Chiral Metasurface
-  - zh: 双频带极化转换
-    en: Dual-Band Polarization Conversion
-  - zh: 透射型超表面
-    en: Transmissive Metasurface
+  - zh: 开口环谐振器
+    en: Split-Ring Resonator
+  - zh: 偏振转换
+    en: Polarization Conversion
+  - zh: 双频带
+    en: Dual-Band
   - zh: 表面电流分析
     en: Surface-Current Analysis
 figures:
