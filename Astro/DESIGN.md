@@ -187,7 +187,7 @@ The build remains static Astro, emits exactly these eight documents, and publish
 - The sticky header is a solid canvas/surface with a bottom border and 2px horizontal signal rail; no backdrop blur.
 - Retain wordmark, four base-aware routes, `aria-current="page"`, language counterpart, contact, and theme controls. Inline primary navigation appears at `>=1024px`.
 - Compact navigation opens from a labelled icon button, focuses its first route, and closes on Escape, outside pointer, or route activation. Escape restores the toggle. With no JavaScript, the menu button is hidden and route anchors remain expanded in normal flow.
-- `ThemeToggle` is hidden until listeners attach. `aria-pressed="true"` means dark; visible and accessible text describe the destination theme.
+- `ThemeToggle` is hidden until listeners attach. Its visible and accessible text describe the destination theme; it is an action button rather than a pressed-state toggle.
 - `LanguageLink` preserves the route and project hash while intentionally dropping ephemeral project filter/provenance query state.
 
 ### `SiteFooter` and dialogs

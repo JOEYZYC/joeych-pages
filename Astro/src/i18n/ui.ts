@@ -41,6 +41,10 @@ type UiLabels = {
     readonly skillOrigin: string
     readonly imagePending: string
     readonly imagePendingAlt: string
+    readonly resultCountOne: string
+    readonly resultCountMany: string
+    readonly filtersAdjusted: string
+    readonly clearFilters: string
   }
   readonly language: {
     readonly label: string
@@ -136,6 +140,10 @@ export const UI = {
       skillOrigin: "来自技能证据",
       imagePending: "项目图片待补充",
       imagePendingAlt: "项目占位图片；项目图片待补充",
+      resultCountOne: "显示 {count} 个项目",
+      resultCountMany: "显示 {count} 个项目",
+      filtersAdjusted: "已清除不兼容的筛选条件。",
+      clearFilters: "清除筛选",
     },
     language: {
       label: "English",
@@ -243,6 +251,10 @@ export const UI = {
       skillOrigin: "From skill evidence",
       imagePending: "Project image pending",
       imagePendingAlt: "Project placeholder image; project image pending",
+      resultCountOne: "{count} project shown",
+      resultCountMany: "{count} projects shown",
+      filtersAdjusted: "Incompatible filters were cleared.",
+      clearFilters: "Clear filters",
     },
     language: {
       label: "中文",

@@ -13,7 +13,7 @@ async function expectTheme(
   await expect(root).toHaveAttribute("data-js", "true")
   await expect(root).toHaveAttribute("data-theme", theme)
   await expect.poll(() => root.evaluate((element) => element.style.colorScheme)).toBe(theme)
-  await expect(toggle).toHaveAttribute("aria-pressed", String(theme === "dark"))
+  await expect(toggle).not.toHaveAttribute("aria-pressed", /.+/)
   await expect(toggle).toHaveAttribute("aria-label", destination.name)
   await expect(toggle).toContainText(destination.label)
   await expect(page.getByRole("main")).toBeVisible()

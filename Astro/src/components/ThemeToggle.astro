@@ -16,7 +16,6 @@ const labels = UI[locale].theme
   data-label-dark={labels.dark}
   data-to-light={labels.toLight}
   data-to-dark={labels.toDark}
-  aria-pressed="false"
   aria-label={labels.toDark}
   title={labels.toDark}
   hidden
@@ -56,7 +55,6 @@ const labels = UI[locale].theme
         destination === "light" ? button.dataset.labelLight : button.dataset.labelDark
       const accessibleLabel = destination === "light" ? button.dataset.toLight : button.dataset.toDark
 
-      button.setAttribute("aria-pressed", String(current === "dark"))
       if (accessibleLabel) {
         button.setAttribute("aria-label", accessibleLabel)
         button.title = accessibleLabel

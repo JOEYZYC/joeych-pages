@@ -89,11 +89,15 @@ test.describe("projects archive", () => {
     await expect(figureControls.nth(1)).toHaveAttribute("aria-pressed", "false")
     await expect(dialog.locator(".project-figures")).toHaveCount(0)
     await expect(media.locator("[data-project-media-caption]")).toHaveCount(0)
+    await expect(media.locator("[data-project-media-image]")).toHaveAttribute("width", "1200")
+    await expect(media.locator("[data-project-media-image]")).toHaveAttribute("height", "673")
 
     await figureControls.nth(1).press("Enter")
     await expect(figureControls.nth(1)).toHaveAttribute("aria-pressed", "true")
     await expect(media).toHaveAttribute("data-project-media-source", "/projects/2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign/power-print-hardware.png")
     await expect(media.locator("[data-project-media-image]")).toHaveAttribute("alt", "Hardware Device")
+    await expect(media.locator("[data-project-media-image]")).toHaveAttribute("width", "1017")
+    await expect(media.locator("[data-project-media-image]")).toHaveAttribute("height", "728")
 
     await figureControls.nth(0).click()
     await expect(figureControls.nth(0)).toHaveAttribute("aria-pressed", "true")
@@ -104,6 +108,15 @@ test.describe("projects archive", () => {
     await expect(outcome).toContainText("National Third")
     await expect(outcome.locator("[data-certificate-dialog]")).toHaveCount(1)
     await expect(outcome.locator("[data-certificate-items] li")).toHaveCount(2)
+    await outcome.locator("[data-certificate-trigger]").click()
+    const certificateDialog = outcome.locator("[data-certificate-dialog]")
+    const certificateImage = certificateDialog.locator("[data-certificate-image]")
+    await expect(certificateImage).toHaveAttribute("width", "1279")
+    await expect(certificateImage).toHaveAttribute("height", "1940")
+    await certificateDialog.locator("[data-certificate-next]").click()
+    await expect(certificateImage).toHaveAttribute("width", "1733")
+    await expect(certificateImage).toHaveAttribute("height", "1279")
+    await certificateDialog.locator("[data-certificate-close]").click()
     await dialog.locator("[data-project-dialog-close]").click()
     await expect(card).toBeFocused()
   })
@@ -257,8 +270,9 @@ test.describe("projects archive", () => {
     const honor = page.locator("[data-project-honor-filter]")
 
     await expect(honor.locator('option[value="award:renesas-east-first-national-third-2024"]')).toHaveText(
-      "Awards: National Undergraduate Electronic Design Contest (Renesas Cup) · Eastern China First Place, National Third Prize",
+      "National Undergraduate Electronic Design Contest (Renesas Cup) · Eastern China First Place, National Third Prize",
     )
+    await expect(honor.locator('optgroup[label="Awards"]')).toHaveCount(1)
 
     await honor.selectOption("award:renesas-east-first-national-third-2024")
 
@@ -272,7 +286,7 @@ test.describe("projects archive", () => {
     const honor = page.locator("[data-project-honor-filter]")
 
     await expect(honor.locator('option[value="publication:resgatnet"]')).toHaveText(
-      "Publications: ResGatNet: Bridging Efficiency and Precision in Low-SNR Wireless Perception · IEEE Access",
+      "ResGatNet: Bridging Efficiency and Precision in Low-SNR Wireless Perception · IEEE Access",
     )
     await honor.selectOption("publication:resgatnet")
 
@@ -280,8 +294,32 @@ test.describe("projects archive", () => {
 
     await page.goto("projects/")
     await expect(page.locator('[data-project-honor-filter] option[value="publication:dual-band-polarization-conversion"]')).toHaveText(
-      "学术论文: 双频带柔性极化转换超表面的仿真研究 · 光电子·激光 34(7), 690–697",
+      "双频带柔性极化转换超表面的仿真研究 · 光电子·激光 34(7), 690–697",
     )
+  })
+
+  test("announces user-driven filter changes and clears all filters", async ({ page }) => {
+    await page.goto("en/projects/")
+    const name = page.locator("[data-project-name-filter]")
+    const status = page.locator("[data-project-filter-status]")
+    const announcement = page.locator("[data-project-filter-announcement]")
+    const clear = page.locator("[data-project-filter-clear]")
+
+    await expect(status).toHaveText(`${projectIds.length} projects shown`)
+    await expect(announcement).toBeEmpty()
+    await expect(clear).toBeDisabled()
+
+    await name.selectOption("2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
+    await expect(status).toHaveText("1 project shown")
+    await expect(announcement).toHaveText("1 project shown")
+    await expect(clear).toBeEnabled()
+
+    await clear.click()
+    await expect(name).toHaveValue("")
+    await expect(status).toHaveText(`${projectIds.length} projects shown`)
+    await expect(announcement).toHaveText(`${projectIds.length} projects shown`)
+    await expect(clear).toBeDisabled()
+    expect(await visibleCardIds(page)).toEqual(projectIds)
   })
 
   test("links category, project name, and honor choices", async ({ page }) => {
@@ -358,6 +396,7 @@ test.describe("projects archive", () => {
       await page.goto("en/projects/")
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width)
       await expect(page.locator("[data-project-card-grid]")).toBeVisible()
+      await expect(page.locator("[data-project-filter-controls]")).toHaveCSS("position", viewport.name === "mobile" ? "static" : "sticky")
     })
   }
 })

@@ -20,15 +20,25 @@ const categories = [...new Map(
 ).entries()].map(([value, label]) => ({ value, label }))
 const awardLabel = (award: Project["awards"][number]) => {
   const prizes = award.prizes.map((prize) => prize[locale]).join(locale === "zh" ? "、" : ", ")
-  return `${labels.sections.awards.awards}: ${award.title[locale]}${prizes ? ` · ${prizes}` : ""}`
+  return `${award.title[locale]}${prizes ? ` · ${prizes}` : ""}`
 }
-const honors = [...new Map(
-  projects.flatMap((project) => [
-    ...project.awards.map((award) => [`award:${award.id}`, awardLabel(award)] as const),
-    ...project.publications.map((publication) => [`publication:${publication.id}`, `${labels.sections.awards.publications}: ${publication.title[locale]} · ${publication.venue[locale]}`] as const),
-    ...project.patents.map((patent) => [`patent:${patent.id}`, `${labels.sections.awards.patents}: ${patent.title[locale]}`] as const),
-  ]),
-).entries()].map(([value, label]) => ({ value, label }))
+const honorGroups = [
+  {
+    prefix: "award",
+    label: labels.sections.awards.awards,
+    options: [...new Map(projects.flatMap((project) => project.awards.map((award) => [`award:${award.id}`, awardLabel(award)] as const))).entries()],
+  },
+  {
+    prefix: "publication",
+    label: labels.sections.awards.publications,
+    options: [...new Map(projects.flatMap((project) => project.publications.map((publication) => [`publication:${publication.id}`, `${publication.title[locale]} · ${publication.venue[locale]}`] as const))).entries()],
+  },
+  {
+    prefix: "patent",
+    label: labels.sections.awards.patents,
+    options: [...new Map(projects.flatMap((project) => project.patents.map((patent) => [`patent:${patent.id}`, patent.title[locale]] as const))).entries()],
+  },
+].filter(({ options }) => options.length > 0)
 
 const skillEvidence = Object.fromEntries(
   skills.flatMap((group) => group.tags).map((tag) => [
@@ -66,9 +76,27 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
         <span>{labels.projectExplorer.honor}</span>
         <select id="project-honor-filter" data-project-honor-filter>
           <option value="">{labels.projectExplorer.allHonors}</option>
-          {honors.map((honor) => <option value={honor.value}>{honor.label}</option>)}
+          {honorGroups.map((group) => <optgroup label={group.label} data-honor-prefix={group.prefix}>
+            {group.options.map(([value, label]) => <option value={value}>{label}</option>)}
+          </optgroup>)}
         </select>
       </label>
+    </div>
+    <div class="project-filter-summary" data-project-filter-summary hidden>
+      <p
+        class="project-filter-status"
+        data-project-filter-status
+        data-result-count-one={labels.projectExplorer.resultCountOne}
+        data-result-count-many={labels.projectExplorer.resultCountMany}
+      >{labels.projectExplorer.resultCountMany.replace("{count}", String(projects.length))}</p>
+      <button class="project-filter-clear" type="button" data-project-filter-clear disabled>{labels.projectExplorer.clearFilters}</button>
+      <p
+        class="visually-hidden"
+        data-project-filter-announcement
+        data-filters-adjusted={labels.projectExplorer.filtersAdjusted}
+        aria-live="polite"
+        aria-atomic="true"
+      ></p>
     </div>
 
     <div class="project-card-grid" data-project-card-grid hidden>
@@ -103,6 +131,10 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const categoryFilter = explorer.querySelector<HTMLSelectElement>("[data-project-category-filter]")
     const nameFilter = explorer.querySelector<HTMLSelectElement>("[data-project-name-filter]")
     const honorFilter = explorer.querySelector<HTMLSelectElement>("[data-project-honor-filter]")
+    const filterSummary = explorer.querySelector<HTMLElement>("[data-project-filter-summary]")
+    const filterStatus = explorer.querySelector<HTMLElement>("[data-project-filter-status]")
+    const filterAnnouncement = explorer.querySelector<HTMLElement>("[data-project-filter-announcement]")
+    const clearFilters = explorer.querySelector<HTMLButtonElement>("[data-project-filter-clear]")
     const cards = [...explorer.querySelectorAll<HTMLElement>("[data-project-card]")]
     const records = [...explorer.querySelectorAll<HTMLElement>("[data-project-record]")]
     const dialog = explorer.querySelector<HTMLDialogElement>("[data-project-dialog]")
@@ -110,7 +142,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const dialogTemplates = new Map([...explorer.querySelectorAll<HTMLTemplateElement>("[data-project-dialog-template]")].map((template) => [template.dataset.projectId ?? "", template]))
     const recordsSection = explorer.querySelector<HTMLElement>("[data-project-records]")
     const evidenceSource = explorer.querySelector<HTMLScriptElement>("[data-project-skill-evidence]")
-    if (!controls || !cardGrid || !categoryFilter || !nameFilter || !honorFilter || cards.length === 0 || records.length === 0 || !dialog || !dialogContent || dialogTemplates.size !== cards.length || !recordsSection || !evidenceSource) continue
+    if (!controls || !cardGrid || !categoryFilter || !nameFilter || !honorFilter || !filterSummary || !filterStatus || !filterAnnouncement || !clearFilters || cards.length === 0 || records.length === 0 || !dialog || !dialogContent || dialogTemplates.size !== cards.length || !recordsSection || !evidenceSource) continue
 
     const evidenceMap = JSON.parse(evidenceSource.textContent ?? "") as EvidenceMap
 
@@ -122,8 +154,20 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const allHonorsLabel = honorFilter.options.item(0)?.textContent ?? ""
     const categoryLabels = new Map([...categoryFilter.options].flatMap((option) => option.value ? [[option.value, option.textContent ?? ""]] : []))
     const honorLabels = new Map([...honorFilter.options].flatMap((option) => option.value ? [[option.value, option.textContent ?? ""]] : []))
+    const honorGroupLabels = new Map([...honorFilter.querySelectorAll<HTMLOptGroupElement>("optgroup")].map((group) => [group.dataset.honorPrefix ?? "", group.label]))
     let trigger: HTMLElement | undefined
     let visibleIds = [...projectIds]
+    let closingFromUrl = false
+    let urlSyncScheduled = false
+
+    const projectHistoryKey = "profileProjectId"
+
+    const currentHistoryProject = () => {
+      const state: unknown = window.history.state
+      if (typeof state !== "object" || state === null || !(projectHistoryKey in state)) return ""
+      const projectId = state[projectHistoryKey]
+      return typeof projectId === "string" ? projectId : ""
+    }
 
     const currentHashId = () => {
       if (window.location.hash.length < 2) return ""
@@ -136,6 +180,16 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
 
     const replaceUrl = (url: URL) => {
       window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`)
+      window.dispatchEvent(new Event("profile:urlchange"))
+    }
+
+    const pushProjectUrl = (url: URL, id: string) => {
+      const state: unknown = window.history.state
+      const nextState = typeof state === "object" && state !== null
+        ? { ...state, [projectHistoryKey]: id }
+        : { [projectHistoryKey]: id }
+      window.history.pushState(nextState, "", `${url.pathname}${url.search}${url.hash}`)
+      window.dispatchEvent(new Event("profile:urlchange"))
     }
 
     const clearActiveState = () => {
@@ -174,6 +228,21 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       select.value = options.some(([value]) => value === selected) ? selected : ""
     }
 
+    const replaceHonorOptions = (ids: readonly string[], selected: string) => {
+      const groups = ["award", "publication", "patent"].flatMap((prefix) => {
+        const options = ids.filter((id) => id.startsWith(`${prefix}:`)).map((id) => new Option(honorLabels.get(id) ?? id, id))
+        const label = honorGroupLabels.get(prefix)
+        if (options.length === 0 || !label) return []
+        const group = document.createElement("optgroup")
+        group.label = label
+        group.dataset.honorPrefix = prefix
+        group.append(...options)
+        return [group]
+      })
+      honorFilter.replaceChildren(new Option(allHonorsLabel, ""), ...groups)
+      honorFilter.value = ids.includes(selected) ? selected : ""
+    }
+
     const syncFacetOptions = () => {
       const filters = currentFilters()
       const categoryIds = matchingIds({ ...filters, category: "" })
@@ -191,12 +260,12 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       replaceOptions(nameFilter, allProjectsLabel, names, filters.name)
 
       const honorIds = matchingIds({ ...currentFilters(), honor: "" }).flatMap((id) => projectHonors(cardById.get(id)))
-      const honors = [...new Set(honorIds)].map((id) => [id, honorLabels.get(id) ?? id] as const)
-      replaceOptions(honorFilter, allHonorsLabel, honors, filters.honor)
+      replaceHonorOptions([...new Set(honorIds)], filters.honor)
     }
 
     const normalizeSelections = (changed: FilterKey) => {
       const filters = { ...currentFilters() }
+      let adjusted = false
       const resetOrder: Record<FilterKey, readonly FilterKey[]> = {
         category: ["name", "honor"],
         name: ["honor", "category"],
@@ -204,11 +273,13 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       }
       for (const key of resetOrder[changed]) {
         if (matchingIds(filters).length > 0) break
+        adjusted ||= filters[key] !== ""
         filters[key] = ""
       }
       categoryFilter.value = filters.category
       nameFilter.value = filters.name
       honorFilter.value = filters.honor
+      return adjusted
     }
 
     const clearSkillOrigin = (removeQuery: boolean) => {
@@ -246,7 +317,18 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       }
     }
 
-    const applyFilters = ({ clearOrigin = true } = {}) => {
+    const updateFilterStatus = (adjusted: boolean, announce: boolean) => {
+      const template = visibleIds.length === 1
+        ? filterStatus.dataset.resultCountOne
+        : filterStatus.dataset.resultCountMany
+      const result = template?.replace("{count}", String(visibleIds.length)) ?? String(visibleIds.length)
+      const prefix = adjusted ? filterAnnouncement.dataset.filtersAdjusted : undefined
+      filterStatus.textContent = result
+      filterAnnouncement.textContent = announce ? (prefix ? `${prefix} ${result}` : result) : ""
+      clearFilters.disabled = categoryFilter.value === "" && nameFilter.value === "" && honorFilter.value === ""
+    }
+
+    const applyFilters = ({ clearOrigin = true, adjusted = false, announce = false } = {}) => {
       if (clearOrigin) clearSkillOrigin(true)
       const name = nameFilter.value
       visibleIds = matchingIds(currentFilters())
@@ -263,6 +345,7 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       }
       if (name) setActiveProject(name)
       else clearActiveState()
+      updateFilterStatus(adjusted, announce)
     }
 
     const openDialog = (id: string, nextTrigger?: HTMLElement, focusTitle = true) => {
@@ -295,11 +378,38 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       applySkillOrigin()
     }
 
+    const synchronizeProjectFromUrl = () => {
+      const id = currentHashId()
+      if (cardById.has(id)) {
+        revealProject(id, true)
+        return
+      }
+      clearActiveState()
+      if (dialog.open) {
+        closingFromUrl = true
+        dialog.close()
+      }
+      applySkillOrigin()
+    }
+
+    const scheduleUrlSynchronization = () => {
+      if (urlSyncScheduled) return
+      urlSyncScheduled = true
+      queueMicrotask(() => {
+        urlSyncScheduled = false
+        synchronizeProjectFromUrl()
+      })
+    }
+
     for (const card of cards) {
       card.addEventListener("click", (event) => {
+        if (event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
         event.preventDefault()
         const id = card.dataset.projectId
         if (!id) return
+        const url = new URL(window.location.href)
+        url.hash = id
+        if (currentHashId() !== id) pushProjectUrl(url, id)
         setActiveProject(id)
         openDialog(id, card)
       })
@@ -313,11 +423,13 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       const src = button.dataset.projectFigureSrc
       const source = button.dataset.projectFigureSource
       const captionText = button.dataset.projectFigureCaption
+      const width = Number(button.dataset.projectFigureWidth)
+      const height = Number(button.dataset.projectFigureHeight)
       const media = dialogContent.querySelector<HTMLElement>('[data-project-media-context="record"]')
       const image = media?.querySelector<HTMLImageElement>("[data-project-media-image]")
       const caption = media?.querySelector<HTMLElement>("[data-project-media-caption]")
       const unavailable = media?.querySelector<HTMLElement>("[data-project-media-unavailable]")
-      if (!src || !source || !captionText || !media || !image || !unavailable) return
+      if (!src || !source || !captionText || !width || !height || !media || !image || !unavailable) return
 
       for (const control of dialogContent.querySelectorAll<HTMLButtonElement>("[data-project-figure-select]")) {
         control.setAttribute("aria-pressed", String(control === button))
@@ -328,27 +440,50 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
       unavailable.hidden = true
       image.src = src
       image.alt = captionText
+      image.width = width
+      image.height = height
       if (caption) caption.textContent = captionText
     })
     attachDialogDismissal(dialog, () => trigger?.focus())
+    dialog.addEventListener("close", () => {
+      clearActiveState()
+      if (closingFromUrl) {
+        closingFromUrl = false
+        return
+      }
+      const id = dialog.dataset.projectId ?? ""
+      const url = new URL(window.location.href)
+      if (currentHashId() !== id) return
+      if (currentHistoryProject() === id) {
+        window.history.back()
+        return
+      }
+      url.hash = ""
+      replaceUrl(url)
+    })
     dialog.hidden = false
     const updateFilters = (changed: FilterKey) => {
-      normalizeSelections(changed)
+      const adjusted = normalizeSelections(changed)
       syncFacetOptions()
-      applyFilters()
+      applyFilters({ adjusted, announce: true })
     }
     categoryFilter.addEventListener("change", () => updateFilters("category"))
     nameFilter.addEventListener("change", () => updateFilters("name"))
     honorFilter.addEventListener("change", () => updateFilters("honor"))
-    window.addEventListener("hashchange", () => {
-      const id = currentHashId()
-      if (cardById.has(id)) revealProject(id, true)
-      else applySkillOrigin()
+    clearFilters.addEventListener("click", () => {
+      categoryFilter.value = ""
+      nameFilter.value = ""
+      honorFilter.value = ""
+      syncFacetOptions()
+      applyFilters({ announce: true })
     })
+    window.addEventListener("hashchange", scheduleUrlSynchronization)
+    window.addEventListener("popstate", scheduleUrlSynchronization)
 
     syncFacetOptions()
     cardGrid.hidden = false
     controls.hidden = false
+    filterSummary.hidden = false
     recordsSection.hidden = true
     explorer.dataset.explorerReady = "true"
     const initialHash = currentHashId()

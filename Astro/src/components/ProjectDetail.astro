@@ -2,6 +2,7 @@
 import type { Project } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
+import { getProjectMediaDimensions } from "../lib/project-media"
 import { publicMediaUrl } from "../lib/urls"
 import CertificateDialog from "./CertificateDialog.astro"
 import ProjectMedia from "./ProjectMedia.astro"
@@ -53,6 +54,8 @@ const titleId = `${idPrefix}-title`
       data-project-figure-src={publicMediaUrl(figure.src)}
       data-project-figure-source={figure.src}
       data-project-figure-caption={figure[locale]}
+      data-project-figure-width={getProjectMediaDimensions(figure.src)?.width}
+      data-project-figure-height={getProjectMediaDimensions(figure.src)?.height}
       aria-pressed={figure.src === project.image ? "true" : "false"}
     >{figure[locale]}</button>)}
   </div>
@@ -114,7 +117,14 @@ const titleId = `${idPrefix}-title`
       <div class="project-figure-grid">
         {remainingFigures.map((figure) => figure.src === undefined
           ? <figure class="project-figure-unavailable"><figcaption>{figure[locale]}</figcaption><p>{labels.unavailable.media}</p></figure>
-          : <figure><img src={publicMediaUrl(figure.src)} alt={figure[locale]} loading="lazy" decoding="async" /><figcaption>{figure[locale]}</figcaption></figure>)}
+          : <figure><img
+            src={publicMediaUrl(figure.src)}
+            alt={figure[locale]}
+            loading="lazy"
+            decoding="async"
+            width={getProjectMediaDimensions(figure.src)?.width}
+            height={getProjectMediaDimensions(figure.src)?.height}
+          /><figcaption>{figure[locale]}</figcaption></figure>)}
       </div>
     </section>
   )}

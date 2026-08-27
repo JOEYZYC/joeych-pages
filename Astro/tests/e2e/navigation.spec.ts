@@ -26,6 +26,8 @@ test.describe("navigation state synchronization", () => {
 
     await expect(languageLink).toHaveAttribute("href", `${basePath}/en/projects/${projectFragment}`)
     await expect(languageLink).toHaveAttribute("data-language-counterpart", `${basePath}/en/projects/`)
+    await expect(languageLink).not.toHaveAttribute("lang", /.+/)
+    await expect(languageLink.locator("span[lang]").first()).toHaveAttribute("lang", "en")
   })
 
   test("updates and clears the locale counterpart when the project fragment changes", async ({ page }) => {
@@ -58,6 +60,60 @@ test.describe("navigation state synchronization", () => {
     await expect(page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')).toBeHidden()
     expect(await page.evaluate(() => window.history.length)).toBe(historyLength)
     await expect(page).toHaveURL(/\/en\/projects\/$/)
+    await expect(page.locator("[data-project-filter-status]")).toHaveText("1 project shown")
+  })
+
+  test("project cards preserve modified clicks and synchronize dialog history", async ({ page }) => {
+    await page.goto("en/projects/")
+    const card = page.locator('[data-project-card][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')
+    const dialog = page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')
+    const historyLength = await page.evaluate(() => window.history.length)
+
+    const modifiedClickPrevented = await card.evaluate((element) => new Promise<boolean>((resolve) => {
+      element.addEventListener("click", (event) => {
+        resolve(event.defaultPrevented)
+        event.preventDefault()
+      }, { once: true })
+      element.dispatchEvent(new MouseEvent("click", {
+        bubbles: true,
+        button: 0,
+        cancelable: true,
+        ctrlKey: true,
+      }))
+    }))
+    expect(modifiedClickPrevented).toBe(false)
+
+    await card.click()
+    await expect(page).toHaveURL(new RegExp(`${projectFragment}$`))
+    await expect(page.locator("a.language-link")).toHaveAttribute("href", `${basePath}/projects/${projectFragment}`)
+    await expect(dialog).toBeVisible()
+    expect(await page.evaluate(() => window.history.length)).toBe(historyLength + 1)
+
+    await page.goBack()
+    await expect(page).toHaveURL(/\/en\/projects\/$/)
+    await expect(dialog).toBeHidden()
+    await expect(page.locator("a.language-link")).toHaveAttribute("href", `${basePath}/projects/`)
+
+    await page.goForward()
+    await expect(page).toHaveURL(new RegExp(`${projectFragment}$`))
+    await expect(dialog).toBeVisible()
+
+    await dialog.locator("[data-project-dialog-close]").click()
+    await expect(page).toHaveURL(/\/en\/projects\/$/)
+    await expect(dialog).toBeHidden()
+  })
+
+  test("closing a direct project deep link clears its hash without adding history", async ({ page }) => {
+    await page.goto(`en/projects/${projectFragment}`)
+    const dialog = page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')
+    const historyLength = await page.evaluate(() => window.history.length)
+
+    await expect(dialog).toBeVisible()
+    await dialog.locator("[data-project-dialog-close]").click()
+
+    await expect(page).toHaveURL(/\/en\/projects\/$/)
+    await expect(dialog).toBeHidden()
+    expect(await page.evaluate(() => window.history.length)).toBe(historyLength)
   })
 
   test("a browser hash change synchronizes project filters and opens the matching dialog", async ({ page }) => {

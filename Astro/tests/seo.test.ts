@@ -1,7 +1,15 @@
+import { readFile } from "node:fs/promises"
+
 import { describe, expect, it } from "vitest"
 
 import { getProfileData } from "../src/lib/profile-data"
-import { buildPersonJsonLd, getSeoUrls, serializeJsonLd } from "../src/lib/seo"
+import {
+  buildPersonJsonLd,
+  buildProjectItemListJsonLd,
+  buildWebsiteJsonLd,
+  getSeoUrls,
+  serializeJsonLd,
+} from "../src/lib/seo"
 
 describe("SEO helpers", () => {
   it("builds a truthful Person graph from public Profile identity and contact fields", async () => {
@@ -9,16 +17,54 @@ describe("SEO helpers", () => {
     const { site } = await getProfileData()
 
     // When: the English Person graph is built
-    const actual = buildPersonJsonLd({ locale: "en", site })
+    const actual = buildPersonJsonLd({
+      locale: "en",
+      site,
+      url: "https://joeyzyc.github.io/joeych-pages/en/",
+      image: "https://joeyzyc.github.io/joeych-pages/site/social-card.png",
+    })
 
     // Then: it carries only public name, role, email, and approved identity links
     expect(actual).toEqual({
       "@context": "https://schema.org",
       "@type": "Person",
-      name: site.name.en,
+      name: "Joey Zhang",
+      alternateName: "JOEYCH",
       jobTitle: site.role.en,
       email: site.contact.email,
+      url: "https://joeyzyc.github.io/joeych-pages/en/",
+      image: "https://joeyzyc.github.io/joeych-pages/site/social-card.png",
       sameAs: [site.contact.github, site.contact.scholar, site.contact.orcid],
+    })
+  })
+
+  it("builds website and ordered project collection graphs", async () => {
+    const { projects, site } = await getProfileData()
+    const website = buildWebsiteJsonLd({
+      locale: "zh",
+      site,
+      url: "https://joeyzyc.github.io/joeych-pages/",
+    })
+    const itemList = buildProjectItemListJsonLd({
+      canonical: "https://joeyzyc.github.io/joeych-pages/projects/",
+      locale: "zh",
+      projects,
+    })
+
+    expect(website).toEqual({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "JOEYCH",
+      url: "https://joeyzyc.github.io/joeych-pages/",
+      inLanguage: "zh-CN",
+    })
+    expect(itemList.itemListElement).toHaveLength(projects.length)
+    expect(itemList.itemListElement[0]).toMatchObject({
+      position: 1,
+      item: {
+        name: projects[0]?.title.zh,
+        url: `https://joeyzyc.github.io/joeych-pages/projects/#${projects[0]?.id}`,
+      },
     })
   })
 
@@ -41,6 +87,13 @@ describe("SEO helpers", () => {
     expect(actual).toContain("\\u2028")
     expect(actual).toContain("\\u2029")
     expect(actual).not.toContain("<script>")
+  })
+
+  it("ships the declared 1200 by 630 social card", async () => {
+    const image = await readFile(new URL("../../Profile/site/social-card.png", import.meta.url))
+
+    expect(image.readUInt32BE(16)).toBe(1200)
+    expect(image.readUInt32BE(20)).toBe(630)
   })
 
   it("keeps canonical, alternate, and x-default URLs base-aware", () => {

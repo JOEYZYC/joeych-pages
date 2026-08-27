@@ -3,6 +3,7 @@ import type { Certificate } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import { UI } from "../i18n/ui"
 import { getDialogIds } from "../lib/dialog-ids"
+import { getProjectMediaDimensions } from "../lib/project-media"
 import { publicMediaUrl } from "../lib/urls"
 import Icon from "./Icon.astro"
 
@@ -11,6 +12,7 @@ const { certificates, id, locale } = Astro.props
 const labels = UI[locale].certificate
 const ids = getDialogIds(id)
 const first = certificates[0]
+const firstDimensions = first ? getProjectMediaDimensions(first.src) : undefined
 ---
 
 {first && (
@@ -47,13 +49,20 @@ const first = certificates[0]
         src={publicMediaUrl(first.src)}
         alt={first[locale]}
         loading="lazy"
+        width={firstDimensions?.width}
+        height={firstDimensions?.height}
       />
       <p class="certificate-caption" data-certificate-caption>{first[locale]}</p>
       <p class="certificate-status" data-certificate-unavailable hidden>{labels.unavailable}</p>
       <p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true" data-certificate-announcement>{labels.loading}</p>
       <ol hidden data-certificate-items>
         {certificates.map((certificate) => (
-          <li data-source={publicMediaUrl(certificate.src)} data-label={certificate[locale]}></li>
+          <li
+            data-source={publicMediaUrl(certificate.src)}
+            data-label={certificate[locale]}
+            data-width={getProjectMediaDimensions(certificate.src)?.width}
+            data-height={getProjectMediaDimensions(certificate.src)?.height}
+          ></li>
         ))}
       </ol>
       {certificates.length > 1 && (
@@ -135,10 +144,14 @@ const first = certificates[0]
       const certificate = items.item(index)
       const source = certificate?.dataset.source
       const label = certificate?.dataset.label
-      if (!source || !label) return
+      const width = Number(certificate?.dataset.width)
+      const height = Number(certificate?.dataset.height)
+      if (!source || !label || !width || !height) return
       showLoading()
       image.src = source
       image.alt = label
+      image.width = width
+      image.height = height
       caption.textContent = label
       if (previous) previous.disabled = index === 0
       if (next) next.disabled = index === items.length - 1

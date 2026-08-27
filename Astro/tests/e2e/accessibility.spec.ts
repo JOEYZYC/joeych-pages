@@ -28,6 +28,57 @@ async function expectNoWcagViolations(
   testInfo: TestInfo,
 ): Promise<void> {
   const results = await new AxeBuilder({ page }).withTags(wcagTags).analyze()
+  const actionableViolations: typeof results.violations = []
+  const acceptedDebt: AxeEvidence["violations"][number][] = []
+  for (const violation of results.violations) {
+    if (evidence.theme !== "dark" || violation.id !== "color-contrast") {
+      actionableViolations.push(violation)
+      continue
+    }
+
+    const acceptedNodeIndexes = new Set<number>()
+    const acceptedTargets: string[] = []
+    for (const [nodeIndex, node] of violation.nodes.entries()) {
+      let accepted = false
+      for (const target of node.target) {
+        if (typeof target !== "string") continue
+        try {
+          accepted = await page.locator(target).first().evaluate((element) => {
+            const acceptedBackgrounds = new Set([
+              "rgb(5, 5, 5)",
+              "rgb(15, 14, 13)",
+              "rgb(23, 22, 20)",
+              "rgb(36, 33, 30)",
+            ])
+            let background = ""
+            let current: Element | null = element
+            while (current !== null) {
+              const candidate = getComputedStyle(current).backgroundColor
+              if (candidate !== "rgba(0, 0, 0, 0)" && candidate !== "transparent") {
+                background = candidate
+                break
+              }
+              current = current.parentElement
+            }
+            return getComputedStyle(element).color === "rgb(23, 107, 69)" && acceptedBackgrounds.has(background)
+          })
+        } catch {
+          accepted = false
+        }
+        if (accepted) {
+          acceptedNodeIndexes.add(nodeIndex)
+          acceptedTargets.push(target)
+          break
+        }
+      }
+    }
+
+    const actionableNodes = violation.nodes.filter((_, nodeIndex) => !acceptedNodeIndexes.has(nodeIndex))
+    if (acceptedTargets.length > 0) {
+      acceptedDebt.push({ id: violation.id, impact: violation.impact ?? null, targets: acceptedTargets.sort() })
+    }
+    if (actionableNodes.length > 0) actionableViolations.push({ ...violation, nodes: actionableNodes })
+  }
   const violations = results.violations
     .map((violation) => ({
       id: violation.id,
@@ -38,13 +89,19 @@ async function expectNoWcagViolations(
     }))
     .sort((left, right) => left.id.localeCompare(right.id))
   await testInfo.attach("axe-results.json", {
-    body: JSON.stringify({ ...evidence, violations }, null, 2),
+    body: JSON.stringify({ ...evidence, violations, acceptedDebt }, null, 2),
     contentType: "application/json",
   })
-  const message = results.violations
+  if (acceptedDebt.length > 0) {
+    testInfo.annotations.push({
+      type: "accepted-debt",
+      description: "Dark-theme #176b45 contrast debt remains present and explicitly scoped.",
+    })
+  }
+  const message = actionableViolations
     .map((violation) => `${violation.id} (${violation.impact ?? "unknown"}): ${violation.nodes.map((node) => node.target.join(" ")).join(", ")}`)
     .join("\n")
-  expect(results.violations, message).toEqual([])
+  expect(actionableViolations, message).toEqual([])
 }
 
 async function applyPageScale(page: Page): Promise<void> {
@@ -82,7 +139,6 @@ test.describe("WCAG accessibility and 200% reflow", () => {
     for (const theme of themes) {
       test(`has no WCAG A/AA Axe violations on all routes in ${theme} at ${viewport.width}px`, async ({ page }, testInfo) => {
         test.setTimeout(60_000)
-        test.fail(theme === "dark", "Accepted #176b45 dark-theme text contrast debt")
         await page.setViewportSize(viewport)
         await page.addInitScript(({ key, value }) => window.localStorage.setItem(key, value), { key: "joeych-theme", value: theme })
 
@@ -102,7 +158,6 @@ test.describe("WCAG accessibility and 200% reflow", () => {
 
   for (const theme of themes) {
     test(`has no WCAG A/AA Axe violations in contact, certificate, and project dialogs in ${theme}`, async ({ page }, testInfo) => {
-      test.fail(theme === "dark", "Accepted #176b45 dark-theme text contrast debt")
       await page.addInitScript(({ key, value }) => window.localStorage.setItem(key, value), { key: "joeych-theme", value: theme })
       await page.goto("")
       await page.locator("[data-contact-trigger]").click()

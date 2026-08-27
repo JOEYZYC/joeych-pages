@@ -105,7 +105,11 @@ function validateOutcomeIds(projects: readonly Project[]): void {
 }
 
 function resolveSite(site: Site): Site {
-  return { ...site, favicon: siteMediaPath(site.favicon) }
+  return {
+    ...site,
+    favicon: siteMediaPath(site.favicon),
+    social_image: { ...site.social_image, src: siteMediaPath(site.social_image.src) },
+  }
 }
 
 function resolveHome(home: Home): Home {
@@ -146,6 +150,7 @@ function resolveProject(project: Project): Project {
 function associatedMedia(site: Site, home: Home, projects: readonly Project[]): readonly PublicMediaPath[] {
   return [
     site.favicon,
+    site.social_image.src,
     home.portrait,
     home.hero_background.light,
     home.hero_background.dark,

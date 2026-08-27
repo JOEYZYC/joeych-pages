@@ -113,8 +113,14 @@ const campusExperienceSchema = z
 export const siteSchema = z
   .object({
     name: localizedSchema,
+    person_name: localizedSchema,
+    alternate_name: textSchema,
     role: localizedSchema,
     favicon: localMediaFileSchema,
+    social_image: z.object({
+      src: localMediaFileSchema,
+      alt: localizedSchema,
+    }).strict().readonly(),
     contact: z.object({
       email: z.email(),
       github: httpsUrlSchema,

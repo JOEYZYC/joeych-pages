@@ -2,6 +2,8 @@
 import type { Locale } from "../../i18n/locales"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import { getProfileData } from "../../lib/profile-data"
+import { buildProjectItemListJsonLd } from "../../lib/seo"
+import { getCanonicalUrl } from "../../lib/urls"
 import "../../styles/projects.css"
 import EditorialIntro from "../EditorialIntro.astro"
 import ProjectExplorer from "../ProjectExplorer.astro"
@@ -10,9 +12,12 @@ type Props = { readonly locale: Locale }
 
 const { locale } = Astro.props
 const data = await getProfileData()
+const origin = Astro.site?.toString() ?? Astro.url.origin
+const canonical = getCanonicalUrl("projects", locale, { siteOrigin: origin })
+const structuredData = buildProjectItemListJsonLd({ canonical, locale, projects: data.projects })
 ---
 
-<BaseLayout locale={locale} page={data.projectPage.page} site={data.site} routeId="projects">
+<BaseLayout locale={locale} page={data.projectPage.page} site={data.site} routeId="projects" structuredData={structuredData}>
   <div data-projects-page>
     <EditorialIntro
       overline={data.projectPage.page.overline[locale]}

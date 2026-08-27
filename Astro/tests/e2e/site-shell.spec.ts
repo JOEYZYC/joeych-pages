@@ -23,7 +23,7 @@ test.describe("formal site shell", () => {
   for (const route of routes) {
     test(`renders the complete localized shell for ${route.path || "root"}`, async ({ page }) => {
       await page.goto(route.path)
-      const personJsonLd = await page.locator('script[type="application/ld+json"]').textContent()
+      const jsonLd = (await page.locator('script[type="application/ld+json"]').allTextContents()).map((value) => JSON.parse(value) as { readonly "@type"?: string; readonly name?: string })
 
       await expect(page.locator("html")).toHaveAttribute("lang", route.locale === "zh" ? "zh-CN" : "en")
       await expect(page.locator("html")).toHaveAttribute("data-js", "true")
@@ -53,9 +53,16 @@ test.describe("formal site shell", () => {
         "href",
         `${basePath}/site/favicon.svg`,
       )
-      expect(personJsonLd).not.toBeNull()
-      expect(() => JSON.parse(personJsonLd ?? "")).not.toThrow()
-      expect(personJsonLd).toContain('"@type":"Person"')
+      await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", route.path.includes("projects") || route.path.includes("tech-stack") ? "website" : "profile")
+      await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute("content", "JOEYCH")
+      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", `${siteOrigin}${basePath}/site/social-card.png`)
+      await expect(page.locator('meta[property="og:image:width"]')).toHaveAttribute("content", "1200")
+      await expect(page.locator('meta[property="og:image:height"]')).toHaveAttribute("content", "630")
+      await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image")
+      await expect(page.locator('meta[name="twitter:image"]')).toHaveAttribute("content", `${siteOrigin}${basePath}/site/social-card.png`)
+      expect(jsonLd.some((value) => value["@type"] === "Person" && value.name === (route.locale === "zh" ? "张易成" : "Joey Zhang"))).toBe(true)
+      expect(jsonLd.some((value) => value["@type"] === "WebSite" && value.name === "JOEYCH")).toBe(true)
+      expect(jsonLd.some((value) => value["@type"] === "ItemList")).toBe(route.path.includes("projects"))
       await expect(page.locator("a.language-link")).toHaveAttribute("href", `${basePath}${route.counterpart}`)
     })
   }
@@ -63,6 +70,8 @@ test.describe("formal site shell", () => {
   test("serves the Profile-backed SVG favicon", async ({ page }) => {
     const favicon = await page.request.get(`${basePath}/site/favicon.svg`)
     expect(favicon.status()).toBe(200)
+    const socialCard = await page.request.get(`${basePath}/site/social-card.png`)
+    expect(socialCard.status()).toBe(200)
   })
 
   test("JavaScript-disabled shell expands navigation and exposes real contact fallback anchors", async ({ browser }) => {

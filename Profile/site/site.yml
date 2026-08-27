@@ -1,10 +1,19 @@
 name:
   zh: 张易成
   en: JOEYCH
+person_name:
+  zh: 张易成
+  en: Joey Zhang
+alternate_name: JOEYCH
 role:
   zh: 电子信息工程本科毕业生
   en: Electronic & Information Engineering Graduate
 favicon: favicon.svg
+social_image:
+  src: social-card.png
+  alt:
+    zh: 张易成个人学术与工程作品集
+    en: Joey Zhang academic and engineering portfolio
 contact:
   email: szjoeych@gmail.com
   github: https://github.com/JOEYZYC

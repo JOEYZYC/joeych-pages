@@ -17,8 +17,9 @@ type Props = {
   readonly page: PageMeta
   readonly routeId: RouteId
   readonly site: Site
+  readonly structuredData?: object
 }
-const { locale, page, routeId, site } = Astro.props
+const { locale, page, routeId, site, structuredData } = Astro.props
 const labels = UI[locale]
 const title = `${page.title[locale]} | ${site.name[locale]}`
 const description = page.summary[locale]
@@ -49,7 +50,7 @@ const description = page.summary[locale]
     </script>
     {locale === "en" && <Font cssVariable="--font-dm-sans" preload />}
     <Font cssVariable="--font-google-sans-code" preload />
-    <SeoHead routeId={routeId} locale={locale} site={site} title={title} description={description} />
+    <SeoHead routeId={routeId} locale={locale} site={site} title={title} description={description} structuredData={structuredData} />
   </head>
   <body>
     <a class="skip-link" href="#main-content">{labels.skipToContent}</a>

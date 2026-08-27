@@ -140,7 +140,7 @@ test.describe("header interactions", () => {
 
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.reload()
-    await page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"]').click()
+    await expect(projectDialog).toBeVisible()
     await page.locator('[data-project-dialog][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"] [data-certificate-trigger]').click()
     expect(await dialog.evaluate((element) => {
       const style = getComputedStyle(element)

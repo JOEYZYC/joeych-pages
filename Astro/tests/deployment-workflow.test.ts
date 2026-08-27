@@ -53,10 +53,17 @@ describe("GitHub Pages deployment workflow", () => {
   it("verifies Astro and uploads only Astro/dist", async () => {
     const { raw, workflow } = await loadWorkflow()
     const buildSteps = workflow.jobs.build.steps
+    const browserInstall = buildSteps.find(({ name }) => name === "Install Playwright Chrome")
     const verify = buildSteps.find(({ name }) => name === "Build and verify")
+    const e2e = buildSteps.find(({ name }) => name === "Run non-visual E2E")
     const uploads = buildSteps.filter(({ uses }) => uses?.startsWith("actions/upload-pages-artifact@"))
 
+    expect(browserInstall).toMatchObject({ run: "pnpm exec playwright install --with-deps chrome", "working-directory": "Astro" })
     expect(verify).toMatchObject({ run: "pnpm run verify", "working-directory": "Astro" })
+    expect(e2e).toMatchObject({ run: "pnpm run test:e2e:ci", "working-directory": "Astro" })
+    expect(buildSteps.findIndex(({ name }) => name === "Run non-visual E2E")).toBeLessThan(
+      buildSteps.findIndex(({ uses }) => uses?.startsWith("actions/upload-pages-artifact@")),
+    )
     expect(uploads).toHaveLength(1)
     expect(uploads[0]?.with).toEqual({ path: "Astro/dist" })
     expect(raw).not.toMatch(/(?:Profile|Jeklly)(?:\/|\\).*artifact/i)

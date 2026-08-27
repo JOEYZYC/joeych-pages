@@ -2,8 +2,8 @@
 import type { Locale } from "../i18n/locales"
 import type { RouteId } from "../lib/routes"
 import type { Site } from "../content/schemas"
-import { buildPersonJsonLd, getSeoUrls, serializeJsonLd } from "../lib/seo"
-import { publicMediaUrl } from "../lib/urls"
+import { buildPersonJsonLd, buildWebsiteJsonLd, getSeoUrls, serializeJsonLd } from "../lib/seo"
+import { getCanonicalUrl, publicMediaUrl } from "../lib/urls"
 
 type Props = {
   readonly routeId: RouteId
@@ -11,12 +11,19 @@ type Props = {
   readonly site: Site
   readonly title: string
   readonly description: string
+  readonly structuredData?: object
 }
 
-const { routeId, locale, site, title, description } = Astro.props
+const { routeId, locale, site, title, description, structuredData } = Astro.props
 const origin = Astro.site?.toString() ?? Astro.url.origin
 const { canonical, alternates, xDefault } = getSeoUrls({ locale, routeId, siteOrigin: origin })
-const personJsonLd = serializeJsonLd(buildPersonJsonLd({ locale, site }))
+const homeCanonical = getCanonicalUrl("home", locale, { siteOrigin: origin })
+const socialImage = new URL(publicMediaUrl(site.social_image.src), origin).toString()
+const personJsonLd = serializeJsonLd(buildPersonJsonLd({ locale, site, url: homeCanonical, image: socialImage }))
+const websiteJsonLd = serializeJsonLd(buildWebsiteJsonLd({ locale, site, url: homeCanonical }))
+const additionalJsonLd = structuredData === undefined ? undefined : serializeJsonLd(structuredData)
+const alternateLocale = locale === "zh" ? "en_US" : "zh_CN"
+const openGraphType = routeId === "home" || routeId === "about" ? "profile" : "website"
 ---
 
 <title>{title}</title>
@@ -26,9 +33,22 @@ const personJsonLd = serializeJsonLd(buildPersonJsonLd({ locale, site }))
 <link rel="alternate" hreflang="en" href={alternates.en} />
 <link rel="alternate" hreflang="x-default" href={xDefault} />
 <link rel="icon" type="image/svg+xml" href={publicMediaUrl(site.favicon)} />
-<meta property="og:type" content="profile" />
+<meta property="og:type" content={openGraphType} />
+<meta property="og:site_name" content={site.alternate_name} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:locale" content={locale === "zh" ? "zh_CN" : "en_US"} />
+<meta property="og:locale:alternate" content={alternateLocale} />
 <meta property="og:url" content={canonical} />
+<meta property="og:image" content={socialImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={site.social_image.alt[locale]} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={socialImage} />
+<meta name="twitter:image:alt" content={site.social_image.alt[locale]} />
 <script type="application/ld+json" set:html={personJsonLd}></script>
+<script type="application/ld+json" set:html={websiteJsonLd}></script>
+{additionalJsonLd !== undefined && <script type="application/ld+json" set:html={additionalJsonLd}></script>}

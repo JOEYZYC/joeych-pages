@@ -17,12 +17,11 @@ const counterpartPath = getCorrespondingLocalePath(routeId, locale)
   href={counterpartPath}
   data-language-counterpart={counterpartPath}
   hreflang={targetLocale}
-  lang={targetLocale}
   title={locale === "zh" ? labels.switchToEnglish : labels.switchToChinese}
   aria-label={locale === "zh" ? labels.switchToEnglishVersion : labels.switchToChineseVersion}
 >
   <Icon name="language" />
-  <span>{labels.label}</span>
+  <span lang={targetLocale === "zh" ? "zh-CN" : "en"}>{labels.label}</span>
   <span class="control-tooltip" data-control-tooltip aria-hidden="true">{locale === "zh" ? labels.switchToEnglish : labels.switchToChinese}</span>
 </a>
 
@@ -36,5 +35,6 @@ const counterpartPath = getCorrespondingLocalePath(routeId, locale)
     }
     synchronizeHref()
     window.addEventListener("hashchange", synchronizeHref)
+    window.addEventListener("profile:urlchange", synchronizeHref)
   }
 </script>
