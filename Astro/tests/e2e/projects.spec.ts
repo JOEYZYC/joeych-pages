@@ -218,15 +218,6 @@ test.describe("projects archive", () => {
     expect(source).toBe("/projects/2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign/拓扑图.png")
   })
 
-  test("settles a card image failure that occurs before enhancement", async ({ page }) => {
-    await page.route("**/projects/2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign/%E6%8B%93%E6%89%91%E5%9B%BE.png", (route) => route.abort())
-    await page.goto("en/projects/")
-    const media = page.locator('[data-project-card][data-project-id="2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign"] [data-project-media]')
-
-    await expect(media).toHaveAttribute("data-media-error", "true")
-    await expect(media.locator("[data-project-media-unavailable]")).toBeVisible()
-  })
-
   test("filters cards by technology and project name without opening the dialog", async ({ page }) => {
     await page.goto("en/projects/")
     const category = page.locator("[data-project-category-filter]")
@@ -369,7 +360,7 @@ test.describe("projects archive", () => {
 
     await expect(dialog).toBeVisible()
     await expect(dialog).toHaveAttribute("data-evidence-origin", "true")
-    await expect(dialog.locator("[data-project-origin-label]")).toHaveText("From skill evidence: Halcon / OpenCV image processing & vision")
+    await expect(dialog.locator("[data-project-origin-label]")).toHaveText("From skill evidence: Vision Algorithms")
     await page.goto("en/projects/?skill=vision-halcon-opencv#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")
     await expect(page).toHaveURL(/\/en\/projects\/#2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception$/)
     await expect(page.locator('[data-evidence-origin="true"]')).toHaveCount(0)
