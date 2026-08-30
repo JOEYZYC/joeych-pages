@@ -6,8 +6,10 @@ import { VIEWPORTS } from "./support/site-matrix"
 const projectIds = [
   "2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform",
   "2026-Project-DesignOfAGrapheneBasedTerahertzLinearToCircularPolarizationConversionMetasurface",
+  "2026-Project-ResumeAchievementsArchive",
   "2025-Paper-DesignOfADualBandPolarizationConverterBasedOnAChiralMetasurface",
   "2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite",
+  "2025-Paper-DualBroadbandFlexibleMetasurfaceBasedOnTheStaggeredTriangularCheckerboardLayoutForRCSReduction",
   "2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign",
   "2024-Competition-DualLightFusionSmartThermalImager",
   "2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception",
@@ -66,7 +68,7 @@ test.describe("projects archive", () => {
       expect(await visibleCardIds(page)).toEqual(projectIds)
       await expect(page.locator("[data-project-records]")).toBeHidden()
       await expect(cards.locator('[data-project-media-kind="real"]')).toHaveCount(18)
-      await expect(cards.locator('[data-project-media-kind="unavailable"]')).toHaveCount(0)
+      await expect(cards.locator('[data-project-media-kind="unavailable"]')).toHaveCount(2)
       for (const [id, source] of addedProjectImages) {
         await expect(page.locator(`[data-project-card][data-project-id="${id}"] [data-project-media]`)).toHaveAttribute("data-project-media-source", source)
       }
@@ -161,7 +163,7 @@ test.describe("projects archive", () => {
     const dialog = page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')
 
     await expect(dialog).toBeVisible()
-    await expect(dialog.locator('[data-project-outcome-id="resgatnet"]')).toContainText("IEEE Access · 3rd author of 6")
+    await expect(dialog.locator('[data-project-outcome-id="resgatnet"]')).toContainText("IEEE Access · 2nd author of 6")
     await expect(dialog.locator("[data-project-figure-select]")).toHaveCount(1)
     await expect(dialog.locator("[data-project-figure-select]")).toHaveAttribute("aria-pressed", "true")
     await expect(dialog.locator("[data-project-media-caption]")).toHaveCount(0)
@@ -175,7 +177,7 @@ test.describe("projects archive", () => {
     const card = page.locator(`[data-project-card][data-project-id="${publicationId}"]`)
 
     await expect(page.locator('[data-project-card][data-project-id="publication-resgatnet"]')).toHaveCount(0)
-    await expect(card).toContainText("Diamond and Related Materials, 3rd author of 9")
+    await expect(card).toContainText("Diamond and Related Materials, 3rd author of 8")
     await card.click()
 
     const dialog = page.locator(`[data-project-dialog][data-project-id="${publicationId}"]`)

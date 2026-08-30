@@ -59,20 +59,18 @@ awards:
     year: 2024
     featured: false
     title:
-      zh: 全国大学生嵌入式芯片与系统设计竞赛（芯片应用赛道）
-      en: National Collegiate Embedded Chip and System Design Contest (Chip
-        Application Track)
+      zh: 全国大学生嵌入式芯片与系统设计竞赛（ST 赛道）
+      en: National Collegiate Embedded Chip and System Design Contest (ST Track)
     prizes:
       - level: regional
-        zh: 东部赛区 三等奖
-        en: Eastern Division Third Prize
+        zh: 江苏省 三等奖
+        en: Jiangsu Third Prize
     tags:
       - embedded
     links: []
     certificates:
       - src: 24嵌赛省三.png
-        zh: 全国大学生嵌入式芯片与系统设计竞赛芯片应用赛道东部赛区三等奖
-        en: Embedded Chip and System Design Contest, Chip Application Track — Eastern
-          Division Third Prize
+        zh: 全国大学生嵌入式芯片与系统设计竞赛 ST 赛道江苏省三等奖
+        en: Embedded Chip and System Design Contest, ST Track — Jiangsu Third Prize
 publications: []
 patents: []

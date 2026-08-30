@@ -88,9 +88,9 @@ test.describe("formal site shell", () => {
     await expect(page.locator("[data-noscript-header-fallback]")).toBeVisible()
     await expect(page.locator("[data-noscript-header-routes] a")).toHaveCount(4)
     await expect(page.locator("[data-noscript-language-counterpart]")).toHaveAttribute("href", `${basePath}/`)
-    await expect(page.locator("[data-noscript-contact-links] a")).toHaveCount(4)
+    await expect(page.locator("[data-noscript-contact-links] a")).toHaveCount(5)
     for (const link of await page.locator("[data-noscript-contact-links] a").all()) {
-      await expect(link).toHaveAttribute("href", /^(mailto:|https:)/)
+      await expect(link).toHaveAttribute("href", /^(mailto:|tel:|https:)/)
     }
     await expect(page.locator("#primary-navigation")).toBeHidden()
     await expect(page.locator("[data-theme-toggle]")).toBeHidden()

@@ -1,135 +1,192 @@
-.tech-stack-ledger {
-  margin-block-start: var(--space-12);
+.capability-tree {
+  display: grid;
+  margin-block: var(--space-8) var(--space-12);
 }
 
-.skill-group {
-  border-block-start: 1px solid var(--color-border);
-  padding-block: var(--space-10);
-}
-
-.skill-group .section-title {
-  margin-block-end: var(--space-6);
-}
-
-.skill-group-heading,
-.skill-evidence-type {
-  align-items: center;
-  display: inline-flex;
-  gap: var(--space-2);
-}
-
-.skill-group-heading svg {
-  color: var(--color-accent);
-  flex: 0 0 auto;
-  inline-size: 0.875em;
-}
-
-.skill-tag {
-  border-block-end: 1px solid var(--color-border);
-  padding-block: var(--space-5);
-}
-
-.skill-tag h3,
-.skill-evidence h4,
-.skill-evidence ul,
-.skill-components {
+.capability-tree-label,
+.capability-tree-root,
+.capability-tree-branch-node,
+.capability-tree-branches,
+.capability-tree-leaves {
   margin: 0;
 }
 
-.skill-tag h3 {
-  font-family: var(--font-display);
-  font-size: var(--type-h3);
-  line-height: 1.28;
-  word-break: keep-all;
-}
-
-.intro > p:not(.eyebrow),
-.skill-evidence-type {
-  word-break: keep-all;
-}
-
-.skill-components {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-3);
-  list-style: none;
-  padding: var(--space-3) 0 0;
-}
-
-.skill-components code,
-.skill-evidence-supports {
-  overflow-wrap: anywhere;
-}
-
-.skill-components code {
+.capability-tree-label {
   color: var(--color-text-muted);
   font-family: var(--font-mono);
-  font-size: var(--type-small);
-}
-
-.skill-evidence {
-  margin-block-start: var(--space-5);
-}
-
-.skill-evidence h4 {
-  color: var(--color-text-muted);
   font-size: var(--type-overline);
   letter-spacing: 0.1em;
+  margin-block-end: var(--space-6);
+  text-align: center;
   text-transform: uppercase;
 }
 
-.skill-evidence ul {
+.capability-tree-branches,
+.capability-tree-leaves {
   list-style: none;
-  padding: var(--space-2) 0 0;
+  padding: 0;
 }
 
-.skill-evidence-row {
-  align-items: baseline;
-  border-block-start: 1px solid var(--color-border);
+.capability-tree-branches {
   display: grid;
-  gap: var(--space-2) var(--space-4);
-  grid-template-columns: minmax(0, 1fr) minmax(10rem, 16rem);
-  padding-block: var(--space-2);
+  gap: var(--space-8);
+  position: relative;
 }
 
-.skill-evidence-reference {
+.capability-tree-branches::after {
+  border-inline-start: 1px solid var(--color-border-strong);
+  content: "";
+  inset-block: var(--space-6) 0;
+  inset-inline-start: 50%;
+  position: absolute;
+}
+
+.capability-tree-subtree {
+  position: relative;
+  z-index: 1;
+}
+
+.capability-tree-subtree section {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-5);
+}
+
+.capability-tree-leaves {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.capability-tree-leaves > li {
+  position: relative;
+}
+
+.capability-tree-leaf {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
   min-inline-size: 0;
+  padding: var(--space-5);
+  position: relative;
+  z-index: 1;
 }
 
-.skill-evidence-type {
+.capability-tree-leaf h2 {
+  font-family: var(--font-display);
+  font-size: var(--type-h3);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.capability-tree-leaf p {
   color: var(--color-text-muted);
-  font-size: var(--type-meta);
-  font-weight: 650;
+  margin: var(--space-3) 0 0;
 }
 
-.skill-evidence-type svg {
-  color: var(--color-accent);
-  flex: 0 0 auto;
-  inline-size: 0.875em;
+.capability-tree-branch-node,
+.capability-tree-root {
+  border-radius: var(--radius-control);
+  font-family: var(--font-display);
+  font-weight: 700;
+  justify-self: center;
+  padding: var(--space-3) var(--space-5);
+  position: relative;
+  text-align: center;
 }
 
-.skill-evidence-level {
-  color: var(--color-text-muted);
-  font-size: var(--type-small);
-  margin-block-start: var(--space-1);
+.capability-tree-branch-node {
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border-strong);
+  font-size: var(--type-h3);
 }
 
-.skill-evidence-row[data-skill-evidence="credential"] .skill-evidence-type,
-.skill-evidence-row[data-evidence-level="working"] .skill-evidence-level,
-.skill-evidence-row[data-evidence-level="exposure"] .skill-evidence-level {
-  color: var(--color-text);
+.capability-tree-branch-node::before {
+  border-inline-start: 1px solid var(--color-border-strong);
+  block-size: var(--space-5);
+  content: "";
+  inset-block-end: 100%;
+  inset-inline-start: 50%;
+  position: absolute;
 }
 
-.skill-evidence-supports {
-  color: var(--color-text-muted);
-  font-family: var(--font-mono);
-  font-size: var(--type-meta);
+.capability-tree-junction {
+  border-inline-start: 1px solid var(--color-border-strong);
+  block-size: var(--space-8);
+  justify-self: center;
 }
 
-@media (max-width: 47.99rem) {
-  .skill-evidence-row {
-    grid-template-columns: minmax(0, 1fr);
+.capability-tree-root {
+  background: var(--color-accent);
+  color: var(--color-accent-on);
+  font-size: var(--type-h3);
+  max-inline-size: 24rem;
+}
+
+@media (min-width: 48rem) {
+  .capability-tree {
+    margin-block-start: var(--space-10);
+  }
+
+  .capability-tree-branches {
+    align-items: stretch;
+    gap: var(--space-5);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .capability-tree-branches::after {
+    display: none;
+  }
+
+  .capability-tree-subtree section {
+    grid-template-rows: 1fr auto;
+    block-size: 100%;
+  }
+
+  .capability-tree-leaves {
+    border-inline-start: 0;
+    margin: 0;
+    padding: 0 0 var(--space-6);
+    position: relative;
+  }
+
+  .capability-tree-leaves::after {
+    border-inline-start: 1px solid var(--color-border-strong);
+    content: "";
+    inset-block: var(--space-6) 0;
+    inset-inline-start: 50%;
+    position: absolute;
+  }
+
+  .capability-tree-leaf {
+    block-size: 100%;
+    padding: var(--space-5);
+  }
+
+  .capability-tree-branch-node::before {
+    block-size: var(--space-6);
+  }
+
+  .capability-tree-junction {
+    block-size: var(--space-10);
+    inline-size: calc(100% - (100% / 3));
+    position: relative;
+  }
+
+  .capability-tree-junction::before {
+    border-block-start: 1px solid var(--color-border-strong);
+    content: "";
+    inset-block-start: 0;
+    inset-inline: 0;
+    position: absolute;
+  }
+}
+
+@media (min-width: 64rem) {
+  .capability-tree-branches {
+    gap: var(--space-6);
+  }
+
+  .capability-tree-leaf {
+    padding: var(--space-6);
   }
 }

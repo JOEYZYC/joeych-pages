@@ -1,0 +1,145 @@
+id: 2026-Project-ResumeAchievementsArchive
+year: 2026
+featured: false
+image: null
+title:
+  zh: 简历成果补充档案
+  en: Resume Achievements Supplement
+claim:
+  zh: 补充收录 4 项竞赛获奖与 4 项发明专利申请
+  en: Four additional competition honors and four invention patent applications
+category:
+  zh: 成果档案
+  en: Achievement Archive
+summary:
+  zh: 根据个人简历补充收录尚未关联到独立项目页面的竞赛获奖与发明专利申请；具体项目材料、专利申请号与申请年份待后续补充。
+  en: This archive records competition honors and invention patent applications listed on the resume but not yet linked to standalone project pages. Project evidence, patent application numbers, and filing years remain to be added.
+contribution:
+  zh: 请补充
+  en: To be completed
+tags:
+  - zh: 竞赛获奖
+    en: Competition Honors
+  - zh: 发明专利
+    en: Invention Patents
+  - zh: 集成电路
+    en: Integrated Circuits
+  - zh: 电子设计
+    en: Electronic Design
+  - zh: 嵌入式人工智能
+    en: Embedded AI
+  - zh: 太赫兹
+    en: Terahertz
+figures: []
+links: []
+awards:
+  - id: ic-innovation-vocational-national-third-2025
+    year: 2025
+    featured: true
+    title:
+      zh: 全国大学生集成电路创新创业大赛（职业技能赛项）
+      en: National College Student IC Innovation and Entrepreneurship Competition (Vocational Skills Track)
+    prizes:
+      - level: national
+        zh: 全国三等奖
+        en: National Third Prize
+    tags:
+      - integrated-circuits
+    links: []
+    certificates: []
+  - id: ti-jiangsu-first-2023
+    year: 2023
+    featured: false
+    title:
+      zh: 全国大学生电子设计竞赛（TI 杯）
+      en: National Undergraduate Electronic Design Contest (TI Cup)
+    prizes:
+      - level: provincial
+        zh: 江苏省一等奖
+        en: Jiangsu First Prize
+    tags:
+      - electronic-design
+    links: []
+    certificates: []
+  - id: yudian-east-third-2023
+    year: 2023
+    featured: false
+    title:
+      zh: 全国大学生集成电路创新创业大赛（“裕典”杯）
+      en: National College Student IC Innovation and Entrepreneurship Competition (Yudian Cup)
+    prizes:
+      - level: regional
+        zh: 华东赛区三等奖
+        en: East China Division Third Prize
+    tags:
+      - integrated-circuits
+    links: []
+    certificates: []
+  - id: bochuang-national-third-2023
+    year: 2023
+    featured: false
+    title:
+      zh: 全国大学生嵌入式人工智能设计大赛（“博创”杯）
+      en: National College Student Embedded AI Design Competition (Bochuang Cup)
+    prizes:
+      - level: national
+        zh: 全国三等奖
+        en: National Third Prize
+    tags:
+      - embedded-ai
+    links: []
+    certificates: []
+publications: []
+patents:
+  - id: dictionary-dynamic-learning-target-parameter-estimation
+    featured: true
+    title:
+      zh: 基于字典动态学习的目标参数估计方法、系统及存储介质
+      en: Target parameter estimation method, system, and storage medium based on dynamic dictionary learning
+    authors:
+      zh: 申请人位次 2/6
+      en: 2nd applicant of 6
+    tags:
+      - parameter-estimation
+      - dynamic-dictionary-learning
+    links: []
+    certificates: []
+  - id: vo2-photoconductive-silicon-tunable-terahertz-absorber
+    featured: true
+    title:
+      zh: 一种基于二氧化钒和光导硅的动态可调太赫兹吸波器
+      en: Dynamically tunable terahertz absorber based on vanadium dioxide and photoconductive silicon
+    authors:
+      zh: 申请人位次 5/7
+      en: 5th applicant of 7
+    tags:
+      - terahertz
+      - metasurface-absorber
+    links: []
+    certificates: []
+  - id: vo2-tunable-broadband-terahertz-absorber
+    featured: false
+    title:
+      zh: 一种基于二氧化钒的太赫兹可调控宽带吸波器
+      en: Tunable broadband terahertz absorber based on vanadium dioxide
+    authors:
+      zh: 申请人位次 8/10
+      en: 8th applicant of 10
+    tags:
+      - terahertz
+      - vanadium-dioxide
+    links: []
+    certificates: []
+  - id: terahertz-switchable-bifunctional-chiral-metasurface
+    featured: false
+    title:
+      zh: 一种太赫兹可控定量切换双功能手性超构表面
+      en: Controllably and quantitatively switchable bifunctional terahertz chiral metasurface
+    authors:
+      zh: 申请人位次 9/11
+      en: 9th applicant of 11
+    tags:
+      - terahertz
+      - chiral-metasurface
+    links: []
+    certificates: []

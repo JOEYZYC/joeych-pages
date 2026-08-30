@@ -6,23 +6,122 @@ page:
     zh: 技术栈
     en: Tech Stack
   summary:
-    zh: 按技能领域查看对应组件、能力语境与项目证据。
-    en: Browse technical capabilities by domain with their components, context, and
-      project evidence.
+    zh: 通过自下而上的能力树展示研究分析、嵌入式系统与协作沟通能力。
+    en: A bottom-up capability tree spanning research, embedded systems, and collaboration.
+map:
+  title:
+    zh: 技术能力树
+    en: Technical Capability Tree
+  center:
+    zh: 电子信息工程
+    en: Electronic & Information Engineering
 skills:
-  - id: hardware
+  - id: research-analysis
     title:
-      zh: 硬件
-      en: Hardware
+      zh: 研究与分析
+      en: Research & Analysis
+    tags:
+      - id: cst-microwave-antenna
+        zh: 电磁仿真
+        en: Electromagnetic Simulation
+        description:
+          zh: 聚焦微波与太赫兹超表面，借助 CST 开展结构建模、参数优化与机理分析。
+          en: Focused on microwave and terahertz metasurfaces, using CST for structural modeling, parameter optimization, and mechanism analysis.
+        components:
+          - id: cst-studio-suite
+          - id: microwave-metasurfaces
+          - id: terahertz-metasurfaces
+          - id: structure-modeling
+          - id: parameter-optimization
+          - id: mechanism-analysis
+        evidence:
+          - type: project
+            project_id: 2024-Project-PerformanceStudyOfARigidLinearCircularDualPolarizationConversionMetasurface
+            scope: project-record
+            supports:
+              - cst-studio-suite
+              - microwave-metasurfaces
+          - type: project
+            project_id: 2026-Project-DesignOfAGrapheneBasedTerahertzLinearToCircularPolarizationConversionMetasurface
+            scope: project-record
+            supports:
+              - terahertz-metasurfaces
+              - structure-modeling
+              - parameter-optimization
+              - mechanism-analysis
+      - id: vision-halcon-opencv
+        zh: 视觉算法
+        en: Vision Algorithms
+        description:
+          zh: 熟悉 Python、OpenCV 及深度学习，具备图像处理、模式识别与目标检测经验。
+          en: Proficient with Python, OpenCV, and deep learning, with experience in image processing, pattern recognition, and object detection.
+        components:
+          - id: python
+          - id: opencv
+          - id: deep-learning
+          - id: image-processing
+          - id: pattern-recognition
+          - id: object-detection
+        evidence:
+          - type: project
+            project_id: 2024-Competition-IntelligentReconnaissanceSystem
+            scope: project-record
+            supports:
+              - python
+              - opencv
+              - image-processing
+              - object-detection
+          - type: project
+            project_id: 2023-Competition-SmartHarvestingRobot
+            scope: project-record
+            supports:
+              - pattern-recognition
+          - type: general-ability
+            verification: self-described
+            level: working
+            supports:
+              - deep-learning
+      - id: matlab-simulink
+        zh: 建模分析
+        en: Modeling & Analysis
+        description:
+          zh: 借助 MATLAB/Simulink 进行系统建模、信号处理、算法验证与数据分析。
+          en: Uses MATLAB and Simulink for system modeling, signal processing, algorithm validation, and data analysis.
+        components:
+          - id: matlab
+          - id: simulink
+          - id: system-modeling
+          - id: signal-processing
+          - id: algorithm-validation
+          - id: data-analysis
+        evidence:
+          - type: general-ability
+            verification: self-described
+            level: working
+            supports:
+              - matlab
+              - simulink
+              - system-modeling
+              - signal-processing
+              - algorithm-validation
+              - data-analysis
+  - id: embedded-systems
+    title:
+      zh: 嵌入式系统
+      en: Embedded Systems
     tags:
       - id: hardware-design-pcb
-        zh: 电子电路设计 · 多层 PCB 布板 · 焊接调试
-        en: Circuit design · multilayer PCB layout · soldering & debugging
+        zh: 硬件设计
+        en: Hardware Design
+        description:
+          zh: 能够完成电子电路与 PCB 设计，并具备焊接、板级调试及传感器集成经验。
+          en: Capable of electronic circuit and PCB design, with experience in soldering, board-level debugging, and sensor integration.
         components:
           - id: circuit-design
-          - id: pcb-layout
-          - id: multilayer-pcb-layout
-          - id: soldering-debugging
+          - id: pcb-design
+          - id: soldering
+          - id: board-level-debugging
+          - id: sensor-integration
         evidence:
           - type: project
             project_id: 2024-Competition-SinglePhasePowerAnalyzer
@@ -33,218 +132,140 @@ skills:
             project_id: 2024-Competition-SmartCarModelGroupTeamDevelopmentArchive
             scope: project-record
             supports:
-              - pcb-layout
+              - pcb-design
+              - board-level-debugging
+              - sensor-integration
           - type: general-ability
             verification: self-described
             level: working
             supports:
-              - multilayer-pcb-layout
-              - soldering-debugging
-      - id: hardware-platforms
-        zh: ST / Renesas / TI / Infineon
-        en: ST / Renesas / TI / Infineon
-        components:
-          - id: st
-          - id: renesas
-          - id: ti
-          - id: infineon
-        evidence:
-          - type: project
-            project_id: 2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform
-            scope: project-record
-            supports:
-              - st
-          - type: project
-            project_id: 2024-Competition-DualLightFusionSmartThermalImager
-            scope: project-record
-            supports:
-              - st
-          - type: project
-            project_id: 2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign
-            scope: project-record
-            supports:
-              - renesas
-          - type: project
-            project_id: 2024-Competition-IntelligentConnectedTrafficSignRecognitionSystemBasedOnLightweightTensorFlow
-            scope: project-record
-            supports:
-              - renesas
-          - type: project
-            project_id: 2024-Competition-SinglePhasePowerAnalyzer
-            scope: project-record
-            supports:
-              - ti
-          - type: project
-            project_id: 2024-Competition-SmartCarModelGroupTeamDevelopmentArchive
-            scope: project-record
-            supports:
-              - infineon
-      - id: uav-pilot-level-5
-        zh: 无人机驾驶员 五级/初级工
-        en: UAV Pilot
-        components:
-          - id: uav-pilot-level-5
-        evidence:
-          - type: credential
-            verification: public-profile-claim
-            supports:
-              - uav-pilot-level-5
-      - id: electrician-senior
-        zh: 电工 三级/高级工
-        en: Electrician
-        components:
-          - id: electrician-senior
-        evidence:
-          - type: credential
-            verification: public-profile-claim
-            supports:
-              - electrician-senior
-  - id: software
-    title:
-      zh: 软件
-      en: Software
-    tags:
-      - id: languages-c-csharp-python
-        zh: C / C# / Python
-        en: C / C# / Python
+              - soldering
+      - id: mcu-rtos-development
+        zh: MCU 编程
+        en: MCU Programming
+        description:
+          zh: 以 C 语言和 RTOS 为主，可实现实时任务、外设驱动及嵌入式控制程序。
+          en: Primarily uses C and RTOS to implement real-time tasks, peripheral drivers, and embedded control software.
         components:
           - id: c
-          - id: csharp
-          - id: python
+          - id: rtos
+          - id: real-time-tasks
+          - id: peripheral-drivers
+          - id: embedded-control
         evidence:
           - type: project
             project_id: 2024-Competition-SmartCarModelGroupTeamDevelopmentArchive
             scope: project-record
             supports:
               - c
-          - type: project
-            project_id: 2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign
-            scope: project-record
+              - embedded-control
+          - type: general-ability
+            verification: self-described
+            level: working
             supports:
-              - csharp
-          - type: project
-            project_id: 2024-Competition-IntelligentReconnaissanceSystem
-            scope: project-record
-            supports:
-              - python
-      - id: linux-docker-deployment
-        zh: Linux & Docker 容器部署
-        en: Linux & Docker deployment
+              - rtos
+              - real-time-tasks
+              - peripheral-drivers
+      - id: mpu-applications
+        zh: MPU 应用
+        en: MPU Applications
+        description:
+          zh: 面向 Linux 平台，相关实践涵盖应用编程、设备通信及软硬件系统集成。
+          en: Works with Linux platforms across application programming, device communication, and hardware-software system integration.
         components:
           - id: linux
-          - id: docker-deployment
+          - id: application-programming
+          - id: device-communication
+          - id: hardware-software-integration
         evidence:
           - type: general-ability
             verification: self-described
             level: working
             supports:
               - linux
-              - docker-deployment
+              - application-programming
+              - device-communication
+              - hardware-software-integration
+      - id: hmi-design
+        zh: HMI 设计
+        en: HMI Design
+        description:
+          zh: 采用 C#、Qt 及 Web 技术，可设计设备监测、数据可视化与双语个人网站。
+          en: Uses C#, Qt, and web technologies to design device monitoring, data visualization, and a bilingual personal website.
+        components:
+          - id: csharp
+          - id: qt
+          - id: web
+          - id: device-monitoring
+          - id: data-visualization
+          - id: bilingual-website
+        evidence:
+          - type: project
+            project_id: 2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign
+            scope: project-record
+            supports:
+              - csharp
+              - device-monitoring
+              - data-visualization
+          - type: project
+            project_id: 2025-Project-ZhangYichengPersonalAcademicPortfolioWebsite
+            scope: project-record
+            supports:
+              - web
+              - bilingual-website
+          - type: general-ability
+            verification: self-described
+            level: working
+            supports:
+              - qt
+  - id: collaboration-communication
+    title:
+      zh: 协作与沟通
+      en: Collaboration & Communication
+    tags:
       - id: git-team-collaboration
-        zh: Git 版本管理与团队协作
-        en: Git version control & team collaboration
+        zh: 团队协作
+        en: Team Collaboration
+        description:
+          zh: 通过 Git/GitHub 管理项目版本，具备跨学科协作、任务分工与系统联调经验。
+          en: Uses Git and GitHub for version management, with experience in interdisciplinary collaboration, task allocation, and system integration testing.
         components:
           - id: git
-          - id: team-collaboration
+          - id: github
+          - id: interdisciplinary-collaboration
+          - id: task-allocation
+          - id: system-integration-testing
         evidence:
+          - type: project
+            project_id: 2024-Competition-SmartCarModelGroupTeamDevelopmentArchive
+            scope: project-record
+            supports:
+              - interdisciplinary-collaboration
+              - task-allocation
+              - system-integration-testing
           - type: general-ability
             verification: self-described
             level: working
             supports:
               - git
-          - type: project
-            project_id: 2024-Competition-SmartCarModelGroupTeamDevelopmentArchive
-            scope: project-record
-            supports:
-              - team-collaboration
-  - id: algorithms-simulation
-    title:
-      zh: 算法与仿真
-      en: Algorithms & Simulation
-    tags:
-      - id: vision-halcon-opencv
-        zh: Halcon / OpenCV 图像处理与视觉算法
-        en: Halcon / OpenCV image processing & vision
+              - github
+      - id: international-technical-exchange
+        zh: 国际交流
+        en: International Exchange
+        description:
+          zh: 具有外企实习和英国院校来访接待经历，可进行英文文献阅读与跨文化交流。
+          en: Has experience in an international-company internship and hosting a visiting UK institution, with the ability to read English literature and communicate across cultures.
         components:
-          - id: halcon
-          - id: opencv
-        evidence:
-          - type: general-ability
-            verification: self-described
-            level: exposure
-            supports:
-              - halcon
-          - type: project
-            project_id: 2023-Competition-IntelligentReconnaissanceCompetitionProject
-            scope: project-record
-            supports:
-              - opencv
-          - type: project
-            project_id: 2024-Competition-IntelligentReconnaissanceSystem
-            scope: project-record
-            supports:
-              - opencv
-          - type: project
-            project_id: 2023-Competition-SmartHarvestingRobot
-            scope: project-record
-            supports:
-              - opencv
-      - id: matlab-simulink
-        zh: MATLAB / Simulink 建模仿真
-        en: MATLAB / Simulink modeling & simulation
-        components:
-          - id: matlab
-          - id: simulink
+          - id: international-company-internship
+          - id: uk-institution-reception
+          - id: english-literature-reading
+          - id: cross-cultural-communication
         evidence:
           - type: general-ability
             verification: self-described
             level: working
             supports:
-              - matlab
-              - simulink
-      - id: cst-microwave-antenna
-        zh: CST Studio Suite 微波仿真与天线设计
-        en: CST Studio Suite microwave simulation & antenna design
-        components:
-          - id: cst-studio-suite
-          - id: microwave-simulation
-          - id: antenna-design
-        evidence:
-          - type: project
-            project_id: 2024-Project-PerformanceStudyOfARigidLinearCircularDualPolarizationConversionMetasurface
-            scope: project-record
-            supports:
-              - cst-studio-suite
-              - microwave-simulation
-          - type: general-ability
-            verification: self-described
-            level: working
-            supports:
-              - antenna-design
-  - id: general
-    title:
-      zh: 通用
-      en: General
-    tags:
-      - id: ai-assisted-development
-        zh: 善用 AI 工具提升开发效率
-        en: AI-assisted development
-        components:
-          - id: ai-assisted-development
-        evidence:
-          - type: general-ability
-            verification: self-described
-            level: working
-            supports:
-              - ai-assisted-development
-      - id: english-technical-reading
-        zh: 良好英语能力，能阅读英文技术文档
-        en: Strong English
-        components:
-          - id: english-technical-reading
-        evidence:
-          - type: general-ability
-            verification: self-described
-            level: working
-            supports:
-              - english-technical-reading
+              - international-company-internship
+              - uk-institution-reception
+              - english-literature-reading
+              - cross-cultural-communication

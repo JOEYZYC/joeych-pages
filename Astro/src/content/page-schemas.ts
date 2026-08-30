@@ -56,6 +56,7 @@ const skillTagSchema = z
     id: recordIdSchema,
     zh: textSchema,
     en: textSchema,
+    description: localizedSchema,
     components: z.array(z.object({ id: componentIdSchema }).strict().readonly()).min(1).readonly(),
     evidence: z.array(skillEvidenceSchema).min(1).readonly(),
   })
@@ -99,7 +100,7 @@ const educationSchema = z
   .refine(hasUniqueIds, "duplicate education ID")
   .readonly()
 
-const campusExperienceSchema = z
+const experienceSchema = z
   .array(z.object({
     id: recordIdSchema,
     period: textSchema,
@@ -107,7 +108,7 @@ const campusExperienceSchema = z
     role: localizedSchema,
     details: z.array(localizedSchema).readonly(),
   }).strict().readonly())
-  .refine(hasUniqueIds, "duplicate campus experience ID")
+  .refine(hasUniqueIds, "duplicate experience ID")
   .readonly()
 
 export const siteSchema = z
@@ -123,6 +124,7 @@ export const siteSchema = z
     }).strict().readonly(),
     contact: z.object({
       email: z.email(),
+      phone: textSchema,
       github: httpsUrlSchema,
       scholar: httpsUrlSchema,
       orcid: httpsUrlSchema,
@@ -155,7 +157,8 @@ export const aboutSchema = z
     interests: z.array(localizedSchema).min(1).readonly(),
     goal: localizedSchema,
     education: educationSchema,
-    campus_experience: campusExperienceSchema,
+    internship_experience: experienceSchema,
+    campus_experience: experienceSchema,
   })
   .strict()
   .readonly()
@@ -165,6 +168,10 @@ export const projectPageSchema = z.object({ page: pageMetaSchema }).strict().rea
 export const techStackSchema = z
   .object({
     page: pageMetaSchema,
+    map: z.object({
+      title: localizedSchema,
+      center: localizedSchema,
+    }).strict().readonly(),
     skills: z.array(z.object({
       id: recordIdSchema,
       title: localizedSchema,

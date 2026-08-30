@@ -1,26 +1,34 @@
 ---
-import type { Project } from "../../content/schemas"
 import type { Locale } from "../../i18n/locales"
-import { UI } from "../../i18n/ui"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import { getProfileData } from "../../lib/profile-data"
 import "../../styles/skills.css"
-import EditorialIntro from "../EditorialIntro.astro"
-import SkillGroup from "../SkillGroup.astro"
 
 type Props = { readonly locale: Locale }
 const { locale } = Astro.props
 const data = await getProfileData()
-const projectTitles: ReadonlyMap<Project["id"], string> = new Map(
-  data.projects.map((project) => [project.id, project.title[locale]]),
-)
 ---
 
 <BaseLayout locale={locale} page={data.techStack.page} site={data.site} routeId="tech-stack">
-  <EditorialIntro overline={data.techStack.page.overline[locale]} title={data.techStack.page.title[locale]} summary={data.techStack.page.summary[locale]} />
-  <div class="tech-stack-ledger" aria-label={UI[locale].sections["tech-stack"].skills}>
-    {data.techStack.skills.map((group) => (
-      <SkillGroup group={group} locale={locale} projectTitles={projectTitles} />
-    ))}
-  </div>
+  <section class="capability-tree" aria-labelledby="capability-tree-title" data-capability-tree>
+    <h1 id="capability-tree-title" class="visually-hidden">{data.techStack.page.title[locale]}</h1>
+    <p class="capability-tree-label">{data.techStack.map.title[locale]}</p>
+    <ul class="capability-tree-branches">
+      {data.techStack.skills.map((group) => <li class="capability-tree-subtree" data-capability-branch={group.id}>
+        <section aria-label={group.title[locale]}>
+          <ul class="capability-tree-leaves">
+            {group.tags.map((tag) => <li>
+              <article class="capability-tree-leaf" data-capability-leaf={tag.id}>
+                <h2>{tag[locale]}</h2>
+                <p>{tag.description[locale]}</p>
+              </article>
+            </li>)}
+          </ul>
+          <p class="capability-tree-branch-node">{group.title[locale]}</p>
+        </section>
+      </li>)}
+    </ul>
+    <span class="capability-tree-junction" aria-hidden="true"></span>
+    <p class="capability-tree-root">{data.techStack.map.center[locale]}</p>
+  </section>
 </BaseLayout>

@@ -59,6 +59,7 @@ type UiLabels = {
     readonly close: string
     readonly closeButton: string
     readonly email: string
+    readonly phone: string
     readonly github: string
     readonly scholar: string
     readonly orcid: string
@@ -85,15 +86,6 @@ type UiLabels = {
     readonly related: string
   }
   readonly sections: Readonly<Record<SectionId, Readonly<Record<string, string>>>>
-  readonly evidence: {
-    readonly project: string
-    readonly credential: string
-    readonly generalAbility: string
-    readonly levels: {
-      readonly working: string
-      readonly exposure: string
-    }
-  }
 }
 
 export const UI = {
@@ -158,6 +150,7 @@ export const UI = {
       close: "关闭联系方式",
       closeButton: "关闭",
       email: "电子邮箱",
+      phone: "电话",
       github: "GitHub",
       scholar: "Google Scholar",
       orcid: "ORCID",
@@ -191,6 +184,7 @@ export const UI = {
         interests: "兴趣方向",
         goal: "个人目标",
         education: "教育经历",
+        internship: "实习经历",
         campus: "校园经历",
       },
       awards: {
@@ -199,13 +193,7 @@ export const UI = {
         patents: "发明专利",
       },
       projects: { contribution: "个人贡献", links: "相关链接", figures: "项目图示" },
-      "tech-stack": { skills: "技能证据", evidence: "证据依据" },
-    },
-    evidence: {
-      project: "项目证据",
-      credential: "公开资料凭证",
-      generalAbility: "自述能力",
-      levels: { working: "工作使用", exposure: "接触了解" },
+      "tech-stack": {},
     },
   },
   en: {
@@ -269,6 +257,7 @@ export const UI = {
       close: "Close contact details",
       closeButton: "Close",
       email: "Email",
+      phone: "Phone",
       github: "GitHub",
       scholar: "Google Scholar",
       orcid: "ORCID",
@@ -302,6 +291,7 @@ export const UI = {
         interests: "Interests",
         goal: "Goal",
         education: "Education",
+        internship: "Internship experience",
         campus: "Campus experience",
       },
       awards: {
@@ -310,13 +300,7 @@ export const UI = {
         patents: "Patent applications",
       },
       projects: { contribution: "Contribution", links: "Related links", figures: "Figures" },
-      "tech-stack": { skills: "Skill evidence", evidence: "Evidence" },
-    },
-    evidence: {
-      project: "Project",
-      credential: "Credential",
-      generalAbility: "Self-reported skill",
-      levels: { working: "Working knowledge", exposure: "Exposure" },
+      "tech-stack": {},
     },
   },
 } as const satisfies Readonly<Record<Locale, UiLabels>>

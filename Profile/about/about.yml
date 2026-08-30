@@ -35,12 +35,12 @@ statistics:
     label:
       zh: 综测专业排名
       en: Academic rank
-    value: 5/71
+    value: 4/71
   - id: publications
     label:
       zh: 学术论文
       en: Publications
-    value: 6
+    value: 7
   - id: patents
     label:
       zh: 发明专利
@@ -50,7 +50,7 @@ statistics:
     label:
       zh: 竞赛获奖
       en: Competition records
-    value: 10+
+    value: 12
 interests:
   - zh: 嵌入式系统与智能硬件
     en: Embedded systems and intelligent hardware
@@ -74,8 +74,10 @@ education:
       zh: 电子信息工程 · 工学学士
       en: B.Eng. in Electronic & Information Engineering
     highlights:
-      - zh: 综测专业排名 5/71
-        en: Comprehensive rank 5/71
+      - zh: 平均成绩 84.92/100
+        en: Average score 84.92/100
+      - zh: 综测专业排名 4/71
+        en: Comprehensive rank 4/71
       - zh: 校三好学生 (2022·2023·2024·2025)
         en: '"Three-Good" Merit Student (2022·2023·2024·2025)'
       - zh: 奖学金：校二等 (2022·2023) → 校一等 (2024) → 校特等 (2025)
@@ -87,6 +89,20 @@ education:
         en: May Fourth Youth Medal (2024)
       - zh: 校优秀毕业生
         en: Outstanding Graduate
+internship_experience:
+  - id: karcher-digital-solutions
+    period: 2026-07–2026-08
+    organization:
+      zh: 卡赫清洁技术（苏州）有限公司
+      en: Kärcher Cleaning Technology (Suzhou) Co., Ltd.
+    role:
+      zh: 数字化解决方案实习生
+      en: Digital Solutions Intern
+    details:
+      - zh: 完成需求的技术预研与算法设计。
+        en: Completed technical research and algorithm design for product requirements.
+      - zh: 德国独资企业。
+        en: German wholly owned enterprise.
 campus_experience:
   - id: aeromodelling-club
     period: 2024-06–2025-06

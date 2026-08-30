@@ -39,7 +39,6 @@ export const awardSchema = z
 
 const authoredRecordShape = {
   id: recordIdSchema,
-  year: z.number().int(),
   featured: z.boolean(),
   title: localizedSchema,
   authors: localizedSchema,
@@ -49,10 +48,10 @@ const authoredRecordShape = {
 } as const
 
 export const publicationSchema = z
-  .object({ ...authoredRecordShape, image: localMediaFileSchema.nullable(), venue: localizedSchema })
+  .object({ ...authoredRecordShape, year: z.number().int(), image: localMediaFileSchema.nullable(), venue: localizedSchema })
   .strict()
   .readonly()
-export const patentSchema = z.object(authoredRecordShape).strict().readonly()
+export const patentSchema = z.object({ ...authoredRecordShape, year: z.number().int().optional() }).strict().readonly()
 
 export const projectSchema = z
   .object({

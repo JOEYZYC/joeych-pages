@@ -11,6 +11,7 @@ const labels = UI[locale].contact
 const ids = getDialogIds(id)
 const contacts = [
   { label: labels.email, href: `mailto:${site.contact.email}`, value: site.contact.email },
+  { label: labels.phone, href: `tel:+86${site.contact.phone}`, value: site.contact.phone },
   { label: labels.github, href: site.contact.github, value: site.contact.github },
   { label: labels.scholar, href: site.contact.scholar, value: site.contact.scholar },
   { label: labels.orcid, href: site.contact.orcid, value: site.contact.orcid },
@@ -45,8 +46,8 @@ const contacts = [
           <strong>{contact.label}</strong>
           <a
             href={contact.href}
-            target={contact.href.startsWith("mailto:") ? undefined : "_blank"}
-            rel={contact.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+            target={contact.href.startsWith("http") ? "_blank" : undefined}
+            rel={contact.href.startsWith("http") ? "noopener noreferrer" : undefined}
           >{contact.value}</a>
         </li>
       ))}

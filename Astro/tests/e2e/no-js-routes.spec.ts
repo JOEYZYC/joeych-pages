@@ -58,6 +58,7 @@ test.describe("JavaScript-disabled canonical routes", () => {
         )
         expect(contactHrefs).toEqual([
           expect.stringMatching(/^mailto:/),
+          expect.stringMatching(/^tel:/),
           expect.stringMatching(/^https:/),
           expect.stringMatching(/^https:/),
           expect.stringMatching(/^https:/),

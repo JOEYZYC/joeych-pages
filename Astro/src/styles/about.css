@@ -194,6 +194,10 @@
     grid-column: 1 / -1;
   }
 
+  .about-record--internship {
+    grid-column: 1 / -1;
+  }
+
   .about-record--campus[data-about-position="1"],
   .about-record--campus[data-about-position="4"] {
     grid-column: span 3;

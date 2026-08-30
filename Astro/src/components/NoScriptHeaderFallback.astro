@@ -12,6 +12,7 @@ const counterpart = getCorrespondingLocalePath(routeId, locale)
 const targetLanguage = locale === "zh" ? labels.language.switchToEnglish : labels.language.switchToChinese
 const contacts = [
   { label: labels.contact.email, href: `mailto:${site.contact.email}`, value: site.contact.email },
+  { label: labels.contact.phone, href: `tel:+86${site.contact.phone}`, value: site.contact.phone },
   { label: labels.contact.github, href: site.contact.github, value: site.contact.github },
   { label: labels.contact.scholar, href: site.contact.scholar, value: site.contact.scholar },
   { label: labels.contact.orcid, href: site.contact.orcid, value: site.contact.orcid },

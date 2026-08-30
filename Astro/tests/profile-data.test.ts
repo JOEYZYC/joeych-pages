@@ -36,6 +36,10 @@ describe("Profile content bundles", () => {
 
     expect(awards.map(({ id }) => id)).toEqual([
       "outstanding-thesis-third-2026",
+      "ic-innovation-vocational-national-third-2025",
+      "ti-jiangsu-first-2023",
+      "yudian-east-third-2023",
+      "bochuang-national-third-2023",
       "renesas-east-first-national-third-2024",
       "embedded-chip-third-2024",
       "ti-first-2024",
@@ -45,18 +49,24 @@ describe("Profile content bundles", () => {
       "raicom-jiangsu-third-2023",
     ])
     expect(awards.flatMap(({ certificates }) => certificates)).toHaveLength(10)
-    expect(publications).toHaveLength(6)
+    expect(publications).toHaveLength(7)
     expect(publications.flatMap(({ certificates }) => certificates)).toHaveLength(2)
-    expect(patents).toEqual([])
+    expect(patents.map(({ id }) => id)).toEqual([
+      "dictionary-dynamic-learning-target-parameter-estimation",
+      "vo2-photoconductive-silicon-tunable-terahertz-absorber",
+      "vo2-tunable-broadband-terahertz-absorber",
+      "terahertz-switchable-bifunctional-chiral-metasurface",
+    ])
     expect(projects.find(({ id }) => id === "2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception")?.publications.map(({ id }) => id)).toEqual(["resgatnet"])
-    expect(projects.filter(({ category }) => category.en === "Publication")).toHaveLength(4)
-    expect(about.statistics.map(({ value }) => value)).toEqual(["5/71", 6, 4, "10+"])
+    expect(projects.filter(({ category }) => category.en === "Publication")).toHaveLength(5)
+    expect(about.statistics.map(({ value }) => value)).toEqual(["4/71", 7, 4, 12])
     expect(about.education).toHaveLength(1)
+    expect(about.internship_experience).toHaveLength(1)
     expect(about.campus_experience).toHaveLength(4)
-    expect(techStack.skills).toHaveLength(4)
+    expect(techStack.skills).toHaveLength(3)
   })
 
-  it("uses normalized technologies and microcontroller brands as project tags", async () => {
+  it("uses normalized project tags and the authored capability-map structure", async () => {
     const { projects, techStack } = await loadProfileData()
     const projectTags = new Map<string, string[]>(projects.map((project) => [project.id, project.tags.map((tag) => tag.en)]))
 
@@ -68,15 +78,31 @@ describe("Profile content bundles", () => {
     expect(projectTags.get("2024-Competition-SmartCarModelGroupTeamDevelopmentArchive")).toContain("Infineon")
     expect(projects.every((project) => project.tags.length === 6)).toBe(true)
 
-    const platforms = techStack.skills.flatMap((group) => group.tags).find(({ id }) => id === "hardware-platforms")
-    expect(platforms?.evidence.filter((evidence) => evidence.type === "project")).toHaveLength(6)
+    expect(techStack.skills.map(({ id }) => id)).toEqual([
+      "research-analysis",
+      "embedded-systems",
+      "collaboration-communication",
+    ])
+    const capabilities = techStack.skills.flatMap(({ tags }) => tags)
+    expect(capabilities.map(({ id }) => id)).toEqual([
+      "cst-microwave-antenna",
+      "vision-halcon-opencv",
+      "matlab-simulink",
+      "hardware-design-pcb",
+      "mcu-rtos-development",
+      "mpu-applications",
+      "hmi-design",
+      "git-team-collaboration",
+      "international-technical-exchange",
+    ])
+    expect(capabilities.every(({ description }) => description.zh.length > 0 && description.en.length > 0)).toBe(true)
   })
 
   it("uses each paper title as its bilingual project title", async () => {
     const { projects } = await loadProfileData()
     const papers = projects.filter(({ id }) => id.includes("-Paper-"))
 
-    expect(papers).toHaveLength(6)
+    expect(papers).toHaveLength(7)
     for (const paper of papers) {
       expect(paper.publications).toHaveLength(1)
       expect(paper.publications[0]?.title).toEqual(paper.title)

@@ -58,6 +58,7 @@ test.describe("home and about routes", () => {
       await expect(page.locator(".about-interest-list li")).toHaveText(about.interests.map((interest) => interest[route.locale]))
       await expect(page.locator(".about-goal p")).toHaveText(about.goal[route.locale])
       await expect(page.locator('[data-about-kind="education"]')).toHaveCount(about.education.length)
+      await expect(page.locator('[data-about-kind="internship"]')).toHaveCount(about.internship_experience.length)
       await expect(page.locator('[data-about-kind="campus"]')).toHaveCount(about.campus_experience.length)
     })
   }
@@ -74,6 +75,20 @@ test.describe("home and about routes", () => {
         await page.goto(path)
         await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width)
       }
+    })
+  }
+
+  for (const viewport of VIEWPORTS.filter(({ width }) => width >= 768)) {
+    test(`keeps the internship record full width at the ${viewport.name} viewport`, async ({ page }) => {
+      await page.setViewportSize(viewport)
+      await page.goto("about/")
+
+      const internship = page.locator('[data-about-kind="internship"]')
+      await expect(internship).toBeVisible()
+      expect(await internship.evaluate((record) => {
+        const grid = record.parentElement
+        return grid !== null && Math.abs(record.getBoundingClientRect().width - grid.getBoundingClientRect().width) < 1
+      })).toBe(true)
     })
   }
 })

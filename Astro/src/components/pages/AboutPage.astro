@@ -90,6 +90,25 @@ const facts = [
     </div>
   </section>
 
+  <section class="about-section about-chronology" aria-labelledby="about-internship-title">
+    <header class="about-section-heading">
+      <h2 id="about-internship-title">{labels.internship}</h2>
+    </header>
+    <div class="about-grid">
+      {about.internship_experience.map((experience) => <article
+        id={`internship-${experience.id}`}
+        class="about-record about-record--internship"
+        data-about-record
+        data-about-kind="internship"
+      >
+        <p class="about-period">{experience.period}</p>
+        <h3>{experience.organization[locale]}</h3>
+        <p class="about-role">{experience.role[locale]}</p>
+        <ul>{experience.details.map((detail) => <li>{detail[locale]}</li>)}</ul>
+      </article>)}
+    </div>
+  </section>
+
   <section class="about-section about-chronology" aria-labelledby="about-campus-title">
     <header class="about-section-heading">
       <h2 id="about-campus-title">{labels.campus}</h2>
