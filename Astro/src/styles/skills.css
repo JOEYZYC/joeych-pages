@@ -131,6 +131,7 @@
     align-items: stretch;
     gap: var(--space-5);
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding-block-end: var(--space-6);
   }
 
   .capability-tree-branches::after {
@@ -166,7 +167,17 @@
     block-size: var(--space-6);
   }
 
+  .capability-tree-branch-node::after {
+    border-inline-start: 1px solid var(--color-border-strong);
+    block-size: var(--space-6);
+    content: "";
+    inset-block-start: 100%;
+    inset-inline-start: 50%;
+    position: absolute;
+  }
+
   .capability-tree-junction {
+    border-inline-start: 0;
     block-size: var(--space-10);
     inline-size: calc(100% - (100% / 3));
     position: relative;
@@ -177,6 +188,14 @@
     content: "";
     inset-block-start: 0;
     inset-inline: 0;
+    position: absolute;
+  }
+
+  .capability-tree-junction::after {
+    border-inline-start: 1px solid var(--color-border-strong);
+    content: "";
+    inset-block: 0;
+    inset-inline-start: 50%;
     position: absolute;
   }
 }
