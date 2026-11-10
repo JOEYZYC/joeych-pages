@@ -10,17 +10,7 @@ type ChipState = {
   x: number
   y: number
   size: number
-  r: number
-  spread: number
   fill: Color
-  stroke: Color
-  die: Color
-  mark: Color
-  trace: number
-  field: number
-  body: number
-  side: number
-  label: string
 }
 
 const mix = (a: number, b: number, t: number) => a + (b - a) * t
@@ -30,10 +20,7 @@ const rgb = (value: Color) => `rgb(${value.map(Math.round).join(",")})`
 const interpolate = (a: ChipState, b: ChipState, t: number): ChipState => ({
   ...a,
   x: mix(a.x, b.x, t), y: mix(a.y, b.y, t), size: mix(a.size, b.size, t),
-  r: mix(a.r, b.r, t), spread: mix(a.spread, b.spread, t),
-  trace: mix(a.trace, b.trace, t), field: mix(a.field, b.field, t), body: mix(a.body, b.body, t),
-  fill: color(a.fill, b.fill, t), stroke: color(a.stroke, b.stroke, t),
-  die: color(a.die, b.die, t), mark: color(a.mark, b.mark, t), label: t < .5 ? a.label : b.label,
+  fill: color(a.fill, b.fill, t),
 })
 
 export function initializeChipSite(): void {
@@ -42,14 +29,8 @@ export function initializeChipSite(): void {
   const canvas = document.querySelector<HTMLElement>("[data-chapter-canvas]")
   const overlay = document.querySelector<HTMLElement>("#chip-overlay")
   const chip = document.querySelector<HTMLElement>("[data-shared-chip]")
-  const pins = chip?.querySelector<SVGElement>(".chip-pin-group")
-  const shell = chip?.querySelector<SVGElement>(".chip-shell")
-  const die = chip?.querySelector<SVGElement>(".chip-die")
-  const mark = chip?.querySelector<SVGElement>(".chip-mark")
-  const traces = chip?.querySelector<SVGElement>(".chip-traces")
-  const field = chip?.querySelector<SVGElement>(".chip-field")
-  const caption = chip?.querySelector<HTMLElement>(".chip-caption")
-  if (!overlay || !chip || !pins || !shell || !die || !mark || !traces || !field || !caption) return
+  const shape = chip?.querySelector<SVGElement>(".chapter-shape")
+  if (!overlay || !chip || !shape) return
   const reduced = matchMedia("(prefers-reduced-motion: reduce)")
   const originKey = "joeych-chip-origin"
   const intentKey = "joeych-chip-return-intent"
@@ -86,6 +67,7 @@ export function initializeChipSite(): void {
   const position = document.querySelector<HTMLElement>("[data-chapter-position]")
   const dots = [...document.querySelectorAll<HTMLElement>("[data-chapter-go]")]
   let index = 0
+  let layoutWidth = rail?.clientWidth ?? innerWidth
   let moveFrame = 0
   let resizeFrame = 0
   let settleTimer = 0
@@ -93,32 +75,35 @@ export function initializeChipSite(): void {
   let wheelLocked = false
   let wheelStart = 0
   let pendingFocus: number | undefined
+  let destinationIndex: number | undefined
   let restoring = false
   let paints = 0
   let documentShown = document.readyState === "complete"
+  let movingShape: ChipState | undefined
+  let entrance: Animation[] = []
+  let layers: Animation[] = []
+  const clearLayers = () => { for (const animation of layers) animation.cancel(); layers = [] }
+  const clearEntrance = () => { for (const animation of entrance) animation.cancel(); entrance = [] }
   const clamp = (value: number) => Math.max(0, Math.min(chapters.length - 1, value))
   const horizontal = () => !!rail && root.dataset["reflow"] === "false"
 
   const states = (): readonly ChipState[] => {
     const dark = root.dataset["theme"] === "dark"
-    const paper: Color = dark ? [16, 15, 15] : [255, 252, 240]
     const ink: Color = dark ? [255, 252, 240] : [16, 15, 15]
     const cyan: Color = dark ? [90, 189, 172] : [28, 108, 102]
-    const soft: Color = dark ? [40, 39, 38] : [230, 228, 217]
-    const mint: Color = [135, 211, 195]
     const base: readonly ChipState[] = [
-      { x: .79, y: .45, size: 350, r: -12, spread: 1, fill: ink, stroke: ink, die: paper, mark: cyan, trace: .2, field: 0, body: 1, side: 1, label: "01 / CURIOSITY" },
-      { x: .91, y: .34, size: 128, r: 23, spread: 1.12, fill: paper, stroke: cyan, die: soft, mark: ink, trace: .95, field: .08, body: 1, side: 1, label: "02 / MAKING" },
-      { x: .77, y: .28, size: 220, r: -7, spread: .82, fill: paper, stroke: cyan, die: paper, mark: cyan, trace: .22, field: .95, body: .35, side: 1, label: "03 / SIGNAL" },
-      { x: .24, y: .75, size: 175, r: 45, spread: 1.05, fill: [16, 15, 15], stroke: mint, die: [16, 15, 15], mark: [255, 252, 240], trace: .8, field: .45, body: .8, side: -1, label: "04 / CONNECTIONS" },
-      { x: .40, y: .77, size: 130, r: -12, spread: .94, fill: paper, stroke: cyan, die: paper, mark: ink, trace: .25, field: .1, body: 1, side: -1, label: "05 / STILL CURIOUS" },
+      { x: .79, y: .45, size: Math.min(280, innerWidth * .23), fill: ink },
+      { x: .90, y: .18, size: 80, fill: cyan },
+      { x: .87, y: .18, size: 96, fill: ink },
+      { x: .89, y: .18, size: 80, fill: [135, 211, 195] },
+      { x: .85, y: .18, size: 72, fill: cyan },
     ]
     const mobile = [
-      { x: .79, y: .53, size: 128, r: -12 },
-      { x: .85, y: .29, size: 66, r: 24 },
-      { x: .85, y: .26, size: 72, r: -7 },
-      { x: .84, y: .26, size: 82, r: 45 },
-      { x: .85, y: .27, size: 70, r: -12 },
+      { x: .87, y: .29, size: 72 },
+      { x: .87, y: .28, size: 60 },
+      { x: .87, y: .28, size: 68 },
+      { x: .87, y: .28, size: 60 },
+      { x: .87, y: .28, size: 56 },
     ]
     return base.map((state, i) => {
       const adjusted = innerWidth < 600 ? { ...state, ...mobile[i] } : state
@@ -130,7 +115,8 @@ export function initializeChipSite(): void {
     const list = states()
     const first = list[0]
     if (!first) throw new Error("Missing chip composition")
-    if (!rail || root.dataset["view"] === "detail") return { ...first, x: innerWidth - (innerWidth < 600 ? 120 : 140), y: 32, size: innerWidth < 600 ? 29 : 36, r: 0, fill: first.die, stroke: first.mark, die: first.die, mark: first.stroke, trace: .3, field: .1, body: 1, label: "" }
+    if (!rail || root.dataset["view"] === "detail") return { ...first, x: innerWidth - (innerWidth < 600 ? 120 : 140), y: 32, size: innerWidth < 600 ? 24 : 28 }
+    if (movingShape) return movingShape
     const progress = Math.max(0, Math.min(4, rail.scrollLeft / Math.max(1, rail.clientWidth)))
     const i = Math.floor(progress)
     const t = progress - i
@@ -139,23 +125,8 @@ export function initializeChipSite(): void {
     if (reduced.matches) return list[Math.round(progress)] ?? a
     if (t < .001 || i === 4) return a
     if (t > .999) return b
-    // Clear the entering chapter before its first target crosses the viewport edge.
-    // The outer transit lane also stays clear of longer translated directory labels.
-    const smallA = { ...a, size: Math.min(46, a.size), r: a.r * .3, label: "" }
-    const smallB = { ...b, size: Math.min(46, b.size), r: b.r * .3, label: "" }
-    const exit = { ...smallA, x: innerWidth < 600 || a.side > 0 ? innerWidth + 40 : -40 }
-    const entry = { ...smallB, x: innerWidth < 600 || b.side > 0 ? innerWidth + 40 : -40 }
-    const topA = { ...exit, y: -30 }
-    const topB = { ...entry, y: -30 }
-    const shrinkEnd = innerWidth < 600 ? .025 : .05
-    const exitEnd = innerWidth < 600 ? .045 : .07
-    if (t < shrinkEnd) return interpolate(a, smallA, ease(t / shrinkEnd))
-    if (t < exitEnd) return interpolate(smallA, exit, ease((t - shrinkEnd) / (exitEnd - shrinkEnd)))
-    if (t < .28) return interpolate(exit, topA, ease((t - exitEnd) / (.28 - exitEnd)))
-    if (t < .60) return interpolate(topA, topB, ease((t - .28) / .32))
-    if (t < .90) return interpolate(topB, entry, ease((t - .60) / .30))
-    if (t < .96) return interpolate(entry, smallB, ease((t - .90) / .06))
-    return interpolate(smallB, b, ease((t - .96) / .04))
+    // Native touch/trackpad owns the rail. Its intermediate shape uses the clear band.
+    return { ...interpolate(a, b, t), x: innerWidth * mix(.76, .87, t), y: innerHeight * .18, size: innerWidth < 600 ? 48 : 64 }
   }
 
   const paint = () => {
@@ -163,43 +134,32 @@ export function initializeChipSite(): void {
     overlay.hidden = root.dataset["reflow"] === "true" && !!rail
     if (overlay.hidden) return
     const state = desired()
-    chip.style.transform = `translate3d(${state.x - 160}px,${state.y - 160}px,0) rotate(${state.r}deg) scale(${state.size / 320})`
-    pins.style.transform = `scale(${state.spread})`
-    shell.style.fill = rgb(state.fill)
-    shell.style.stroke = rgb(state.stroke)
-    shell.style.opacity = String(state.body)
-    pins.style.stroke = rgb(state.stroke)
-    die.style.fill = rgb(state.die)
-    die.style.stroke = rgb(state.stroke)
-    mark.style.stroke = rgb(state.mark)
-    traces.style.stroke = rgb(state.stroke)
-    traces.style.opacity = String(state.trace)
-    field.style.stroke = rgb(state.stroke)
-    field.style.opacity = String(state.field)
-    field.style.transform = `rotate(${state.r * -1.5}deg)`
-    caption.textContent = state.label
-    caption.style.color = rgb(state.stroke)
-    caption.style.opacity = state.size >= 220 ? "1" : "0"
+    chip.style.transform = `translate3d(${state.x - 160}px,${state.y - 160}px,0) scale(${state.size / 320})`
+    shape.style.fill = rgb(state.fill)
     overlay.dataset["updates"] = String(++paints)
     overlay.dataset["size"] = state.size.toFixed(3)
     overlay.dataset["x"] = state.x.toFixed(3)
     overlay.dataset["y"] = state.y.toFixed(3)
-    overlay.dataset["rotation"] = state.r.toFixed(3)
     overlay.dataset["animating"] = String(!!moveFrame)
   }
 
   const stopMove = () => {
     if (moveFrame) cancelAnimationFrame(moveFrame)
     moveFrame = 0
+    movingShape = undefined
+    destinationIndex = undefined
+    pendingFocus = undefined
+    clearLayers()
+    clearEntrance()
     rail?.style.removeProperty("scroll-snap-type")
     overlay.dataset["animating"] = "false"
   }
   const ui = () => {
-    if (rail && horizontal()) index = clamp(Math.round(rail.scrollLeft / Math.max(1, rail.clientWidth)))
+    if (rail && horizontal() && rail.clientWidth === layoutWidth) index = clamp(Math.round(rail.scrollLeft / Math.max(1, layoutWidth)))
     root.dataset["activeChapter"] = String(index)
     if (position) position.textContent = `${String(index + 1).padStart(2, "0")} / 05`
-    if (previous) previous.disabled = index === 0
-    if (next) next.disabled = index === 4
+    if (previous) previous.disabled = (destinationIndex ?? index) === 0
+    if (next) next.disabled = (destinationIndex ?? index) === 4
     for (const dot of dots) {
       if (Number(dot.dataset["chapterGo"]) === index) dot.setAttribute("aria-current", "step")
       else dot.removeAttribute("aria-current")
@@ -225,6 +185,7 @@ export function initializeChipSite(): void {
   const go = (target: number, focus = false, instant = false) => {
     if (!rail) return
     const n = clamp(target)
+    const currentShape = desired()
     stopMove()
     clearTimeout(settleTimer)
     pendingFocus = focus ? n : undefined
@@ -243,15 +204,36 @@ export function initializeChipSite(): void {
       return
     }
     const from = rail.scrollLeft
+    if (Math.abs(destination - from) < 1) { ui(); settle(); return }
     const started = performance.now()
+    destinationIndex = n
+    const endShape = states()[n] ?? currentShape
+    const small = { ...currentShape, size: innerWidth < 600 ? 48 : 64 }
+    const lane = { ...small, x: innerWidth * .87, y: innerHeight * .18 }
+    const arrival = { ...endShape, size: small.size }
+    const incoming = chapters[n]
+    for (const [selector, distance, delay] of [["h2,h1", 18, 0], [".hero-art-link,.research-art-link,.skill-pathways,.experience-preview", 32, 90]] as const) {
+      for (const element of incoming?.querySelectorAll<HTMLElement>(selector) ?? []) {
+        layers.push(element.animate([{ translate: `0 ${distance}px` }, { translate: "0 0" }], { duration: 440, delay: 640 + delay, easing: "cubic-bezier(.2,.8,.2,1)", fill: "backwards" }))
+      }
+    }
     rail.style.scrollSnapType = "none"
     const move = (now: number) => {
-      const progress = Math.min(1, (now - started) / 620)
-      rail.scrollLeft = from + (destination - from) * (1 - (1 - progress) ** 3)
+      const elapsed = now - started
+      const progress = Math.max(0, Math.min(1, (elapsed - 320) / 520))
+      rail.scrollLeft = from + (destination - from) * ease(progress)
+      movingShape = elapsed < 160 ? interpolate(currentShape, small, ease(elapsed / 160))
+        : elapsed < 320 ? interpolate(small, lane, ease((elapsed - 160) / 160))
+        : elapsed < 840 ? { ...lane, fill: color(currentShape.fill, endShape.fill, progress), x: innerWidth * mix(.87, .76, Math.sin(progress * Math.PI)) }
+        : elapsed < 960 ? interpolate({ ...lane, fill: endShape.fill }, arrival, ease((elapsed - 840) / 120))
+        : interpolate(arrival, endShape, ease(Math.min(1, (elapsed - 960) / 160)))
       ui()
-      if (progress < 1) moveFrame = requestAnimationFrame(move)
+      if (elapsed < 1120) moveFrame = requestAnimationFrame(move)
       else {
         moveFrame = 0
+        movingShape = undefined
+        destinationIndex = undefined
+        clearLayers()
         rail.style.removeProperty("scroll-snap-type")
         rail.scrollLeft = destination
         settle()
@@ -267,6 +249,7 @@ export function initializeChipSite(): void {
       root.dataset["reflow"] = String(innerHeight < 520 || innerWidth < 340 || Number.parseFloat(getComputedStyle(root).fontSize) > 22)
       canvas.style.setProperty("--scene-h", `${innerHeight}px`)
       index = clamp(retained)
+      layoutWidth = rail.clientWidth
       if (horizontal()) rail.scrollLeft = index * rail.clientWidth
       ui()
     } else paint()
@@ -295,8 +278,8 @@ export function initializeChipSite(): void {
   reduced.addEventListener("change", applyLayout)
   if (!rail || !canvas) { applyLayout(); return }
   document.querySelector<HTMLElement>("[data-overview-controls]")?.removeAttribute("hidden")
-  previous?.addEventListener("click", () => go(index - 1))
-  next?.addEventListener("click", () => go(index + 1))
+  previous?.addEventListener("click", () => go((destinationIndex ?? index) - 1))
+  next?.addEventListener("click", () => go((destinationIndex ?? index) + 1))
   for (const dot of dots) dot.addEventListener("click", (event) => {
     event.preventDefault()
     go(Number(dot.dataset["chapterGo"]), true)
@@ -307,8 +290,9 @@ export function initializeChipSite(): void {
     settleTimer = window.setTimeout(settle, 140)
   }, { passive: true })
   rail.addEventListener("scrollend", settle)
-  rail.addEventListener("pointerdown", stopMove, { passive: true })
-  rail.addEventListener("touchstart", stopMove, { passive: true })
+  const cancelGesture = () => { stopMove(); ui() }
+  rail.addEventListener("pointerdown", cancelGesture, { passive: true })
+  rail.addEventListener("touchstart", cancelGesture, { passive: true })
   rail.addEventListener("focusin", (event) => {
     if (restoring || !horizontal() || !(event.target instanceof HTMLElement)) return
     const owner = event.target.closest<HTMLElement>("[data-chapter]")
@@ -316,9 +300,10 @@ export function initializeChipSite(): void {
   })
   rail.addEventListener("keydown", (event) => {
     if (!horizontal() || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || !(event.target instanceof Element) || event.target.closest("input,textarea,select,[contenteditable]")) return
-    const directions: Record<string, number> = { ArrowRight: index + 1, PageDown: index + 1, ArrowLeft: index - 1, PageUp: index - 1, Home: 0, End: 4 }
+    const origin = destinationIndex ?? index
+    const directions: Record<string, number> = { ArrowRight: origin + 1, PageDown: origin + 1, ArrowLeft: origin - 1, PageUp: origin - 1, Home: 0, End: 4 }
     const target = directions[event.key]
-    if (target === undefined || target < 0 || target > 4 || target === index) return
+    if (target === undefined || target < 0 || target > 4 || target === origin) return
     event.preventDefault()
     go(target, true)
   })
@@ -387,5 +372,18 @@ export function initializeChipSite(): void {
     if (originInvoker) requestAnimationFrame(focusOriginInvoker)
   })
   restoreOrigin()
-  document.fonts.ready.then(applyLayout)
+  document.addEventListener("focusin", (event) => {
+    clearEntrance()
+    if (event.target instanceof Node && !rail.contains(event.target)) pendingFocus = undefined
+  })
+  document.fonts.ready.then(() => { if (!moveFrame) ui() })
+  // Only a fresh, unfragmented Home entry. Never wait for fonts or move focus.
+  const navigation = performance.getEntriesByType("navigation")[0]
+  if (horizontal() && !reduced.matches && !location.hash && !originInvoker && navigation instanceof PerformanceNavigationTiming && navigation.type === "navigate") {
+    root.dataset["homeEntrance"] = "played"
+    for (const [i, line] of [...document.querySelectorAll<HTMLElement>(".chapter-hello h1 > span")].entries()) {
+      entrance.push(line.animate([{ clipPath: "inset(0 0 100% 0)", translate: "0 18px" }, { clipPath: "inset(0)", translate: "0 0" }], { duration: 520, delay: i * 80, easing: "cubic-bezier(.2,.8,.2,1)" }))
+    }
+    entrance.push(shape.animate([{ transform: "scale(.65)" }, { transform: "scale(1)" }], { duration: 680, easing: "cubic-bezier(.16,1,.3,1)" }))
+  }
 }

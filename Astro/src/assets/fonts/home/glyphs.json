@@ -84,7 +84,7 @@
     },
     {
       "path": "Astro/src/components/SharedChip.astro",
-      "sha256": "231e97ee78e408a4340b041a6e1b96e51a108f6db074a5b4cc58b094d07da213"
+      "sha256": "5082a39cec519fb27282e4a9ab9792456f712d360c9b965467a0dc03c8025386"
     },
     {
       "path": "Astro/src/components/SiteFooter.astro",
@@ -136,7 +136,7 @@
     },
     {
       "path": "Astro/src/lib/chip-site.ts",
-      "sha256": "802f5e81285e3f77ce76dc567414f133d50d183b00fe1501f6b2bc443a39c46f"
+      "sha256": "185727f77e23f8bc2971e27f76f1e870604e45e86733baa2775eea44f54e0237"
     },
     {
       "path": "Astro/src/lib/dialog-dismissal.ts",
@@ -232,7 +232,7 @@
     },
     {
       "path": "Astro/src/styles/chip.css",
-      "sha256": "8d7810db86b391362791dd2a6256e7a2dc4198e7839950c9813eccf15c99cfaf"
+      "sha256": "27b9ff86890e652c397c64009fea388e71057efe098a1d0a81993f8083c68c09"
     },
     {
       "path": "Astro/src/styles/components.css",

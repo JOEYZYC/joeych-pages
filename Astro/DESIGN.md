@@ -1,6 +1,6 @@
-# One chip, five compositions
+# One filled shape, five compositions
 
-The owner-approved November 2026 direction applies to **all four routes**, not just Home. Expressive C typography, warm paper and ink, an original 24-pin chip, and quiet editorial readers replace the previous Apple-style shell. Rauno is an interaction reference, not a copied layout, asset or source. The accepted offline `site-chip-concept.html` is the visual reference, not a deployable document or content source.
+The owner-approved November 2026 direction applies to **all four routes**, not just Home. Expressive C typography, warm paper and ink, a simple filled circle, and quiet editorial readers replace the previous Apple-style shell. The November 11 production revision supersedes the detailed chip and invisible outer transit path. Rauno informs mechanisms (separate motion clocks, clipped title entry, layered settling), not artwork, source, layout or framework. Offline concepts are not deployable documents or content sources.
 
 ## Composition
 
@@ -12,11 +12,13 @@ The owner-approved November 2026 direction applies to **all four routes**, not j
 
 ## The shared graphic
 
-`SharedChip.astro` emits exactly one original decorative SVG per document: 24 pins, rounded package, inset die, open-loop mark, traces and field contours. It is not a project figure or a real circuit claim. It has no accessible name or tab stop; its clipped overlay is `aria-hidden="true"` and `pointer-events: none`.
+`SharedChip.astro` keeps its compatibility filename/hooks but emits exactly one filled SVG circle per document. No pins, circuit details, contours or caption. It is not a project figure or a real circuit claim. It has no accessible name or tab stop; its overlay is `aria-hidden="true"` and `pointer-events: none`.
 
-`chip-site.ts` samples the actual fractional native rail position. Package/die/pin geometry, fill, traces, contours, scale, position and rotation change together. The same SVG node is reused, including when it is moved into the project dialog's top layer. In readers it docks small in reserved upper-toolbar space. Cross-document View Transitions are progressive CSS enhancements; the named chip snapshot docks without sweeping a large package over new reading text. Unsupported browsers use ordinary anchors.
+`chip-site.ts` retains the actual native rail and one reused SVG node, including the project dialog's top layer. Shape diameter, position and semantic fill change independently of eased rail distance. In readers it docks small in reserved upper-toolbar space. Cross-document View Transitions remain progressive CSS enhancements; unsupported browsers use ordinary anchors.
 
-The normal scene move lasts 620ms. Rail and graphic paint atomically on the same bounded RAF. Between compositions the graphic shrinks and uses a clipped top/edge transit lane clear of text, images and controls. **Text is never scaled.** No independent slide entrances, idle floating, body scroll lock, perpetual RAF or client router.
+Button/vertical-wheel/key moves use a bounded 1120ms sequence: shrink 160ms, lift into the visible upper band 160ms, native rail travel 520ms, arrive 120ms, resolve 160ms. Transit diameter is 64px desktop / 48px mobile, wholly within the viewport. The rail and shape paint on the same bounded RAF, but the shape clock is not derived from cubic-eased rail displacement. The chapter label and mobile research/title spacing reserve the transit band. Native horizontal touch/trackpad retains direct manipulation and a visible band pose at fractional positions, without imposing the programmatic clock.
+
+Incoming headings settle by 18px; media/ledgers settle by 32px with 90ms follow-through. These translations end on a bounded timeline; focus reveal, resize, interruption, reduced motion or reflow cancels them immediately. **Text is never scaled.** A fresh unfragmented Home navigation has a short clipped title entrance and circle resolve, never awaited for navigation or fonts. Focus cancels the entrance; hashes, Back and reader restoration do not replay it. Final content is the default CSS/DOM state, so failed JS/fonts/animation cannot leave it hidden. No idle floating, body scroll lock, perpetual RAF or client router.
 
 ## Input, focus and fallback
 
@@ -53,6 +55,6 @@ Theme initialization still runs before visible paint. A valid guarded stored ove
 
 Focused production checks cover desktop/mobile working overview first, then structured/detail behavior: direct descendant focus; Tab/reverse/Arrow/PageDown then Tab; resize; wheel/boundaries; history/back/forward/hash/refresh/return focus; all eight documents and 20 records; both locales/themes; no-JS; reduced motion; 375×667/812, 768×1024, 1280×720/900 and 200% reflow.
 
-Collision probes check terminal **and fractional** SVG painted bounds, clipped to the viewport and scene, against text/media/controls. They are conservative geometric evidence, not a substitute for visual review or live feel. Idle RAF and actual custom-font rendering are separate checks. Headless native visibility, physical touch and OS zoom must not be claimed when unavailable. No generated screenshot-golden updates.
+Collision probes check terminal **and fractional** actual circle geometry against text/media/controls. Bounded RAF probes additionally measure visible fraction, minimum painted diameter, independently changing fill/size and incoming title/media translations during Next and vertical-wheel moves. They are geometric evidence, not a substitute for screenshot review or live feel. Idle RAF and actual custom-font rendering are separate checks. Headless native visibility, physical touch and OS zoom must not be claimed when unavailable. No generated screenshot-golden updates.
 
 Run only the assigned focused checks in the implementation lane. Parent owns final `pnpm run verify`, independent UI review, nonvisual E2E integration, commit and deployment. Existing security/resource/assertion coverage must be retargeted to the real design, never weakened or allowlisted.

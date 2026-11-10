@@ -36,9 +36,7 @@ a { text-underline-offset: .4em; text-decoration-thickness: 1px; }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(shared-silicon), ::view-transition-old(shared-silicon), ::view-transition-new(shared-silicon) { animation: none; }
 }
-.chip-pin-group { transform-origin: 160px 160px; }
-.chip-dot { fill: var(--warm); }
-.chip-caption { position: absolute; top: 100%; left: 0; width: 100%; text-align: center; font: 9px var(--font-mono); letter-spacing: .12em; padding-top: 12px; white-space: nowrap; }
+.chapter-shape { fill: var(--ink); transform-origin: 160px 160px; }
 html[data-js="false"] .chip-overlay { display: none; }
 html[data-js="false"] .site-directory { display: none; }
 html[data-js="false"] .reader-toolbar { display: none; }
@@ -102,13 +100,13 @@ html[lang="en"][data-reflow="false"] .chapter h2 { max-width: 43%; }
 html[data-reflow="false"] .chapter-rail { display: flex; align-items: stretch; width: 100%; height: var(--scene-h); overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
 html[data-reflow="false"] .chapter-rail::-webkit-scrollbar { display: none; }
 html[data-reflow="false"] .chapter { flex: 0 0 100%; width: 100%; height: var(--scene-h); padding: 0; scroll-snap-align: start; scroll-snap-stop: always; }
-html[data-reflow="false"] .chapter-label { position: absolute; left: 6%; right: 6%; top: 9%; margin: 0; z-index: 3; }
+html[data-reflow="false"] .chapter-label { position: absolute; left: 6%; right: 24%; top: 7%; margin: 0; z-index: 3; }
 html[data-reflow="false"] .hello-composition, html[data-reflow="false"] .making-composition, html[data-reflow="false"] .research-composition, html[data-reflow="false"] .capabilities-composition, html[data-reflow="false"] .experience-composition { position: absolute; inset: 0; }
 html[data-reflow="false"] .hello-greeting { position: absolute; top: 20%; left: 6%; }
 html[data-reflow="false"] .chapter-hello h1 { position: absolute; top: 27%; left: 6%; max-width: 58%; }
 html[data-reflow="false"] .hello-voice { position: absolute; top: 63%; left: 6%; max-width: 40%; }
 html[data-reflow="false"] .hello-actions { position: absolute; left: 6%; top: 78%; }
-html[data-reflow="false"] .chapter .kicker { position: absolute; left: 7%; top: 17%; }
+html[data-reflow="false"] .chapter .kicker { display: none; }
 html[data-reflow="false"] .chapter h2 { position: absolute; left: 7%; top: 23%; }
 html[data-reflow="false"] .chapter-description { position: absolute; left: 7%; top: 53%; max-width: 38%; }
 html[data-reflow="false"] .chapter-project-list { position: absolute; left: 7%; top: 65%; width: 39%; }
@@ -182,24 +180,27 @@ html[data-reflow="true"] .chapter .project-media-image, html[data-js="false"] .c
   .hello-actions { gap: 1.375rem; }
   .hello-actions a { font-size: .6875rem; gap: .75rem; }
   html[data-reflow="false"] .hello-greeting { top: 18%; }
-  html[data-reflow="false"] .chapter-hello h1 { top: 25%; max-width: 88%; }
+  html[data-reflow="false"] .chapter-hello h1 { top: 25%; max-width: 70%; }
   html[data-reflow="false"] .hello-voice { top: 68%; max-width: 88%; }
   html[data-reflow="false"] .hello-actions { top: 81%; }
   html[data-reflow="false"] .chapter .kicker { display: none; }
   html[data-reflow="false"] .chapter h2 { left: 6%; top: 24%; font-size: 2.1875rem; max-width: 66%; }
-  html[data-reflow="false"] .chapter-making h2 { top: 21%; font-size: 2.125rem; max-width: 65%; }
+  html[data-reflow="false"] .chapter-making h2 { top: 24%; font-size: 2.125rem; max-width: 65%; }
   html[data-reflow="false"] .chapter-making .chapter-description { display: none; }
   html[data-reflow="false"] .chapter-project-list { left: 6%; top: 37%; width: 88%; }
   .chapter-project { font-size: .75rem; padding-block: .4375rem; }
   .chapter-project .link-type { font-size: .5rem; }
-  html[data-reflow="false"] .hero-art-link { left: 6%; top: 57%; width: 88%; height: 29%; }
-  html[data-reflow="false"] .hero-art-link .project-media { background: var(--field); display: grid; grid-template-columns: 1fr 1fr; gap: 1.125rem; padding: .8125rem .9375rem; }
+  html[data-reflow="false"] .hero-art-link { left: 6%; top: 64%; width: 88%; height: 22%; }
+  html[data-reflow="false"] .hero-art-link .project-media { background: var(--field); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: 1.125rem; padding: .8125rem .9375rem; }
+  html[data-reflow="false"] .hero-art-link .project-media-well { min-height: 0; }
   html[data-reflow="false"] .hero-art-link .project-media::before { display: none; }
   .chapter .project-media-image { height: 100%; max-height: 172px; margin: auto; }
   html[data-reflow="false"] .hero-art-link figcaption { position: static; font-size: .5625rem; margin: 0; align-self: center; }
   html[data-reflow="false"] .hero-art-link .chapter-media-status { position: absolute; left: 54%; top: 64%; margin: 0; max-width: 42%; font-size: .5rem; }
+  html[data-reflow="false"] .chapter-making .chapter-project-list { top: 40%; }
+  .chapter-making .chapter-project { font-size: .6875rem; line-height: 1.5; padding-block: .375rem; }
   .hero-art-link .image-open { font-size: .5625rem; padding-top: .375rem; }
-  html[data-reflow="false"] .research-art-link { left: 6%; top: 19%; width: 55%; height: 22%; }
+  html[data-reflow="false"] .research-art-link { left: 6%; top: 23%; width: 55%; height: 19%; }
   html[data-reflow="false"] .research-art-link .project-media { padding: .75rem; gap: .375rem; }
   html[data-reflow="false"] .research-art-link .project-media-well { height: 75%; }
   .research-art-link figcaption { font-size: .5rem; line-height: 1.6; padding: 0; }
@@ -208,14 +209,14 @@ html[data-reflow="true"] .chapter .project-media-image, html[data-js="false"] .c
   html[data-reflow="false"] .chapter-research .chapter-description { left: 6%; top: 61%; font-size: .6875rem; max-width: 88%; }
   html[data-reflow="false"] .chapter-research .chapter-project-list { left: 6%; top: 73%; width: 88%; }
   .chapter-research .chapter-project { font-size: .625rem; line-height: 1.6; padding-block: .375rem; }
-  html[data-reflow="false"] .chapter-capabilities h2 { left: 6%; top: 19%; font-size: 2rem; max-width: 64%; }
-  html[data-reflow="false"] .chapter-capabilities .chapter-description { left: 6%; top: 35%; font-size: .6875rem; max-width: 63%; }
+  html[data-reflow="false"] .chapter-capabilities h2 { left: 6%; top: 24%; font-size: 2rem; max-width: 64%; }
+  html[data-reflow="false"] .chapter-capabilities .chapter-description { left: 6%; top: 38%; font-size: .6875rem; max-width: 63%; }
   html[data-reflow="false"] .skill-pathways { left: 6%; top: 47%; width: 88%; }
   .skill-pathways a { grid-template-columns: 20px 1fr 14px; gap: .75rem; padding-block: 1rem; }
   .skill-pathways h3 { font-size: 1.25rem; }
   .skill-pathways p { font-size: .625rem; line-height: 1.7; }
-  html[data-reflow="false"] .chapter-experience h2 { left: 6%; top: 19%; max-width: 63%; font-size: 2.0625rem; }
-  html[data-reflow="false"] .chapter-experience .chapter-description { left: 6%; top: 35%; max-width: 63%; font-size: .6875rem; }
+  html[data-reflow="false"] .chapter-experience h2 { left: 6%; top: 24%; max-width: 63%; font-size: 2.0625rem; }
+  html[data-reflow="false"] .chapter-experience .chapter-description { left: 6%; top: 38%; max-width: 63%; font-size: .6875rem; }
   html[data-reflow="false"] .experience-preview { left: 6%; top: 46%; width: 88%; }
   .experience-preview a { padding: .875rem 1.5rem .875rem 0; }
   .experience-preview h3 { font-size: .9375rem; margin-block: .3125rem; }

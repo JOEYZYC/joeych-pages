@@ -1,18 +1,7 @@
----
-const pins = Array.from({ length: 6 }, (_, index) => 100 + index * 24)
----
-<div class="chip-overlay" id="chip-overlay" aria-hidden="true">
+<div class="chip-overlay" id="chip-overlay" aria-hidden="true" hidden>
   <div class="shared-chip" id="shared-chip" data-shared-chip>
     <svg viewBox="0 0 320 320" focusable="false">
-      <g class="chip-pin-group" fill="none" stroke-width="6" stroke-linecap="round">{pins.map((point) => <path d={`M${point} 80V48 M${point} 240v32 M80 ${point}H48 M240 ${point}h32`} />)}</g>
-      <rect class="chip-shell" x="78" y="78" width="164" height="164" rx="20" stroke-width="2" />
-      <path d="M93 104V93h11 M216 93h11v11 M227 216v11h-11 M104 227H93v-11" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".4" />
-      <rect class="chip-die" x="105" y="105" width="110" height="110" rx="10" stroke-width="1.2" />
-      <g class="chip-traces" fill="none" stroke-width="1.4" stroke-linecap="round"><path d="M115 92v17m15-17v17m15-17v17m15-17v17m15-17v17m15-17v17m15-17v17M115 211v17m15-17v17m15-17v17m15-17v17m15-17v17m15-17v17m15-17v17M92 115h17m-17 15h17m-17 15h17m-17 15h17m-17 15h17m-17 15h17m-17 15h17M211 115h17m-17 15h17m-17 15h17m-17 15h17m-17 15h17m-17 15h17m-17 15h17" /></g>
-      <g class="chip-field" fill="none" stroke-width="1.2" transform-origin="160 160"><circle cx="160" cy="160" r="71" /><circle cx="160" cy="160" r="89" stroke-dasharray="4 7" /><path d="M40 160h57m126 0h57M160 40v57m0 126v57" /><circle cx="160" cy="160" r="105" opacity=".35" /></g>
-      <path class="chip-mark" d="M137 137h24c15 0 25 10 25 23s-10 23-25 23h-24v-46m0 23h46" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
-      <circle class="chip-dot" cx="201" cy="119" r="4" /><circle class="chip-dot" cx="91" cy="91" r="2" />
+      <circle class="chapter-shape" cx="160" cy="160" r="160" />
     </svg>
-    <span class="chip-caption">01 / CURIOSITY</span>
   </div>
 </div>
