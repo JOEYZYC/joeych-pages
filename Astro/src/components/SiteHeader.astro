@@ -5,143 +5,44 @@ import { UI } from "../i18n/ui"
 import type { RouteId } from "../lib/routes"
 import { getRoutePath, ROUTE_IDS } from "../lib/routes"
 import ContactDialog from "./ContactDialog.astro"
-import Icon from "./Icon.astro"
 import LanguageLink from "./LanguageLink.astro"
-import NoScriptHeaderFallback from "./NoScriptHeaderFallback.astro"
 import ThemeToggle from "./ThemeToggle.astro"
+import NoScriptHeaderFallback from "./NoScriptHeaderFallback.astro"
+import Icon from "./Icon.astro"
 
 type Props = { readonly locale: Locale; readonly site: Site; readonly routeId: RouteId }
 const { locale, site, routeId } = Astro.props
 const labels = UI[locale]
 ---
-
-<header class="site-header" data-site-header>
-  <div class="header-inner">
-    <a class="wordmark" href={getRoutePath("home", locale)}>{site.name[locale]}</a>
-    <button
-      class="header-button menu-button"
-      type="button"
-      data-menu-toggle
-      data-menu-open-label={labels.menuOpen}
-      data-menu-close-label={labels.menuClose}
-      aria-expanded="false"
-      aria-controls="primary-navigation"
-      aria-label={labels.menuOpen}
-      title={labels.menuOpen}
-      hidden
-    >
-      <span class="header-icon" data-menu-open-icon><Icon name="bars" /></span>
-      <span class="header-icon" data-menu-close-icon hidden><Icon name="xmark" /></span>
-      <span class="control-tooltip" data-control-tooltip aria-hidden="true" data-menu-tooltip>{labels.menuOpen}</span>
-    </button>
-    <nav
-      id="primary-navigation"
-      class="header-nav"
-      aria-label={labels.mainNavigation}
-      data-header-navigation
-      data-open="false"
-      data-signal-rail-group
-    >
-      <span class="signal-rail" data-signal-rail aria-hidden="true"></span>
-      {ROUTE_IDS.map((id) => (
-        <a
-          class="header-link"
-          href={getRoutePath(id, locale)}
-          aria-current={id === routeId ? "page" : undefined}
-          data-header-route
-          data-signal-target
-        >{labels.navigation[id]}</a>
-      ))}
-    </nav>
-    <div class="header-actions">
-      <LanguageLink routeId={routeId} locale={locale} />
-      <span class="header-control-group">
-        <ThemeToggle locale={locale} />
-        <span class="control-tooltip" data-control-tooltip aria-hidden="true">{labels.tooltips.theme}</span>
-      </span>
-      <span class="header-control-group">
-        <ContactDialog id="site-contact" locale={locale} site={site} />
-        <span class="control-tooltip" data-control-tooltip aria-hidden="true">{labels.tooltips.contact}</span>
-      </span>
+<header class="site-directory" data-site-header>
+  {routeId !== "home" && <a class="reader-return" data-overview-return href={getRoutePath("home", locale)}>← {labels.navigation.home}</a>}
+  <details class="directory" data-directory>
+    <summary aria-label={labels.menuOpen} data-menu-toggle aria-expanded="false">{labels.menu}<span class="header-icon" aria-hidden="true"><Icon name="bars" /></span></summary>
+    <div class="directory-panel">
+      <a class="directory-name" href={getRoutePath("home", locale)}>{site.name[locale]}</a>
+      <nav aria-label={labels.mainNavigation} id="primary-navigation" data-header-navigation>
+        {ROUTE_IDS.map((id, index) => <a href={getRoutePath(id, locale)} aria-current={id === routeId ? "page" : undefined} data-header-route><span aria-hidden="true">0{index + 1}</span>{labels.navigation[id]}<span aria-hidden="true">↗</span></a>)}
+      </nav>
+      <div class="directory-actions"><LanguageLink routeId={routeId} locale={locale} /><ThemeToggle locale={locale} /><ContactDialog id="site-contact" locale={locale} site={site} /></div>
     </div>
-  </div>
-  <noscript><NoScriptHeaderFallback locale={locale} site={site} routeId={routeId} /></noscript>
+  </details>
 </header>
-
+<noscript><NoScriptHeaderFallback locale={locale} site={site} routeId={routeId} /></noscript>
 <script>
-  const headers = document.querySelectorAll<HTMLElement>("[data-site-header]")
-
-  for (const header of headers) {
-    const menuToggle = header.querySelector<HTMLButtonElement>("[data-menu-toggle]")
-    const navigation = header.querySelector<HTMLElement>("[data-header-navigation]")
-    const routeLinks = navigation?.querySelectorAll<HTMLAnchorElement>("[data-header-route]") ?? []
-    const rail = navigation?.querySelector<HTMLElement>("[data-signal-rail]")
-    const railTargets = navigation?.querySelectorAll<HTMLElement>("[data-signal-target]") ?? []
-    const openIcon = menuToggle?.querySelector<HTMLElement>("[data-menu-open-icon]")
-    const closeIcon = menuToggle?.querySelector<HTMLElement>("[data-menu-close-icon]")
-    const menuTooltip = menuToggle?.querySelector<HTMLElement>("[data-menu-tooltip]")
-
-    const moveRail = (target: HTMLElement) => {
-      if (!navigation || !rail) return
-      const targetBounds = target.getBoundingClientRect()
-      const navigationBounds = navigation.getBoundingClientRect()
-      rail.style.inlineSize = `${targetBounds.width}px`
-      rail.style.transform = `translateX(${targetBounds.left - navigationBounds.left}px)`
-      rail.style.opacity = "1"
-    }
-
-    const restoreRail = () => {
-      const current = navigation?.querySelector<HTMLElement>('[aria-current="page"]')
-      if (current) moveRail(current)
-    }
-
-    const setMenuOpen = (open: boolean, restoreFocus = false) => {
-      if (!menuToggle || !navigation) return
-      menuToggle.setAttribute("aria-expanded", String(open))
-      navigation.dataset.open = String(open)
-      const label = open ? menuToggle.dataset.menuCloseLabel : menuToggle.dataset.menuOpenLabel
-      if (label) {
-        menuToggle.setAttribute("aria-label", label)
-        menuToggle.title = label
-        if (menuTooltip) menuTooltip.textContent = label
-      }
-      if (openIcon) openIcon.hidden = open
-      if (closeIcon) closeIcon.hidden = !open
-      if (open) routeLinks.item(0)?.focus()
-      if (!open && restoreFocus) menuToggle.focus()
-    }
-
-    menuToggle?.addEventListener("click", () => {
-      setMenuOpen(menuToggle.getAttribute("aria-expanded") !== "true")
+  for (const directory of document.querySelectorAll<HTMLDetailsElement>("[data-directory]")) {
+    const summary = directory.querySelector("summary")
+    directory.addEventListener("toggle", () => {
+      summary?.setAttribute("aria-expanded", String(directory.open))
+      if (directory.open && document.activeElement === summary) directory.querySelector<HTMLElement>("[data-header-route]")?.focus()
     })
+    for (const link of directory.querySelectorAll("[data-header-route]")) link.addEventListener("click", () => { directory.open = false })
     document.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape" || menuToggle?.getAttribute("aria-expanded") !== "true") return
-      event.preventDefault()
-      setMenuOpen(false, true)
+      if (event.key !== "Escape" || !directory.open || document.querySelector("dialog[open]")) return
+      directory.open = false
+      summary?.focus()
     })
     document.addEventListener("pointerdown", (event) => {
-      if (
-        menuToggle?.getAttribute("aria-expanded") === "true" &&
-        event.target instanceof Node &&
-        !header.contains(event.target)
-      ) {
-        setMenuOpen(false)
-      }
+      if (event.target instanceof Node && !directory.contains(event.target)) directory.open = false
     })
-    for (const link of routeLinks) link.addEventListener("click", () => setMenuOpen(false))
-
-    for (const target of railTargets) {
-      target.addEventListener("pointerenter", () => moveRail(target))
-      target.addEventListener("focus", () => moveRail(target))
-    }
-    navigation?.addEventListener("pointerleave", restoreRail)
-    navigation?.addEventListener("focusout", () => queueMicrotask(() => {
-      if (!navigation.matches(":focus-within")) restoreRail()
-    }))
-    window.addEventListener("resize", restoreRail)
-    document.fonts.ready.then(restoreRail)
-
-    restoreRail()
-    if (menuToggle) menuToggle.hidden = false
   }
 </script>

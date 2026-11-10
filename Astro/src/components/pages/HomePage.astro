@@ -4,49 +4,82 @@ import { UI } from "../../i18n/ui"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import { getProfileData } from "../../lib/profile-data"
 import { getRoutePath } from "../../lib/routes"
-import { publicMediaUrl } from "../../lib/urls"
-import "../../styles/home.css"
-import Icon from "../Icon.astro"
+import ProjectMedia from "../ProjectMedia.astro"
 
 type Props = { readonly locale: Locale }
-
 const { locale } = Astro.props
 const data = await getProfileData()
-const { home, site } = data
+const { home, site, about, techStack } = data
 const labels = UI[locale]
-const heroBackgroundStyle = `--home-background-light: url("${publicMediaUrl(home.hero_background.light)}"); --home-background-dark: url("${publicMediaUrl(home.hero_background.dark)}")`
+const chapters = home.chapters
+const chapterLabels = Object.values(chapters).map((chapter) => chapter.label[locale])
+const projectById = new Map(data.projects.map((project) => [project.id, project]))
+const making = chapters.making.project_ids.flatMap((id) => { const project = projectById.get(id); return project ? [project] : [] })
+const research = chapters.research.project_ids.flatMap((id) => { const project = projectById.get(id); return project ? [project] : [] })
+const projectPath = (id: string) => `${getRoutePath("projects", locale)}#${id}`
+const scenes = ["CURIOSITY", "MAKING", "SIGNAL", "CONNECTIONS", "STILL CURIOUS"]
 ---
 
 <BaseLayout locale={locale} page={home.page} site={site} routeId="home">
-  <section class="home-hero" data-home-grid data-home-hero aria-labelledby="page-title">
-    <div class="home-copy" data-home-copy>
-      <h1 id="page-title">{home.heading[locale]}</h1>
-      <p class="home-summary">{home.page.summary[locale]}</p>
-      <div class="home-actions">
-        <a class="home-action home-action--primary" href={getRoutePath("about", locale)}>
-          <span>{labels.actions.about}</span>
-          <span class="home-action-icon" aria-hidden="true"><Icon name="arrow-right" /></span>
-        </a>
-        <a class="home-action home-action--primary" href={getRoutePath("projects", locale)}>
-          <span>{labels.actions.projects}</span>
-          <span class="home-action-icon" aria-hidden="true"><Icon name="arrow-right" /></span>
-        </a>
-      </div>
+  <div class="chapter-canvas" data-chapter-canvas aria-label={labels.canvas.label}>
+    <div class="chapter-rail" id="chapter-rail" data-chapter-rail>
+      <section class="chapter chapter-hello" id="chapter-0" data-chapter="0" tabindex="0" aria-labelledby="page-title">
+        <div class="chapter-label"><span>01 / {scenes[0]}</span><span>{chapters.hello.context[locale]}</span></div>
+        <div class="hello-composition">
+          <p class="hello-greeting">{home.heading[locale]}</p>
+          <h1 id="page-title">{home.headline_lines.map((line, index) => <span class:list={{ cyan: index === 1 }}>{line[locale]}</span>)}</h1>
+          <p class="hello-voice">{home.page.summary[locale]}</p>
+          <div class="hello-actions"><a href="#chapter-1" data-chapter-go="1">{chapters.hello.explore[locale]}<span aria-hidden="true">↗</span></a><a href={getRoutePath("about", locale)}>{labels.actions.about}<span aria-hidden="true">→</span></a></div>
+        </div>
+      </section>
+      <section class="chapter chapter-making" id="chapter-1" data-chapter="1" tabindex="0" aria-labelledby="making-title">
+        <div class="chapter-label"><span>02 / {scenes[1]}</span><a href={getRoutePath("projects", locale)}>{chapters.making.action[locale]} ↗</a></div>
+        <div class="making-composition">
+          <p class="kicker">{chapters.making.label[locale]}</p>
+          <h2 id="making-title">{chapters.making.title_lines.map((line) => <span>{line[locale]}</span>)}</h2>
+          <p class="chapter-description">{chapters.making.summary[locale]}</p>
+          <div class="chapter-project-list">{making.map((project) => <a class="chapter-project" href={projectPath(project.id)}><span>{project.title[locale]}</span><span class="link-type">{project.year} / {project.category[locale]}</span><span aria-hidden="true">↗</span></a>)}</div>
+          {making[0] && <a class="hero-art-link" href={projectPath(making[0].id)} aria-label={`${labels.projectExplorer.open}: ${making[0].title[locale]}`}><ProjectMedia context="record" locale={locale} record={making[0]} loading="eager" />{making[0].status && <span class="chapter-media-status">{making[0].status[locale]}</span>}<span class="image-open">{labels.projectExplorer.open} ↗</span></a>}
+        </div>
+      </section>
+      <section class="chapter chapter-research" id="chapter-2" data-chapter="2" tabindex="0" aria-labelledby="research-title">
+        <div class="chapter-label"><span>03 / {scenes[2]}</span><a href={getRoutePath("projects", locale)}>{chapters.research.action[locale]} ↗</a></div>
+        <div class="research-composition">
+          <p class="kicker">{chapters.research.label[locale]}</p>
+          <h2 id="research-title">{chapters.research.title_lines.map((line, index) => <span class:list={{ cyan: index === 1 }}>{line[locale]}</span>)}</h2>
+          <p class="chapter-description">{chapters.research.summary[locale]}</p>
+          <div class="chapter-project-list">{research.map((project) => <a class="chapter-project" href={projectPath(project.id)}><span>{project.title[locale]}</span><span class="link-type">{project.year} / {project.category[locale]}</span><span aria-hidden="true">↗</span></a>)}</div>
+          {research[0] && <a class="research-art-link" href={projectPath(research[0].id)} aria-label={`${labels.projectExplorer.open}: ${research[0].title[locale]}`}><ProjectMedia context="record" locale={locale} record={research[0]} loading="eager" /><span class="image-open">{labels.projectExplorer.open} ↗</span></a>}
+        </div>
+      </section>
+      <section class="chapter chapter-capabilities" id="chapter-3" data-chapter="3" tabindex="0" aria-labelledby="connections-title">
+        <div class="chapter-label"><span>04 / {scenes[3]}</span><a href={getRoutePath("tech-stack", locale)}>{chapters.connections.action[locale]} ↗</a></div>
+        <div class="capabilities-composition">
+          <p class="kicker">{chapters.connections.label[locale]}</p>
+          <h2 id="connections-title">{chapters.connections.title_lines.map((line, index) => <span class:list={{ cyan: index === 1 }}>{line[locale]}</span>)}</h2>
+          <p class="chapter-description">{chapters.connections.summary[locale]}</p>
+          <div class="skill-pathways">{techStack.skills.map((group, index) => <a href={`${getRoutePath("tech-stack", locale)}#skill-group-${group.id}`}><span class="number">0{index + 1}</span><div><h3>{group.title[locale]}</h3><p>{group.tags.map((tag) => tag[locale]).join(" / ")}</p></div><span aria-hidden="true">↗</span></a>)}</div>
+        </div>
+      </section>
+      <section class="chapter chapter-experience" id="chapter-4" data-chapter="4" tabindex="0" aria-labelledby="experience-title">
+        <div class="chapter-label"><span>05 / {scenes[4]}</span><a href={getRoutePath("about", locale)}>{chapters.experience.action[locale]} ↗</a></div>
+        <div class="experience-composition">
+          <p class="kicker">{chapters.experience.label[locale]}</p>
+          <h2 id="experience-title">{chapters.experience.title_lines.map((line, index) => <span class:list={{ cyan: index === 1 }}>{line[locale]}</span>)}</h2>
+          <p class="chapter-description">{chapters.experience.summary[locale]}</p>
+          <a class="large-text-link" href={getRoutePath("about", locale)}>{chapters.experience.action[locale]} ↗</a>
+          <div class="experience-preview">
+            {about.internship_experience.slice(0, 1).map((record) => <a href={`${getRoutePath("about", locale)}#internship-${record.id}`}><span class="number">{record.period}</span><h3>{record.role[locale]}</h3><p>{record.organization[locale]}</p><span aria-hidden="true">↗</span></a>)}
+            {about.education.slice(0, 1).map((record) => <a href={`${getRoutePath("about", locale)}#education-${record.id}`}><span class="number">{record.period}</span><h3>{record.degree[locale]}</h3><p>{record.school[locale]}</p><span aria-hidden="true">↗</span></a>)}
+            <a href={`${getRoutePath("about", locale)}#about-campus-title`}><span class="number">CAMPUS / COLLABORATION</span><h3>{labels.sections.about.campus}</h3><span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </section>
     </div>
-
-    <figure class="home-portrait" data-home-portrait>
-      <img
-        src={publicMediaUrl(home.portrait)}
-        alt={site.name[locale]}
-        width="1051"
-        height="1497"
-      />
-    </figure>
-
-    <span
-      class="home-background"
-      style={heroBackgroundStyle}
-      aria-hidden="true"
-    ></span>
-  </section>
+    <div class="overview-navigation" data-overview-controls hidden>
+      <p class="movement-hint">{labels.canvas.wheel}</p>
+      <nav class="chapter-dots" aria-label={labels.canvas.label}>{chapterLabels.map((label, index) => <a href={`#chapter-${index}`} data-chapter-go={index} aria-label={label}><span>{label}</span></a>)}</nav>
+      <div class="step-buttons"><button type="button" data-chapter-prev aria-label={labels.canvas.previous}>←</button><span data-chapter-position role="status" aria-live="polite" aria-atomic="true">01 / 05</span><button type="button" data-chapter-next aria-label={labels.canvas.next}>→</button></div>
+    </div>
+  </div>
 </BaseLayout>

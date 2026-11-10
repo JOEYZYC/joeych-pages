@@ -37,7 +37,7 @@
 - Preserve the four route IDs and eight canonical trailing-slash URLs: home, about, projects, and tech-stack in Chinese and English.
 - Use `getRoutePath()`/`withBase()` for internal links and `publicMediaUrl()` for public files.
 - Keep browser behavior local and progressive with native DOM APIs, dialogs, focus restoration, Escape handling, reduced-motion support, ARIA state, and no client framework.
-- Preserve the accepted dark accent contrast debt until the site owner changes `#176b45`; tests must report it explicitly rather than hiding it.
+- Follow the owner-approved site-wide chip design documented in `Astro/DESIGN.md`: expressive C typography, full-screen horizontal overview chapters without a persistent header bar, and normally scrolling detail readers. One original decorative chip changes composition across chapters and docks for detail reading. Unify all four routes while preserving their canonical URLs and project anchors; retain progressive enhancement, reduced-motion and reflow fallbacks, and the Flexoki-inspired semantic light/dark palette. Verify text, controls, and focus contrast in both themes; the former `#176b45` dark-accent exception does not apply.
 
 ## Development
 

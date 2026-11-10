@@ -6,13 +6,69 @@ page:
     zh: 首页
     en: Home
   summary:
-    zh: 我是一名电子信息工程本科毕业生，关注嵌入式系统、无线感知与智能硬件。我喜欢把想法落实为可以运行、可以验证的软硬件作品。
-    en: I am an Electronic & Information Engineering graduate, with interests in
-      embedded systems, wireless sensing, and intelligent hardware. I enjoy
-      turning ideas into practical hardware-software projects.
+    zh: 从电路到代码，我喜欢把好奇心变成看得见的作品。
+    en: From circuits to code, I enjoy turning curiosity into things I can build and share.
 heading:
-  zh: 你好，我叫张易成
+  zh: 你好，我是张易成。
   en: Hi, I'm Joey.
+headline_lines:
+  - zh: 充满热情的
+    en: An enthusiastic
+  - zh: 电子工程师
+    en: electronics engineer
+motif_caption:
+  zh: 让好奇心通上电。
+  en: Give curiosity a spark.
+chapters:
+  hello:
+    label: { zh: 认识我, en: Hello }
+    context: { zh: 江苏苏州 · 电子信息工程, en: Suzhou · Electronic engineering }
+    explore: { zh: 先看看我做的东西, en: See what I make }
+  making:
+    label: { zh: 动手做, en: Making }
+    title_lines:
+      - { zh: 从想法，, en: From an idea, }
+      - { zh: 做到手上。, en: to something real. }
+    summary: { zh: '板卡、设备、机器人。进入项目，看看具体问题、我的贡献与资料。', en: 'Boards, devices, robots. Open a project for the problem, my contribution, and the supporting material.' }
+    action: { zh: 工程项目目录, en: Project directory }
+    project_ids:
+      - 2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform
+      - 2024-Competition-DualLightFusionSmartThermalImager
+      - 2024-Competition-SmartCarModelGroupTeamDevelopmentArchive
+  research:
+    label: { zh: 研究探索, en: Research }
+    title_lines:
+      - { zh: 在看不见的地方，, en: Beyond what }
+      - { zh: 继续追问。, en: we can see. }
+    summary: { zh: '超表面、太赫兹与无线感知。从结构与信号出发，继续理解问题。', en: 'Metasurfaces, terahertz waves, and wireless sensing. Exploring questions through structures and signals.' }
+    action: { zh: 研究目录, en: Research directory }
+    project_ids:
+      - 2026-Project-DesignOfAGrapheneBasedTerahertzLinearToCircularPolarizationConversionMetasurface
+      - 2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception
+  connections:
+    label: { zh: 能力与证据, en: Skills & evidence }
+    title_lines:
+      - { zh: 会什么，, en: The practice. }
+      - { zh: 拿作品来说。, en: The evidence. }
+    summary: { zh: '从工具与实践出发。项目依据、自述经验，分别标注。', en: 'Starting with tools and practice. Project evidence and self-described experience are clearly distinguished.' }
+    action: { zh: 完整能力与证据, en: All skills & evidence }
+  experience:
+    label: { zh: 一路走来, en: Along the way }
+    title_lines:
+      - { zh: 不只是作品，, en: More than work. }
+      - { zh: 也是我。, en: A little of me. }
+    summary: { zh: '学习、实践，与别人一起把事情做好。从校园，到新的工程现场。', en: 'Learning, making, and working with others. From campus to new engineering settings.' }
+    action: { zh: 展开我的经历, en: Read my story }
+selected_project_ids:
+  - 2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform
+  - 2024-Competition-DualLightFusionSmartThermalImager
+closing:
+  title:
+    zh: 让好奇心，有一个去处。
+    en: A place for curiosity to grow.
+  summary:
+    zh: 我是一名电子信息工程本科毕业生，关注嵌入式系统、无线感知与智能硬件。这里记录我的工程实践与研究探索。
+    en: I am an Electronic & Information Engineering graduate interested in embedded systems, wireless sensing, and intelligent hardware. This is where I share my engineering projects and research explorations.
 portrait: portrait-b1-cutout-workshirt-upright-transparent.png
 hero_background:
   light: hero-circuit-background-light.png

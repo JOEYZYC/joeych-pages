@@ -1,0 +1,29 @@
+Site-wide font subsets — Modified Versions under SIL Open Font License 1.1
+
+home-maple-600.woff: Home Maple Subset SemiBold, derived from the installed
+Maple Mono NF CN SemiBold, version 7.900, weight 600.
+Copyright 2022 The Maple Mono Project Authors
+(https://github.com/subframe7536/maple-font)
+Full license: maple-OFL.txt. No Reserved Font Name is declared there.
+
+home-noto-400.woff and home-noto-600.woff: Home Noto Subset Regular/SemiBold,
+derived by static instantiation at weights 400 and 600 from installed Noto
+Sans SC variable font, version 2.04.
+Copyright 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'.
+Full license: noto-OFL.txt. 'Source' is not used as a derivative primary name.
+
+Modifications: retain a declared site-wide Unicode subset and ASCII,
+instantiate Noto weights, assign derivative family names, and encode WOFF1.
+Original copyright, author, version, trademark and licensing metadata are
+retained where present; full OFL notices are also embedded in name table 13.
+The original authors do not endorse these Modified Versions.
+
+Exact local source hashes, versions, output hashes, weights and sizes:
+provenance.json. Input hashes and complete Unicode inventory: glyphs.json.
+Public text input hashes use UTF-8 with CRLF and lone CR normalized to LF
+(inputHashNormalization: utf8-lf); binary and donor hashes use raw bytes.
+Reproduce with existing fontTools: python Astro/scripts/subset-home-fonts.py
+Read-only final coverage check: python Astro/scripts/subset-home-fonts.py --check
+No original font is copied, redistributed in full, downloaded or modified.
+
+These files must be bundled with both full OFL notices and this notice.

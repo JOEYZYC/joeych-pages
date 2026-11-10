@@ -67,7 +67,7 @@ test.describe("local font and icon network budgets", () => {
       const url = response.url()
       if (new URL(url).origin !== siteOrigin) remoteRequests.push(url)
       const contentType = response.headers()["content-type"] ?? ""
-      if ((contentType.includes("font") || url.endsWith(".woff2")) && response.status() === 200) {
+      if ((contentType.includes("font") || /\.woff2?$/.test(url)) && response.status() === 200) {
         fontResponses.set(url, {
           url,
           status: response.status(),

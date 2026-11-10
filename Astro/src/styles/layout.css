@@ -14,7 +14,7 @@
 .site-main {
   margin: 0 auto;
   max-inline-size: var(--content-max);
-  padding: var(--space-12) var(--space-4) var(--space-16);
+  padding: var(--space-8) var(--space-4) var(--space-16);
 }
 .eyebrow {
   color: var(--color-text-muted);
@@ -32,6 +32,7 @@
 }
 @media (min-width: 48rem) {
   .site-main {
+    padding-block-start: var(--space-16);
     padding-inline: var(--space-6);
   }
 }

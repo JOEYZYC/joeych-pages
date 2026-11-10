@@ -9,9 +9,9 @@ const routes = [
   { locale: "en", path: "en/tech-stack/", language: "en" },
 ] as const
 
-test.describe("tech stack capability tree", () => {
+test.describe("evidence-backed capability ledger", () => {
   for (const route of routes) {
-    test(`renders the complete ${route.locale} bottom-up capability tree`, async ({ page }) => {
+    test(`renders every ${route.locale} capability with its actual evidence`, async ({ page }) => {
       const { techStack } = await getProfileData()
       const capabilities = techStack.skills.flatMap(({ tags }) => tags)
 
@@ -19,50 +19,49 @@ test.describe("tech stack capability tree", () => {
 
       await expect(page.locator("html")).toHaveAttribute("lang", route.language)
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(techStack.page.title[route.locale])
-      await expect(page.locator(".intro")).toHaveCount(0)
+      await expect(page.locator(".intro")).toBeVisible()
       await expect(page.locator("[data-capability-tree]")).toBeVisible()
-      await expect(page.locator(".capability-tree-label")).toHaveText(techStack.map.title[route.locale])
-      await expect(page.locator(".capability-tree-root")).toHaveText(techStack.map.center[route.locale])
+      await expect(page.locator(".intro > p:not(.eyebrow)")).toHaveText(techStack.map.center[route.locale])
       await expect(page.locator("[data-capability-branch]")).toHaveCount(techStack.skills.length)
       await expect(page.locator("[data-capability-leaf]")).toHaveCount(capabilities.length)
-      await expect(page.locator(".tech-stack-ledger, .skill-evidence, .skill-components")).toHaveCount(0)
+      await expect(page.locator(".skill-evidence")).toHaveCount(capabilities.length)
 
       for (const group of techStack.skills) {
         const branch = page.locator(`[data-capability-branch="${group.id}"]`)
-        await expect(branch.locator(".capability-tree-branch-node")).toHaveText(group.title[route.locale])
+        await expect(branch.getByRole("heading", { level: 2 })).toHaveText(group.title[route.locale])
         expect(await branch.locator("[data-capability-leaf]").evaluateAll(
           (leaves) => leaves.map((leaf) => leaf.getAttribute("data-capability-leaf")),
         )).toEqual(group.tags.map(({ id }) => id))
 
         for (const tag of group.tags) {
           const leaf = branch.locator(`[data-capability-leaf="${tag.id}"]`)
-          await expect(leaf.getByRole("heading", { level: 2 })).toHaveText(tag[route.locale])
-          await expect(leaf.locator("p")).toHaveText(tag.description[route.locale])
+          await expect(leaf.getByRole("heading", { level: 3 })).toHaveText(tag[route.locale])
+          await expect(leaf.locator(".skill-description")).toHaveText(tag.description[route.locale])
+          await expect(leaf.locator("[data-skill-evidence-type]")).toHaveCount(tag.evidence.length)
+          for (const evidence of tag.evidence) {
+            if (evidence.type === "project") {
+              await expect(leaf.locator(`a[href$="?skill=${tag.id}#${evidence.project_id}"]`)).toBeVisible()
+            } else if (evidence.type === "general-ability") {
+              await expect(leaf.locator(`[data-skill-level="${evidence.level}"]`)).toBeVisible()
+            }
+          }
         }
       }
     })
   }
 
   for (const route of routes) {
-    test(`places ${route.locale} leaves above branches and the root at the bottom`, async ({ page }) => {
+    test(`opens exact ${route.locale} project evidence and retains its skill origin`, async ({ page }) => {
       await page.setViewportSize({ width: 1280, height: 900 })
       await page.goto(route.path)
 
-      expect(await page.locator("[data-capability-tree]").evaluate((tree) => {
-        const root = tree.querySelector<HTMLElement>(".capability-tree-root")
-        const branches = [...tree.querySelectorAll<HTMLElement>("[data-capability-branch]")]
-        if (!root || branches.length === 0) return false
-        const rootTop = root.getBoundingClientRect().top
-
-        return branches.every((branch) => {
-          const branchNode = branch.querySelector<HTMLElement>(".capability-tree-branch-node")
-          const leaves = [...branch.querySelectorAll<HTMLElement>("[data-capability-leaf]")]
-          if (!branchNode || leaves.length === 0) return false
-          const branchRect = branchNode.getBoundingClientRect()
-          return branchRect.bottom < rootTop
-            && leaves.every((leaf) => leaf.getBoundingClientRect().bottom < branchRect.top)
-        })
-      })).toBe(true)
+      const link = page.locator('.skill-evidence a').first()
+      const href = await link.getAttribute("href")
+      await link.click()
+      await expect(page).toHaveURL(new RegExp(`\\?skill=cst-microwave-antenna#${href?.split("#")[1]}`))
+      await expect(page.locator("[data-project-dialog]")).toBeVisible()
+      await expect(page.locator("[data-project-dialog]")).toHaveAttribute("data-evidence-origin", "true")
+      await expect(page.locator("[data-project-dialog] [data-project-origin-label]")).toContainText(route.locale === "zh" ? "电磁仿真" : "Electromagnetic Simulation")
     })
   }
 

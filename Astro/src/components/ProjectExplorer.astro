@@ -66,6 +66,9 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
           {categories.map((category) => <option value={category.value}>{category.label}</option>)}
         </select>
       </label>
+      <details class="project-advanced-filters" data-project-advanced-filters open>
+        <summary>{labels.portfolio.moreFilters}</summary>
+        <div class="project-advanced-fields">
       <label class="project-filter-field" for="project-name-filter">
         <span>{labels.projectExplorer.name}</span>
         <select id="project-name-filter" data-project-name-filter data-all-projects-label={labels.projectExplorer.allProjects}>
@@ -81,6 +84,8 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
           </optgroup>)}
         </select>
       </label>
+        </div>
+      </details>
     </div>
     <div class="project-filter-summary" data-project-filter-summary hidden>
       <p
@@ -142,6 +147,17 @@ const serializedSkillEvidence = JSON.stringify(skillEvidence).replaceAll("<", "\
     const dialogTemplates = new Map([...explorer.querySelectorAll<HTMLTemplateElement>("[data-project-dialog-template]")].map((template) => [template.dataset.projectId ?? "", template]))
     const recordsSection = explorer.querySelector<HTMLElement>("[data-project-records]")
     const evidenceSource = explorer.querySelector<HTMLScriptElement>("[data-project-skill-evidence]")
+    const advanced = explorer.querySelector<HTMLDetailsElement>("[data-project-advanced-filters]")
+    const wideFilters = window.matchMedia("(min-width: 48rem)")
+    if (advanced) {
+      advanced.open = wideFilters.matches
+      wideFilters.addEventListener("change", () => {
+        if (!wideFilters.matches && advanced.contains(document.activeElement)) {
+          advanced.querySelector("summary")?.focus()
+        }
+        advanced.open = wideFilters.matches
+      })
+    }
     if (!controls || !cardGrid || !categoryFilter || !nameFilter || !honorFilter || !filterSummary || !filterStatus || !filterAnnouncement || !clearFilters || cards.length === 0 || records.length === 0 || !dialog || !dialogContent || dialogTemplates.size !== cards.length || !recordsSection || !evidenceSource) continue
 
     const evidenceMap = JSON.parse(evidenceSource.textContent ?? "") as EvidenceMap

@@ -7,7 +7,7 @@ const componentsUrl = new URL("../src/styles/components.css", import.meta.url)
 const designUrl = new URL("../DESIGN.md", import.meta.url)
 const footerUrl = new URL("../src/components/SiteFooter.astro", import.meta.url)
 const layoutUrl = new URL("../src/styles/layout.css", import.meta.url)
-const homeUrl = new URL("../src/styles/home.css", import.meta.url)
+const homeUrl = new URL("../src/styles/chip.css", import.meta.url)
 const tokensUrl = new URL("../src/styles/tokens.css", import.meta.url)
 
 function contrastRatio(foreground: string, background: string): number {
@@ -49,15 +49,17 @@ describe("shared visual system contract", () => {
     expect(base).toMatch(/html\[lang="en"\] h1,[\s\S]*font-weight: 700/)
   })
 
-  it("uses a single layered Home hero without a dedicated gradient", async () => {
+  it("uses a progressively enhanced Home canvas with visible source-ordered fallback", async () => {
     const [home, tokens] = await Promise.all([readFile(homeUrl, "utf8"), readFile(tokensUrl, "utf8")])
 
     expect(`${home}\n${tokens}`).not.toContain("--gradient-hero")
-    expect(home).toMatch(/\.home-hero\s*\{[\s\S]*background: var\(--color-surface\)/)
-    expect(home).toMatch(/\.home-background\s*\{[\s\S]*background-image: var\(--home-background-light\)/)
-    expect(home).toMatch(/html\[data-theme="dark"\] \.home-background\s*\{[\s\S]*background-image: var\(--home-background-dark\)/)
-    expect(home).toMatch(/\.home-background\s*\{[\s\S]*background-size: cover/)
-    expect(home).toMatch(/\.home-portrait img\s*\{[\s\S]*object-fit: contain/)
+    expect(home).not.toContain(".home-background")
+    expect(home).toContain(".chapter-rail { display: grid")
+    expect(home).toContain('data-reflow="false"')
+    expect(home).toContain("overflow: clip")
+    expect(home).not.toMatch(/min-block-size: (?:39|42)rem/)
+    expect(home).toContain("object-fit: contain")
+    expect(home).not.toContain('src: local(')
   })
 
   it("uses semantic state cues for shared controls without a color-only disabled state", async () => {
@@ -152,6 +154,28 @@ describe("shared visual system contract", () => {
     }
   })
 
+  it("meets AA text and control contrast in every Flexoki theme entry path", async () => {
+    const tokens = await readFile(tokensUrl, "utf8")
+    for (const scope of [":root", 'html[data-theme="dark"]', 'html[data-js="false"]']) {
+      const block = tokens.slice(tokens.indexOf(scope)).split("}")[0] ?? ""
+      const color = (name: string) => {
+        const value = block.match(new RegExp(`--color-${name}: (#[0-9a-f]{6})`, "i"))?.[1]
+        if (!value) throw new Error(`Missing ${name} in ${scope}`)
+        return value
+      }
+      for (const surface of ["canvas", "surface", "surface-muted"]) {
+        for (const text of ["text", "text-muted", "text-subtle", "accent", "control-hover", "warning"]) {
+          expect(contrastRatio(color(text), color(surface)), `${scope}: ${text}/${surface}`).toBeGreaterThanOrEqual(4.5)
+        }
+        expect(contrastRatio(color("focus"), color(surface))).toBeGreaterThanOrEqual(3)
+        expect(contrastRatio(color("border-strong"), color(surface))).toBeGreaterThanOrEqual(3)
+      }
+      expect(contrastRatio(color("accent-on"), color("accent"))).toBeGreaterThanOrEqual(4.5)
+      expect(contrastRatio(color("accent-on"), color("accent-hover"))).toBeGreaterThanOrEqual(4.5)
+    }
+    expect(tokens).not.toContain("#176b45")
+  })
+
   it("keeps the shared prose measure within the documented reading range", async () => {
     // Given: the shared prose width token and base body font size
     const tokens = await readFile(tokensUrl, "utf8")
@@ -190,6 +214,6 @@ describe("shared visual system contract", () => {
     expect(design).toContain("42 MiB")
     expect(design).toContain("6 MiB")
     expect(design).toContain("256 KiB")
-    expect(design).toContain("Inline primary navigation appears at `>=1024px`.")
+    expect(design).toContain("No persistent header bar")
   })
 })

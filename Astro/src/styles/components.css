@@ -23,13 +23,14 @@
 .header-button {
   color: var(--color-text);
   font-family: var(--font-body);
-  font-size: var(--type-meta);
+  font-size: var(--type-small);
   font-weight: 500;
   letter-spacing: 0.04em;
   text-decoration: none;
 }
 
 .wordmark {
+  font-size: var(--type-body);
   font-weight: 700;
   margin-inline-end: auto;
 }
@@ -327,20 +328,20 @@ html[data-js="true"] .header-nav[data-open="true"] {
 
 .intro {
   border-block-end: 1px solid var(--color-border);
-  max-inline-size: var(--prose-max);
-  padding-block-end: var(--space-10);
+  padding-block-end: var(--space-6);
 }
 
 .intro h1 {
   font-family: var(--font-display);
   font-size: var(--type-h1);
-  line-height: 1.08;
+  line-height: 1.2;
   margin: 0 0 var(--space-4);
 }
 
 .intro p {
   font-size: var(--type-lead);
   margin: 0;
+  max-inline-size: var(--prose-max);
 }
 
 

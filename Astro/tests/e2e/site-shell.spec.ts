@@ -28,6 +28,8 @@ test.describe("formal site shell", () => {
       await expect(page.locator("html")).toHaveAttribute("lang", route.locale === "zh" ? "zh-CN" : "en")
       await expect(page.locator("html")).toHaveAttribute("data-js", "true")
       await expect(page.getByRole("banner")).toBeVisible()
+      await expect(page.locator("#primary-navigation")).toBeHidden()
+      await page.locator("[data-menu-toggle]").click()
       await expect(page.locator("#primary-navigation")).toBeVisible()
       await expect(page.getByRole("main")).toBeVisible()
       await expect(page.getByRole("contentinfo")).toBeVisible()
@@ -63,7 +65,7 @@ test.describe("formal site shell", () => {
       expect(jsonLd.some((value) => value["@type"] === "Person" && value.name === (route.locale === "zh" ? "张易成" : "Joey Zhang"))).toBe(true)
       expect(jsonLd.some((value) => value["@type"] === "WebSite" && value.name === "JOEYCH")).toBe(true)
       expect(jsonLd.some((value) => value["@type"] === "ItemList")).toBe(route.path.includes("projects"))
-      await expect(page.locator("a.language-link")).toHaveAttribute("href", `${basePath}${route.counterpart}`)
+      await expect(page.locator("a.language-link")).toHaveAttribute("href", `${basePath}${route.counterpart}${route.path === "" || route.path === "en/" ? "#chapter-0" : ""}`)
     })
   }
 

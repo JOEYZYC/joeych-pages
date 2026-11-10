@@ -7,9 +7,11 @@ const viewports = VIEWPORTS
 test.describe("header interactions", () => {
   test("opens contact by keyboard and restores focus after every close path", async ({ page }) => {
     await page.goto("")
+    await page.locator("[data-menu-toggle]").click()
     const trigger = page.locator("[data-contact-trigger]")
     const dialog = page.locator("[data-contact-dialog]")
 
+    await expect(trigger).toBeVisible()
     await trigger.focus()
     await page.keyboard.press("Enter")
     await expect(dialog).toBeVisible()
@@ -19,6 +21,11 @@ test.describe("header interactions", () => {
     await page.keyboard.press("Escape")
     await expect(dialog).not.toBeVisible()
     await expect(trigger).toBeFocused()
+    await expect(page.locator("[data-directory]")).toHaveAttribute("open", "")
+    await page.keyboard.press("Escape")
+    await expect(page.locator("[data-directory]")).not.toHaveAttribute("open", "")
+    await expect(page.locator("[data-menu-toggle]")).toBeFocused()
+    await page.locator("[data-menu-toggle]").click()
 
     await trigger.click()
     const bounds = await dialog.boundingBox()
@@ -43,12 +50,9 @@ test.describe("header interactions", () => {
     const toggle = page.locator("[data-menu-toggle]")
     const navigation = page.locator("#primary-navigation")
     const firstRoute = navigation.getByRole("link").first()
-    const actions = page.locator(".header-actions")
-
-    const [toggleBox, actionsBox] = await Promise.all([toggle.boundingBox(), actions.boundingBox()])
+    const toggleBox = await toggle.boundingBox()
     expect(toggleBox).not.toBeNull()
-    expect(actionsBox).not.toBeNull()
-    expect(toggleBox?.x ?? 0).toBeLessThan(actionsBox?.x ?? 0)
+    expect(toggleBox?.x ?? 0).toBeGreaterThan(viewports[0].width / 2)
 
     await toggle.click()
     await expect(firstRoute).toBeFocused()
@@ -66,24 +70,19 @@ test.describe("header interactions", () => {
     await expect(toggle).toBeFocused()
   })
 
-  test("header controls use named build-time icons and reveal localized tooltips on focus", async ({ page }) => {
+  test("corner directory controls retain localized names, visible labels and build-time service icons", async ({ page }) => {
     await page.setViewportSize(viewports[1])
     await page.goto("en/")
 
-    const controls = [
-      { trigger: page.locator("[data-menu-toggle]"), tooltip: page.locator("[data-menu-toggle] [data-control-tooltip]") },
-      { trigger: page.locator("a.language-link"), tooltip: page.locator("a.language-link [data-control-tooltip]") },
-      { trigger: page.locator("[data-theme-toggle]"), tooltip: page.locator("[data-theme-toggle]").locator("xpath=..").locator("[data-control-tooltip]") },
-      { trigger: page.locator("[data-contact-trigger]"), tooltip: page.locator("[data-contact-trigger]").locator("xpath=../..").locator("[data-control-tooltip]") },
-    ] as const
-
-    for (const { trigger, tooltip } of controls) {
+    await page.locator("[data-menu-toggle]").click()
+    for (const trigger of [page.locator("a.language-link"), page.locator("[data-theme-toggle]"), page.locator("[data-contact-trigger]")]) {
       await expect(trigger).toBeVisible()
       await trigger.focus()
-      await expect(tooltip).toBeVisible()
+      await expect(trigger).toBeFocused()
+      await expect(trigger).toHaveAccessibleName(/.+/)
+      await expect(trigger).not.toHaveText("")
     }
 
-    await expect(page.locator("[data-menu-toggle] [data-menu-open-icon] svg[data-icon]")).toHaveCount(1)
     await expect(page.locator("a.language-link svg[data-icon]")).toHaveCount(1)
     await expect(page.locator("[data-theme-toggle] [data-theme-destination]:not([hidden]) svg[data-icon]")).toHaveCount(1)
     await expect(page.locator('[data-contact-trigger] svg[data-icon="envelope"]')).toHaveCount(1)
@@ -101,6 +100,7 @@ test.describe("header interactions", () => {
     }))
     expect(hasViewTransitionRule).toBe(true)
 
+    await page.locator("[data-menu-toggle]").click()
     await page.locator("#primary-navigation").getByRole("link", { name: "自我介绍" }).click()
     await expect(page).toHaveURL(/\/about\/$/)
 
@@ -111,6 +111,7 @@ test.describe("header interactions", () => {
       })
     })
     await page.goto("")
+    await page.locator("[data-menu-toggle]").click()
     await page.locator("#primary-navigation").getByRole("link", { name: "项目与成果" }).click()
     await expect(page).toHaveURL(/\/projects\/$/)
   })
@@ -159,7 +160,7 @@ test.describe("header interactions", () => {
     await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewports[1].width)
   })
 
-  test("switches from compact to inline navigation at the 1024px boundary in both locales", async ({ page }) => {
+  test("keeps the same compact corner directory on both sides of 1024px in both locales", async ({ page }) => {
     const compactViewport = { width: 1023, height: 900 }
     const fullNavigationViewports = [
       { width: 1024, height: 900 },
@@ -180,7 +181,9 @@ test.describe("header interactions", () => {
         await page.setViewportSize(viewport)
         await page.goto(localePath)
 
-        await expect(page.locator("[data-menu-toggle]")).toBeHidden()
+        await expect(page.locator("[data-menu-toggle]")).toBeVisible()
+        await expect(page.locator("#primary-navigation")).toBeHidden()
+        await page.locator("[data-menu-toggle]").click()
         await expect(page.locator("#primary-navigation")).toBeVisible()
         await expect(page.locator("[data-header-route]")).toHaveCount(4)
         for (const route of await page.locator("[data-header-route]").all()) {

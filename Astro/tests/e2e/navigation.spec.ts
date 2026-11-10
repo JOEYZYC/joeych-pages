@@ -196,6 +196,7 @@ test.describe("navigation state synchronization", () => {
           for (const destination of destinations) {
             await page.evaluate((marker) => window.sessionStorage.removeItem(marker), unloadMarker)
             const link = page.locator(`[data-header-route][href="${basePath}/${destination.path}"]`)
+            await page.locator("[data-menu-toggle]").click()
 
             await Promise.all([
               page.waitForURL(new URL(destination.path, siteBaseUrl).toString()),

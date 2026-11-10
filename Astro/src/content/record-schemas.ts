@@ -64,6 +64,7 @@ export const projectSchema = z
     category: localizedSchema,
     summary: localizedSchema,
     contribution: localizedSchema,
+    status: localizedSchema.optional(),
     tags: z.array(localizedSchema).readonly(),
     figures: z.array(projectFigureSchema).refine(hasUniqueIds, "duplicate project figure ID").readonly(),
     links: z.array(linkSchema).readonly(),

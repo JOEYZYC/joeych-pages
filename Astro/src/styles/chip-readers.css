@@ -1,0 +1,74 @@
+/* The same editorial voice, with normal document scrolling for the full records. */
+body .intro { border: 0; padding: 0 0 2.5rem; margin: 0; max-inline-size: 60rem; }
+body .intro h1 { font-size: clamp(2.75rem, 5.5vw, 5rem); line-height: 1.2; letter-spacing: -.055em; margin: 1rem 0 1.5rem; font-weight: 600; }
+body .intro > p:last-child { color: var(--muted); max-inline-size: 44rem; font-size: 1rem; line-height: 1.9; }
+body .intro .eyebrow { font-size: .6875rem; letter-spacing: .08em; color: var(--cyan); }
+body .about-panel, body .about-facts { border-radius: 0; background: transparent; box-shadow: none; }
+body .about-lead { gap: 4rem; margin-top: 1rem; }
+body .about-facts { border-block-start: 1px solid var(--ink); padding: 1.5rem 0; }
+body .about-facts dl { grid-template-columns: 1fr; }
+body .about-facts dl div { display: grid; grid-template-columns: 6rem 1fr; gap: 1rem; padding: .5rem 0; }
+body .about-facts dt, body .about-facts dd { margin: 0; font-size: .8125rem; }
+body .about-facts dt { color: var(--muted); }
+body .about-section { margin-top: 5rem; }
+body .about-section-heading h2, body .about-panel h2 { font-size: 1.375rem; line-height: 1.5; font-weight: 600; }
+body .about-heading-icon { display: none; }
+body .about-record { padding-block: 1.5rem 2rem; }
+body .about-record h3 { font-family: var(--font-body); font-weight: 600; font-size: 1.25rem; margin: .75rem 0 .5rem; }
+body .about-record .about-period { font-size: .6875rem; font-family: var(--font-mono); color: var(--cyan); }
+body .about-record li { font-size: .875rem; line-height: 1.9; }
+body .about-statistics strong { color: var(--ink); font-family: var(--font-display); font-size: 2.75rem; }
+body .about-statistics span { font-size: .75rem; color: var(--muted); }
+body .about-direction-grid { margin-top: 4rem; gap: 4rem; }
+body .skills-ledger { margin-top: 1rem; }
+body .skill-group { border-block-start: 1px solid var(--ink); padding-block: 2rem 3rem; }
+body .skill-group-heading { align-items: baseline; }
+body .skill-group-heading h2 { font-size: clamp(1.5rem, 2.5vw, 2rem); line-height: 1.4; }
+body .skill-record { border-radius: 0; background: transparent; box-shadow: none; padding-block: 1.5rem; }
+body .skill-record h3 { font-family: var(--font-body); font-size: 1.25rem; font-weight: 600; }
+body .skill-evidence { font-size: .8125rem; }
+body .skill-evidence-label { font-size: .6875rem; }
+body .project-filter-bar { position: static; background: transparent; padding-bottom: 1.5rem; }
+body .project-filter-field select { border-radius: 2px; font-size: .8125rem; }
+body .project-card { padding-block: 2rem; gap: .75rem 2rem; }
+body .project-card h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(1.25rem, 2vw, 1.875rem); letter-spacing: -.035em; }
+body .project-card .project-media-well { border-radius: 2px; border: 0; }
+body .project-card-meta { font-size: .625rem; letter-spacing: .04em; }
+body .project-card .project-card-title { color: var(--ink); }
+body .project-record { background: transparent; border-radius: 0; box-shadow: none; }
+body .dialog-surface.project-dialog { background: var(--paper); color: var(--ink); inline-size: 100%; max-inline-size: none; block-size: 100dvh; max-block-size: none; margin: 0; padding: 0; border: 0; border-radius: 0; overflow: hidden; position: fixed; }
+body .project-dialog::before { content: ""; position: absolute; inset: 0 0 auto; height: 64px; background: var(--paper); border-bottom: 1px solid var(--rule); z-index: 30; pointer-events: none; }
+body .project-dialog > [data-project-dialog-content] { block-size: 100%; max-block-size: none; overflow-y: auto; overscroll-behavior: contain; padding: 7rem 6% 5rem; scrollbar-gutter: auto; }
+body .project-dialog .dialog-close { position: absolute; inset: 1rem auto auto 6%; border-radius: 0; border: 0; background: var(--paper); z-index: 50; }
+body .project-dialog .project-record { max-inline-size: 68rem; margin-inline: auto; border: 0; padding: 0; }
+body .project-dialog .project-record-header { padding: 0; }
+body .project-dialog .project-record-header h2 { max-inline-size: 60rem; font-size: clamp(2rem, 3.5vw, 3.5rem); line-height: 1.35; font-weight: 600; letter-spacing: -.04em; }
+body .project-dialog .project-record-claim { max-inline-size: 46rem; margin-top: 1.5rem; color: var(--muted); font-size: 1rem; line-height: 1.9; }
+body .project-record-status { color: var(--warm); font-size: .8125rem; border-inline-start: 2px solid var(--warm); padding-inline-start: .75rem; margin-block: 1.25rem; }
+body .project-dialog .project-record-meta { color: var(--muted); font-size: .6875rem; }
+body .project-dialog .project-record > .project-media { margin-top: 3rem; }
+body .project-dialog .project-media-well { max-block-size: 32rem; border-radius: 2px; }
+body .project-record-section h3 { font-family: var(--font-body); font-size: 1.125rem; font-weight: 600; }
+body .project-outcome, body .project-record-contribution { border-radius: 0; background: transparent; padding: 1.5rem 0; border-block-start: 1px solid var(--rule); border-inline-start: 0; }
+body .project-dialog .project-record-body { max-inline-size: 52rem; margin-inline: auto; padding-top: 2rem; }
+body .project-outcome h4 { font-size: 1rem; }
+body .project-tag-list li { background: transparent; border: 1px solid var(--rule); border-radius: 2px; }
+@media (min-width: 768px) {
+  body .about-grid { grid-template-columns: 1fr; }
+  body .about-record { display: grid; grid-template-columns: 12rem 1fr; column-gap: 3rem; }
+  body .about-record > :not(.about-period) { grid-column: 2; }
+  body .about-record .about-period { grid-column: 1; grid-row: 1 / 5; padding-top: .5rem; }
+  body .about-record h3 { margin-top: 0; }
+  body .about-record--education ul { columns: auto; }
+}
+@media (max-width: 599px) {
+  body .intro { padding-bottom: 1.5rem; }
+  body .intro h1 { font-size: 2.75rem; }
+  body .intro > p:last-child { font-size: .875rem; }
+  body .about-lead, body .about-direction-grid { gap: 2.5rem; }
+  body .about-section { margin-top: 3.5rem; }
+  body .about-statistics strong { font-size: 2.125rem; }
+  body .project-dialog > [data-project-dialog-content] { padding-top: 6rem; }
+  body .project-dialog .project-record-header h2 { font-size: 1.8125rem; }
+  body .project-card { gap: .75rem; }
+}

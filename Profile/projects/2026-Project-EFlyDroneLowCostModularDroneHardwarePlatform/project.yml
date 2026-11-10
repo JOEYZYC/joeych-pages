@@ -1,5 +1,8 @@
 id: 2026-Project-EFlyDroneLowCostModularDroneHardwarePlatform
 year: 2026
+status:
+  zh: 实物尚未完成测试
+  en: Physical testing is not yet complete
 featured: false
 image: 飞控核心正面.png
 title:

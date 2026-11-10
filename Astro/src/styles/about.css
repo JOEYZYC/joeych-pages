@@ -230,3 +230,27 @@
     grid-column: span 7;
   }
 }
+
+/* A compact profile followed by a readable experience ledger. */
+.about-panel { background: transparent; border: 0; border-radius: 0; box-shadow: none; padding: 0; }
+.about-lead { align-items: start; margin-block-start: var(--space-8); }
+.about-overview > p:not(.eyebrow), .about-goal p { font-size: var(--type-body); }
+.about-facts { background: var(--color-surface-muted); border-radius: var(--radius-panel); padding: var(--space-6); }
+.about-facts h2 { font-size: var(--type-h3); }
+.about-facts dl { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+.about-facts dl div { border: 0; padding: 0; }
+.about-facts dl div:last-child { grid-column: 1 / -1; }
+.about-statistics { border-block: 1px solid var(--color-border); }
+.about-statistics article { background: transparent; border: 0; border-radius: 0; box-shadow: none; padding: var(--space-4) 0; }
+.about-statistics strong { font-variant-numeric: tabular-nums; }
+.about-record { background: transparent; border: 0; border-block-start: 1px solid var(--color-border); border-radius: 0; box-shadow: none; padding: var(--space-5) 0; }
+.about-record::before { display: none; }
+.about-section-heading { margin-block-end: var(--space-3); }
+.about-direction-grid { border-block-start: 1px solid var(--color-border); padding-block-start: var(--space-6); }
+.about-direction-grid h2 { font-size: var(--type-h3); }
+@media (min-width: 48rem) {
+  .about-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .about-record--campus[data-about-position] { grid-column: auto; }
+  .about-record--education ul { columns: 2; column-gap: var(--space-10); }
+  .about-record li { break-inside: avoid; }
+}

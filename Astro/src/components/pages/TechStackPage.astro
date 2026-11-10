@@ -2,33 +2,41 @@
 import type { Locale } from "../../i18n/locales"
 import BaseLayout from "../../layouts/BaseLayout.astro"
 import { getProfileData } from "../../lib/profile-data"
+import { getRoutePath } from "../../lib/routes"
+import { UI } from "../../i18n/ui"
+import EditorialIntro from "../EditorialIntro.astro"
 import "../../styles/skills.css"
 
 type Props = { readonly locale: Locale }
 const { locale } = Astro.props
 const data = await getProfileData()
+const labels = UI[locale]
+const projectById = new Map(data.projects.map((project) => [project.id, project]))
 ---
 
 <BaseLayout locale={locale} page={data.techStack.page} site={data.site} routeId="tech-stack">
-  <section class="capability-tree" aria-labelledby="capability-tree-title" data-capability-tree>
-    <h1 id="capability-tree-title" class="visually-hidden">{data.techStack.page.title[locale]}</h1>
-    <p class="capability-tree-label">{data.techStack.map.title[locale]}</p>
-    <ul class="capability-tree-branches">
-      {data.techStack.skills.map((group) => <li class="capability-tree-subtree" data-capability-branch={group.id}>
-        <section aria-label={group.title[locale]}>
-          <ul class="capability-tree-leaves">
-            {group.tags.map((tag) => <li>
-              <article class="capability-tree-leaf" data-capability-leaf={tag.id}>
-                <h2>{tag[locale]}</h2>
-                <p>{tag.description[locale]}</p>
-              </article>
+  <EditorialIntro overline={data.techStack.page.overline[locale]} title={data.techStack.page.title[locale]} summary={data.techStack.map.center[locale]} />
+  <section class="skills-ledger" aria-label={data.techStack.map.title[locale]} data-capability-tree>
+    {data.techStack.skills.map((group, index) => <section class="skill-group" aria-labelledby={`skill-group-${group.id}`} data-capability-branch={group.id}>
+      <header class="skill-group-heading">
+        <span class="eyebrow" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+        <h2 id={`skill-group-${group.id}`}>{group.title[locale]}</h2>
+      </header>
+      <div class="skill-group-records">
+        {group.tags.map((tag) => <article class="skill-record" data-capability-leaf={tag.id}>
+          <h3>{tag[locale]}</h3>
+          <p class="skill-description">{tag.description[locale]}</p>
+          <ul class="skill-evidence" aria-label={labels.portfolio.evidence}>
+            {tag.evidence.map((evidence) => <li data-skill-evidence-type={evidence.type}>
+              {evidence.type === "project" ? <>
+                <span class="skill-evidence-label">{labels.portfolio.projectEvidence}</span>
+                <a href={`${getRoutePath("projects", locale)}?skill=${tag.id}#${evidence.project_id}`}>{projectById.get(evidence.project_id)?.title[locale]}</a>
+              </> : <span class="skill-evidence-label" data-skill-level={evidence.type === "general-ability" ? evidence.level : "credential"}>{evidence.type === "credential" ? labels.portfolio.credential : labels.portfolio[evidence.level]}</span>}
+              <span class="skill-evidence-scope">{evidence.supports.map((id) => id.replaceAll("-", " ")).join(" · ")}</span>
             </li>)}
           </ul>
-          <p class="capability-tree-branch-node">{group.title[locale]}</p>
-        </section>
-      </li>)}
-    </ul>
-    <span class="capability-tree-junction" aria-hidden="true"></span>
-    <p class="capability-tree-root">{data.techStack.map.center[locale]}</p>
+        </article>)}
+      </div>
+    </section>)}
   </section>
 </BaseLayout>

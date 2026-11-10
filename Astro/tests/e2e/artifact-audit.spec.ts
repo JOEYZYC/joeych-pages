@@ -62,7 +62,7 @@ test.describe("fresh static artifact audit", () => {
     const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].flatMap((match) => match[1] === undefined ? [] : [match[1]]).sort()
     const violations = sources.flatMap(({ path, source }) => auditText(relative(distPath, path), source)).sort()
     const symlinks = await Promise.all(artifactFiles.map(async (path) => ({ path, stat: await lstat(path) })))
-    const fontFiles = artifactFiles.filter((path) => path.endsWith(".woff2"))
+    const fontFiles = artifactFiles.filter((path) => /\.woff2?$/.test(path))
     const fontBytes = (await Promise.all(fontFiles.map(async (path) => (await stat(path)).size))).reduce((total, bytes) => total + bytes, 0)
 
     // Then: exactly eight base-aware static documents remain free of alternate runtimes and protected inputs

@@ -4,6 +4,31 @@ import type { Locale } from "./locales"
 type SectionId = RouteId | "awards"
 
 type UiLabels = {
+  readonly canvas: {
+    readonly label: string
+    readonly previous: string
+    readonly next: string
+    readonly beginning: string
+    readonly replay: string
+    readonly explore: string
+    readonly wheel: string
+    readonly swipe: string
+    readonly reading: string
+    readonly position: string
+    readonly fontLicenses: string
+  }
+  readonly portfolio: {
+    readonly selectedWork: string
+    readonly allProjects: string
+    readonly contribution: string
+    readonly evidence: string
+    readonly projectEvidence: string
+    readonly working: string
+    readonly exposure: string
+    readonly credential: string
+    readonly filters: string
+    readonly moreFilters: string
+  }
   readonly skipToContent: string
   readonly navigation: Readonly<Record<RouteId, string>>
   readonly menu: string
@@ -90,6 +115,19 @@ type UiLabels = {
 
 export const UI = {
   zh: {
+    canvas: { label: "首页章节", previous: "上一幕", next: "下一幕", beginning: "回到开头", replay: "重播入场", explore: "探索作品", wheel: "横滑 / 滚轮，切换下一幕", swipe: "横向滑动，或使用切换按钮", reading: "依次阅读，也可使用切换按钮", position: "第 {current} 幕，共 {total} 幕", fontLicenses: "字体来源与许可" },
+    portfolio: {
+      selectedWork: "代表作品",
+      allProjects: "查看全部项目",
+      contribution: "我的贡献",
+      evidence: "实践依据",
+      projectEvidence: "项目实践",
+      working: "日常使用 · 自述",
+      exposure: "接触了解 · 自述",
+      credential: "公开资质声明",
+      filters: "筛选项目",
+      moreFilters: "项目名称与荣誉",
+    },
     skipToContent: "跳到主要内容",
     navigation: {
       home: "首页",
@@ -197,6 +235,19 @@ export const UI = {
     },
   },
   en: {
+    canvas: { label: "Home canvas", previous: "Previous section", next: "Next section", beginning: "Back to the beginning", replay: "Replay entrance", explore: "Explore the work", wheel: "Scroll down to explore across", swipe: "Swipe across or use the section buttons", reading: "Read in order or use the section buttons", position: "Section {current} of {total}", fontLicenses: "Font sources and licenses" },
+    portfolio: {
+      selectedWork: "Selected work",
+      allProjects: "View all projects",
+      contribution: "My contribution",
+      evidence: "Evidence",
+      projectEvidence: "Project practice",
+      working: "Working knowledge · self-described",
+      exposure: "Exposure · self-described",
+      credential: "Public credential claim",
+      filters: "Filter projects",
+      moreFilters: "Project name & honors",
+    },
     skipToContent: "Skip to main content",
     navigation: {
       home: "Home",

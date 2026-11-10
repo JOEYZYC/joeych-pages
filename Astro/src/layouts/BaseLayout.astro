@@ -4,13 +4,18 @@ import type { PageMeta, Site } from "../content/schemas"
 import type { Locale } from "../i18n/locales"
 import type { RouteId } from "../lib/routes"
 import { UI } from "../i18n/ui"
-import "../styles/fonts.css"
 import "../styles/base.css"
 import "../styles/layout.css"
 import "../styles/components.css"
 import SeoHead from "../components/SeoHead.astro"
 import SiteHeader from "../components/SiteHeader.astro"
 import SiteFooter from "../components/SiteFooter.astro"
+import SharedChip from "../components/SharedChip.astro"
+import "../styles/chip.css"
+import "../styles/chip-readers.css"
+import mapleLicense from "../assets/fonts/home/maple-OFL.txt?raw"
+import notoLicense from "../assets/fonts/home/noto-OFL.txt?raw"
+import fontNotice from "../assets/fonts/home/NOTICE.txt?raw"
 
 type Props = {
   readonly locale: Locale
@@ -26,7 +31,7 @@ const description = page.summary[locale]
 ---
 
 <!doctype html>
-<html lang={locale === "zh" ? "zh-CN" : "en"} data-js="false">
+<html lang={locale === "zh" ? "zh-CN" : "en"} data-js="false" data-view={routeId === "home" ? "overview" : "detail"}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -52,10 +57,17 @@ const description = page.summary[locale]
     <Font cssVariable="--font-google-sans-code" preload />
     <SeoHead routeId={routeId} locale={locale} site={site} title={title} description={description} structuredData={structuredData} />
   </head>
-  <body>
+  <body data-route={routeId}>
     <a class="skip-link" href="#main-content">{labels.skipToContent}</a>
+    {routeId !== "home" && <div class="reader-toolbar" aria-hidden="true"></div>}
     <SiteHeader locale={locale} site={site} routeId={routeId} />
     <main id="main-content" class="site-main" tabindex="-1"><slot /></main>
     <SiteFooter locale={locale} site={site} />
+    <details class="site-font-notices"><summary>{labels.canvas.fontLicenses}</summary><pre>{fontNotice}</pre><pre>{mapleLicense}</pre><pre>{notoLicense}</pre></details>
+    <SharedChip />
+    <script>
+      import { initializeChipSite } from "../lib/chip-site"
+      initializeChipSite()
+    </script>
   </body>
 </html>

@@ -37,13 +37,19 @@ const titleId = `${idPrefix}-title`
     tabindex="-1"
   >{project.title[locale]}</h2>
   <p class="project-record-claim">{project.claim[locale]}</p>
+  {project.status && <p class="project-record-status">{project.status[locale]}</p>}
 </header>
+
+<section class="project-record-section project-record-contribution" aria-labelledby={`${idPrefix}-contribution`}>
+  <h3 id={`${idPrefix}-contribution`}>{labels.sections.projects.contribution}</h3>
+  <p class:list={{ "project-template-unavailable": project.contribution[locale] === labels.projectExplorer.pending }}>{project.contribution[locale]}</p>
+</section>
 
 {project.image === null ? (
   <div class="project-media project-media--record project-media--unavailable" data-project-media data-project-media-context="record" data-project-media-kind="unavailable" role="img" aria-label={labels.projectExplorer.imagePendingAlt}>
     <div class="project-media-well"><p class="project-media-pending">{labels.projectExplorer.imagePending}</p></div>
   </div>
-) : <ProjectMedia context="record" locale={locale} record={project} loading="lazy" showCaption={mode === "record"} />}
+) : <ProjectMedia context="record" locale={locale} record={project} loading="lazy" />}
 
 {mode === "dialog" && availableFigures.length > 0 && (
   <div class="project-figure-controls" role="group" aria-label={labels.sections.projects.figures} data-project-figure-controls>
@@ -74,6 +80,8 @@ const titleId = `${idPrefix}-title`
         {project.awards.map((award) => <article class="project-outcome" data-project-outcome-kind="award" data-project-outcome-id={award.id}>
           <h4>{award.title[locale]}</h4>
           <p>{award.prizes.map((prize) => prize[locale]).join(" / ")}</p>
+          <p class="project-outcome-year">{award.year}</p>
+          {award.links.map((link) => link.url !== null && <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label[locale]}</a>)}
           {award.certificates.length > 0 && <CertificateDialog certificates={award.certificates} id={`${idPrefix}-award-${award.id}`} locale={locale} />}
         </article>)}
       </div>
@@ -87,6 +95,8 @@ const titleId = `${idPrefix}-title`
         {project.publications.map((publication) => <article class="project-outcome" data-project-outcome-kind="publication" data-project-outcome-id={publication.id}>
           <h4>{publication.title[locale]}</h4>
           <p>{publication.venue[locale]} · {publication.authors[locale]}</p>
+          <p class="project-outcome-year">{publication.year}</p>
+          {publication.links.map((link) => link.url !== null && <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label[locale]}</a>)}
           {publication.certificates.length > 0 && <CertificateDialog certificates={publication.certificates} id={`${idPrefix}-publication-${publication.id}`} locale={locale} />}
         </article>)}
       </div>
@@ -100,16 +110,12 @@ const titleId = `${idPrefix}-title`
         {project.patents.map((patent) => <article class="project-outcome" data-project-outcome-kind="patent" data-project-outcome-id={patent.id}>
           <h4>{patent.title[locale]}</h4>
           <p>{patent.authors[locale]}</p>
+          {patent.links.map((link) => link.url !== null && <a href={link.url} target="_blank" rel="noopener noreferrer">{link.label[locale]}</a>)}
           {patent.certificates.length > 0 && <CertificateDialog certificates={patent.certificates} id={`${idPrefix}-patent-${patent.id}`} locale={locale} />}
         </article>)}
       </div>
     </section>
   )}
-
-  <section class="project-record-section project-record-contribution" aria-labelledby={`${idPrefix}-contribution`}>
-    <h3 id={`${idPrefix}-contribution`}>{labels.sections.projects.contribution}</h3>
-    <p class:list={{ "project-template-unavailable": project.contribution[locale] === labels.projectExplorer.pending }}>{project.contribution[locale]}</p>
-  </section>
 
   {mode === "record" && remainingFigures.length > 0 && (
     <section class="project-record-section project-figures" aria-labelledby={`${idPrefix}-figures`}>

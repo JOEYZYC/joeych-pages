@@ -68,6 +68,7 @@ test.describe("explicit light and dark themes", () => {
     await page.goto("en/")
     await expectTheme(page, "dark", { label: "Light", name: "Switch to light theme" })
 
+    await page.locator("[data-menu-toggle]").click()
     await page.locator("[data-theme-toggle]").click()
     await expectTheme(page, "light", { label: "Dark", name: "Switch to dark theme" })
 
@@ -83,6 +84,7 @@ test.describe("explicit light and dark themes", () => {
       Object.defineProperty(Storage.prototype, "getItem", {
         configurable: true,
         value: (requestedKey: string) => {
+          if (requestedKey !== key) return null
           reads += 1
           // biome-ignore lint/complexity/useLiteralKeys: DOMStringMap requires indexed access under strict config.
           document.documentElement.dataset["themeStorageReads"] = String(reads)
@@ -124,6 +126,7 @@ test.describe("explicit light and dark themes", () => {
     await page.reload()
     await expectTheme(page, "light", { label: "Dark", name: "Switch to dark theme" })
 
+    await page.locator("[data-menu-toggle]").click()
     await page.locator("[data-theme-toggle]").click()
     await expectTheme(page, "dark", { label: "Light", name: "Switch to light theme" })
     await expect.poll(() => page.evaluate((key) => window.localStorage.getItem(key), themeKey)).toBe("dark")

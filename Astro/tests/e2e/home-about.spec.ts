@@ -19,21 +19,31 @@ test.describe("home and about routes", () => {
       await page.goto(route.path)
 
       await expect(page.locator("html")).toHaveAttribute("lang", route.language)
-      await expect(page.getByRole("heading", { level: 1 })).toHaveText(data.home.heading[route.locale])
-      await expect(page.locator(".home-summary")).toHaveText(data.home.page.summary[route.locale])
+      await expect(page.getByRole("heading", { level: 1 })).toHaveText(data.home.headline_lines.map(line => line[route.locale]).join(""))
+      await expect(page.locator(".hello-voice")).toHaveText(data.home.page.summary[route.locale])
+      await page.locator("[data-menu-toggle]").click()
       await expect(page.getByRole("navigation").getByRole("link", { name: route.navigation })).toHaveAttribute("aria-current", "page")
-      await expect(page.locator(".home-portrait img")).toHaveAttribute("src", /\/joeych-pages\/home\/portrait-/)
-      const aboutAction = page.getByRole("link", { name: new RegExp(route.action) })
+      await expect(page.locator("section[data-chapter]")).toHaveCount(5)
+      const aboutAction = page.locator(".chapter-hello").getByRole("link", { name: new RegExp(route.action) })
       await expect(aboutAction).toHaveAttribute("href", route.locale === "zh" ? "/joeych-pages/about/" : "/joeych-pages/en/about/")
     })
   }
 
-  test("switches Home artwork with the explicit theme", async ({ page }) => {
+  test("shows authored chapter projects and keeps content stable across themes", async ({ page }) => {
+    const data = await getProfileData()
     await page.goto("")
-    const background = page.locator(".home-background")
-    await expect(background).toHaveCSS("background-image", /hero-circuit-background-light\.png/)
+    const selected = data.home.chapters.making.project_ids
+    const links = page.locator("#chapter-1 .chapter-project")
+    await expect(links).toHaveCount(selected.length)
+    for (const [index, id] of selected.entries()) {
+      await expect(links.nth(index)).toHaveAttribute("href", `/joeych-pages/projects/#${id}`)
+    }
+    const before = await page.locator("[data-chapter-rail]").innerText()
+    await page.locator("[data-menu-toggle]").click()
     await page.locator("[data-theme-toggle]").click()
-    await expect(background).toHaveCSS("background-image", /hero-circuit-background\.png/)
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark")
+    expect(await page.locator("[data-chapter-rail]").innerText()).toEqual(before)
+    await expect(page.locator(".home-background")).toHaveCount(0)
   })
 
   for (const route of aboutRoutes) {
@@ -45,6 +55,7 @@ test.describe("home and about routes", () => {
       await expect(page.locator("html")).toHaveAttribute("lang", route.language)
       await expect(page.getByRole("heading", { level: 1 })).toHaveText(about.page.title[route.locale])
       await expect(page.locator(".intro > p:not(.eyebrow)")).toHaveText(about.page.summary[route.locale])
+      await page.locator("[data-menu-toggle]").click()
       await expect(page.getByRole("navigation").getByRole("link", { name: route.navigation })).toHaveAttribute("aria-current", "page")
       await expect(page.locator(".about-overview > p:not(.eyebrow)")).toHaveText(about.overview.map((paragraph) => paragraph[route.locale]))
       await expect(page.locator(".about-facts dd")).toHaveText([

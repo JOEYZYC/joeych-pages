@@ -137,6 +137,17 @@ export const homeSchema = z
   .object({
     page: pageMetaSchema,
     heading: localizedSchema,
+    headline_lines: z.array(localizedSchema).length(2).readonly(),
+    motif_caption: localizedSchema,
+    chapters: z.object({
+      hello: z.object({ label: localizedSchema, context: localizedSchema, explore: localizedSchema }).strict().readonly(),
+      making: z.object({ label: localizedSchema, title_lines: z.array(localizedSchema).length(2).readonly(), summary: localizedSchema, action: localizedSchema, project_ids: z.array(projectIdSchema).length(3).readonly() }).strict().readonly(),
+      research: z.object({ label: localizedSchema, title_lines: z.array(localizedSchema).length(2).readonly(), summary: localizedSchema, action: localizedSchema, project_ids: z.array(projectIdSchema).length(2).readonly() }).strict().readonly(),
+      connections: z.object({ label: localizedSchema, title_lines: z.array(localizedSchema).length(2).readonly(), summary: localizedSchema, action: localizedSchema }).strict().readonly(),
+      experience: z.object({ label: localizedSchema, title_lines: z.array(localizedSchema).length(2).readonly(), summary: localizedSchema, action: localizedSchema }).strict().readonly(),
+    }).strict().readonly(),
+    selected_project_ids: z.array(projectIdSchema).length(2).refine((ids) => new Set(ids).size === ids.length, "duplicate Home project ID").readonly(),
+    closing: z.object({ title: localizedSchema, summary: localizedSchema }).strict().readonly(),
     portrait: localMediaFileSchema,
     hero_background: z.object({
       light: localMediaFileSchema,

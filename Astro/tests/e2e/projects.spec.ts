@@ -46,6 +46,87 @@ async function visibleCardIds(page: Page): Promise<string[]> {
 }
 
 test.describe("projects archive", () => {
+  test("keeps mobile browsing title-first and exposes advanced facets through a native disclosure", async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 })
+    await page.goto("projects/")
+    const advanced = page.locator("[data-project-advanced-filters]")
+    await expect(advanced).not.toHaveAttribute("open", "")
+    const firstCard = page.locator("[data-project-card]:visible").first()
+    const title = await firstCard.locator("h2").boundingBox()
+    expect(title?.y).toBeLessThan(650)
+    await advanced.locator("summary").press("Enter")
+    await expect(page.locator("[data-project-name-filter]")).toBeVisible()
+    await expect(page.locator("[data-project-honor-filter]")).toBeVisible()
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await expect(advanced).toHaveAttribute("open", "")
+  })
+
+  for (const facet of ["name", "honor"] as const) {
+    test(`restores focus to the visible disclosure when resizing the focused ${facet} facet to mobile`, async ({ page }) => {
+      await page.setViewportSize({ width: 1280, height: 900 })
+      await page.goto("projects/")
+      const advanced = page.locator("[data-project-advanced-filters]")
+      const summary = advanced.locator("summary")
+      await page.locator(`[data-project-${facet}-filter]`).focus()
+
+      await page.setViewportSize({ width: 375, height: 812 })
+
+      await expect(advanced).not.toHaveAttribute("open", "")
+      await expect(summary).toBeVisible()
+      await expect(summary).toBeFocused()
+      await page.keyboard.press("Enter")
+      await expect(advanced).toHaveAttribute("open", "")
+      await page.keyboard.press("Tab")
+      await expect(page.locator("[data-project-name-filter]")).toBeFocused()
+    })
+  }
+
+  for (const width of [320, 375, 768, 1280]) {
+    test(`keeps actual project text glyphs clear of media at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 })
+      for (const locale of locales) {
+        await page.goto(locale.path)
+        await page.evaluate(() => document.fonts.ready)
+        await expect(page.locator('[data-explorer-ready="true"]')).toBeVisible()
+
+        const overlaps = await page.locator("[data-project-card]").evaluateAll((cards) => cards.flatMap((card) => {
+          const media = card.querySelector(".project-media-well")?.getBoundingClientRect()
+          if (!media) return []
+          const collisions: { readonly id: string | null; readonly character: string }[] = []
+          for (const text of card.querySelectorAll("h2, .project-card-claim, .project-card-contribution")) {
+            const walker = document.createTreeWalker(text, NodeFilter.SHOW_TEXT)
+            while (walker.nextNode()) {
+              const node = walker.currentNode
+              let offset = 0
+              for (const character of node.textContent ?? "") {
+                const range = document.createRange()
+                range.setStart(node, offset)
+                offset += character.length
+                range.setEnd(node, offset)
+                if (!character.trim()) continue
+                const glyph = range.getBoundingClientRect()
+                if (Math.min(glyph.right, media.right) - Math.max(glyph.left, media.left) > 0.5 &&
+                  Math.min(glyph.bottom, media.bottom) - Math.max(glyph.top, media.top) > 0.5) {
+                  collisions.push({ id: card.getAttribute("data-project-id"), character })
+                }
+              }
+            }
+          }
+          return collisions
+        }))
+        expect(overlaps, `${locale.path} ${width}px glyph/media intersections`).toEqual([])
+        for (const card of await page.locator(".project-card--text").all()) {
+          await expect(card.locator(".project-media-well")).toHaveCount(0)
+          const widths = await card.evaluate((record) => ({
+            card: record.getBoundingClientRect().width,
+            claim: record.querySelector(".project-card-claim")?.getBoundingClientRect().width,
+          }))
+          expect(widths.claim).toBeCloseTo(widths.card, 0)
+        }
+        await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
+      }
+    })
+  }
   test("keeps the retired awards routes deleted", async ({ page }) => {
     expect((await page.goto("awards/"))?.status()).toBe(404)
     expect((await page.goto("en/awards/"))?.status()).toBe(404)
@@ -60,7 +141,14 @@ test.describe("projects archive", () => {
       await expect(page.getByRole("heading", { level: 1, name: locale.title })).toHaveCount(1)
       await expect(page.locator(".intro > p").last()).toHaveText(locale.summary)
       await expect(page.locator("html")).toHaveAttribute("lang", locale.htmlLanguage)
-      await expect(page.getByRole("navigation").getByRole("link", { name: locale.navigation })).toHaveAttribute("aria-current", "page")
+      const directoryToggle = page.locator("[data-menu-toggle]")
+      await expect(page.locator("#primary-navigation")).toBeHidden()
+      await directoryToggle.click()
+      await expect(directoryToggle).toHaveAttribute("aria-expanded", "true")
+      await expect(page.locator("#primary-navigation").getByRole("link", { name: locale.navigation })).toHaveAttribute("aria-current", "page")
+      await page.keyboard.press("Escape")
+      await expect(directoryToggle).toHaveAttribute("aria-expanded", "false")
+      await expect(page.locator("#primary-navigation")).toBeHidden()
       await expect(cards).toHaveCount(projectIds.length)
       await expect(records).toHaveCount(projectIds.length)
       expect(await cards.evaluateAll((elements) => elements.map((element) => element.getAttribute("data-project-id")))).toEqual(projectIds)
@@ -90,7 +178,7 @@ test.describe("projects archive", () => {
     await expect(figureControls.nth(0)).toHaveAttribute("aria-pressed", "true")
     await expect(figureControls.nth(1)).toHaveAttribute("aria-pressed", "false")
     await expect(dialog.locator(".project-figures")).toHaveCount(0)
-    await expect(media.locator("[data-project-media-caption]")).toHaveCount(0)
+    await expect(media.locator("[data-project-media-caption]")).toHaveText(await figureControls.nth(0).innerText())
     await expect(media.locator("[data-project-media-image]")).toHaveAttribute("width", "1200")
     await expect(media.locator("[data-project-media-image]")).toHaveAttribute("height", "673")
 
@@ -98,6 +186,7 @@ test.describe("projects archive", () => {
     await expect(figureControls.nth(1)).toHaveAttribute("aria-pressed", "true")
     await expect(media).toHaveAttribute("data-project-media-source", "/projects/2024-Competition-PowerPrintRecognitionAndOpenLabNewQualityInteractiveScenarioDesign/power-print-hardware.png")
     await expect(media.locator("[data-project-media-image]")).toHaveAttribute("alt", "Hardware Device")
+    await expect(media.locator("[data-project-media-caption]")).toHaveText("Hardware Device")
     await expect(media.locator("[data-project-media-image]")).toHaveAttribute("width", "1017")
     await expect(media.locator("[data-project-media-image]")).toHaveAttribute("height", "728")
 
@@ -123,7 +212,7 @@ test.describe("projects archive", () => {
     await expect(card).toBeFocused()
   })
 
-  test("keeps the project dialog rounded close control visible while its content scrolls", async ({ page }) => {
+  test("keeps the project reader toolbar close control visible while its content scrolls", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 })
     await page.emulateMedia({ reducedMotion: "reduce" })
     await page.goto("en/projects/")
@@ -163,10 +252,10 @@ test.describe("projects archive", () => {
     const dialog = page.locator('[data-project-dialog][data-project-id="2025-Paper-ResGatNetBridgingEfficiencyAndPrecisionInLowSNRWirelessPerception"]')
 
     await expect(dialog).toBeVisible()
-    await expect(dialog.locator('[data-project-outcome-id="resgatnet"]')).toContainText("IEEE Access · 2nd author of 6")
+    await expect(dialog.locator('[data-project-outcome-id="resgatnet"]')).toContainText("IEEE Access, vol. 14, pp. 2834–2849 (2026) · W. Jiang, H. Yang, Y. Zhang, J. Xu, J. Zhang, and Y. Teng (3rd author of 6)")
     await expect(dialog.locator("[data-project-figure-select]")).toHaveCount(1)
     await expect(dialog.locator("[data-project-figure-select]")).toHaveAttribute("aria-pressed", "true")
-    await expect(dialog.locator("[data-project-media-caption]")).toHaveCount(0)
+    await expect(dialog.locator("[data-project-media-caption]")).toHaveText(await dialog.locator("[data-project-figure-select]").innerText())
     await expect(dialog.locator(".project-figure-unavailable")).toHaveCount(0)
     await expect(dialog.locator(".project-link-unavailable")).toHaveCount(1)
   })
@@ -177,7 +266,7 @@ test.describe("projects archive", () => {
     const card = page.locator(`[data-project-card][data-project-id="${publicationId}"]`)
 
     await expect(page.locator('[data-project-card][data-project-id="publication-resgatnet"]')).toHaveCount(0)
-    await expect(card).toContainText("Diamond and Related Materials, 3rd author of 8")
+    await expect(card).toContainText("Diamond and Related Materials, 3rd author of 9")
     await card.click()
 
     const dialog = page.locator(`[data-project-dialog][data-project-id="${publicationId}"]`)
@@ -279,7 +368,7 @@ test.describe("projects archive", () => {
     const honor = page.locator("[data-project-honor-filter]")
 
     await expect(honor.locator('option[value="publication:resgatnet"]')).toHaveText(
-      "ResGatNet: Bridging Efficiency and Precision in Low-SNR Wireless Perception · IEEE Access",
+      "ResGatNet: Bridging Efficiency and Precision in Low-SNR Wireless Perception · IEEE Access, vol. 14, pp. 2834–2849 (2026)",
     )
     await honor.selectOption("publication:resgatnet")
 
@@ -389,7 +478,25 @@ test.describe("projects archive", () => {
       await page.goto("en/projects/")
       await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(viewport.width)
       await expect(page.locator("[data-project-card-grid]")).toBeVisible()
-      await expect(page.locator("[data-project-filter-controls]")).toHaveCSS("position", viewport.name === "mobile" ? "static" : "sticky")
+      const filters = page.locator("[data-project-filter-controls]")
+      await expect(filters).toHaveCSS("position", "static")
+      const documentTop = await filters.evaluate(element => element.getBoundingClientRect().top + scrollY)
+      await page.locator("[data-project-card]").last().scrollIntoViewIfNeeded()
+      expect(await filters.evaluate(element => element.getBoundingClientRect().top + scrollY)).toBeCloseTo(documentTop, 0)
+      expect(await filters.evaluate(element => element.getBoundingClientRect().bottom)).toBeLessThan(64)
+      const advanced = page.locator("[data-project-advanced-filters]")
+      if (!(await advanced.evaluate(element => (element as HTMLDetailsElement).open))) await advanced.locator("summary").click()
+      for (const selector of ["[data-project-category-filter]", "[data-project-name-filter]", "[data-project-honor-filter]"]) {
+        const control = page.locator(selector)
+        await control.scrollIntoViewIfNeeded()
+        await control.focus()
+        await expect(control).toBeFocused()
+        await expect.poll(() => control.evaluate(element => {
+          const bounds = element.getBoundingClientRect()
+          const hit = document.elementFromPoint(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2)
+          return bounds.left >= 0 && bounds.right <= innerWidth && bounds.top >= 64 && bounds.bottom <= innerHeight && bounds.height >= 44 && (hit === element || (hit !== null && element.contains(hit)))
+        })).toBe(true)
+      }
     })
   }
 })

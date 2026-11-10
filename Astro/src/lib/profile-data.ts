@@ -41,6 +41,7 @@ export type ProfileData = {
   readonly about: About
   readonly projectPage: ProjectPage
   readonly projects: readonly Project[]
+  readonly homeProjects: readonly Project[]
   readonly techStack: TechStack
 }
 
@@ -102,6 +103,15 @@ function validateOutcomeIds(projects: readonly Project[]): void {
       throw new ProfileContentError({ source: "projects", detail: `duplicate embedded ${key} ID` })
     }
   }
+}
+
+export function selectHomeProjects(home: Home, projects: readonly Project[]): readonly Project[] {
+  const byId = new Map(projects.map((project) => [project.id, project]))
+  return home.selected_project_ids.map((id) => {
+    const project = byId.get(id)
+    if (!project) throw new ProfileContentError({ source: "home/home.yml", detail: `unknown selected project ${id}` })
+    return project
+  })
 }
 
 function resolveSite(site: Site): Site {
@@ -205,6 +215,14 @@ export async function loadProfileData(): Promise<ProfileData> {
   const site = resolveSite(authoredSite)
   const home = resolveHome(authoredHome)
   const projects = authoredProjects.map(resolveProject)
+  const homeProjects = selectHomeProjects(home, projects)
+  for (const chapter of [home.chapters.making, home.chapters.research]) {
+    for (const id of chapter.project_ids) {
+      if (!projects.some((project) => project.id === id)) {
+        throw new ProfileContentError({ source: "home/home.yml", detail: `unknown chapter project ${id}` })
+      }
+    }
+  }
   try {
     await assertPublicMediaExists(associatedMedia(site, home, projects))
   } catch (error) {
@@ -213,7 +231,7 @@ export async function loadProfileData(): Promise<ProfileData> {
     }
     throw error
   }
-  return { site, home, about, projectPage, projects, techStack }
+  return { site, home, about, projectPage, projects, homeProjects, techStack }
 }
 
 let profileDataPromise: Promise<ProfileData> | undefined

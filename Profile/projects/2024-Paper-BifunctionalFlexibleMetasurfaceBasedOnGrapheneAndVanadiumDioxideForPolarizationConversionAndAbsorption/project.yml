@@ -4,12 +4,12 @@ featured: true
 image: modlepic.jpg
 title:
   zh: 基于石墨烯和二氧化钒的偏振转换与吸收双功能柔性超表面
-  en: Bifunctional flexible metasurface based on graphene and vanadium dioxide for
-    polarization conversion and absorption
+  en: Bifunctional Flexible Metasurface Based on Graphene and Vanadium Dioxide for
+    Polarization Conversion and Absorption
 claim:
-  zh: 2023 年大学生创新创业训练计划项目 · Diamond and Related Materials 作者位次 3/8
+  zh: 2023 年大学生创新创业训练计划项目 · Diamond and Related Materials 作者位次 3/9
   en: 2023 Innovation Training Project · Diamond and Related Materials, 3rd author
-    of 8
+    of 9
 category:
   zh: 创新训练项目 / 学术论文
   en: Innovation Training Project / Publication
@@ -58,14 +58,14 @@ publications:
     image: modlepic.jpg
     title:
       zh: 基于石墨烯和二氧化钒的偏振转换与吸收双功能柔性超表面
-      en: Bifunctional flexible metasurface based on graphene and vanadium dioxide for
-        polarization conversion and absorption
+      en: Bifunctional Flexible Metasurface Based on Graphene and Vanadium Dioxide for
+        Polarization Conversion and Absorption
     venue:
-      zh: Diamond and Related Materials
-      en: Diamond and Related Materials
+      zh: Diamond and Related Materials，142 卷，文章号 110862（2024 年 2 月）
+      en: Diamond and Related Materials, vol. 142, Art. no. 110862 (Feb. 2024)
     authors:
-      zh: 作者位次 3/8
-      en: 3rd author of 8
+      zh: C. Fu、L. Zhang、Y. Zhang、N. Li、S. Gu、J. Ju、R. Pan、X. Liu、L. Han（作者位次 3/9）
+      en: C. Fu, L. Zhang, Y. Zhang, N. Li, S. Gu, J. Ju, R. Pan, X. Liu, and L. Han (3rd author of 9)
     tags:
       - metasurface
       - microwave
@@ -79,8 +79,8 @@ publications:
           en: Paper DOI
     certificates:
       - src: BifunctionalFlexibleMetasurfaceBasedOnGrapheneAndVanadiumDioxideForPolarizationConversionAndAbsorption.png
-        zh: 论文：Bifunctional flexible metasurface based on graphene and vanadium dioxide
-          for polarization conversion and absorption
-        en: "Paper: Bifunctional flexible metasurface based on graphene and vanadium
-          dioxide for polarization conversion and absorption"
+        zh: 论文：Bifunctional Flexible Metasurface Based on Graphene and Vanadium Dioxide
+          for Polarization Conversion and Absorption
+        en: "Paper: Bifunctional Flexible Metasurface Based on Graphene and Vanadium
+          Dioxide for Polarization Conversion and Absorption"
 patents: []

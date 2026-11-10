@@ -1,0 +1,189 @@
+{
+  "license": "OFL-1.1",
+  "format": "WOFF1 (zlib)",
+  "modified_version": true,
+  "generation_command": "python Astro/scripts/subset-home-fonts.py",
+  "verification_command": "python Astro/scripts/subset-home-fonts.py --check",
+  "python": "3.12.13",
+  "fontTools": "4.65.0",
+  "sources": {
+    "maple": {
+      "path": "C:/Users/JOEYCH/AppData/Local/Microsoft/Windows/Fonts/MapleMono-NF-CN-SemiBold.ttf",
+      "sha256": "9b8af53af2fa6f07ccd47a1eed108ac2999f4a6f7698c39f4a7edd5b5b053a49",
+      "upstream": "https://github.com/subframe7536/maple-font/releases/tag/v7.9",
+      "license_url": "https://raw.githubusercontent.com/subframe7536/maple-font/v7/OFL.txt",
+      "license_file": "maple-OFL.txt",
+      "copyright_marker": "Copyright 2022 The Maple Mono Project Authors",
+      "reserved_font_names": [],
+      "family": "Home Maple Subset",
+      "bytes": 20538736,
+      "original_names": {
+        "0": [
+          "Copyright 2022 The Maple Mono Project Authors (https://github.com/subframe7536/maple-font)"
+        ],
+        "1": [
+          "Maple Mono NF CN SemiBold"
+        ],
+        "2": [
+          "Regular"
+        ],
+        "3": [
+          "Version 7.900;SUBF;MapleMono-NF-CN-SemiBold;2024;FL830;NF3.4.0;+calt;"
+        ],
+        "4": [
+          "Maple Mono NF CN SemiBold"
+        ],
+        "5": [
+          "Version 7.900"
+        ],
+        "6": [
+          "MapleMono-NF-CN-SemiBold"
+        ],
+        "7": [],
+        "8": [],
+        "9": [
+          "subframe7536"
+        ],
+        "11": [
+          "https://github.com/subframe7536"
+        ],
+        "13": [
+          "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org"
+        ],
+        "14": [
+          "https://openfontlicense.org"
+        ],
+        "16": [
+          "Maple Mono NF CN"
+        ],
+        "17": [
+          "SemiBold"
+        ]
+      },
+      "license_sha256": "19bc40b365c749a5c4546fbb8b949b98c5baf6393c71ca08c375cd87b1a95f85"
+    },
+    "noto": {
+      "path": "C:/Windows/Fonts/NotoSansSC-VF.ttf",
+      "sha256": "763146584cf0710223441356b4395e279021b0806c196614377a7a0174ae074a",
+      "upstream": "https://github.com/google/fonts/tree/main/ofl/notosanssc",
+      "license_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/OFL.txt",
+      "license_file": "noto-OFL.txt",
+      "copyright_marker": "2014-2021 Adobe",
+      "reserved_font_names": [
+        "Source"
+      ],
+      "family": "Home Noto Subset",
+      "bytes": 17773244,
+      "original_names": {
+        "0": [
+          "© 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'."
+        ],
+        "1": [
+          "Noto Sans SC"
+        ],
+        "2": [
+          "Regular"
+        ],
+        "3": [
+          "2.004;ADBO;NotoSansSC-Thin;ADOBE"
+        ],
+        "4": [
+          "Noto Sans SC"
+        ],
+        "5": [
+          "Version 2.04;241114210130;non-release"
+        ],
+        "6": [
+          "NotoSansSC-Thin"
+        ],
+        "7": [
+          "Source is a trademark of Adobe in the United States and/or other countries."
+        ],
+        "8": [
+          "Adobe"
+        ],
+        "9": [
+          "Ryoko NISHIZUKA 西塚涼子 (kana, bopomofo & ideographs); Paul D. Hunt (Latin, Greek & Cyrillic); Sandoll Communications 산돌커뮤니케이션, Soo-young JANG 장수영 & Joo-yeon KANG 강주연 (hangul elements, letters & syllables)"
+        ],
+        "11": [
+          "http://www.adobe.com/type/"
+        ],
+        "13": [
+          "This Font Software is licensed under the SIL Open Font License, Version 1.1. This Font Software is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the SIL Open Font License for the specific language, permissions and limitations governing your use of this Font Software."
+        ],
+        "14": [
+          "http://scripts.sil.org/OFL"
+        ],
+        "16": [],
+        "17": [
+          "Thin"
+        ]
+      },
+      "license_sha256": "ea7155bae3d6079d0e3c9dba24bc8d447ec666877d695e33be8379e5091c152a"
+    }
+  },
+  "assets": [
+    {
+      "file": "home-maple-600.woff",
+      "sha256": "3511d8b504e5c4949188f68a17ac58b36688236651c6e0e0117c4731411c95f5",
+      "bytes": 274664,
+      "signature": "wOFF",
+      "family": "Home Maple Subset",
+      "weight": 600,
+      "style": "normal",
+      "static": true,
+      "required_codepoints": 837,
+      "cmap_codepoints": 837,
+      "missing_codepoints": [],
+      "copyright": [
+        "Copyright 2022 The Maple Mono Project Authors (https://github.com/subframe7536/maple-font)"
+      ],
+      "version": [
+        "Version 7.900"
+      ]
+    },
+    {
+      "file": "home-noto-400.woff",
+      "sha256": "1abb3fd2cc284a9135d8f67fdae87979a480589b24613d43c8e0965c09203928",
+      "bytes": 176408,
+      "signature": "wOFF",
+      "family": "Home Noto Subset",
+      "weight": 400,
+      "style": "normal",
+      "static": true,
+      "required_codepoints": 837,
+      "cmap_codepoints": 837,
+      "missing_codepoints": [],
+      "copyright": [
+        "© 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'."
+      ],
+      "version": [
+        "Version 2.04;241114210130;non-release"
+      ]
+    },
+    {
+      "file": "home-noto-600.woff",
+      "sha256": "fac3b6c93ed850147196e722de01dd61490bc8249907b87694cc56fccf4fc546",
+      "bytes": 177856,
+      "signature": "wOFF",
+      "family": "Home Noto Subset",
+      "weight": 600,
+      "style": "normal",
+      "static": true,
+      "required_codepoints": 837,
+      "cmap_codepoints": 837,
+      "missing_codepoints": [],
+      "copyright": [
+        "© 2014-2021 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'."
+      ],
+      "version": [
+        "Version 2.04;241114210130;non-release"
+      ]
+    }
+  ],
+  "total_bytes": 628928,
+  "target_bytes": 1048576,
+  "coverage": "glyphs.json",
+  "inputHashNormalization": "utf8-lf",
+  "input_hashes_must_be_rechecked_after_content_freeze": true
+}
